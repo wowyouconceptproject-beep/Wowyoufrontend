@@ -61,3 +61,22 @@ export async function getEvent(
 
   return response.json();
 }
+
+export async function publishEvent(
+  token: string,
+  id: string
+) {
+  const response =
+    await fetch(
+      `${API_URL}/events/${id}/publish`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization:
+            `Bearer ${token}`,
+        },
+      }
+    );
+
+  return response.json();
+}

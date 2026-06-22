@@ -11,6 +11,7 @@ import {
 
 import {
   getEvent,
+  publishEvent,
 } from "@/services/event";
 
 export default function EventPage() {
@@ -64,6 +65,44 @@ export default function EventPage() {
     }
   }
 
+  async function handlePublish() {
+    try {
+      const token =
+        localStorage.getItem(
+          "token"
+        );
+
+      if (!token) {
+        return;
+      }
+
+      const result =
+        await publishEvent(
+          token,
+          event.id
+        );
+
+      if (!result.success) {
+        alert(
+          result.message
+        );
+
+        return;
+      }
+
+      await loadEvent();
+    } catch (error) {
+      console.error(
+        "Publish Error:",
+        error
+      );
+
+      alert(
+        "Failed to publish event"
+      );
+    }
+  }
+
   useEffect(() => {
     if (params.id) {
       loadEvent();
@@ -99,7 +138,6 @@ export default function EventPage() {
       </div>
 
       <div className="grid md:grid-cols-3 gap-4 mb-8">
-
         <div className="border rounded p-4">
           <p className="text-sm text-gray-500">
             Venue
@@ -129,7 +167,6 @@ export default function EventPage() {
             {event.status}
           </p>
         </div>
-
       </div>
 
       <div className="border rounded p-6 mb-8">
@@ -143,7 +180,6 @@ export default function EventPage() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-4 mb-8">
-
         <div className="border rounded p-4">
           <p className="text-sm text-gray-500">
             Start Date
@@ -167,11 +203,9 @@ export default function EventPage() {
             ).toLocaleString()}
           </p>
         </div>
-
       </div>
 
       <div className="grid md:grid-cols-3 gap-4 mb-8">
-
         <div className="border rounded p-4">
           <p className="text-sm text-gray-500">
             Attendees
@@ -201,19 +235,24 @@ export default function EventPage() {
             ₦0
           </p>
         </div>
-
       </div>
 
       <div className="flex gap-4">
-
-        <button className="bg-black text-white px-6 py-3">
-          Publish Event
-        </button>
+        {event.status ===
+          "DRAFT" && (
+          <button
+            onClick={
+              handlePublish
+            }
+            className="bg-black text-white px-6 py-3"
+          >
+            Publish Event
+          </button>
+        )}
 
         <button className="border px-6 py-3">
           Edit Event
         </button>
-
       </div>
     </main>
   );
