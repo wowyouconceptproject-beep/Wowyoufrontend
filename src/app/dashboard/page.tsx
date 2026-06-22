@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
 import {
   createOrganization,
@@ -34,68 +31,97 @@ export default function Dashboard() {
     useState(true);
 
   async function loadDashboard() {
-    const token =
-      localStorage.getItem(
-        "token"
-      );
+    try {
+      const token =
+        localStorage.getItem(
+          "token"
+        );
 
-    if (!token) {
-      window.location.href =
-        "/login";
-      return;
+      if (!token) {
+        window.location.href =
+          "/login";
+        return;
+      }
+
+      const userResponse =
+        await fetch(
+          `${API_URL}/auth/me`,
+          {
+            headers: {
+              Authorization:
+                `Bearer ${token}`,
+            },
+          }
+        );
+
+      const userData =
+        await userResponse.json();
+
+      if (!userData.success) {
+        localStorage.removeItem(
+          "token"
+        );
+
+        window.location.href =
+          "/login";
+
+        return;
+      }
+
+      setUser(userData.user);
+
+      const orgData =
+        await getMyOrganization(
+          token
+        );
+
+      if (orgData.success) {
+        setOrganization(
+          orgData.organization
+        );
+      }
+    } catch (error) {
+      console.error(
+        "Dashboard Error:",
+        error
+      );
+    } finally {
+      setLoading(false);
     }
-
-    const userResponse =
-      await fetch(
-        `${API_URL}/auth/me`,
-        {
-          headers: {
-            Authorization:
-              `Bearer ${token}`,
-          },
-        }
-      );
-
-    const userData =
-      await userResponse.json();
-
-    setUser(userData.user);
-
-    const orgData =
-      await getMyOrganization(
-        token
-      );
-
-    setOrganization(
-      orgData.organization
-    );
-
-    setLoading(false);
   }
 
   async function handleCreate() {
-    const token =
-      localStorage.getItem(
-        "token"
-      );
+    try {
+      const token =
+        localStorage.getItem(
+          "token"
+        );
 
-    if (!token) return;
+      if (!token) return;
 
-    const result =
-      await createOrganization(
-        token,
-        name,
-        slug
-      );
+      const result =
+        await createOrganization(
+          token,
+          name,
+          slug
+        );
 
-    if (!result.success) {
+      if (!result.success) {
+        alert(
+          result.message
+        );
+
+        return;
+      }
+
+      await loadDashboard();
+    } catch (error) {
+      console.error(error);
+
       alert(
-        result.message
+        "Failed to create organization"
       );
-      return;
     }
-
-    await loadDashboard();
   }
 
   useEffect(() => {
@@ -116,6 +142,11 @@ export default function Dashboard() {
         <h1 className="text-3xl font-bold mb-6">
           Create Organization
         </h1>
+
+        <p className="mb-6 text-gray-500">
+          Welcome{" "}
+          {user?.firstName}
+        </p>
 
         <input
           className="w-full border p-3 mb-4"
@@ -157,7 +188,12 @@ export default function Dashboard() {
         {organization.name}
       </h1>
 
-      <p className="mt-2">
+      <p className="mt-2 text-gray-500">
+        Welcome{" "}
+        {user?.firstName}
+      </p>
+
+      <p className="mt-4">
         Slug:{" "}
         {organization.slug}
       </p>
@@ -170,11 +206,14 @@ export default function Dashboard() {
         }
       </p>
 
-      <button className="mt-6 bg-black text-white px-6 py-3">
+      <a
+        href="/dashboard/events/create"
+        className="inline-block mt-6 bg-black text-white px-6 py-3"
+      >
         Create Event
-      </button>
+      </a>
 
-      <pre className="mt-8">
+      <pre className="mt-8 rounded bg-gray-100 p-4 text-sm overflow-auto">
         {JSON.stringify(
           organization,
           null,
