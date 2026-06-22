@@ -43,3 +43,21 @@ export async function getMyEvents(
 
   return response.json();
 }
+
+export async function getEvent(
+  token: string,
+  id: string
+) {
+  const response =
+    await fetch(
+      `${API_URL}/events/${id}`,
+      {
+        headers: {
+          Authorization:
+            `Bearer ${token}`,
+        },
+      }
+    );
+
+  return response.json();
+}

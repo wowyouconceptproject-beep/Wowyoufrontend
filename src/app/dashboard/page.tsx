@@ -184,42 +184,89 @@ export default function Dashboard() {
 
   return (
     <main className="p-8">
-      <h1 className="text-4xl font-bold">
-        {organization.name}
-      </h1>
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-4xl font-bold">
+            {organization.name}
+          </h1>
 
-      <p className="mt-2 text-gray-500">
-        Welcome{" "}
-        {user?.firstName}
-      </p>
+          <p className="text-gray-500 mt-2">
+            Welcome{" "}
+            {user?.firstName}
+          </p>
 
-      <p className="mt-4">
-        Slug:{" "}
-        {organization.slug}
-      </p>
+          <p className="mt-2">
+            Slug:{" "}
+            {organization.slug}
+          </p>
 
-      <p className="mt-2">
-        Events:{" "}
-        {
-          organization.events
-            ?.length
-        }
-      </p>
+          <p className="mt-2">
+            Events:{" "}
+            {
+              organization.events
+                ?.length
+            }
+          </p>
+        </div>
 
-      <a
-        href="/dashboard/events/create"
-        className="inline-block mt-6 bg-black text-white px-6 py-3"
-      >
-        Create Event
-      </a>
+        <a
+          href="/dashboard/events/create"
+          className="bg-black text-white px-6 py-3"
+        >
+          Create Event
+        </a>
+      </div>
 
-      <pre className="mt-8 rounded bg-gray-100 p-4 text-sm overflow-auto">
-        {JSON.stringify(
-          organization,
-          null,
-          2
+      <div className="grid gap-4">
+        {organization.events
+          ?.length === 0 && (
+          <div className="border rounded p-6">
+            <h3 className="font-semibold">
+              No events yet
+            </h3>
+
+            <p className="text-gray-500 mt-2">
+              Create your first
+              event to get
+              started.
+            </p>
+          </div>
         )}
-      </pre>
+
+        {organization.events?.map(
+          (event: any) => (
+            <a
+              key={event.id}
+              href={`/dashboard/events/${event.id}`}
+              className="block border rounded p-6 hover:border-gray-400 transition"
+            >
+              <h3 className="text-xl font-bold">
+                {event.title}
+              </h3>
+
+              <p className="mt-2">
+                📍 {event.venue}
+              </p>
+
+              <p className="mt-1">
+                👥 Capacity:{" "}
+                {
+                  event.capacity
+                }
+              </p>
+
+              <p className="mt-1">
+                Status:{" "}
+                {event.status}
+              </p>
+
+              <p className="mt-4 text-sm text-gray-500">
+                View Event →
+              </p>
+            </a>
+          )
+        )}
+      </div>
     </main>
   );
 }
