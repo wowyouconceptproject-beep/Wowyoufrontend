@@ -250,6 +250,13 @@ export default function EventPage() {
           </button>
         )}
 
+        <a
+  href={`/dashboard/events/${event.id}/tickets`}
+  className="border px-6 py-3"
+>
+  Manage Tickets
+</a>
+
         <button className="border px-6 py-3">
           Edit Event
         </button>
