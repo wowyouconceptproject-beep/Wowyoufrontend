@@ -23,41 +23,6 @@ export default function CreateEventPage() {
       endDate: "",
     });
 
-    <select
-  className="w-full border p-3 mb-4"
-  onChange={(e) =>
-    setForm({
-      ...form,
-      currency:
-        e.target.value,
-    })
-  }
->
-  <option value="USD">
-    USD
-  </option>
-
-  <option value="EUR">
-    EUR
-  </option>
-
-  <option value="GBP">
-    GBP
-  </option>
-
-  <option value="NGN">
-    NGN
-  </option>
-
-  <option value="KES">
-    KES
-  </option>
-
-  <option value="ZAR">
-    ZAR
-  </option>
-</select>
-
   async function submit() {
     const token =
       localStorage.getItem(
@@ -76,6 +41,7 @@ export default function CreateEventPage() {
       alert(
         result.message
       );
+
       return;
     }
 
@@ -140,6 +106,42 @@ export default function CreateEventPage() {
           })
         }
       />
+
+      <select
+        className="w-full border p-3 mb-4"
+        value={form.currency}
+        onChange={(e) =>
+          setForm({
+            ...form,
+            currency:
+              e.target.value,
+          })
+        }
+      >
+        <option value="USD">
+          USD ($)
+        </option>
+
+        <option value="EUR">
+          EUR (€)
+        </option>
+
+        <option value="GBP">
+          GBP (£)
+        </option>
+
+        <option value="NGN">
+          NGN (₦)
+        </option>
+
+        <option value="KES">
+          KES
+        </option>
+
+        <option value="ZAR">
+          ZAR
+        </option>
+      </select>
 
       <input
         type="datetime-local"

@@ -24,6 +24,9 @@ export default function TicketsPage() {
   const [tickets, setTickets] =
     useState<any[]>([]);
 
+  const [currency, setCurrency] =
+    useState("USD");
+
   const [name, setName] =
     useState("");
 
@@ -34,15 +37,56 @@ export default function TicketsPage() {
     setQuantity] =
     useState("");
 
-  async function loadTickets() {
-    const result =
-      await getTickets(
-        eventId
-      );
+  function currencySymbol(
+    currency: string
+  ) {
+    switch (currency) {
+      case "USD":
+        return "$";
 
-    if (result.success) {
-      setTickets(
-        result.tickets
+      case "EUR":
+        return "€";
+
+      case "GBP":
+        return "£";
+
+      case "NGN":
+        return "₦";
+
+      case "KES":
+        return "KSh ";
+
+      case "ZAR":
+        return "R ";
+
+      default:
+        return currency;
+    }
+  }
+
+  async function loadTickets() {
+    try {
+      const result =
+        await getTickets(
+          eventId
+        );
+
+      if (result.success) {
+        setTickets(
+          result.tickets || []
+        );
+
+        if (
+          result.currency
+        ) {
+          setCurrency(
+            result.currency
+          );
+        }
+      }
+    } catch (error) {
+      console.error(
+        error
       );
     }
   }
@@ -84,20 +128,27 @@ export default function TicketsPage() {
   }, [eventId]);
 
   return (
-    <main className="max-w-4xl p-8">
-      <h1 className="text-3xl font-bold mb-8">
-        Ticket Management
-      </h1>
+    <main className="max-w-5xl p-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold">
+          Ticket Management
+        </h1>
+
+        <p className="text-gray-500 mt-2">
+          Event Currency:
+          {" "}
+          {currency}
+        </p>
+      </div>
 
       <div className="border rounded p-6 mb-8">
-
         <h2 className="font-bold mb-4">
           Create Ticket
         </h2>
 
         <input
           className="w-full border p-3 mb-4"
-          placeholder="Ticket Name"
+          placeholder="Ticket Name (VIP, Regular, VVIP)"
           value={name}
           onChange={(e) =>
             setName(
@@ -109,7 +160,7 @@ export default function TicketsPage() {
         <input
           type="number"
           className="w-full border p-3 mb-4"
-          placeholder="Price"
+          placeholder={`Price (${currency})`}
           value={price}
           onChange={(e) =>
             setPrice(
@@ -136,59 +187,78 @@ export default function TicketsPage() {
         >
           Create Ticket
         </button>
-
       </div>
 
       <div>
-
         <h2 className="font-bold text-xl mb-4">
           Existing Tickets
         </h2>
 
-        <div className="space-y-4">
-
-          {tickets.map(
-            (ticket) => (
-              <div
-                key={
-                  ticket.id
-                }
-                className="border rounded p-4"
-              >
-                <h3 className="font-bold">
-                  {
-                    ticket.name
+        {tickets.length ===
+        0 ? (
+          <div className="border rounded p-6 text-gray-500">
+            No tickets
+            created yet
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {tickets.map(
+              (
+                ticket
+              ) => (
+                <div
+                  key={
+                    ticket.id
                   }
-                </h3>
+                  className="border rounded p-5"
+                >
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-bold text-lg">
+                      {
+                        ticket.name
+                      }
+                    </h3>
 
-                <p>
-                  Price:
-                  ₦
-                  {
-                    ticket.price
-                  }
-                </p>
+                    <span className="font-semibold text-lg">
+                      {currencySymbol(
+                        currency
+                      )}
+                      {Number(
+                        ticket.price
+                      ).toLocaleString()}
+                    </span>
+                  </div>
 
-                <p>
-                  Quantity:
-                  {
-                    ticket.quantity
-                  }
-                </p>
+                  <div className="mt-4 flex flex-wrap gap-6 text-sm text-gray-500">
+                    <span>
+                      Quantity:
+                      {" "}
+                      {
+                        ticket.quantity
+                      }
+                    </span>
 
-                <p>
-                  Sold:
-                  {
-                    ticket.sold
-                  }
-                </p>
+                    <span>
+                      Sold:
+                      {" "}
+                      {ticket.sold ??
+                        0}
+                    </span>
 
-              </div>
-            )
-          )}
-
-        </div>
-
+                    <span>
+                      Remaining:
+                      {" "}
+                      {(ticket.quantity ??
+                        0) -
+                        (ticket.sold ??
+                          0)}
+                    </span>
+                  </div>
+                </div>
+              )
+            )}
+          </div>
+        )}
       </div>
     </main>
   );
