@@ -18,9 +18,45 @@ export default function CreateEventPage() {
       description: "",
       venue: "",
       capacity: 100,
+      currency: "USD",
       startDate: "",
       endDate: "",
     });
+
+    <select
+  className="w-full border p-3 mb-4"
+  onChange={(e) =>
+    setForm({
+      ...form,
+      currency:
+        e.target.value,
+    })
+  }
+>
+  <option value="USD">
+    USD
+  </option>
+
+  <option value="EUR">
+    EUR
+  </option>
+
+  <option value="GBP">
+    GBP
+  </option>
+
+  <option value="NGN">
+    NGN
+  </option>
+
+  <option value="KES">
+    KES
+  </option>
+
+  <option value="ZAR">
+    ZAR
+  </option>
+</select>
 
   async function submit() {
     const token =
