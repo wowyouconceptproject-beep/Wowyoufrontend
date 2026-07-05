@@ -1,41 +1,94 @@
-const API_URL =
-  process.env
-    .NEXT_PUBLIC_API_URL
-    ?.replace(/\/$/, "");
+import { apiFetch } from "@/lib/api";
 
-export async function createTicket(
-  eventId: string,
-  data: {
-    name: string;
-    price: number;
-    quantity: number;
-  }
-) {
-  const response =
-    await fetch(
-      `${API_URL}/tickets/${eventId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type":
-            "application/json",
-        },
-        body: JSON.stringify(
-          data
-        ),
-      }
-    );
-
-  return response.json();
+export interface Ticket {
+  id: string;
+  name: string;
+  description?: string;
+  price: number;
+  quantity: number;
+  sold: number;
+  remaining: number;
+  isActive: boolean;
+  createdAt: string;
 }
 
-export async function getTickets(
+export interface CreateTicketPayload {
+  name: string;
+  description?: string;
+  price: number;
+  quantity: number;
+}
+
+export interface TicketResponse {
+  success: boolean;
+  ticket: Ticket;
+  message?: string;
+}
+
+export interface TicketsResponse {
+  success: boolean;
+  tickets: Ticket[];
+  currency: string;
+  message?: string;
+}
+
+export interface DeleteTicketResponse {
+  success: boolean;
+  message?: string;
+}
+
+export function createTicket(
+  eventId: string,
+  data: CreateTicketPayload
+) {
+  return apiFetch<TicketResponse>(
+    `/tickets/${eventId}`,
+    {
+      method: "POST",
+      body: JSON.stringify(data),
+    }
+  );
+}
+
+export function getTickets(
   eventId: string
 ) {
-  const response =
-    await fetch(
-      `${API_URL}/tickets/${eventId}`
-    );
+  return apiFetch<TicketsResponse>(
+    `/tickets/${eventId}`
+  );
+}
 
-  return response.json();
+export function updateTicket(
+  ticketId: string,
+  data: Partial<CreateTicketPayload>
+) {
+  return apiFetch<TicketResponse>(
+    `/tickets/${ticketId}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }
+  );
+}
+
+export function deleteTicket(
+  ticketId: string
+) {
+  return apiFetch<DeleteTicketResponse>(
+    `/tickets/${ticketId}`,
+    {
+      method: "DELETE",
+    }
+  );
+}
+
+export function toggleTicket(
+  ticketId: string
+) {
+  return apiFetch<TicketResponse>(
+    `/tickets/${ticketId}/toggle`,
+    {
+      method: "PATCH",
+    }
+  );
 }

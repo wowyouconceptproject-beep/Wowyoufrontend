@@ -1,47 +1,56 @@
-const API_URL =
-  process.env
-    .NEXT_PUBLIC_API_URL
-    ?.replace(/\/$/, "");
+import { apiFetch } from "@/lib/api";
 
-export async function getMyOrganization(
-  token: string
-) {
-  const response =
-    await fetch(
-      `${API_URL}/organizations/me`,
-      {
-        headers: {
-          Authorization:
-            `Bearer ${token}`,
-        },
-      }
-    );
+export interface Organization {
+  id: string;
+  name: string;
+  slug: string;
+  logo?: string;
+  description?: string;
+  website?: string;
+  verified: boolean;
+  createdAt: string;
 
-  return response.json();
+  events?: any[];
 }
 
-export async function createOrganization(
-  token: string,
+export interface OrganizationResponse {
+  success: boolean;
+
+  organization: Organization;
+
+  message?: string;
+}
+
+export function getMyOrganization() {
+  return apiFetch<OrganizationResponse>(
+    "/organizations/me"
+  );
+}
+
+export function createOrganization(
   name: string,
   slug: string
 ) {
-  const response =
-    await fetch(
-      `${API_URL}/organizations`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type":
-            "application/json",
-          Authorization:
-            `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          name,
-          slug,
-        }),
-      }
-    );
+  return apiFetch<OrganizationResponse>(
+    "/organizations",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        name,
+        slug,
+      }),
+    }
+  );
+}
 
-  return response.json();
+export function updateOrganization(
+  data: Partial<Organization>
+) {
+  return apiFetch<OrganizationResponse>(
+    "/organizations/me",
+    {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }
+  );
 }

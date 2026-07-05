@@ -32,10 +32,9 @@ export default function CreateEventPage() {
     if (!token) return;
 
     const result =
-      await createEvent(
-        token,
-        form
-      );
+  await createEvent(
+    form
+  );
 
     if (!result.success) {
       alert(

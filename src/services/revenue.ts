@@ -1,15 +1,28 @@
-const API_URL =
-  process.env
-    .NEXT_PUBLIC_API_URL
-    ?.replace(/\/$/, "");
+import { apiFetch } from "@/lib/api";
 
-export async function getRevenue(
+export interface RevenueBreakdown {
+  name: string;
+  sold: number;
+  revenue: number;
+}
+
+export interface RevenueSummary {
+  totalRevenue: number;
+  todayRevenue?: number;
+  ticketsSold: number;
+  averageOrderValue?: number;
+  breakdown: RevenueBreakdown[];
+}
+
+interface RevenueResponse {
+  success: boolean;
+  revenue: RevenueSummary;
+}
+
+export function getRevenue(
   eventId: string
 ) {
-  const response =
-    await fetch(
-      `${API_URL}/revenue/event/${eventId}`
-    );
-
-  return response.json();
+  return apiFetch<RevenueResponse>(
+    `/revenue/event/${eventId}`
+  );
 }

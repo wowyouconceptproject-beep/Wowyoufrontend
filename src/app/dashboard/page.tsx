@@ -2,15 +2,16 @@
 
 import { useEffect, useState } from "react";
 
+import Link from "next/link";
+
 import {
   createOrganization,
   getMyOrganization,
 } from "@/services/organization";
 
-const API_URL =
-  process.env
-    .NEXT_PUBLIC_API_URL
-    ?.replace(/\/$/, "");
+import {
+  getCurrentUser,
+} from "@/services/auth";
 
 export default function Dashboard() {
   const [user, setUser] =
@@ -32,32 +33,10 @@ export default function Dashboard() {
 
   async function loadDashboard() {
     try {
-      const token =
-        localStorage.getItem(
-          "token"
-        );
+      const userResult =
+        await getCurrentUser();
 
-      if (!token) {
-        window.location.href =
-          "/login";
-        return;
-      }
-
-      const userResponse =
-        await fetch(
-          `${API_URL}/auth/me`,
-          {
-            headers: {
-              Authorization:
-                `Bearer ${token}`,
-            },
-          }
-        );
-
-      const userData =
-        await userResponse.json();
-
-      if (!userData.success) {
+      if (!userResult.success) {
         localStorage.removeItem(
           "token"
         );
@@ -68,59 +47,71 @@ export default function Dashboard() {
         return;
       }
 
-      setUser(userData.user);
+      setUser(
+        userResult.user
+      );
 
-      const orgData =
-        await getMyOrganization(
-          token
-        );
+      const orgResult =
+        await getMyOrganization();
 
-      if (orgData.success) {
+      if (
+        orgResult.success
+      ) {
         setOrganization(
-          orgData.organization
+          orgResult.organization
         );
       }
+
     } catch (error) {
-      console.error(
-        "Dashboard Error:",
-        error
+
+      console.error(error);
+
+      localStorage.removeItem(
+        "token"
       );
+
+      window.location.href =
+        "/login";
+
     } finally {
+
       setLoading(false);
+
     }
   }
 
   async function handleCreate() {
     try {
-      const token =
-        localStorage.getItem(
-          "token"
-        );
-
-      if (!token) return;
-
       const result =
         await createOrganization(
-          token,
           name,
           slug
         );
 
-      if (!result.success) {
+      if (
+        !result.success
+      ) {
         alert(
-          result.message
+          result.message ??
+            "Unable to create organization."
         );
 
         return;
       }
 
+      setOrganization(
+        result.organization
+      );
+
       await loadDashboard();
-    } catch (error) {
-      console.error(error);
+
+    } catch (error: any) {
 
       alert(
-        "Failed to create organization"
+        error.message ??
+          "Failed to create organization."
       );
+
     }
   }
 
@@ -139,17 +130,17 @@ export default function Dashboard() {
   if (!organization) {
     return (
       <main className="max-w-xl p-8">
-        <h1 className="text-3xl font-bold mb-6">
+
+        <h1 className="mb-6 text-3xl font-bold">
           Create Organization
         </h1>
 
         <p className="mb-6 text-gray-500">
-          Welcome{" "}
-          {user?.firstName}
+          Welcome {user?.firstName}
         </p>
 
         <input
-          className="w-full border p-3 mb-4"
+          className="mb-4 w-full border p-3"
           placeholder="Organization Name"
           value={name}
           onChange={(e) =>
@@ -160,7 +151,7 @@ export default function Dashboard() {
         />
 
         <input
-          className="w-full border p-3 mb-4"
+          className="mb-6 w-full border p-3"
           placeholder="Organization Slug"
           value={slug}
           onChange={(e) =>
@@ -174,72 +165,85 @@ export default function Dashboard() {
           onClick={
             handleCreate
           }
-          className="bg-black text-white px-6 py-3"
+          className="rounded bg-black px-6 py-3 text-white"
         >
           Create Organization
         </button>
+
       </main>
     );
   }
 
   return (
-    <main className="p-8">
-      <div className="flex items-center justify-between mb-8">
+    <main className="space-y-8 p-8">
+
+      <div className="flex items-center justify-between">
+
         <div>
+
           <h1 className="text-4xl font-bold">
             {organization.name}
           </h1>
 
-          <p className="text-gray-500 mt-2">
+          <p className="mt-2 text-gray-500">
             Welcome{" "}
             {user?.firstName}
           </p>
 
-          <p className="mt-2">
+          <p className="mt-1">
             Slug:{" "}
             {organization.slug}
           </p>
 
-          <p className="mt-2">
+          <p className="mt-1">
             Events:{" "}
             {
               organization.events
-                ?.length
+                ?.length ?? 0
             }
           </p>
+
         </div>
 
-        <a
+        <Link
           href="/dashboard/events/create"
-          className="bg-black text-white px-6 py-3"
+          className="rounded bg-black px-6 py-3 text-white"
         >
           Create Event
-        </a>
+        </Link>
+
       </div>
 
       <div className="grid gap-4">
-        {organization.events
-          ?.length === 0 && (
-          <div className="border rounded p-6">
+
+        {organization.events?.length ===
+          0 && (
+
+          <div className="rounded border p-6">
+
             <h3 className="font-semibold">
               No events yet
             </h3>
 
-            <p className="text-gray-500 mt-2">
+            <p className="mt-2 text-gray-500">
               Create your first
               event to get
               started.
             </p>
+
           </div>
+
         )}
 
         {organization.events?.map(
           (event: any) => (
-            <a
+
+            <Link
               key={event.id}
               href={`/dashboard/events/${event.id}`}
-              className="block border rounded p-6 hover:border-gray-400 transition"
+              className="block rounded border p-6 transition hover:border-gray-400"
             >
+
               <h3 className="text-xl font-bold">
                 {event.title}
               </h3>
@@ -250,9 +254,7 @@ export default function Dashboard() {
 
               <p className="mt-1">
                 👥 Capacity:{" "}
-                {
-                  event.capacity
-                }
+                {event.capacity}
               </p>
 
               <p className="mt-1">
@@ -263,10 +265,14 @@ export default function Dashboard() {
               <p className="mt-4 text-sm text-gray-500">
                 View Event →
               </p>
-            </a>
+
+            </Link>
+
           )
         )}
+
       </div>
+
     </main>
   );
 }

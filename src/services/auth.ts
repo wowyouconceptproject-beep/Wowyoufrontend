@@ -1,61 +1,66 @@
-const API_URL =
-process.env
-.NEXT_PUBLIC_API_URL;
+import { apiFetch } from "@/lib/api";
 
-export async function registerUser(
-data: {
-firstName: string;
-lastName: string;
-email: string;
-password: string;
-role: string;
+export interface RegisterPayload {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  role: string;
 }
+
+export interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+}
+
+export interface LoginResponse {
+  success: boolean;
+  token: string;
+  user: User;
+  message?: string;
+}
+
+export interface CurrentUserResponse {
+  success: boolean;
+  user: User;
+  message?: string;
+}
+
+export function registerUser(
+  data: RegisterPayload
 ) {
-const response =
-await fetch(
-`${API_URL}/auth/register`,
-{
-method: "POST",
-headers: {
-"Content-Type":
-"application/json",
-},
-body: JSON.stringify(
-data
-),
-}
-);
-
-return response.json();
+  return apiFetch<LoginResponse>(
+    "/auth/register",
+    {
+      method: "POST",
+      withAuth: false,
+      body: JSON.stringify(data),
+    }
+  );
 }
 
-export async function loginUser(
-email: string,
-password: string
+export function loginUser(
+  email: string,
+  password: string
 ) {
-const response =
-await fetch(
-`${API_URL}/auth/login`,
-{
-method: "POST",
-headers: {
-"Content-Type":
-"application/json",
-},
-body: JSON.stringify({
-email,
-password,
-}),
+  return apiFetch<LoginResponse>(
+    "/auth/login",
+    {
+      method: "POST",
+      withAuth: false,
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    }
+  );
 }
-);
 
-const data =
-await response.json();
-
-console.log(
-"LOGIN API:",
-data
-);
-
-return data;
+export function getCurrentUser() {
+  return apiFetch<CurrentUserResponse>(
+    "/auth/me"
+  );
 }

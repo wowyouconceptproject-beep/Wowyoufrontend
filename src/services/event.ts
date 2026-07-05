@@ -1,82 +1,129 @@
-const API_URL =
-  process.env
-    .NEXT_PUBLIC_API_URL
-    ?.replace(/\/$/, "");
+import { apiFetch } from "@/lib/api";
 
-export async function createEvent(
-  token: string,
-  data: any
-) {
-  const response =
-    await fetch(
-      `${API_URL}/events`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type":
-            "application/json",
-          Authorization:
-            `Bearer ${token}`,
-        },
-        body: JSON.stringify(
-          data
-        ),
-      }
-    );
-
-  return response.json();
+export interface EventPayload {
+  title: string;
+  description?: string;
+  venue: string;
+  startDate: string;
+  endDate: string;
+  currency: string;
+  bannerUrl?: string;
+  [key: string]: any;
 }
 
-export async function getMyEvents(
-  token: string
-) {
-  const response =
-    await fetch(
-      `${API_URL}/events/my`,
-      {
-        headers: {
-          Authorization:
-            `Bearer ${token}`,
-        },
-      }
-    );
+export interface Event {
+  id: string;
+  title: string;
+  description?: string;
+  venue: string;
+  startDate: string;
+  endDate: string;
+  currency: string;
+  bannerUrl?: string;
 
-  return response.json();
+  status: string;
+
+  capacity?: number;
+
+  organizationId?: string;
+
+  createdAt?: string;
+  updatedAt?: string;
+
+  stats?: {
+    ticketSold: number;
+    checkedIn: number;
+    revenue: number;
+    staff: number;
+    onlineStaff: number;
+  };
 }
 
-export async function getEvent(
-  token: string,
-  id: string
-) {
-  const response =
-    await fetch(
-      `${API_URL}/events/${id}`,
-      {
-        headers: {
-          Authorization:
-            `Bearer ${token}`,
-        },
-      }
-    );
-
-  return response.json();
+export interface EventResponse {
+  success: boolean;
+  event: Event;
+  message?: string;
 }
 
-export async function publishEvent(
-  token: string,
-  id: string
-) {
-  const response =
-    await fetch(
-      `${API_URL}/events/${id}/publish`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization:
-            `Bearer ${token}`,
-        },
-      }
-    );
+export interface EventsResponse {
+  success: boolean;
+  events: Event[];
+  message?: string;
+}
 
-  return response.json();
+export interface DeleteEventResponse {
+  success: boolean;
+  message?: string;
+}
+
+export function createEvent(
+  data: EventPayload
+) {
+  return apiFetch<EventResponse>(
+    "/events",
+    {
+      method: "POST",
+      body: JSON.stringify(data),
+    }
+  );
+}
+
+export function getMyEvents() {
+  return apiFetch<EventsResponse>(
+    "/events/my"
+  );
+}
+
+export function getEvent(
+  eventId: string
+) {
+  return apiFetch<EventResponse>(
+    `/events/${eventId}`
+  );
+}
+
+export function publishEvent(
+  eventId: string
+) {
+  return apiFetch<EventResponse>(
+    `/events/${eventId}/publish`,
+    {
+      method: "PATCH",
+    }
+  );
+}
+
+export function updateEvent(
+  eventId: string,
+  data: Partial<EventPayload>
+) {
+  return apiFetch<EventResponse>(
+    `/events/${eventId}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }
+  );
+}
+
+export function deleteEvent(
+  eventId: string
+) {
+  return apiFetch<DeleteEventResponse>(
+    `/events/${eventId}`,
+    {
+      method: "DELETE",
+    }
+  );
+}
+
+export function archiveEvent(
+  eventId: string
+) {
+  return apiFetch<EventResponse>(
+    `/events/${eventId}/archive`,
+    {
+      method: "PATCH",
+    }
+  );
 }
