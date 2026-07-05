@@ -18,8 +18,11 @@ import {
 export default function EventPage() {
   const params =
     useParams<{
-      id: string;
+      eventId: string;
     }>();
+
+  const eventId =
+    params.eventId;
 
   const [event, setEvent] =
     useState<any>(null);
@@ -31,7 +34,7 @@ export default function EventPage() {
     try {
       const result =
         await getEvent(
-          params.id
+          eventId
         );
 
       if (
@@ -40,9 +43,16 @@ export default function EventPage() {
         setEvent(
           result.event
         );
+      } else {
+        console.error(
+          result.message
+        );
       }
     } catch (error) {
-      console.error(error);
+      console.error(
+        "Failed to load event:",
+        error
+      );
     } finally {
       setLoading(false);
     }
@@ -79,10 +89,10 @@ export default function EventPage() {
   }
 
   useEffect(() => {
-    if (params.id) {
+    if (eventId) {
       loadEvent();
     }
-  }, [params.id]);
+  }, [eventId]);
 
   if (loading) {
     return (
@@ -95,7 +105,15 @@ export default function EventPage() {
   if (!event) {
     return (
       <main className="p-8">
-        Event not found.
+
+        <h1 className="text-3xl font-bold">
+          Event
+        </h1>
+
+        <p className="mt-4 text-gray-500">
+          Event not found.
+        </p>
+
       </main>
     );
   }
@@ -253,35 +271,35 @@ export default function EventPage() {
 
         <Link
           href={`/dashboard/events/${event.id}/tickets`}
-          className="rounded-xl border p-5 hover:bg-gray-50"
+          className="rounded-xl border p-5 transition hover:bg-gray-50"
         >
           🎟 Tickets
         </Link>
 
         <Link
           href={`/dashboard/events/${event.id}/attendees`}
-          className="rounded-xl border p-5 hover:bg-gray-50"
+          className="rounded-xl border p-5 transition hover:bg-gray-50"
         >
           👥 Attendees
         </Link>
 
         <Link
           href={`/dashboard/events/${event.id}/staff`}
-          className="rounded-xl border p-5 hover:bg-gray-50"
+          className="rounded-xl border p-5 transition hover:bg-gray-50"
         >
           👨‍💼 Staff
         </Link>
 
         <Link
           href={`/dashboard/events/${event.id}/revenue`}
-          className="rounded-xl border p-5 hover:bg-gray-50"
+          className="rounded-xl border p-5 transition hover:bg-gray-50"
         >
           💰 Revenue
         </Link>
 
         <Link
           href={`/dashboard/events/${event.id}/activity`}
-          className="rounded-xl border p-5 hover:bg-gray-50"
+          className="rounded-xl border p-5 transition hover:bg-gray-50"
         >
           📡 Activity
         </Link>
