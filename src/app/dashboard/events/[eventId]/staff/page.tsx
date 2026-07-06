@@ -32,7 +32,8 @@ export default async function StaffPage({
       !result.success
     ) {
       throw new Error(
-        "Unable to load staff."
+        result.message ??
+          "Unable to load staff."
       );
     }
 
@@ -61,15 +62,40 @@ export default async function StaffPage({
 
         </div>
 
-        <StaffTable
-          eventId={eventId}
-          staff={result.staff}
-        />
+        {result.staff.length === 0 ? (
+
+          <div className="rounded-xl border border-dashed p-12 text-center">
+
+            <h2 className="text-xl font-semibold">
+              No Staff Yet
+            </h2>
+
+            <p className="mt-2 text-gray-500">
+              Add your first staff member
+              to begin managing check-ins,
+              security and event operations.
+            </p>
+
+          </div>
+
+        ) : (
+
+          <StaffTable
+            eventId={eventId}
+            staff={result.staff}
+          />
+
+        )}
 
       </main>
     );
 
-  } catch {
+  } catch (error) {
+
+    console.error(
+      "Staff page error:",
+      error
+    );
 
     return (
       <main className="p-8">

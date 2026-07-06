@@ -16,11 +16,11 @@ import {
 export default function RevenuePage() {
   const params =
     useParams<{
-      id: string;
+      eventId: string;
     }>();
 
   const eventId =
-    params.id;
+    params.eventId;
 
   const [data, setData] =
     useState<any>(null);
@@ -32,10 +32,20 @@ export default function RevenuePage() {
     try {
       setLoading(true);
 
+      console.log(
+        "Loading revenue for:",
+        eventId
+      );
+
       const result =
         await getRevenue(
           eventId
         );
+
+      console.log(
+        "Revenue response:",
+        result
+      );
 
       if (
         result.success
@@ -46,6 +56,7 @@ export default function RevenuePage() {
       }
     } catch (error) {
       console.error(
+        "Revenue Error:",
         error
       );
 
@@ -58,9 +69,11 @@ export default function RevenuePage() {
   }
 
   useEffect(() => {
-    if (eventId) {
-      loadRevenue();
+    if (!eventId) {
+      return;
     }
+
+    loadRevenue();
   }, [eventId]);
 
   if (loading) {
@@ -130,8 +143,7 @@ export default function RevenuePage() {
           Ticket Breakdown
         </h2>
 
-        {data.breakdown.length ===
-        0 ? (
+        {data.breakdown.length === 0 ? (
 
           <div className="rounded border border-dashed p-6 text-center text-gray-500">
             No ticket sales yet.
@@ -156,16 +168,12 @@ export default function RevenuePage() {
                   <div>
 
                     <h3 className="font-semibold">
-                      {
-                        ticket.name
-                      }
+                      {ticket.name}
                     </h3>
 
                     <p className="text-sm text-gray-500">
                       Sold:{" "}
-                      {
-                        ticket.sold
-                      }
+                      {ticket.sold}
                     </p>
 
                   </div>

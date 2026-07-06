@@ -17,11 +17,11 @@ import {
 export default function TicketsPage() {
   const params =
     useParams<{
-      id: string;
+      eventId: string;
     }>();
 
   const eventId =
-    params.id;
+    params.eventId;
 
   const [
     tickets,
@@ -84,10 +84,20 @@ export default function TicketsPage() {
     try {
       setLoading(true);
 
+      console.log(
+        "Loading tickets for:",
+        eventId
+      );
+
       const result =
         await getTickets(
           eventId
         );
+
+      console.log(
+        "Tickets response:",
+        result
+      );
 
       if (
         result.success
@@ -104,16 +114,22 @@ export default function TicketsPage() {
           );
         }
       }
+
     } catch (error) {
+
       console.error(
+        "Ticket load failed:",
         error
       );
 
       alert(
         "Unable to load tickets."
       );
+
     } finally {
+
       setLoading(false);
+
     }
   }
 
@@ -163,9 +179,13 @@ export default function TicketsPage() {
   }
 
   useEffect(() => {
-    if (eventId) {
-      loadTickets();
+
+    if (!eventId) {
+      return;
     }
+
+    loadTickets();
+
   }, [eventId]);
 
   if (loading) {

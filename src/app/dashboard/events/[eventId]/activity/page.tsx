@@ -21,11 +21,11 @@ import {
 export default function ActivityPage() {
   const params =
     useParams<{
-      id: string;
+      eventId: string;
     }>();
 
   const eventId =
-    params.id;
+    params.eventId;
 
   const [
     activities,
@@ -46,10 +46,20 @@ export default function ActivityPage() {
     try {
       setLoading(true);
 
+      console.log(
+        "Loading activity for:",
+        eventId
+      );
+
       const result =
         await getActivity(
           eventId
         );
+
+      console.log(
+        "Activity response:",
+        result
+      );
 
       if (
         result.success
@@ -60,22 +70,29 @@ export default function ActivityPage() {
 
         setError("");
       }
+
     } catch (err: any) {
+
       console.error(err);
 
       setError(
         err.message ??
           "Unable to load activity."
       );
+
     } finally {
+
       setLoading(false);
+
     }
   }
 
   useEffect(() => {
-    if (eventId) {
-      loadActivity();
+    if (!eventId) {
+      return;
     }
+
+    loadActivity();
   }, [eventId]);
 
   useRealtime({
