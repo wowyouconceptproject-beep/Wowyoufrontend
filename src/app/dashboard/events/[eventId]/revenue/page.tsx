@@ -13,6 +13,33 @@ import {
   getRevenue,
 } from "@/services/revenue";
 
+function currencySymbol(
+  currency?: string
+) {
+  switch (currency) {
+    case "USD":
+      return "$";
+
+    case "EUR":
+      return "€";
+
+    case "GBP":
+      return "£";
+
+    case "NGN":
+      return "₦";
+
+    case "KES":
+      return "KSh ";
+
+    case "ZAR":
+      return "R ";
+
+    default:
+      return currency ?? "";
+  }
+}
+
 export default function RevenuePage() {
   const params =
     useParams<{
@@ -32,20 +59,10 @@ export default function RevenuePage() {
     try {
       setLoading(true);
 
-      console.log(
-        "Loading revenue for:",
-        eventId
-      );
-
       const result =
         await getRevenue(
           eventId
         );
-
-      console.log(
-        "Revenue response:",
-        result
-      );
 
       if (
         result.success
@@ -92,6 +109,11 @@ export default function RevenuePage() {
     );
   }
 
+  const symbol =
+    currencySymbol(
+      data.currency
+    );
+
   return (
     <main className="space-y-8 p-8">
 
@@ -117,7 +139,7 @@ export default function RevenuePage() {
           </p>
 
           <h2 className="mt-3 text-3xl font-bold">
-            ₦
+            {symbol}
             {data.totalRevenue.toLocaleString()}
           </h2>
 
@@ -185,7 +207,7 @@ export default function RevenuePage() {
                     </p>
 
                     <p className="text-lg font-bold">
-                      ₦
+                      {symbol}
                       {ticket.revenue.toLocaleString()}
                     </p>
 
