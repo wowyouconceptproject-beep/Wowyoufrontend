@@ -26,6 +26,8 @@ export interface GetAttendeesResponse {
   success: boolean;
 
   attendees: Attendee[];
+
+  message?: string;
 }
 
 export function getAttendees(

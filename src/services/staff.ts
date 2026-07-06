@@ -40,14 +40,20 @@ export interface CreateStaffPayload {
   permissions: string[];
 }
 
-interface StaffResponse {
+export interface StaffResponse {
   success: boolean;
+
   staff: Staff;
+
+  message?: string;
 }
 
-interface StaffListResponse {
+export interface StaffListResponse {
   success: boolean;
+
   staff: Staff[];
+
+  message?: string;
 }
 
 export function getStaff(
@@ -91,6 +97,7 @@ export function deleteStaff(
 ) {
   return apiFetch<{
     success: boolean;
+    message?: string;
   }>(
     `/events/${eventId}/staff/${staffId}`,
     {
