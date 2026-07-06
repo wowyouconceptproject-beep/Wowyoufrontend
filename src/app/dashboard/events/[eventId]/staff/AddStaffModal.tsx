@@ -2,6 +2,8 @@
 
 import { useState, useTransition } from "react";
 
+import { useRouter } from "next/navigation";
+
 import {
   Dialog,
   DialogContent,
@@ -19,7 +21,9 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
-import { createStaff } from "./actions";
+import {
+  createStaff,
+} from "@/services/staff";
 
 interface Props {
   eventId: string;
@@ -28,6 +32,8 @@ interface Props {
 export function AddStaffModal({
   eventId,
 }: Props) {
+  const router = useRouter();
+
   const [open, setOpen] =
     useState(false);
 
@@ -54,17 +60,25 @@ export function AddStaffModal({
         const result =
           await createStaff(
             eventId,
-            form
+            {
+              ...form,
+              permissions: [],
+            }
           );
 
         setCreatedCode(
-          result.accessCode
+          result.staff.accessCode
         );
 
-      } catch {
+        router.refresh();
+
+      } catch (error: any) {
+
+        console.error(error);
 
         alert(
-          "Unable to create staff."
+          error.message ??
+            "Unable to create staff."
         );
 
       }
@@ -162,6 +176,7 @@ export function AddStaffModal({
                   <SelectItem value="VENDOR_MANAGER">
                     Vendor Manager
                   </SelectItem>
+
                 </Select>
 
                 <Input
@@ -208,10 +223,9 @@ export function AddStaffModal({
               <div className="space-y-4 text-center">
 
                 <p className="text-sm text-gray-500">
-                  Give this access
-                  code to the staff.
-                  It can be regenerated
-                  later if necessary.
+                  Give this access code to the
+                  staff member. It can be
+                  regenerated later.
                 </p>
 
                 <div
@@ -240,7 +254,7 @@ export function AddStaffModal({
                 </Button>
 
                 <Button
-                  variant="outline"
+                  variant="secondary"
                   className="w-full"
                   onClick={() => {
                     setOpen(false);
@@ -256,6 +270,8 @@ export function AddStaffModal({
                       station:
                         "",
                     });
+
+                    router.refresh();
                   }}
                 >
                   Done
