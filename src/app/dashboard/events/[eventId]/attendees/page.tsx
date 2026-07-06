@@ -1,3 +1,14 @@
+"use client";
+
+import {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  useParams,
+} from "next/navigation";
+
 import {
   getAttendees,
 } from "@/services/attendees";
@@ -6,80 +17,78 @@ import {
   AttendeesTable,
 } from "./AttendeesTable";
 
-interface Props {
-  params: Promise<{
-    eventId: string;
-  }>;
-}
+export default function AttendeesPage() {
+  const params =
+    useParams<{
+      eventId: string;
+    }>();
 
-export default async function AttendeesPage({
-  params,
-}: Props) {
-  const { eventId } =
-    await params;
+  const eventId =
+    params.eventId;
 
-  try {
-    const result =
-      await getAttendees(
-        eventId
+  const [
+    attendees,
+    setAttendees,
+  ] = useState<any[]>([]);
+
+  const [
+    loading,
+    setLoading,
+  ] = useState(true);
+
+  const [
+    error,
+    setError,
+  ] = useState("");
+
+  async function loadAttendees() {
+    try {
+      setLoading(true);
+
+      const result =
+        await getAttendees(
+          eventId
+        );
+
+      if (
+        result.success
+      ) {
+        setAttendees(
+          result.attendees ?? []
+        );
+
+        setError("");
+      }
+    } catch (err: any) {
+      console.error(
+        "Attendees page error:",
+        err
       );
 
-    if (
-      !result.success
-    ) {
-      throw new Error(
-        "Unable to load attendees."
+      setError(
+        err.message ??
+          "Unable to load attendees."
       );
+    } finally {
+      setLoading(false);
     }
+  }
 
+  useEffect(() => {
+    if (eventId) {
+      loadAttendees();
+    }
+  }, [eventId]);
+
+  if (loading) {
     return (
-      <main className="space-y-6 p-8">
-
-        <div className="flex items-center justify-between">
-
-          <div>
-
-            <h1 className="text-3xl font-bold">
-              Attendees
-            </h1>
-
-            <p className="text-sm text-gray-500">
-              {result.attendees.length} attendee
-              {result.attendees.length !== 1
-                ? "s"
-                : ""}
-            </p>
-
-          </div>
-
-        </div>
-
-        {result.attendees.length === 0 ? (
-          <div className="rounded-lg border border-dashed p-12 text-center">
-
-            <h2 className="text-xl font-semibold">
-              No Attendees Yet
-            </h2>
-
-            <p className="mt-2 text-gray-500">
-              Attendees will appear here
-              once tickets are purchased.
-            </p>
-
-          </div>
-        ) : (
-          <AttendeesTable
-            attendees={
-              result.attendees
-            }
-          />
-        )}
-
+      <main className="p-8">
+        Loading attendees...
       </main>
     );
+  }
 
-  } catch (error) {
-
+  if (error) {
     return (
       <main className="p-8">
 
@@ -94,14 +103,60 @@ export default async function AttendeesPage({
           </h2>
 
           <p className="mt-2 text-sm text-red-600">
-            Please refresh the page or
-            try again later.
+            {error}
           </p>
 
         </div>
 
       </main>
     );
-
   }
+
+  return (
+    <main className="space-y-6 p-8">
+
+      <div className="flex items-center justify-between">
+
+        <div>
+
+          <h1 className="text-3xl font-bold">
+            Attendees
+          </h1>
+
+          <p className="text-sm text-gray-500">
+            {attendees.length} attendee
+            {attendees.length !== 1
+              ? "s"
+              : ""}
+          </p>
+
+        </div>
+
+      </div>
+
+      {attendees.length === 0 ? (
+
+        <div className="rounded-lg border border-dashed p-12 text-center">
+
+          <h2 className="text-xl font-semibold">
+            No Attendees Yet
+          </h2>
+
+          <p className="mt-2 text-gray-500">
+            Attendees will appear here
+            once tickets are purchased.
+          </p>
+
+        </div>
+
+      ) : (
+
+        <AttendeesTable
+          attendees={attendees}
+        />
+
+      )}
+
+    </main>
+  );
 }

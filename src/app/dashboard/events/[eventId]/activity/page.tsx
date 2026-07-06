@@ -46,20 +46,10 @@ export default function ActivityPage() {
     try {
       setLoading(true);
 
-      console.log(
-        "Loading activity for:",
-        eventId
-      );
-
       const result =
         await getActivity(
           eventId
         );
-
-      console.log(
-        "Activity response:",
-        result
-      );
 
       if (
         result.success
@@ -70,20 +60,18 @@ export default function ActivityPage() {
 
         setError("");
       }
-
     } catch (err: any) {
-
-      console.error(err);
+      console.error(
+        "Activity page error:",
+        err
+      );
 
       setError(
         err.message ??
           "Unable to load activity."
       );
-
     } finally {
-
       setLoading(false);
-
     }
   }
 

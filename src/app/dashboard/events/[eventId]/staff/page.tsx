@@ -1,3 +1,14 @@
+"use client";
+
+import {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  useParams,
+} from "next/navigation";
+
 import {
   getStaff,
 } from "@/services/staff";
@@ -10,93 +21,78 @@ import {
   AddStaffModal,
 } from "./AddStaffModal";
 
-interface Props {
-  params: Promise<{
-    eventId: string;
-  }>;
-}
+export default function StaffPage() {
+  const params =
+    useParams<{
+      eventId: string;
+    }>();
 
-export default async function StaffPage({
-  params,
-}: Props) {
-  const { eventId } =
-    await params;
+  const eventId =
+    params.eventId;
 
-  try {
-    const result =
-      await getStaff(
-        eventId
+  const [
+    staff,
+    setStaff,
+  ] = useState<any[]>([]);
+
+  const [
+    loading,
+    setLoading,
+  ] = useState(true);
+
+  const [
+    error,
+    setError,
+  ] = useState("");
+
+  async function loadStaff() {
+    try {
+      setLoading(true);
+
+      const result =
+        await getStaff(
+          eventId
+        );
+
+      if (
+        result.success
+      ) {
+        setStaff(
+          result.staff ?? []
+        );
+
+        setError("");
+      }
+    } catch (err: any) {
+      console.error(
+        "Staff page error:",
+        err
       );
 
-    if (
-      !result.success
-    ) {
-      throw new Error(
-        result.message ??
+      setError(
+        err.message ??
           "Unable to load staff."
       );
+    } finally {
+      setLoading(false);
     }
+  }
 
+  useEffect(() => {
+    if (eventId) {
+      loadStaff();
+    }
+  }, [eventId]);
+
+  if (loading) {
     return (
-      <main className="space-y-8 p-8">
-
-        <div className="flex items-center justify-between">
-
-          <div>
-
-            <h1 className="text-3xl font-bold">
-              Staff
-            </h1>
-
-            <p className="text-gray-500">
-              Manage event staff,
-              permissions and
-              operations.
-            </p>
-
-          </div>
-
-          <AddStaffModal
-            eventId={eventId}
-          />
-
-        </div>
-
-        {result.staff.length === 0 ? (
-
-          <div className="rounded-xl border border-dashed p-12 text-center">
-
-            <h2 className="text-xl font-semibold">
-              No Staff Yet
-            </h2>
-
-            <p className="mt-2 text-gray-500">
-              Add your first staff member
-              to begin managing check-ins,
-              security and event operations.
-            </p>
-
-          </div>
-
-        ) : (
-
-          <StaffTable
-            eventId={eventId}
-            staff={result.staff}
-          />
-
-        )}
-
+      <main className="p-8">
+        Loading staff...
       </main>
     );
+  }
 
-  } catch (error) {
-
-    console.error(
-      "Staff page error:",
-      error
-    );
-
+  if (error) {
     return (
       <main className="p-8">
 
@@ -111,14 +107,66 @@ export default async function StaffPage({
           </h2>
 
           <p className="mt-2 text-sm text-red-600">
-            Please refresh the page
-            and try again.
+            {error}
           </p>
 
         </div>
 
       </main>
     );
-
   }
+
+  return (
+    <main className="space-y-8 p-8">
+
+      <div className="flex items-center justify-between">
+
+        <div>
+
+          <h1 className="text-3xl font-bold">
+            Staff
+          </h1>
+
+          <p className="text-gray-500">
+            Manage event staff,
+            permissions and
+            operations.
+          </p>
+
+        </div>
+
+        <AddStaffModal
+          eventId={eventId}
+        />
+
+      </div>
+
+      {staff.length === 0 ? (
+
+        <div className="rounded-xl border border-dashed p-12 text-center">
+
+          <h2 className="text-xl font-semibold">
+            No Staff Yet
+          </h2>
+
+          <p className="mt-2 text-gray-500">
+            Add your first staff
+            member to begin managing
+            check-ins, security and
+            event operations.
+          </p>
+
+        </div>
+
+      ) : (
+
+        <StaffTable
+          eventId={eventId}
+          staff={staff}
+        />
+
+      )}
+
+    </main>
+  );
 }
