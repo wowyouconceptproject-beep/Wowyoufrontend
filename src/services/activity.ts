@@ -9,24 +9,37 @@ export interface Activity {
 
   description: string;
 
-  timestamp: string;
+  actorId?: string;
 
-  staffId?: string;
+  actorName?: string;
+
+  actorRole?: string;
 
   attendeeId?: string;
 
-  metadata?: Record<string, any>;
+  attendeeName?: string;
+
+  purchaseId?: string;
+
+  ticketTypeId?: string;
+
+  ticketTypeName?: string;
+
+  station?: string | null;
+
+  createdAt: string;
 }
 
 export interface GetActivityResponse {
   success: boolean;
-  activities: Activity[];
+
+  activity: Activity[];
 }
 
 export function getActivity(
-  eventId: string
+  limit = 50
 ) {
   return apiFetch<GetActivityResponse>(
-    `/events/${eventId}/activity`
+    `/operations/activity?limit=${limit}`
   );
 }

@@ -6,10 +6,6 @@ import {
 } from "react";
 
 import {
-  useParams,
-} from "next/navigation";
-
-import {
   getActivity,
   Activity,
 } from "@/services/activity";
@@ -19,14 +15,6 @@ import {
 } from "@/hooks/useRealtime";
 
 export default function ActivityPage() {
-  const params =
-    useParams<{
-      eventId: string;
-    }>();
-
-  const eventId =
-    params.eventId;
-
   const [
     activities,
     setActivities,
@@ -42,33 +30,35 @@ export default function ActivityPage() {
     setError,
   ] = useState("");
 
+  /*
+  |--------------------------------------------------------------------------
+  | Load Activity
+  |--------------------------------------------------------------------------
+  */
+
   async function loadActivity() {
     try {
       setLoading(true);
 
       const result =
-        await getActivity(
-          eventId
-        );
+        await getActivity();
 
-      if (
-        result.success
-      ) {
-        setActivities(
-          result.activities ?? []
-        );
+      if (result.success) {
+  setActivities(
+    result.activity ?? [],
+  );
 
-        setError("");
-      }
+  setError("");
+}
     } catch (err: any) {
       console.error(
         "Activity page error:",
-        err
+        err,
       );
 
       setError(
         err.message ??
-          "Unable to load activity."
+          "Unable to load activity.",
       );
     } finally {
       setLoading(false);
@@ -76,18 +66,18 @@ export default function ActivityPage() {
   }
 
   useEffect(() => {
-    if (!eventId) {
-      return;
-    }
-
     loadActivity();
-  }, [eventId]);
+  }, []);
+
+  /*
+  |--------------------------------------------------------------------------
+  | Realtime
+  |--------------------------------------------------------------------------
+  */
 
   useRealtime({
-    eventId,
-
     onActivity: (
-      activity
+      activity,
     ) => {
       setActivities(
         (previous) => {
@@ -95,7 +85,7 @@ export default function ActivityPage() {
             previous.some(
               (item) =>
                 item.id ===
-                activity.id
+                activity.id,
             );
 
           if (exists) {
@@ -106,10 +96,16 @@ export default function ActivityPage() {
             activity,
             ...previous,
           ];
-        }
+        },
       );
     },
   });
+
+  /*
+  |--------------------------------------------------------------------------
+  | Loading
+  |--------------------------------------------------------------------------
+  */
 
   if (loading) {
     return (
@@ -118,6 +114,12 @@ export default function ActivityPage() {
       </main>
     );
   }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Error
+  |--------------------------------------------------------------------------
+  */
 
   if (error) {
     return (
@@ -143,72 +145,112 @@ export default function ActivityPage() {
     );
   }
 
+  /*
+  |--------------------------------------------------------------------------
+  | UI
+  |--------------------------------------------------------------------------
+  */
+
   return (
     <main className="space-y-8 p-8">
 
       <div>
 
         <h1 className="text-3xl font-bold">
-          Activity
+          Live Activity
         </h1>
 
         <p className="mt-2 text-gray-500">
-          Live event activity feed
+          Realtime operational feed across the platform.
         </p>
 
       </div>
 
-      {activities.length === 0 ? (
-
+      {activities.length ===
+      0 ? (
         <div className="rounded-xl border border-dashed p-8 text-center text-gray-500">
           No activity yet.
         </div>
-
       ) : (
-
         <div className="space-y-4">
 
           {activities.map(
-            (
-              activity
-            ) => (
-
+            (activity) => (
               <div
                 key={
                   activity.id
                 }
-                className="rounded-xl border p-5"
+                className="rounded-xl border bg-white p-5 shadow-sm"
               >
 
-                <div className="flex items-center justify-between">
+                <div className="flex items-start justify-between">
 
-                  <h3 className="font-semibold">
-                    {activity.title}
-                  </h3>
+                  <div>
 
-                  <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium uppercase">
-                    {activity.type}
+                    <h3 className="font-semibold">
+                      {
+                        activity.title
+                      }
+                    </h3>
+
+                    <p className="mt-2 text-sm text-gray-600">
+                      {
+                        activity.description
+                      }
+                    </p>
+
+                  </div>
+
+                  <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold uppercase">
+                    {
+                      activity.type
+                    }
                   </span>
 
                 </div>
 
-                <p className="mt-3 text-sm text-gray-600">
-                  {activity.description}
-                </p>
+                <div className="mt-4 flex flex-wrap gap-4 text-xs text-gray-500">
 
-                <p className="mt-4 text-xs text-gray-400">
-                  {new Date(
-                    activity.timestamp
-                  ).toLocaleString()}
-                </p>
+                  {activity.station && (
+                    <span>
+                      Station:{" "}
+                      {
+                        activity.station
+                      }
+                    </span>
+                  )}
+
+                  {activity.actorId && (
+                    <span>
+                      Staff:{" "}
+                      {
+                        activity.actorId
+                      }
+                    </span>
+                  )}
+
+                  {activity.attendeeId && (
+                    <span>
+                      Attendee:{" "}
+                      {
+                        activity.attendeeId
+                      }
+                    </span>
+                  )}
+
+                  <span>
+                    {new Date(
+                      activity.createdAt,
+                    ).toLocaleString()}
+                  </span>
+
+                </div>
 
               </div>
-
-            )
+            ),
           )}
 
         </div>
-
       )}
 
     </main>

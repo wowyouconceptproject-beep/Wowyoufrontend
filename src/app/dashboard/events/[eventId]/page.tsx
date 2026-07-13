@@ -270,39 +270,53 @@ export default function EventPage() {
       <div className="grid gap-4 md:grid-cols-5">
 
         <Link
-          href={`/dashboard/events/${event.id}/tickets`}
-          className="rounded-xl border p-5 transition hover:bg-gray-50"
-        >
-          🎟 Tickets
-        </Link>
+  href={`/dashboard/events/${event.id}/tickets`}
+  className="rounded-xl border p-5 transition hover:bg-gray-50"
+>
+  Tickets
+</Link>
 
-        <Link
-          href={`/dashboard/events/${event.id}/attendees`}
-          className="rounded-xl border p-5 transition hover:bg-gray-50"
-        >
-          👥 Attendees
-        </Link>
+<Link
+  href={`/dashboard/events/${event.id}/attendees`}
+  className="rounded-xl border p-5 transition hover:bg-gray-50"
+>
+  Attendees
+</Link>
 
-        <Link
-          href={`/dashboard/events/${event.id}/staff`}
-          className="rounded-xl border p-5 transition hover:bg-gray-50"
-        >
-          👨‍💼 Staff
-        </Link>
+<Link
+  href={`/dashboard/events/${event.id}/staff`}
+  className="rounded-xl border p-5 transition hover:bg-gray-50"
+>
+  Staff
+</Link>
 
-        <Link
-          href={`/dashboard/events/${event.id}/revenue`}
-          className="rounded-xl border p-5 transition hover:bg-gray-50"
-        >
-          💰 Revenue
-        </Link>
+<Link
+  href={`/dashboard/events/${event.id}/revenue`}
+  className="rounded-xl border p-5 transition hover:bg-gray-50"
+>
+  Revenue
+</Link>
 
-        <Link
-          href={`/dashboard/events/${event.id}/activity`}
-          className="rounded-xl border p-5 transition hover:bg-gray-50"
-        >
-          📡 Activity
-        </Link>
+<Link
+  href={`/dashboard/events/${event.id}/activity`}
+  className="rounded-xl border p-5 transition hover:bg-gray-50"
+>
+  Activity
+</Link>
+
+<Link
+  href={`/dashboard/events/${event.id}/announcements`}
+  className="rounded-xl border p-5 transition hover:bg-gray-50"
+>
+  Announcements
+</Link>
+
+<Link
+  href={`/dashboard/events/${event.id}/vendors`}
+  className="rounded-xl border p-5 transition hover:bg-gray-50"
+>
+  Vendor Applications
+</Link>
 
       </div>
 

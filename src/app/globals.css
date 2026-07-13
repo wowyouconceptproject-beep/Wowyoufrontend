@@ -1,26 +1,199 @@
 @import "tailwindcss";
 
+/*
+|--------------------------------------------------------------------------
+| WowYou Design System
+|--------------------------------------------------------------------------
+*/
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Backgrounds */
+
+  --background: #090909;
+
+  --surface: #141414;
+
+  --surface-elevated: #1d1d1d;
+
+  --surface-hover: #262626;
+
+  /* Brand */
+
+  --gold: #d4af37;
+
+  --gold-light: #f1d06a;
+
+  /* Typography */
+
+  --foreground: #f7f4ec;
+
+  --muted: #a6a6a6;
+
+  /* Borders */
+
+  --divider: #2a2a2a;
+
+  /* Status */
+
+  --success: #22c55e;
+
+  --warning: #f59e0b;
+
+  --danger: #ef4444;
+
+  /* Radius */
+
+  --radius-card: 28px;
+
+  --radius-button: 18px;
+
+  --radius-image: 24px;
 }
+
+/*
+|--------------------------------------------------------------------------
+| Tailwind Theme
+|--------------------------------------------------------------------------
+*/
 
 @theme inline {
   --color-background: var(--background);
+
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --color-surface: var(--surface);
+
+  --color-surface-elevated: var(--surface-elevated);
+
+  --color-surface-hover: var(--surface-hover);
+
+  --color-gold: var(--gold);
+
+  --color-gold-light: var(--gold-light);
+
+  --color-muted: var(--muted);
+
+  --color-divider: var(--divider);
+
+  --color-success: var(--success);
+
+  --color-warning: var(--warning);
+
+  --color-danger: var(--danger);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/*
+|--------------------------------------------------------------------------
+| Base
+|--------------------------------------------------------------------------
+*/
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
+  min-height: 100vh;
+
+  overflow-x: hidden;
+
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(212, 175, 55, 0.08),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(255, 255, 255, 0.03),
+      transparent 45%
+    ),
+    var(--background);
+
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+  font-family: var(--font-body), Arial, Helvetica, sans-serif;
+
+  -webkit-font-smoothing: antialiased;
+
+  text-rendering: optimizeLegibility;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Scrollbar
+|--------------------------------------------------------------------------
+*/
+
+::-webkit-scrollbar {
+  width: 10px;
+
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2d2d2d;
+
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Selection
+|--------------------------------------------------------------------------
+*/
+
+::selection {
+  background: rgba(212, 175, 55, 0.35);
+
+  color: white;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Links
+|--------------------------------------------------------------------------
+*/
+
+a {
+  transition:
+    color 250ms ease,
+    transform 250ms ease,
+    opacity 250ms ease;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Images
+|--------------------------------------------------------------------------
+*/
+
+img {
+  user-select: none;
+
+  -webkit-user-drag: none;
+}
+
+/* Discovery Rails */
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+
+  -ms-overflow-style: none;
 }
