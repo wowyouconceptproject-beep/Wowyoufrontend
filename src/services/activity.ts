@@ -37,9 +37,10 @@ export interface GetActivityResponse {
 }
 
 export function getActivity(
-  limit = 50
+  eventId: string,
+  limit = 50,
 ) {
   return apiFetch<GetActivityResponse>(
-    `/operations/activity?limit=${limit}`
+    `/events/${eventId}/activity?limit=${limit}`,
   );
 }

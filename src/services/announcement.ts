@@ -31,9 +31,10 @@ export interface AnnouncementResponse {
 }
 
 export function getAnnouncements(
-  limit = 50
+  eventId: string,
+  limit = 50,
 ) {
   return apiFetch<AnnouncementResponse>(
-    `/operations/announcements?limit=${limit}`
+    `/events/${eventId}/announcements?limit=${limit}`,
   );
 }

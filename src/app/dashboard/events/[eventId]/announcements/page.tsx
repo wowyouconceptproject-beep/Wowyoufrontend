@@ -5,6 +5,10 @@ import {
   useState,
 } from "react";
 
+import {
+  useParams,
+} from "next/navigation";
+
 import AnnouncementList from "@/components/dashboard/announcements/AnnouncementList";
 
 import {
@@ -17,6 +21,14 @@ import {
 } from "@/hooks/useRealtime";
 
 export default function AnnouncementPage() {
+  const params =
+    useParams<{
+      eventId: string;
+    }>();
+
+  const eventId =
+    params.eventId;
+
   const [
     announcements,
     setAnnouncements,
@@ -41,11 +53,17 @@ export default function AnnouncementPage() {
   */
 
   async function loadAnnouncements() {
+    if (!eventId) {
+      return;
+    }
+
     try {
       setLoading(true);
 
       const result =
-        await getAnnouncements();
+        await getAnnouncements(
+          eventId,
+        );
 
       if (
         result.success
@@ -58,7 +76,9 @@ export default function AnnouncementPage() {
         setError("");
       }
     } catch (err: any) {
-      console.error(err);
+      console.error(
+        err,
+      );
 
       setError(
         err.message ??
@@ -70,8 +90,12 @@ export default function AnnouncementPage() {
   }
 
   useEffect(() => {
+    if (!eventId) {
+      return;
+    }
+
     loadAnnouncements();
-  }, []);
+  }, [eventId]);
 
   /*
   |--------------------------------------------------------------------------
@@ -80,6 +104,8 @@ export default function AnnouncementPage() {
   */
 
   useRealtime({
+    eventId,
+
     onAnnouncementCreated(
       announcement,
     ) {
@@ -156,13 +182,11 @@ export default function AnnouncementPage() {
   if (error) {
     return (
       <main className="p-8">
-
         <h1 className="mb-6 text-3xl font-bold">
           Announcements
         </h1>
 
         <div className="rounded-lg border border-red-200 bg-red-50 p-6">
-
           <h2 className="font-semibold text-red-700">
             Failed to load announcements
           </h2>
@@ -170,9 +194,7 @@ export default function AnnouncementPage() {
           <p className="mt-2 text-sm text-red-600">
             {error}
           </p>
-
         </div>
-
       </main>
     );
   }
@@ -185,18 +207,15 @@ export default function AnnouncementPage() {
 
   return (
     <main className="space-y-8 p-8">
-
       <div>
-
         <h1 className="text-3xl font-bold">
           Live Announcements
         </h1>
 
         <p className="mt-2 text-gray-500">
-          Realtime operational announcements
-          from across the platform.
+          Realtime announcements for this
+          event.
         </p>
-
       </div>
 
       <AnnouncementList
@@ -204,7 +223,6 @@ export default function AnnouncementPage() {
           announcements
         }
       />
-
     </main>
   );
 }

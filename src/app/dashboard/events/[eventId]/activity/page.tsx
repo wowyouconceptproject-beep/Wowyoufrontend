@@ -6,6 +6,10 @@ import {
 } from "react";
 
 import {
+  useParams,
+} from "next/navigation";
+
+import {
   getActivity,
   Activity,
 } from "@/services/activity";
@@ -15,6 +19,14 @@ import {
 } from "@/hooks/useRealtime";
 
 export default function ActivityPage() {
+  const params =
+    useParams<{
+      eventId: string;
+    }>();
+
+  const eventId =
+    params.eventId;
+
   const [
     activities,
     setActivities,
@@ -37,19 +49,25 @@ export default function ActivityPage() {
   */
 
   async function loadActivity() {
+    if (!eventId) {
+      return;
+    }
+
     try {
       setLoading(true);
 
       const result =
-        await getActivity();
+        await getActivity(
+          eventId,
+        );
 
       if (result.success) {
-  setActivities(
-    result.activity ?? [],
-  );
+        setActivities(
+          result.activity ?? [],
+        );
 
-  setError("");
-}
+        setError("");
+      }
     } catch (err: any) {
       console.error(
         "Activity page error:",
@@ -66,8 +84,12 @@ export default function ActivityPage() {
   }
 
   useEffect(() => {
+    if (!eventId) {
+      return;
+    }
+
     loadActivity();
-  }, []);
+  }, [eventId]);
 
   /*
   |--------------------------------------------------------------------------
@@ -76,6 +98,8 @@ export default function ActivityPage() {
   */
 
   useRealtime({
+    eventId,
+
     onActivity: (
       activity,
     ) => {
@@ -124,13 +148,11 @@ export default function ActivityPage() {
   if (error) {
     return (
       <main className="p-8">
-
         <h1 className="mb-6 text-3xl font-bold">
           Activity
         </h1>
 
         <div className="rounded-lg border border-red-200 bg-red-50 p-6">
-
           <h2 className="font-semibold text-red-700">
             Failed to load activity
           </h2>
@@ -138,9 +160,7 @@ export default function ActivityPage() {
           <p className="mt-2 text-sm text-red-600">
             {error}
           </p>
-
         </div>
-
       </main>
     );
   }
@@ -153,17 +173,14 @@ export default function ActivityPage() {
 
   return (
     <main className="space-y-8 p-8">
-
       <div>
-
         <h1 className="text-3xl font-bold">
           Live Activity
         </h1>
 
         <p className="mt-2 text-gray-500">
-          Realtime operational feed across the platform.
+          Realtime operational feed for this event.
         </p>
-
       </div>
 
       {activities.length ===
@@ -173,7 +190,6 @@ export default function ActivityPage() {
         </div>
       ) : (
         <div className="space-y-4">
-
           {activities.map(
             (activity) => (
               <div
@@ -182,11 +198,8 @@ export default function ActivityPage() {
                 }
                 className="rounded-xl border bg-white p-5 shadow-sm"
               >
-
                 <div className="flex items-start justify-between">
-
                   <div>
-
                     <h3 className="font-semibold">
                       {
                         activity.title
@@ -198,7 +211,6 @@ export default function ActivityPage() {
                         activity.description
                       }
                     </p>
-
                   </div>
 
                   <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold uppercase">
@@ -206,53 +218,59 @@ export default function ActivityPage() {
                       activity.type
                     }
                   </span>
-
                 </div>
 
                 <div className="mt-4 flex flex-wrap gap-4 text-xs text-gray-500">
-
                   {activity.station && (
                     <span>
-                      Station:{" "}
+                      📍{" "}
                       {
                         activity.station
                       }
                     </span>
                   )}
 
-                  {activity.actorId && (
+                  {activity.actorName && (
                     <span>
-                      Staff:{" "}
+                      👤{" "}
                       {
-                        activity.actorId
+                        activity.actorName
+                      }
+                      {activity.actorRole &&
+                        ` (${activity.actorRole})`}
+                    </span>
+                  )}
+
+                  {activity.attendeeName && (
+                    <span>
+                      🎫{" "}
+                      {
+                        activity.attendeeName
                       }
                     </span>
                   )}
 
-                  {activity.attendeeId && (
+                  {activity.ticketTypeName && (
                     <span>
-                      Attendee:{" "}
+                      🎟️{" "}
                       {
-                        activity.attendeeId
+                        activity.ticketTypeName
                       }
                     </span>
                   )}
 
                   <span>
+                    🕒{" "}
                     {new Date(
                       activity.createdAt,
                     ).toLocaleString()}
                   </span>
-
                 </div>
-
               </div>
             ),
           )}
-
         </div>
       )}
-
     </main>
   );
 }
