@@ -1,704 +1,287 @@
-"use client";
-
-import { useEffect, useState } from "react";
-
 import Link from "next/link";
 
 import {
   ArrowRight,
-  Building2,
   CalendarDays,
-  MapPin,
-  Plus,
-  Users,
 } from "lucide-react";
 
-import {
-  createOrganization,
-  getMyOrganization,
-} from "@/services/organization";
+export default function HomePage() {
+  return (
+    <main className="relative min-h-screen overflow-hidden bg-[#080808] text-white">
 
-import {
-  getCurrentUser,
-} from "@/services/auth";
+      {/* Ambient background */}
 
-export default function Dashboard() {
-  const [user, setUser] =
-    useState<any>(null);
+      <div className="pointer-events-none absolute inset-0">
 
-  const [
-    organization,
-    setOrganization,
-  ] = useState<any>(null);
+        <div
+          className="
+            absolute
+            left-1/2
+            top-1/3
+            h-[700px]
+            w-[700px]
+            -translate-x-1/2
+            -translate-y-1/2
+            rounded-full
+            bg-[#D4AF37]/[0.06]
+            blur-[160px]
+          "
+        />
 
-  const [name, setName] =
-    useState("");
+        <div
+          className="
+            absolute
+            bottom-[-250px]
+            right-[-150px]
+            h-[600px]
+            w-[600px]
+            rounded-full
+            bg-white/[0.025]
+            blur-[140px]
+          "
+        />
 
-  const [slug, setSlug] =
-    useState("");
+      </div>
 
-  const [loading, setLoading] =
-    useState(true);
+      {/* Fine grid */}
 
-  async function loadDashboard() {
-    try {
-      const userResult =
-        await getCurrentUser();
+      <div
+        className="
+          pointer-events-none
+          absolute
+          inset-0
+          opacity-[0.025]
+          [background-image:linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)]
+          [background-size:80px_80px]
+        "
+      />
 
-      if (!userResult.success) {
-        localStorage.removeItem(
-          "token"
-        );
+      {/* Header */}
 
-        window.location.href =
-          "/login";
+      <header
+        className="
+          relative
+          z-20
+          mx-auto
+          flex
+          max-w-7xl
+          items-center
+          justify-between
+          px-6
+          py-7
+          md:px-10
+        "
+      >
 
-        return;
-      }
+        <Link
+          href="/"
+          className="
+            text-xl
+            font-black
+            tracking-[0.2em]
+          "
+        >
+          WOWYOU
+        </Link>
 
-      setUser(
-        userResult.user
-      );
+        <Link
+          href="/login"
+          className="
+            text-sm
+            font-medium
+            text-white/60
+            transition
+            hover:text-white
+          "
+        >
+          Organizer Login
+        </Link>
 
-      const orgResult =
-        await getMyOrganization();
+      </header>
 
-      if (
-        orgResult.success
-      ) {
-        setOrganization(
-          orgResult.organization
-        );
-      }
-    } catch (error) {
-      console.error(error);
+      {/* Hero */}
 
-      localStorage.removeItem(
-        "token"
-      );
+      <section
+        className="
+          relative
+          z-10
+          mx-auto
+          flex
+          min-h-[calc(100vh-88px)]
+          max-w-7xl
+          flex-col
+          justify-between
+          px-6
+          pb-10
+          pt-20
+          md:px-10
+          md:pb-14
+          lg:pt-24
+        "
+      >
 
-      window.location.href =
-        "/login";
-    } finally {
-      setLoading(false);
-    }
-  }
+        {/* Hero copy */}
 
-  async function handleCreate() {
-    try {
-      const result =
-        await createOrganization(
-          name,
-          slug
-        );
+        <div className="max-w-6xl">
 
-      if (
-        !result.success
-      ) {
-        alert(
-          result.message ??
-            "Unable to create organization."
-        );
+          <p
+            className="
+              text-xs
+              font-semibold
+              uppercase
+              tracking-[0.42em]
+              text-[#D4AF37]
+            "
+          >
+            Discover. Experience. Connect.
+          </p>
 
-        return;
-      }
+          <h1
+            className="
+              mt-7
+              max-w-5xl
+              text-[clamp(4rem,9vw,9rem)]
+              font-black
+              leading-[0.84]
+              tracking-[-0.065em]
+            "
+          >
+            Experiences
+            <br />
+            at your
+            <br />
 
-      setOrganization(
-        result.organization
-      );
+            <span className="text-[#D4AF37]">
+              fingertips.
+            </span>
 
-      await loadDashboard();
-    } catch (error: any) {
-      alert(
-        error.message ??
-          "Failed to create organization."
-      );
-    }
-  }
+          </h1>
 
-  useEffect(() => {
-    loadDashboard();
-  }, []);
-
-  /*
-  |--------------------------------------------------------------------------
-  | Loading
-  |--------------------------------------------------------------------------
-  */
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-background px-6 py-10 lg:px-10">
-        <div className="mx-auto max-w-7xl">
-
-          <div className="animate-pulse">
-
-            <div className="h-4 w-32 rounded-full bg-surface" />
-
-            <div className="mt-5 h-12 w-80 rounded-xl bg-surface" />
-
-            <div className="mt-4 h-5 w-56 rounded-lg bg-surface" />
-
-            <div className="mt-12 grid gap-6 md:grid-cols-3">
-
-              {[1, 2, 3].map(
-                (item) => (
-                  <div
-                    key={item}
-                    className="h-36 rounded-[28px] bg-surface"
-                  />
-                )
-              )}
-
-            </div>
-
-          </div>
+          <p
+            className="
+              mt-10
+              max-w-xl
+              text-lg
+              leading-8
+              text-white/55
+              md:text-xl
+            "
+          >
+            See what&apos;s happening
+            around you today — or create
+            an experience of your own.
+          </p>
 
         </div>
-      </main>
-    );
-  }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Organization Setup
-  |--------------------------------------------------------------------------
-  */
+        {/* Actions */}
 
-  if (!organization) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-background px-6 py-16">
+        <div
+          className="
+            mt-16
+            flex
+            flex-col
+            gap-4
+            border-t
+            border-white/10
+            pt-8
+            sm:flex-row
+            sm:items-center
+            sm:justify-between
+          "
+        >
 
-        <div className="w-full max-w-xl">
+          <div className="flex flex-col gap-3 sm:flex-row">
 
-          <div className="mb-10">
-
-            <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl border border-divider bg-surface">
-
-              <Building2
-                className="h-6 w-6 text-gold"
-              />
-
-            </div>
-
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-gold">
-              Organizer Setup
-            </p>
-
-            <h1 className="mt-4 text-4xl font-black tracking-tight md:text-5xl">
-              Create your
-              organization.
-            </h1>
-
-            <p className="mt-5 max-w-md leading-7 text-muted">
-              Welcome{" "}
-              {user?.firstName}.
-              Your organization is
-              the home for your
-              events, teams and
-              operations.
-            </p>
-
-          </div>
-
-          <div className="rounded-[32px] border border-divider bg-surface p-6 md:p-8">
-
-            <div>
-
-              <label className="mb-3 block text-xs font-semibold uppercase tracking-[0.2em] text-muted">
-                Organization Name
-              </label>
-
-              <input
-                className="
-                  w-full
-                  rounded-2xl
-                  border
-                  border-divider
-                  bg-background
-                  px-5
-                  py-4
-                  outline-none
-                  transition
-                  placeholder:text-muted
-                  focus:border-gold
-                "
-                placeholder="e.g. WOWYOU Experiences"
-                value={name}
-                onChange={(e) =>
-                  setName(
-                    e.target.value
-                  )
-                }
-              />
-
-            </div>
-
-            <div className="mt-6">
-
-              <label className="mb-3 block text-xs font-semibold uppercase tracking-[0.2em] text-muted">
-                Organization Slug
-              </label>
-
-              <input
-                className="
-                  w-full
-                  rounded-2xl
-                  border
-                  border-divider
-                  bg-background
-                  px-5
-                  py-4
-                  outline-none
-                  transition
-                  placeholder:text-muted
-                  focus:border-gold
-                "
-                placeholder="e.g. wowyou-experiences"
-                value={slug}
-                onChange={(e) =>
-                  setSlug(
-                    e.target.value
-                  )
-                }
-              />
-
-              <p className="mt-3 text-sm text-muted">
-                This becomes your
-                unique organization
-                identifier.
-              </p>
-
-            </div>
-
-            <button
-              onClick={
-                handleCreate
-              }
+            <Link
+              href="/discover"
               className="
-                mt-8
-                flex
-                w-full
+                group
+                inline-flex
+                min-w-[190px]
                 items-center
-                justify-center
-                gap-2
+                justify-between
+                gap-8
                 rounded-full
-                bg-gold
-                px-6
+                bg-[#D4AF37]
+                px-7
                 py-4
                 font-semibold
                 text-black
                 transition
-                hover:scale-[1.01]
+                duration-300
+                hover:scale-[1.02]
               "
             >
-              Create Organization
+              Discover
 
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight
+                className="
+                  h-4
+                  w-4
+                  transition-transform
+                  group-hover:translate-x-1
+                "
+              />
 
-            </button>
+            </Link>
+
+            <Link
+              href="/register"
+              className="
+                group
+                inline-flex
+                min-w-[240px]
+                items-center
+                justify-between
+                gap-8
+                rounded-full
+                border
+                border-white/15
+                bg-white/[0.03]
+                px-7
+                py-4
+                font-semibold
+                backdrop-blur
+                transition
+                duration-300
+                hover:border-white/30
+                hover:bg-white/[0.07]
+              "
+            >
+              Organize Your Event
+
+              <CalendarDays
+                className="
+                  h-4
+                  w-4
+                  text-[#D4AF37]
+                "
+              />
+
+            </Link>
 
           </div>
+
+          <p
+            className="
+              hidden
+              max-w-[220px]
+              text-right
+              text-xs
+              leading-5
+              text-white/35
+              lg:block
+            "
+          >
+            Events, people and
+            experiences — connected
+            through one platform.
+          </p>
 
         </div>
 
-      </main>
-    );
-  }
-
-  /*
-  |--------------------------------------------------------------------------
-  | Organizer Dashboard
-  |--------------------------------------------------------------------------
-  */
-
-  const eventCount =
-    organization.events
-      ?.length ?? 0;
-
-  const publishedCount =
-    organization.events
-      ?.filter(
-        (event: any) =>
-          event.status ===
-          "PUBLISHED"
-      ).length ?? 0;
-
-  const draftCount =
-    organization.events
-      ?.filter(
-        (event: any) =>
-          event.status ===
-          "DRAFT"
-      ).length ?? 0;
-
-  return (
-    <main className="min-h-screen bg-background px-6 py-10 lg:px-10">
-
-      <div className="mx-auto max-w-7xl">
-
-        {/* Header */}
-
-        <section className="flex flex-col gap-8 border-b border-divider pb-10 lg:flex-row lg:items-end lg:justify-between">
-
-          <div>
-
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-gold">
-              Organizer Dashboard
-            </p>
-
-            <h1 className="mt-4 text-4xl font-black tracking-tight md:text-5xl">
-              {organization.name}
-            </h1>
-
-            <p className="mt-4 text-muted">
-              Welcome back,{" "}
-              <span className="text-foreground">
-                {user?.firstName}
-              </span>
-              . Manage your events
-              and operations from
-              here.
-            </p>
-
-          </div>
-
-          <Link
-            href="/dashboard/events/create"
-            className="
-              inline-flex
-              items-center
-              justify-center
-              gap-2
-              rounded-full
-              bg-gold
-              px-6
-              py-4
-              font-semibold
-              text-black
-              transition
-              hover:scale-[1.02]
-            "
-          >
-            <Plus className="h-5 w-5" />
-
-            Create Event
-          </Link>
-
-        </section>
-
-        {/* Overview */}
-
-        <section className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-
-          <div className="rounded-[28px] border border-divider bg-surface p-6">
-
-            <div className="flex items-center justify-between">
-
-              <p className="text-sm text-muted">
-                Total Events
-              </p>
-
-              <CalendarDays className="h-5 w-5 text-gold" />
-
-            </div>
-
-            <h2 className="mt-8 text-4xl font-black">
-              {eventCount}
-            </h2>
-
-          </div>
-
-          <div className="rounded-[28px] border border-divider bg-surface p-6">
-
-            <p className="text-sm text-muted">
-              Published
-            </p>
-
-            <h2 className="mt-8 text-4xl font-black">
-              {publishedCount}
-            </h2>
-
-            <p className="mt-2 text-xs uppercase tracking-[0.18em] text-green-400">
-              Live Events
-            </p>
-
-          </div>
-
-          <div className="rounded-[28px] border border-divider bg-surface p-6">
-
-            <p className="text-sm text-muted">
-              Drafts
-            </p>
-
-            <h2 className="mt-8 text-4xl font-black">
-              {draftCount}
-            </h2>
-
-            <p className="mt-2 text-xs uppercase tracking-[0.18em] text-muted">
-              In Preparation
-            </p>
-
-          </div>
-
-          <div className="rounded-[28px] border border-divider bg-surface p-6">
-
-            <p className="text-sm text-muted">
-              Organization
-            </p>
-
-            <h2 className="mt-8 truncate text-xl font-bold">
-              {organization.slug}
-            </h2>
-
-            <p className="mt-2 text-xs uppercase tracking-[0.18em] text-muted">
-              Organization ID
-            </p>
-
-          </div>
-
-        </section>
-
-        {/* Events Header */}
-
-        <section className="mt-16">
-
-          <div className="flex items-end justify-between gap-6">
-
-            <div>
-
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gold">
-                Event Portfolio
-              </p>
-
-              <h2 className="mt-3 text-3xl font-bold">
-                Your Events
-              </h2>
-
-              <p className="mt-2 text-muted">
-                Open an event to
-                manage tickets,
-                attendees, staff,
-                revenue and live
-                operations.
-              </p>
-
-            </div>
-
-          </div>
-
-          {/* Empty */}
-
-          {eventCount === 0 && (
-
-            <div className="mt-8 flex min-h-[360px] flex-col items-center justify-center rounded-[32px] border border-dashed border-divider bg-surface/50 px-6 text-center">
-
-              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-divider bg-background">
-
-                <CalendarDays className="h-7 w-7 text-gold" />
-
-              </div>
-
-              <h3 className="mt-6 text-2xl font-bold">
-                Your first event
-                starts here.
-              </h3>
-
-              <p className="mt-3 max-w-md leading-7 text-muted">
-                Create an event,
-                configure tickets,
-                build your staff
-                team and start
-                preparing your live
-                operations.
-              </p>
-
-              <Link
-                href="/dashboard/events/create"
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 font-semibold text-black"
-              >
-                <Plus className="h-4 w-4" />
-
-                Create Event
-              </Link>
-
-            </div>
-
-          )}
-
-          {/* Event Cards */}
-
-          {eventCount > 0 && (
-
-            <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-
-              {organization.events?.map(
-                (event: any) => (
-
-                  <Link
-                    key={
-                      event.id
-                    }
-                    href={`/dashboard/events/${event.id}`}
-                    className="
-                      group
-                      overflow-hidden
-                      rounded-[28px]
-                      border
-                      border-divider
-                      bg-surface
-                      transition
-                      duration-300
-                      hover:-translate-y-1
-                      hover:border-gold/40
-                    "
-                  >
-
-                    {/* Image */}
-
-                    <div className="relative h-52 overflow-hidden bg-background">
-
-                      {event.coverImage ? (
-
-                        <img
-                          src={
-                            event.coverImage
-                          }
-                          alt={
-                            event.title
-                          }
-                          className="
-                            h-full
-                            w-full
-                            object-cover
-                            transition
-                            duration-500
-                            group-hover:scale-105
-                          "
-                        />
-
-                      ) : (
-
-                        <div className="flex h-full items-center justify-center">
-
-                          <CalendarDays className="h-10 w-10 text-muted" />
-
-                        </div>
-
-                      )}
-
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-
-                      <div
-                        className={`
-                          absolute
-                          right-4
-                          top-4
-                          rounded-full
-                          border
-                          px-3
-                          py-1.5
-                          text-xs
-                          font-semibold
-                          uppercase
-                          tracking-wider
-                          backdrop-blur-md
-                          ${
-                            event.status ===
-                            "PUBLISHED"
-                              ? "border-green-400/30 bg-green-500/20 text-green-300"
-                              : "border-white/10 bg-black/40 text-white"
-                          }
-                        `}
-                      >
-                        {event.status}
-                      </div>
-
-                    </div>
-
-                    {/* Content */}
-
-                    <div className="p-6">
-
-                      <h3 className="text-2xl font-bold transition group-hover:text-gold">
-                        {event.title}
-                      </h3>
-
-                      <div className="mt-5 space-y-3">
-
-                        <div className="flex items-center gap-3 text-sm text-muted">
-
-                          <MapPin className="h-4 w-4 shrink-0" />
-
-                          <span className="truncate">
-                            {event.venue}
-                          </span>
-
-                        </div>
-
-                        <div className="flex items-center gap-3 text-sm text-muted">
-
-                          <Users className="h-4 w-4 shrink-0" />
-
-                          <span>
-                            Capacity{" "}
-                            {event.capacity?.toLocaleString()}
-                          </span>
-
-                        </div>
-
-                        {event.startDate && (
-
-                          <div className="flex items-center gap-3 text-sm text-muted">
-
-                            <CalendarDays className="h-4 w-4 shrink-0" />
-
-                            <span>
-                              {new Date(
-                                event.startDate
-                              ).toLocaleDateString(
-                                "en-US",
-                                {
-                                  month:
-                                    "short",
-                                  day:
-                                    "numeric",
-                                  year:
-                                    "numeric",
-                                }
-                              )}
-                            </span>
-
-                          </div>
-
-                        )}
-
-                      </div>
-
-                      <div className="mt-7 flex items-center justify-between border-t border-divider pt-5">
-
-                        <span className="text-sm font-medium">
-                          Manage Event
-                        </span>
-
-                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:text-gold" />
-
-                      </div>
-
-                    </div>
-
-                  </Link>
-
-                )
-              )}
-
-            </div>
-
-          )}
-
-        </section>
-
-      </div>
+      </section>
 
     </main>
   );
