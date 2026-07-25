@@ -242,17 +242,20 @@ export function AccessCodeDialog({
 
               <div className="min-w-0 flex-1">
 
-                <DialogTitle
-                  className="
-                    text-left
-                    text-xl
-                    font-bold
-                    tracking-tight
-                    text-white
-                  "
-                >
-                  {staff.name}
-                </DialogTitle>
+                <DialogTitle>
+  <span
+    className="
+      block
+      text-left
+      text-xl
+      font-bold
+      tracking-tight
+      text-white
+    "
+  >
+    {staff.name}
+  </span>
+</DialogTitle>
 
                 <div
                   className="
