@@ -1,729 +1,288 @@
-"use client";
-
-import {
-  useEffect,
-  useState,
-} from "react";
-
 import Link from "next/link";
 
 import {
   ArrowRight,
-  Menu,
-  Search,
-  X,
+  CalendarDays,
 } from "lucide-react";
 
-import HeroCarousel from "@/components/discovery/HeroCarousel";
-import FeaturedEvent from "@/components/discovery/FeaturedEvent";
-import EventRail from "@/components/discovery/EventRail";
-import CategoryStrip from "@/components/discovery/CategoryStrip";
-
-import {
-  getDiscovery,
-  DiscoveryResponse,
-} from "@/services/discovery";
-
 export default function HomePage() {
-  const [data, setData] =
-    useState<DiscoveryResponse>();
+  return (
+    <main className="relative min-h-screen overflow-hidden bg-[#080808] text-white">
 
-  const [loading, setLoading] =
-    useState(true);
+      {/* Ambient background */}
 
-  const [menuOpen, setMenuOpen] =
-    useState(false);
+      <div className="pointer-events-none absolute inset-0">
 
-  /*
-  |--------------------------------------------------------------------------
-  | Discovery
-  |--------------------------------------------------------------------------
-  */
+        <div
+          className="
+            absolute
+            left-1/2
+            top-1/3
+            h-[700px]
+            w-[700px]
+            -translate-x-1/2
+            -translate-y-1/2
+            rounded-full
+            bg-[#D4AF37]/[0.06]
+            blur-[160px]
+          "
+        />
 
-  useEffect(() => {
-    async function load() {
-      try {
-        const result =
-          await getDiscovery();
+        <div
+          className="
+            absolute
+            bottom-[-250px]
+            right-[-150px]
+            h-[600px]
+            w-[600px]
+            rounded-full
+            bg-white/[0.025]
+            blur-[140px]
+          "
+        />
 
-        setData(result);
-      } catch (error) {
-        console.error(
-          "Discovery error:",
-          error,
-        );
-      } finally {
-        setLoading(false);
-      }
-    }
+      </div>
 
-    load();
-  }, []);
+      {/* Fine grid */}
 
-  /*
-  |--------------------------------------------------------------------------
-  | Loading
-  |--------------------------------------------------------------------------
-  */
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-[#050505] text-white">
-        <div className="h-20 border-b border-white/[0.06]" />
-
-        <div className="mx-auto max-w-7xl px-5 py-16 md:px-8">
-
-          <div
-            className="
-              h-[65vh]
-              animate-pulse
-              rounded-[32px]
-              bg-white/[0.03]
-            "
-          />
-
-        </div>
-      </main>
-    );
-  }
-
-  /*
-  |--------------------------------------------------------------------------
-  | Error
-  |--------------------------------------------------------------------------
-  */
-
-  if (!data) {
-    return (
-      <main
+      <div
         className="
+          pointer-events-none
+          absolute
+          inset-0
+          opacity-[0.025]
+          [background-image:linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)]
+          [background-size:80px_80px]
+        "
+      />
+
+      {/* Header */}
+
+      <header
+        className="
+          relative
+          z-20
+          mx-auto
           flex
-          min-h-screen
+          max-w-7xl
           items-center
-          justify-center
-          bg-[#050505]
+          justify-between
           px-6
-          text-white
+          py-7
+          md:px-10
         "
       >
-        <div className="text-center">
+
+        <Link
+          href="/"
+          className="
+            text-xl
+            font-black
+            tracking-[0.2em]
+          "
+        >
+          WOWYOU
+        </Link>
+
+        <Link
+          href="/login"
+          className="
+            text-sm
+            font-medium
+            text-white/60
+            transition
+            hover:text-white
+          "
+        >
+          Organizer Login
+        </Link>
+
+      </header>
+
+      {/* Hero */}
+
+      <section
+        className="
+          relative
+          z-10
+          mx-auto
+          flex
+          min-h-[calc(100vh-88px)]
+          max-w-7xl
+          flex-col
+          justify-between
+          px-6
+          pb-10
+          pt-20
+          md:px-10
+          md:pb-14
+          lg:pt-24
+        "
+      >
+
+        {/* Hero copy */}
+
+        <div className="max-w-6xl">
 
           <p
             className="
-              text-[10px]
-              font-bold
+              text-xs
+              font-semibold
               uppercase
-              tracking-[0.2em]
+              tracking-[0.42em]
               text-[#D4AF37]
             "
           >
-            WOWYOU
+            Discover. Experience. Connect.
           </p>
 
           <h1
             className="
-              mt-4
-              text-3xl
+              mt-7
+              max-w-5xl
+              text-[clamp(4rem,9vw,9rem)]
               font-black
-              tracking-tight
+              leading-[0.84]
+              tracking-[-0.065em]
             "
           >
-            Unable to load discovery
+            Experiences
+            <br />
+            at your
+            <br />
+
+            <span className="text-[#D4AF37]">
+              fingertips.
+            </span>
+
           </h1>
 
           <p
             className="
-              mt-3
-              text-sm
-              text-white/35
+              mt-10
+              max-w-xl
+              text-lg
+              leading-8
+              text-white/55
+              md:text-xl
             "
           >
-            Please refresh the page
-            and try again.
+            See what&apos;s happening
+            around you today — or create
+            an experience of your own.
           </p>
 
         </div>
-      </main>
-    );
-  }
 
-  /*
-  |--------------------------------------------------------------------------
-  | UI
-  |--------------------------------------------------------------------------
-  */
+        {/* Actions */}
 
-  return (
-    <main
-      className="
-        min-h-screen
-        bg-[#050505]
-        text-white
-      "
-    >
-      {/* Navigation */}
-
-      <header
-        className="
-          sticky
-          top-0
-          z-50
-          border-b
-          border-white/[0.06]
-          bg-[#050505]/90
-          backdrop-blur-xl
-        "
-      >
         <div
           className="
-            mx-auto
+            mt-16
             flex
-            h-[76px]
-            max-w-7xl
-            items-center
-            justify-between
-            px-5
-            md:px-8
+            flex-col
+            gap-4
+            border-t
+            border-white/10
+            pt-8
+            sm:flex-row
+            sm:items-center
+            sm:justify-between
           "
         >
-          {/* Brand */}
 
-          <Link
-            href="/"
-            className="
-              flex
-              shrink-0
-              items-center
-              gap-3
-            "
-          >
-            <div
-              className="
-                flex
-                h-9
-                w-9
-                items-center
-                justify-center
-                rounded-xl
-                bg-[#D4AF37]
-                text-sm
-                font-black
-                text-black
-              "
-            >
-              W
-            </div>
+          <div className="flex flex-col gap-3 sm:flex-row">
 
-            <span
-              className="
-                text-lg
-                font-black
-                tracking-tight
-              "
-            >
-              WOWYOU
-            </span>
-          </Link>
-
-          {/* Desktop Navigation */}
-
-          <nav
-            className="
-              hidden
-              items-center
-              gap-8
-              lg:flex
-            "
-          >
             <Link
-              href="/"
+              href="/discover"
               className="
-                text-sm
+                group
+                inline-flex
+                min-w-[190px]
+                items-center
+                justify-between
+                gap-8
+                rounded-full
+                bg-[#D4AF37]
+                px-7
+                py-4
                 font-semibold
-                text-white
+                text-black
+                transition
+                duration-300
+                hover:scale-[1.02]
               "
             >
               Discover
-            </Link>
 
-            <Link
-              href="/events"
-              className="
-                text-sm
-                font-medium
-                text-white/45
-                transition
-                hover:text-white
-              "
-            >
-              Events
-            </Link>
+              <ArrowRight
+                className="
+                  h-4
+                  w-4
+                  transition-transform
+                  group-hover:translate-x-1
+                "
+              />
 
-            <Link
-              href="/vendor/portal"
-              className="
-                text-sm
-                font-medium
-                text-white/45
-                transition
-                hover:text-white
-              "
-            >
-              Vendors
-            </Link>
-          </nav>
-
-          {/* Desktop Actions */}
-
-          <div
-            className="
-              hidden
-              items-center
-              gap-3
-              lg:flex
-            "
-          >
-            <Link
-              href="/events"
-              aria-label="Search events"
-              className="
-                flex
-                h-11
-                w-11
-                items-center
-                justify-center
-                rounded-xl
-                border
-                border-white/[0.08]
-                text-white/50
-                transition
-                hover:border-white/[0.15]
-                hover:bg-white/[0.04]
-                hover:text-white
-              "
-            >
-              <Search className="h-4 w-4" />
-            </Link>
-
-            <Link
-              href="/login"
-              className="
-                inline-flex
-                h-11
-                items-center
-                justify-center
-                rounded-xl
-                px-5
-                text-sm
-                font-bold
-                text-white/65
-                transition
-                hover:bg-white/[0.04]
-                hover:text-white
-              "
-            >
-              Sign In
             </Link>
 
             <Link
               href="/register"
               className="
+                group
                 inline-flex
-                h-11
+                min-w-[240px]
                 items-center
-                justify-center
-                gap-2
-                rounded-xl
-                bg-[#D4AF37]
-                px-5
-                text-sm
-                font-black
-                text-black
+                justify-between
+                gap-8
+                rounded-full
+                border
+                border-white/15
+                bg-white/[0.03]
+                px-7
+                py-4
+                font-semibold
+                backdrop-blur
                 transition
-                hover:bg-[#E0BE4A]
+                duration-300
+                hover:border-white/30
+                hover:bg-white/[0.07]
               "
             >
               Organize Your Event
 
-              <ArrowRight className="h-4 w-4" />
+              <CalendarDays
+                className="
+                  h-4
+                  w-4
+                  text-[#D4AF37]
+                "
+              />
+
             </Link>
+
           </div>
 
-          {/* Mobile Menu */}
-
-          <button
-            type="button"
-            aria-label={
-              menuOpen
-                ? "Close navigation"
-                : "Open navigation"
-            }
-            onClick={() =>
-              setMenuOpen(
-                (current) =>
-                  !current,
-              )
-            }
+          <p
             className="
-              flex
-              h-11
-              w-11
-              items-center
-              justify-center
-              rounded-xl
-              border
-              border-white/[0.08]
-              text-white
-              lg:hidden
+              hidden
+              max-w-[220px]
+              text-right
+              text-xs
+              leading-5
+              text-white/35
+              lg:block
             "
           >
-            {menuOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
-          </button>
+            Events, people and
+            experiences — connected
+            through one platform.
+          </p>
+
         </div>
 
-        {/* Mobile Navigation */}
+      </section>
 
-        {menuOpen && (
-          <div
-            className="
-              border-t
-              border-white/[0.06]
-              bg-[#080808]
-              px-5
-              py-5
-              lg:hidden
-            "
-          >
-            <nav
-              className="
-                mx-auto
-                max-w-7xl
-                space-y-1
-              "
-            >
-              <MobileLink
-                href="/"
-                label="Discover"
-                onClick={() =>
-                  setMenuOpen(false)
-                }
-              />
-
-              <MobileLink
-                href="/events"
-                label="Events"
-                onClick={() =>
-                  setMenuOpen(false)
-                }
-              />
-
-              <MobileLink
-                href="/vendor/portal"
-                label="Vendors"
-                onClick={() =>
-                  setMenuOpen(false)
-                }
-              />
-
-              <div
-                className="
-                  my-4
-                  h-px
-                  bg-white/[0.06]
-                "
-              />
-
-              <MobileLink
-                href="/login"
-                label="Sign In"
-                onClick={() =>
-                  setMenuOpen(false)
-                }
-              />
-
-              <Link
-                href="/register"
-                onClick={() =>
-                  setMenuOpen(false)
-                }
-                className="
-                  mt-4
-                  flex
-                  h-12
-                  items-center
-                  justify-between
-                  rounded-xl
-                  bg-[#D4AF37]
-                  px-5
-                  text-sm
-                  font-black
-                  text-black
-                "
-              >
-                Organize Your Event
-
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </nav>
-          </div>
-        )}
-      </header>
-
-      {/* Discovery Content */}
-
-      <div className="space-y-28 pb-32 md:space-y-32">
-
-        <HeroCarousel
-          events={data.hero}
-        />
-
-        {data.featured && (
-          <FeaturedEvent
-            event={
-              data.featured
-            }
-          />
-        )}
-
-        <EventRail
-          title="Now Showing"
-          subtitle="Experiences people are discovering this week."
-          events={
-            data.trending
-          }
-        />
-
-        <CategoryStrip
-          categories={
-            data.categories
-          }
-        />
-
-        <EventRail
-          title="Coming Soon"
-          subtitle="Plan your next experience."
-          events={
-            data.upcoming
-          }
-        />
-
-        {/* Organizer CTA */}
-
-        <section
-          className="
-            mx-auto
-            max-w-7xl
-            px-5
-            md:px-8
-          "
-        >
-          <div
-            className="
-              relative
-              overflow-hidden
-              rounded-[32px]
-              border
-              border-[#D4AF37]/15
-              bg-[#0D0D0D]
-              px-6
-              py-14
-              md:px-12
-              md:py-16
-              lg:px-16
-            "
-          >
-            {/* Background Detail */}
-
-            <div
-              className="
-                pointer-events-none
-                absolute
-                -right-24
-                -top-32
-                h-96
-                w-96
-                rounded-full
-                bg-[#D4AF37]/[0.05]
-                blur-3xl
-              "
-            />
-
-            <div
-              className="
-                relative
-                flex
-                flex-col
-                gap-10
-                lg:flex-row
-                lg:items-end
-                lg:justify-between
-              "
-            >
-              <div className="max-w-2xl">
-
-                <div className="flex items-center gap-3">
-
-                  <span className="h-px w-8 bg-[#D4AF37]" />
-
-                  <p
-                    className="
-                      text-[10px]
-                      font-bold
-                      uppercase
-                      tracking-[0.22em]
-                      text-[#D4AF37]
-                    "
-                  >
-                    For Organizers
-                  </p>
-
-                </div>
-
-                <h2
-                  className="
-                    mt-6
-                    text-3xl
-                    font-black
-                    tracking-tight
-                    md:text-5xl
-                  "
-                >
-                  Your event deserves
-                  more than a ticketing
-                  page.
-                </h2>
-
-                <p
-                  className="
-                    mt-5
-                    max-w-xl
-                    text-sm
-                    leading-7
-                    text-white/40
-                    md:text-base
-                  "
-                >
-                  Create your event,
-                  manage ticketing,
-                  coordinate staff,
-                  communicate with
-                  attendees and run
-                  operations from one
-                  platform.
-                </p>
-
-              </div>
-
-              <div
-                className="
-                  flex
-                  shrink-0
-                  flex-col
-                  gap-3
-                  sm:flex-row
-                "
-              >
-                <Link
-                  href="/login"
-                  className="
-                    inline-flex
-                    h-12
-                    items-center
-                    justify-center
-                    rounded-xl
-                    border
-                    border-white/[0.1]
-                    bg-white/[0.025]
-                    px-6
-                    text-sm
-                    font-bold
-                    transition
-                    hover:bg-white/[0.06]
-                  "
-                >
-                  Organizer Sign In
-                </Link>
-
-                <Link
-                  href="/register"
-                  className="
-                    inline-flex
-                    h-12
-                    items-center
-                    justify-center
-                    gap-3
-                    rounded-xl
-                    bg-[#D4AF37]
-                    px-6
-                    text-sm
-                    font-black
-                    text-black
-                    transition
-                    hover:bg-[#E0BE4A]
-                  "
-                >
-                  Organize Your Event
-
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
-
-            </div>
-          </div>
-        </section>
-
-      </div>
     </main>
-  );
-}
-
-/*
-|--------------------------------------------------------------------------
-| Mobile Link
-|--------------------------------------------------------------------------
-*/
-
-function MobileLink({
-  href,
-  label,
-  onClick,
-}: {
-  href: string;
-  label: string;
-  onClick: () => void;
-}) {
-  return (
-    <Link
-      href={href}
-      onClick={onClick}
-      className="
-        flex
-        h-12
-        items-center
-        justify-between
-        rounded-xl
-        px-4
-        text-sm
-        font-semibold
-        text-white/60
-        transition
-        hover:bg-white/[0.04]
-        hover:text-white
-      "
-    >
-      {label}
-
-      <ArrowRight
-        className="
-          h-3.5
-          w-3.5
-          text-white/20
-        "
-      />
-    </Link>
   );
 }
