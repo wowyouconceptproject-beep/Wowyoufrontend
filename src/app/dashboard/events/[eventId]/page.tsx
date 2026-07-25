@@ -1,6 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
 
 import Link from "next/link";
 
@@ -37,9 +40,7 @@ export default function EventPage() {
           eventId
         );
 
-      if (
-        result.success
-      ) {
+      if (result.success) {
         setEvent(
           result.event
         );
@@ -65,9 +66,7 @@ export default function EventPage() {
           event.id
         );
 
-      if (
-        !result.success
-      ) {
+      if (!result.success) {
         alert(
           result.message ??
             "Unable to publish event."
@@ -77,14 +76,11 @@ export default function EventPage() {
       }
 
       await loadEvent();
-
     } catch (error: any) {
-
       alert(
         error.message ??
           "Failed to publish event."
       );
-
     }
   }
 
@@ -96,230 +92,936 @@ export default function EventPage() {
 
   if (loading) {
     return (
-      <main className="p-8">
-        Loading...
+      <main
+        className="
+          min-h-screen
+          bg-[#050505]
+          px-6
+          py-8
+          text-white
+          lg:px-10
+        "
+      >
+        <div
+          className="
+            flex
+            min-h-[60vh]
+            items-center
+            justify-center
+          "
+        >
+          <div className="text-center">
+            <div
+              className="
+                mx-auto
+                h-10
+                w-10
+                animate-spin
+                rounded-full
+                border-2
+                border-white/10
+                border-t-[#D4AF37]
+              "
+            />
+
+            <p
+              className="
+                mt-5
+                text-sm
+                text-white/40
+              "
+            >
+              Loading event command center...
+            </p>
+          </div>
+        </div>
       </main>
     );
   }
 
   if (!event) {
     return (
-      <main className="p-8">
+      <main
+        className="
+          min-h-screen
+          bg-[#050505]
+          p-8
+          text-white
+        "
+      >
+        <div
+          className="
+            mx-auto
+            max-w-7xl
+          "
+        >
+          <h1
+            className="
+              text-3xl
+              font-bold
+            "
+          >
+            Event
+          </h1>
 
-        <h1 className="text-3xl font-bold">
-          Event
-        </h1>
-
-        <p className="mt-4 text-gray-500">
-          Event not found.
-        </p>
-
+          <p
+            className="
+              mt-4
+              text-white/40
+            "
+          >
+            Event not found.
+          </p>
+        </div>
       </main>
     );
   }
 
+  const startDate =
+    new Date(
+      event.startDate
+    );
+
+  const endDate =
+    new Date(
+      event.endDate
+    );
+
+  const managementItems = [
+    {
+      title: "Tickets",
+      description:
+        "Create, manage and monitor ticket sales.",
+      href: `/dashboard/events/${event.id}/tickets`,
+      icon: "◫",
+    },
+    {
+      title: "Attendees",
+      description:
+        "View registrations and attendee information.",
+      href: `/dashboard/events/${event.id}/attendees`,
+      icon: "◎",
+    },
+    {
+      title: "Staff",
+      description:
+        "Manage your event team and staff access.",
+      href: `/dashboard/events/${event.id}/staff`,
+      icon: "◇",
+    },
+    {
+      title: "Revenue",
+      description:
+        "Track sales, revenue and event performance.",
+      href: `/dashboard/events/${event.id}/revenue`,
+      icon: "₦",
+    },
+    {
+      title: "Activity",
+      description:
+        "Follow operational activity across your event.",
+      href: `/dashboard/events/${event.id}/activity`,
+      icon: "↗",
+    },
+    {
+      title: "Announcements",
+      description:
+        "Send updates and information to attendees.",
+      href: `/dashboard/events/${event.id}/announcements`,
+      icon: "◉",
+    },
+    {
+      title: "Vendor Applications",
+      description:
+        "Review and manage vendors participating in your event.",
+      href: `/dashboard/events/${event.id}/vendors`,
+      icon: "▦",
+    },
+  ];
+
   return (
-    <main className="space-y-8 p-8">
+    <main
+      className="
+        relative
+        min-h-screen
+        overflow-hidden
+        bg-[#050505]
+        text-white
+      "
+    >
+      {/* Background atmosphere */}
 
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-
-        <div>
-
-          <h1 className="text-4xl font-bold">
-            {event.title}
-          </h1>
-
-          <p className="mt-2 text-gray-500">
-            {event.venue}
-          </p>
-
-          <p className="mt-2">
-            {event.status}
-          </p>
-
-        </div>
-
-        <div className="flex flex-wrap gap-3">
-
-          {event.status ===
-            "DRAFT" && (
-            <button
-              onClick={
-                handlePublish
-              }
-              className="rounded bg-black px-5 py-3 text-white"
-            >
-              Publish Event
-            </button>
-          )}
-
-          <button className="rounded border px-5 py-3">
-            Edit Event
-          </button>
-
-        </div>
-
-      </div>
-
-      <DashboardStats
-        ticketsSold={
-          event.stats
-            ?.ticketSold ?? 0
-        }
-        checkedIn={
-          event.stats
-            ?.checkedIn ?? 0
-        }
-        revenue={
-          event.stats
-            ?.revenue ?? 0
-        }
-        currency={
-          event.currency
-        }
-        onlineStaff={
-          event.stats
-            ?.onlineStaff ?? 0
-        }
+      <div
+        className="
+          pointer-events-none
+          absolute
+          right-[-200px]
+          top-[-200px]
+          h-[600px]
+          w-[600px]
+          rounded-full
+          bg-[#D4AF37]/[0.06]
+          blur-[160px]
+        "
       />
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div
+        className="
+          relative
+          z-10
+          mx-auto
+          max-w-[1500px]
+          px-6
+          py-8
+          lg:px-10
+          lg:py-10
+        "
+      >
+        {/* Breadcrumb */}
 
-        <div className="rounded-xl border p-5">
+        <div
+          className="
+            mb-8
+            flex
+            items-center
+            gap-2
+            text-sm
+            text-white/35
+          "
+        >
+          <Link
+            href="/dashboard"
+            className="
+              transition
+              hover:text-white
+            "
+          >
+            Dashboard
+          </Link>
 
-          <p className="text-sm text-gray-500">
-            Venue
-          </p>
+          <span>/</span>
 
-          <p className="mt-2 font-semibold">
-            {event.venue}
-          </p>
+          <span>Events</span>
 
+          <span>/</span>
+
+          <span
+            className="
+              max-w-[240px]
+              truncate
+              text-white/60
+            "
+          >
+            {event.title}
+          </span>
         </div>
 
-        <div className="rounded-xl border p-5">
+        {/* ==================================================
+            EVENT COMMAND HEADER
+        ================================================== */}
 
-          <p className="text-sm text-gray-500">
-            Capacity
-          </p>
+        <section
+          className="
+            relative
+            overflow-hidden
+            rounded-[28px]
+            border
+            border-white/[0.07]
+            bg-[#0B0B0B]
+            p-7
+            lg:p-9
+          "
+        >
+          <div
+            className="
+              pointer-events-none
+              absolute
+              right-[-80px]
+              top-[-100px]
+              h-[320px]
+              w-[320px]
+              rounded-full
+              bg-[#D4AF37]/10
+              blur-[100px]
+            "
+          />
 
-          <p className="mt-2 font-semibold">
-            {event.capacity}
-          </p>
+          <div
+            className="
+              relative
+              z-10
+              flex
+              flex-col
+              gap-8
+              xl:flex-row
+              xl:items-end
+              xl:justify-between
+            "
+          >
+            <div
+              className="
+                max-w-3xl
+              "
+            >
+              {/* Status */}
 
-        </div>
+              <div
+                className="
+                  mb-5
+                  flex
+                  flex-wrap
+                  items-center
+                  gap-3
+                "
+              >
+                <span
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    rounded-full
+                    border
+                    border-[#D4AF37]/20
+                    bg-[#D4AF37]/10
+                    px-3
+                    py-1.5
+                    text-xs
+                    font-bold
+                    tracking-wider
+                    text-[#D4AF37]
+                  "
+                >
+                  <span
+                    className="
+                      h-1.5
+                      w-1.5
+                      rounded-full
+                      bg-[#D4AF37]
+                    "
+                  />
 
-        <div className="rounded-xl border p-5">
+                  {event.status}
+                </span>
 
-          <p className="text-sm text-gray-500">
-            Status
-          </p>
+                <span
+                  className="
+                    text-sm
+                    text-white/35
+                  "
+                >
+                  Event Command Center
+                </span>
+              </div>
 
-          <p className="mt-2 font-semibold">
-            {event.status}
-          </p>
+              <h1
+                className="
+                  text-4xl
+                  font-black
+                  tracking-tight
+                  text-white
+                  md:text-5xl
+                  xl:text-6xl
+                "
+              >
+                {event.title}
+              </h1>
 
-        </div>
+              <div
+                className="
+                  mt-5
+                  flex
+                  flex-wrap
+                  items-center
+                  gap-x-6
+                  gap-y-3
+                  text-sm
+                  text-white/50
+                "
+              >
+                <span>
+                  {event.venue}
+                </span>
 
+                <span
+                  className="
+                    hidden
+                    h-1
+                    w-1
+                    rounded-full
+                    bg-white/20
+                    sm:block
+                  "
+                />
+
+                <span>
+                  {startDate.toLocaleDateString(
+                    undefined,
+                    {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    }
+                  )}
+                </span>
+
+                <span
+                  className="
+                    hidden
+                    h-1
+                    w-1
+                    rounded-full
+                    bg-white/20
+                    sm:block
+                  "
+                />
+
+                <span>
+                  Capacity{" "}
+                  {event.capacity}
+                </span>
+              </div>
+            </div>
+
+            {/* Actions */}
+
+            <div
+              className="
+                flex
+                flex-wrap
+                gap-3
+              "
+            >
+              {event.status ===
+                "DRAFT" && (
+                <button
+                  onClick={
+                    handlePublish
+                  }
+                  className="
+                    h-12
+                    rounded-xl
+                    bg-[#D4AF37]
+                    px-6
+                    text-sm
+                    font-bold
+                    text-black
+                    transition
+                    hover:bg-[#E2BF4A]
+                  "
+                >
+                  Publish Event
+                </button>
+              )}
+
+              <button
+                className="
+                  h-12
+                  rounded-xl
+                  border
+                  border-white/10
+                  bg-white/[0.04]
+                  px-6
+                  text-sm
+                  font-semibold
+                  text-white
+                  transition
+                  hover:bg-white/[0.08]
+                "
+              >
+                Edit Event
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* ==================================================
+            PERFORMANCE
+        ================================================== */}
+
+        <section
+          className="
+            mt-10
+          "
+        >
+          <div
+            className="
+              mb-5
+              flex
+              items-end
+              justify-between
+            "
+          >
+            <div>
+              <p
+                className="
+                  text-xs
+                  font-bold
+                  uppercase
+                  tracking-[0.22em]
+                  text-[#D4AF37]
+                "
+              >
+                Live Performance
+              </p>
+
+              <h2
+                className="
+                  mt-2
+                  text-2xl
+                  font-bold
+                  tracking-tight
+                "
+              >
+                Event Overview
+              </h2>
+            </div>
+          </div>
+
+          <DashboardStats
+            ticketsSold={
+              event.stats
+                ?.ticketSold ?? 0
+            }
+            checkedIn={
+              event.stats
+                ?.checkedIn ?? 0
+            }
+            revenue={
+              event.stats
+                ?.revenue ?? 0
+            }
+            currency={
+              event.currency
+            }
+            onlineStaff={
+              event.stats
+                ?.onlineStaff ?? 0
+            }
+          />
+        </section>
+
+        {/* ==================================================
+            EVENT CONTROL CENTER
+        ================================================== */}
+
+        <section
+          className="
+            mt-12
+          "
+        >
+          <div
+            className="
+              mb-6
+            "
+          >
+            <p
+              className="
+                text-xs
+                font-bold
+                uppercase
+                tracking-[0.22em]
+                text-[#D4AF37]
+              "
+            >
+              Management
+            </p>
+
+            <h2
+              className="
+                mt-2
+                text-2xl
+                font-bold
+                tracking-tight
+              "
+            >
+              Event Control Center
+            </h2>
+
+            <p
+              className="
+                mt-2
+                max-w-2xl
+                text-sm
+                leading-6
+                text-white/40
+              "
+            >
+              Manage every operational
+              part of your event from
+              one place.
+            </p>
+          </div>
+
+          <div
+            className="
+              grid
+              gap-4
+              md:grid-cols-2
+              xl:grid-cols-3
+            "
+          >
+            {managementItems.map(
+              (item) => (
+                <Link
+                  key={
+                    item.title
+                  }
+                  href={
+                    item.href
+                  }
+                  className="
+                    group
+                    relative
+                    overflow-hidden
+                    rounded-[22px]
+                    border
+                    border-white/[0.07]
+                    bg-[#0B0B0B]
+                    p-6
+                    transition
+                    duration-300
+                    hover:-translate-y-1
+                    hover:border-[#D4AF37]/25
+                    hover:bg-[#101010]
+                  "
+                >
+                  <div
+                    className="
+                      flex
+                      items-start
+                      justify-between
+                      gap-5
+                    "
+                  >
+                    <div
+                      className="
+                        flex
+                        h-11
+                        w-11
+                        shrink-0
+                        items-center
+                        justify-center
+                        rounded-xl
+                        border
+                        border-[#D4AF37]/15
+                        bg-[#D4AF37]/10
+                        text-lg
+                        font-bold
+                        text-[#D4AF37]
+                      "
+                    >
+                      {item.icon}
+                    </div>
+
+                    <span
+                      className="
+                        text-lg
+                        text-white/20
+                        transition
+                        group-hover:translate-x-1
+                        group-hover:text-[#D4AF37]
+                      "
+                    >
+                      →
+                    </span>
+                  </div>
+
+                  <h3
+                    className="
+                      mt-6
+                      text-lg
+                      font-bold
+                      text-white
+                    "
+                  >
+                    {item.title}
+                  </h3>
+
+                  <p
+                    className="
+                      mt-2
+                      max-w-sm
+                      text-sm
+                      leading-6
+                      text-white/40
+                    "
+                  >
+                    {
+                      item.description
+                    }
+                  </p>
+                </Link>
+              )
+            )}
+          </div>
+        </section>
+
+        {/* ==================================================
+            EVENT INFORMATION
+        ================================================== */}
+
+        <section
+          className="
+            mt-12
+            grid
+            gap-5
+            xl:grid-cols-[1.4fr_0.6fr]
+          "
+        >
+          {/* Description */}
+
+          <div
+            className="
+              rounded-[24px]
+              border
+              border-white/[0.07]
+              bg-[#0B0B0B]
+              p-7
+            "
+          >
+            <p
+              className="
+                text-xs
+                font-bold
+                uppercase
+                tracking-[0.2em]
+                text-[#D4AF37]
+              "
+            >
+              About
+            </p>
+
+            <h2
+              className="
+                mt-3
+                text-xl
+                font-bold
+              "
+            >
+              Event Description
+            </h2>
+
+            <p
+              className="
+                mt-5
+                max-w-4xl
+                whitespace-pre-line
+                text-[15px]
+                leading-7
+                text-white/50
+              "
+            >
+              {event.description ||
+                "No event description has been added."}
+            </p>
+          </div>
+
+          {/* Event details */}
+
+          <div
+            className="
+              rounded-[24px]
+              border
+              border-white/[0.07]
+              bg-[#0B0B0B]
+              p-7
+            "
+          >
+            <p
+              className="
+                text-xs
+                font-bold
+                uppercase
+                tracking-[0.2em]
+                text-[#D4AF37]
+              "
+            >
+              Event Details
+            </p>
+
+            <div
+              className="
+                mt-6
+                divide-y
+                divide-white/[0.06]
+              "
+            >
+              <DetailRow
+                label="Venue"
+                value={
+                  event.venue ||
+                  "Not specified"
+                }
+              />
+
+              <DetailRow
+                label="Capacity"
+                value={String(
+                  event.capacity ??
+                    "—"
+                )}
+              />
+
+              <DetailRow
+                label="Status"
+                value={
+                  event.status
+                }
+              />
+
+              <DetailRow
+                label="Currency"
+                value={
+                  event.currency ||
+                  "—"
+                }
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* ==================================================
+            SCHEDULE
+        ================================================== */}
+
+        <section
+          className="
+            mt-5
+            grid
+            gap-5
+            md:grid-cols-2
+          "
+        >
+          <DateCard
+            eyebrow="EVENT START"
+            date={startDate}
+          />
+
+          <DateCard
+            eyebrow="EVENT END"
+            date={endDate}
+          />
+        </section>
+
+        <div className="h-12" />
       </div>
-
-      <div className="rounded-xl border p-6">
-
-        <h2 className="mb-4 text-xl font-bold">
-          Description
-        </h2>
-
-        <p>
-          {event.description}
-        </p>
-
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2">
-
-        <div className="rounded-xl border p-5">
-
-          <p className="text-sm text-gray-500">
-            Start Date
-          </p>
-
-          <p className="mt-2">
-            {new Date(
-              event.startDate
-            ).toLocaleString()}
-          </p>
-
-        </div>
-
-        <div className="rounded-xl border p-5">
-
-          <p className="text-sm text-gray-500">
-            End Date
-          </p>
-
-          <p className="mt-2">
-            {new Date(
-              event.endDate
-            ).toLocaleString()}
-          </p>
-
-        </div>
-
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-5">
-
-        <Link
-  href={`/dashboard/events/${event.id}/tickets`}
-  className="rounded-xl border p-5 transition hover:bg-gray-50"
->
-  Tickets
-</Link>
-
-<Link
-  href={`/dashboard/events/${event.id}/attendees`}
-  className="rounded-xl border p-5 transition hover:bg-gray-50"
->
-  Attendees
-</Link>
-
-<Link
-  href={`/dashboard/events/${event.id}/staff`}
-  className="rounded-xl border p-5 transition hover:bg-gray-50"
->
-  Staff
-</Link>
-
-<Link
-  href={`/dashboard/events/${event.id}/revenue`}
-  className="rounded-xl border p-5 transition hover:bg-gray-50"
->
-  Revenue
-</Link>
-
-<Link
-  href={`/dashboard/events/${event.id}/activity`}
-  className="rounded-xl border p-5 transition hover:bg-gray-50"
->
-  Activity
-</Link>
-
-<Link
-  href={`/dashboard/events/${event.id}/announcements`}
-  className="rounded-xl border p-5 transition hover:bg-gray-50"
->
-  Announcements
-</Link>
-
-<Link
-  href={`/dashboard/events/${event.id}/vendors`}
-  className="rounded-xl border p-5 transition hover:bg-gray-50"
->
-  Vendor Applications
-</Link>
-
-      </div>
-
     </main>
+  );
+}
+
+/* ==========================================================
+   DETAIL ROW
+========================================================== */
+
+function DetailRow({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div
+      className="
+        flex
+        items-center
+        justify-between
+        gap-5
+        py-4
+        first:pt-0
+        last:pb-0
+      "
+    >
+      <span
+        className="
+          text-sm
+          text-white/35
+        "
+      >
+        {label}
+      </span>
+
+      <span
+        className="
+          text-right
+          text-sm
+          font-semibold
+          text-white/80
+        "
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
+
+/* ==========================================================
+   DATE CARD
+========================================================== */
+
+function DateCard({
+  eyebrow,
+  date,
+}: {
+  eyebrow: string;
+  date: Date;
+}) {
+  return (
+    <div
+      className="
+        rounded-[22px]
+        border
+        border-white/[0.07]
+        bg-[#0B0B0B]
+        p-6
+      "
+    >
+      <p
+        className="
+          text-[10px]
+          font-bold
+          tracking-[0.2em]
+          text-white/30
+        "
+      >
+        {eyebrow}
+      </p>
+
+      <p
+        className="
+          mt-4
+          text-xl
+          font-bold
+          text-white
+        "
+      >
+        {date.toLocaleDateString(
+          undefined,
+          {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          }
+        )}
+      </p>
+
+      <p
+        className="
+          mt-2
+          text-sm
+          font-medium
+          text-[#D4AF37]
+        "
+      >
+        {date.toLocaleTimeString(
+          undefined,
+          {
+            hour: "2-digit",
+            minute: "2-digit",
+          }
+        )}
+      </p>
+    </div>
   );
 }

@@ -68,81 +68,420 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-6">
-      <div className="w-full max-w-md space-y-4">
+    <main className="relative min-h-screen overflow-hidden bg-[#050505] text-white">
+      {/* Cinematic background */}
+      <div
+        className="
+          pointer-events-none
+          absolute
+          left-1/2
+          top-[-260px]
+          h-[620px]
+          w-[620px]
+          -translate-x-1/2
+          rounded-full
+          bg-[#D4AF37]/10
+          blur-[150px]
+        "
+      />
 
-        <h1 className="text-3xl font-bold">
-          Create Account
-        </h1>
+      <div
+        className="
+          pointer-events-none
+          absolute
+          bottom-[-300px]
+          right-[-200px]
+          h-[600px]
+          w-[600px]
+          rounded-full
+          bg-[#D4AF37]/5
+          blur-[160px]
+        "
+      />
 
-        {error && (
-          <div className="rounded border border-red-500 bg-red-50 p-3 text-red-600">
-            {error}
+      <div
+        className="
+          relative
+          z-10
+          flex
+          min-h-screen
+          items-center
+          justify-center
+          px-6
+          py-12
+        "
+      >
+        <div className="w-full max-w-[440px]">
+          {/* Brand */}
+          <div className="mb-10 text-center">
+            <div
+              className="
+                mb-5
+                inline-flex
+                h-14
+                w-14
+                items-center
+                justify-center
+                rounded-2xl
+                border
+                border-[#D4AF37]/20
+                bg-[#D4AF37]/10
+              "
+            >
+              <span
+                className="
+                  text-xl
+                  font-black
+                  text-[#D4AF37]
+                "
+              >
+                W
+              </span>
+            </div>
+
+            <div
+              className="
+                text-2xl
+                font-black
+                tracking-[0.28em]
+                text-[#D4AF37]
+              "
+            >
+              WOWYOU
+            </div>
+
+            <p
+              className="
+                mt-2
+                text-[10px]
+                font-semibold
+                tracking-[0.32em]
+                text-white/35
+              "
+            >
+              EVENT TECHNOLOGY
+            </p>
           </div>
-        )}
 
-        <input
-          className="w-full border rounded p-3"
-          placeholder="First Name"
-          value={form.firstName}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              firstName:
-                e.target.value,
-            })
-          }
-        />
+          {/* Heading */}
+          <div className="mb-8">
+            <h1
+              className="
+                text-4xl
+                font-bold
+                tracking-tight
+                text-white
+              "
+            >
+              Create Account
+            </h1>
 
-        <input
-          className="w-full border rounded p-3"
-          placeholder="Last Name"
-          value={form.lastName}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              lastName:
-                e.target.value,
-            })
-          }
-        />
+            <p
+              className="
+                mt-3
+                text-[15px]
+                leading-7
+                text-white/50
+              "
+            >
+              Create your organizer account
+              and start building unforgettable
+              event experiences.
+            </p>
+          </div>
 
-        <input
-          className="w-full border rounded p-3"
-          placeholder="Email"
-          value={form.email}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              email:
-                e.target.value,
-            })
-          }
-        />
+          {/* Error */}
+          {error && (
+            <div
+              className="
+                mb-6
+                rounded-2xl
+                border
+                border-red-500/20
+                bg-red-500/10
+                px-4
+                py-3.5
+                text-sm
+                text-red-300
+              "
+            >
+              {error}
+            </div>
+          )}
 
-        <input
-          type="password"
-          className="w-full border rounded p-3"
-          placeholder="Password"
-          value={form.password}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              password:
-                e.target.value,
-            })
-          }
-        />
+          {/* Form */}
+          <div className="space-y-5">
+            {/* Name row */}
+            <div
+              className="
+                grid
+                grid-cols-1
+                gap-5
+                sm:grid-cols-2
+              "
+            >
+              <div>
+                <label
+                  className="
+                    mb-2.5
+                    block
+                    text-sm
+                    font-medium
+                    text-white/70
+                  "
+                >
+                  First Name
+                </label>
 
-        <button
-          onClick={submit}
-          disabled={loading}
-          className="w-full rounded bg-black text-white p-3 disabled:opacity-50"
-        >
-          {loading
-            ? "Creating..."
-            : "Create Account"}
-        </button>
+                <input
+                  className="
+                    h-14
+                    w-full
+                    rounded-2xl
+                    border
+                    border-white/[0.08]
+                    bg-[#151515]
+                    px-5
+                    text-[15px]
+                    text-white
+                    outline-none
+                    transition
+                    placeholder:text-white/25
+                    focus:border-[#D4AF37]/70
+                    focus:ring-4
+                    focus:ring-[#D4AF37]/5
+                  "
+                  placeholder="First name"
+                  value={form.firstName}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      firstName:
+                        e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div>
+                <label
+                  className="
+                    mb-2.5
+                    block
+                    text-sm
+                    font-medium
+                    text-white/70
+                  "
+                >
+                  Last Name
+                </label>
+
+                <input
+                  className="
+                    h-14
+                    w-full
+                    rounded-2xl
+                    border
+                    border-white/[0.08]
+                    bg-[#151515]
+                    px-5
+                    text-[15px]
+                    text-white
+                    outline-none
+                    transition
+                    placeholder:text-white/25
+                    focus:border-[#D4AF37]/70
+                    focus:ring-4
+                    focus:ring-[#D4AF37]/5
+                  "
+                  placeholder="Last name"
+                  value={form.lastName}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      lastName:
+                        e.target.value,
+                    })
+                  }
+                />
+              </div>
+            </div>
+
+            {/* Email */}
+            <div>
+              <label
+                className="
+                  mb-2.5
+                  block
+                  text-sm
+                  font-medium
+                  text-white/70
+                "
+              >
+                Email
+              </label>
+
+              <input
+                type="email"
+                autoComplete="email"
+                className="
+                  h-14
+                  w-full
+                  rounded-2xl
+                  border
+                  border-white/[0.08]
+                  bg-[#151515]
+                  px-5
+                  text-[15px]
+                  text-white
+                  outline-none
+                  transition
+                  placeholder:text-white/25
+                  focus:border-[#D4AF37]/70
+                  focus:ring-4
+                  focus:ring-[#D4AF37]/5
+                "
+                placeholder="Enter your email"
+                value={form.email}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    email:
+                      e.target.value,
+                  })
+                }
+              />
+            </div>
+
+            {/* Password */}
+            <div>
+              <label
+                className="
+                  mb-2.5
+                  block
+                  text-sm
+                  font-medium
+                  text-white/70
+                "
+              >
+                Password
+              </label>
+
+              <input
+                type="password"
+                autoComplete="new-password"
+                className="
+                  h-14
+                  w-full
+                  rounded-2xl
+                  border
+                  border-white/[0.08]
+                  bg-[#151515]
+                  px-5
+                  text-[15px]
+                  text-white
+                  outline-none
+                  transition
+                  placeholder:text-white/25
+                  focus:border-[#D4AF37]/70
+                  focus:ring-4
+                  focus:ring-[#D4AF37]/5
+                "
+                placeholder="Create a password"
+                value={form.password}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    password:
+                      e.target.value,
+                  })
+                }
+              />
+            </div>
+
+            {/* Submit */}
+            <button
+              onClick={submit}
+              disabled={loading}
+              className="
+                mt-2
+                flex
+                h-14
+                w-full
+                items-center
+                justify-center
+                rounded-2xl
+                bg-[#D4AF37]
+                px-6
+                text-[15px]
+                font-bold
+                text-black
+                transition
+                hover:bg-[#E0BD48]
+                disabled:cursor-not-allowed
+                disabled:opacity-50
+              "
+            >
+              {loading
+                ? "Creating account..."
+                : "Create Account"}
+            </button>
+          </div>
+
+          {/* Sign in */}
+          <div
+            className="
+              mt-8
+              text-center
+              text-sm
+              text-white/45
+            "
+          >
+            Already have an account?{" "}
+            <button
+              type="button"
+              onClick={() =>
+                router.push(
+                  "/login"
+                )
+              }
+              className="
+                font-semibold
+                text-[#D4AF37]
+                transition
+                hover:text-[#E4C55A]
+              "
+            >
+              Sign In
+            </button>
+          </div>
+
+          {/* Footer */}
+          <div
+            className="
+              mt-8
+              border-t
+              border-white/[0.06]
+              pt-7
+              text-center
+            "
+          >
+            <p
+              className="
+                text-xs
+                leading-6
+                text-white/30
+              "
+            >
+              WOWYOU Organizer
+              <span className="mx-2 text-white/15">
+                •
+              </span>
+              Create events. Build connections.
+              Shape experiences.
+            </p>
+          </div>
+        </div>
       </div>
     </main>
   );

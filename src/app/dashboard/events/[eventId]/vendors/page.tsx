@@ -62,35 +62,37 @@ export default function VendorApplicationsPage() {
 
       const result =
         await getVendorApplications(
-          eventId,
+          eventId
         );
 
       setApplications(
         result.applications ??
-          [],
+          []
       );
     } catch (error) {
-      console.error(error);
+      console.error(
+        error
+      );
     } finally {
       setLoading(false);
     }
   }
 
   async function approve(
-    id: string,
+    id: string
   ) {
     try {
       setProcessing(id);
 
       await approveVendor(
-        id,
+        id
       );
 
       setApplications(
         (previous) =>
           previous.map(
             (
-              application,
+              application
             ) =>
               application.id ===
               id
@@ -99,31 +101,35 @@ export default function VendorApplicationsPage() {
                     status:
                       "APPROVED",
                   }
-                : application,
-          ),
+                : application
+          )
       );
     } catch (error) {
-      console.error(error);
+      console.error(
+        error
+      );
     } finally {
-      setProcessing(null);
+      setProcessing(
+        null
+      );
     }
   }
 
   async function reject(
-    id: string,
+    id: string
   ) {
     try {
       setProcessing(id);
 
       await rejectVendor(
-        id,
+        id
       );
 
       setApplications(
         (previous) =>
           previous.map(
             (
-              application,
+              application
             ) =>
               application.id ===
               id
@@ -132,13 +138,17 @@ export default function VendorApplicationsPage() {
                     status:
                       "REJECTED",
                   }
-                : application,
-          ),
+                : application
+          )
       );
     } catch (error) {
-      console.error(error);
+      console.error(
+        error
+      );
     } finally {
-      setProcessing(null);
+      setProcessing(
+        null
+      );
     }
   }
 
@@ -152,7 +162,7 @@ export default function VendorApplicationsPage() {
     eventId,
 
     onVendorApplicationCreated(
-      application,
+      application
     ) {
       setApplications(
         (previous) => {
@@ -160,7 +170,7 @@ export default function VendorApplicationsPage() {
             previous.some(
               (item) =>
                 item.id ===
-                application.id,
+                application.id
             );
 
           if (exists) {
@@ -171,12 +181,12 @@ export default function VendorApplicationsPage() {
             application,
             ...previous,
           ];
-        },
+        }
       );
     },
 
     onVendorApplicationUpdated(
-      application,
+      application
     ) {
       setApplications(
         (previous) =>
@@ -185,8 +195,8 @@ export default function VendorApplicationsPage() {
               item.id ===
               application.id
                 ? application
-                : item,
-          ),
+                : item
+          )
       );
     },
   });
@@ -195,200 +205,312 @@ export default function VendorApplicationsPage() {
     applications.filter(
       (application) =>
         application.status ===
-        "PENDING",
+        "PENDING"
     );
 
   const approved =
     applications.filter(
       (application) =>
         application.status ===
-        "APPROVED",
+        "APPROVED"
     );
 
   const rejected =
     applications.filter(
       (application) =>
         application.status ===
-        "REJECTED",
+        "REJECTED"
     );
 
   if (loading) {
     return (
-      <main className="p-8">
-        Loading vendor applications...
+      <main className="min-h-screen bg-[#070707] px-6 py-10 text-white md:px-10">
+        <div className="mx-auto max-w-7xl">
+
+          <div className="animate-pulse">
+            <div className="h-4 w-36 rounded bg-white/10" />
+
+            <div className="mt-5 h-12 w-80 rounded bg-white/10" />
+
+            <div className="mt-4 h-5 w-96 max-w-full rounded bg-white/5" />
+
+            <div className="mt-12 grid gap-5 md:grid-cols-3">
+              {[1, 2, 3].map(
+                (item) => (
+                  <div
+                    key={item}
+                    className="h-36 rounded-[24px] border border-white/10 bg-white/[0.03]"
+                  />
+                )
+              )}
+            </div>
+          </div>
+
+        </div>
       </main>
     );
   }
 
   return (
-    <main className="space-y-10 p-8">
+    <main className="min-h-screen bg-[#070707] text-white">
 
-      <div>
+      <div className="mx-auto max-w-7xl px-6 py-10 md:px-10 md:py-14">
 
-        <h1 className="text-3xl font-bold">
-          Vendor Applications
-        </h1>
+        {/* Header */}
 
-        <p className="mt-2 text-gray-500">
-          Review and manage vendor
-          requests for this
-          event.
-        </p>
+        <header className="mb-12">
+
+          <div className="mb-5 flex items-center gap-3">
+            <div className="h-px w-10 bg-[#D4AF37]" />
+
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
+              Vendor Operations
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+
+            <div className="max-w-3xl">
+
+              <h1 className="text-4xl font-bold tracking-tight md:text-5xl">
+                Vendor Applications
+              </h1>
+
+              <p className="mt-4 max-w-2xl text-base leading-7 text-white/45">
+                Review businesses requesting
+                access to your event, approve
+                suitable vendors and keep your
+                marketplace organized.
+              </p>
+
+            </div>
+
+            <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5">
+
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#D4AF37] opacity-40" />
+
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#D4AF37]" />
+              </span>
+
+              <span className="text-xs font-medium text-white/55">
+                Live applications
+              </span>
+
+            </div>
+
+          </div>
+
+        </header>
+
+        {/* Summary */}
+
+        <div className="grid gap-5 md:grid-cols-3">
+
+          <SummaryCard
+            label="Awaiting Review"
+            value={pending.length}
+            description="Applications requiring a decision"
+            tone="gold"
+          />
+
+          <SummaryCard
+            label="Approved Vendors"
+            value={approved.length}
+            description="Businesses accepted for this event"
+            tone="green"
+          />
+
+          <SummaryCard
+            label="Rejected"
+            value={rejected.length}
+            description="Applications not accepted"
+            tone="neutral"
+          />
+
+        </div>
+
+        {/* Pending */}
+
+        <ApplicationSection
+          eyebrow="Requires Action"
+          title="Pending Applications"
+          description="Review these businesses and decide who should participate in your event."
+          emptyTitle="You're all caught up"
+          emptyDescription="There are no vendor applications waiting for review."
+          applications={pending}
+          processing={processing}
+          onApprove={approve}
+          onReject={reject}
+          priority
+        />
+
+        {/* Approved */}
+
+        <ApplicationSection
+          eyebrow="Confirmed"
+          title="Approved Vendors"
+          description="Businesses currently approved to participate in this event."
+          emptyTitle="No approved vendors yet"
+          emptyDescription="Approved vendor applications will appear here."
+          applications={approved}
+        />
+
+        {/* Rejected */}
+
+        <ApplicationSection
+          eyebrow="Application History"
+          title="Rejected Applications"
+          description="Applications that were declined for this event."
+          emptyTitle="No rejected applications"
+          emptyDescription="Rejected applications will remain here for your records."
+          applications={rejected}
+        />
 
       </div>
-
-      <Summary
-        pending={pending.length}
-        approved={
-          approved.length
-        }
-        rejected={
-          rejected.length
-        }
-      />
-
-      <ApplicationSection
-        title="Pending"
-        empty="No pending applications."
-        applications={pending}
-        processing={
-          processing
-        }
-        onApprove={
-          approve
-        }
-        onReject={
-          reject
-        }
-      />
-
-      <ApplicationSection
-        title="Approved"
-        empty="No approved vendors."
-        applications={
-          approved
-        }
-      />
-
-      <ApplicationSection
-        title="Rejected"
-        empty="No rejected applications."
-        applications={
-          rejected
-        }
-      />
 
     </main>
   );
 }
 
-interface SummaryProps {
-  pending: number;
-
-  approved: number;
-
-  rejected: number;
-}
-
-function Summary({
-  pending,
-  approved,
-  rejected,
-}: SummaryProps) {
-  return (
-    <div className="grid gap-6 md:grid-cols-3">
-
-      <SummaryCard
-        title="Pending"
-        value={pending}
-      />
-
-      <SummaryCard
-        title="Approved"
-        value={approved}
-      />
-
-      <SummaryCard
-        title="Rejected"
-        value={rejected}
-      />
-
-    </div>
-  );
-}
-
-interface SummaryCardProps {
-  title: string;
-
-  value: number;
-}
+/*
+|--------------------------------------------------------------------------
+| Summary Card
+|--------------------------------------------------------------------------
+*/
 
 function SummaryCard({
-  title,
+  label,
   value,
-}: SummaryCardProps) {
-  return (
-    <div className="rounded-xl border bg-white p-6">
+  description,
+  tone,
+}: {
+  label: string;
+  value: number;
+  description: string;
+  tone:
+    | "gold"
+    | "green"
+    | "neutral";
+}) {
+  const accent =
+    tone === "gold"
+      ? "bg-[#D4AF37]"
+      : tone === "green"
+      ? "bg-emerald-500"
+      : "bg-white/25";
 
-      <p className="text-sm text-gray-500">
-        {title}
+  return (
+    <div className="relative overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.035] p-6">
+
+      <div
+        className={`absolute left-0 top-0 h-full w-[3px] ${accent}`}
+      />
+
+      <p className="text-sm font-medium text-white/45">
+        {label}
       </p>
 
-      <h2 className="mt-3 text-4xl font-bold">
-        {value}
-      </h2>
+      <div className="mt-5 flex items-end justify-between">
+
+        <p className="text-5xl font-bold tracking-tight">
+          {value}
+        </p>
+
+        <div
+          className={`mb-2 h-2.5 w-2.5 rounded-full ${accent}`}
+        />
+
+      </div>
+
+      <p className="mt-4 text-xs leading-5 text-white/30">
+        {description}
+      </p>
 
     </div>
   );
 }
 
-interface SectionProps {
-  title: string;
-
-  empty: string;
-
-  applications: VendorApplication[];
-
-  processing?: string | null;
-
-  onApprove?: (
-    id: string,
-  ) => void;
-
-  onReject?: (
-    id: string,
-  ) => void;
-}
+/*
+|--------------------------------------------------------------------------
+| Application Section
+|--------------------------------------------------------------------------
+*/
 
 function ApplicationSection({
+  eyebrow,
   title,
-  empty,
+  description,
+  emptyTitle,
+  emptyDescription,
   applications,
   processing,
   onApprove,
   onReject,
-}: SectionProps) {
+  priority = false,
+}: {
+  eyebrow: string;
+  title: string;
+  description: string;
+  emptyTitle: string;
+  emptyDescription: string;
+  applications:
+    VendorApplication[];
+  processing?:
+    string | null;
+  onApprove?: (
+    id: string
+  ) => void;
+  onReject?: (
+    id: string
+  ) => void;
+  priority?: boolean;
+}) {
   return (
-    <section className="space-y-5">
+    <section className="mt-14">
 
-      <h2 className="text-2xl font-semibold">
-        {title}
-      </h2>
+      <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
 
-      {applications.length === 0 ? (
+        <div>
 
-        <div className="rounded-xl border border-dashed p-8 text-center text-gray-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
+            {eyebrow}
+          </p>
 
-          {empty}
+          <h2 className="mt-2 text-2xl font-semibold md:text-3xl">
+            {title}
+          </h2>
+
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-white/40">
+            {description}
+          </p>
 
         </div>
 
-      ) : (
+        <span className="w-fit rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white/50">
+          {applications.length}{" "}
+          {applications.length === 1
+            ? "application"
+            : "applications"}
+        </span>
 
+      </div>
+
+      {applications.length ===
+      0 ? (
+        <EmptyState
+          title={emptyTitle}
+          description={
+            emptyDescription
+          }
+        />
+      ) : (
         <div className="space-y-5">
 
           {applications.map(
-            (application) => (
+            (
+              application
+            ) => (
               <VendorCard
                 key={
                   application.id
@@ -406,165 +528,192 @@ function ApplicationSection({
                 onReject={
                   onReject
                 }
+                priority={
+                  priority
+                }
               />
-            ),
+            )
           )}
 
         </div>
-
       )}
 
     </section>
   );
 }
 
-interface VendorCardProps {
-  application: VendorApplication;
-
-  processing?: boolean;
-
-  onApprove?: (
-    id: string,
-  ) => void;
-
-  onReject?: (
-    id: string,
-  ) => void;
-}
+/*
+|--------------------------------------------------------------------------
+| Vendor Card
+|--------------------------------------------------------------------------
+*/
 
 function VendorCard({
   application,
   processing = false,
   onApprove,
   onReject,
-}: VendorCardProps) {
+  priority,
+}: {
+  application:
+    VendorApplication;
+  processing?: boolean;
+  onApprove?: (
+    id: string
+  ) => void;
+  onReject?: (
+    id: string
+  ) => void;
+  priority?: boolean;
+}) {
+  const initials =
+    application.businessName
+      .split(" ")
+      .slice(0, 2)
+      .map(
+        (word) =>
+          word[0]
+      )
+      .join("")
+      .toUpperCase();
+
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+    <article
+      className={`overflow-hidden rounded-[26px] border bg-white/[0.035] transition ${
+        priority
+          ? "border-[#D4AF37]/20 hover:border-[#D4AF37]/40"
+          : "border-white/10 hover:border-white/15"
+      }`}
+    >
 
-      <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+      <div className="p-6 md:p-8">
 
-        <div className="flex-1 space-y-5">
+        <div className="flex flex-col gap-8 xl:flex-row xl:justify-between">
 
-          <div>
+          {/* Main */}
 
-            <h3 className="text-2xl font-semibold">
-              {application.businessName}
-            </h3>
+          <div className="min-w-0 flex-1">
 
-            <p className="mt-1 text-sm text-gray-500">
-              {application.category}
-            </p>
+            <div className="flex items-start gap-4">
 
-          </div>
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-sm font-bold text-[#D4AF37]">
+                {initials}
+              </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
+              <div className="min-w-0">
 
-            <div>
+                <div className="flex flex-wrap items-center gap-3">
 
-              <p className="text-xs uppercase tracking-wide text-gray-400">
-                Contact
-              </p>
+                  <h3 className="text-xl font-semibold md:text-2xl">
+                    {
+                      application.businessName
+                    }
+                  </h3>
 
-              <p className="mt-1 font-medium">
-                {application.contactName}
-              </p>
+                  <StatusBadge
+                    status={
+                      application.status
+                    }
+                  />
 
-            </div>
+                </div>
 
-            <div>
-
-              <p className="text-xs uppercase tracking-wide text-gray-400">
-                Email
-              </p>
-
-              <p className="mt-1">
-                {application.email}
-              </p>
-
-            </div>
-
-            <div>
-
-              <p className="text-xs uppercase tracking-wide text-gray-400">
-                Phone
-              </p>
-
-              <p className="mt-1">
-                {application.phone}
-              </p>
-
-            </div>
-
-            {application.boothSize && (
-              <div>
-
-                <p className="text-xs uppercase tracking-wide text-gray-400">
-                  Booth Size
+                <p className="mt-2 text-sm text-white/40">
+                  {
+                    application.category
+                  }
                 </p>
 
-                <p className="mt-1">
-                  {application.boothSize}
+              </div>
+
+            </div>
+
+            {/* Contact information */}
+
+            <div className="mt-8 grid gap-x-10 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
+
+              <Information
+                label="Contact"
+                value={
+                  application.contactName
+                }
+              />
+
+              <Information
+                label="Email"
+                value={
+                  application.email
+                }
+              />
+
+              <Information
+                label="Phone"
+                value={
+                  application.phone
+                }
+              />
+
+              {application.boothSize && (
+                <Information
+                  label="Booth"
+                  value={
+                    application.boothSize
+                  }
+                />
+              )}
+
+            </div>
+
+            {/* Business description */}
+
+            <div className="mt-8 border-t border-white/10 pt-7">
+
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/30">
+                About the Business
+              </p>
+
+              <p className="mt-3 max-w-4xl text-sm leading-7 text-white/60">
+                {
+                  application.description
+                }
+              </p>
+
+            </div>
+
+            {application.message && (
+              <div className="mt-6 rounded-2xl border border-white/[0.07] bg-black/20 p-5">
+
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/30">
+                  Message to Organizer
+                </p>
+
+                <p className="mt-3 text-sm leading-7 text-white/55">
+                  {
+                    application.message
+                  }
                 </p>
 
               </div>
             )}
 
-          </div>
-
-          <div>
-
-            <p className="text-xs uppercase tracking-wide text-gray-400">
-              Description
-            </p>
-
-            <p className="mt-2 leading-7 text-gray-700">
-              {application.description}
+            <p className="mt-6 text-xs text-white/25">
+              Applied{" "}
+              {new Date(
+                application.createdAt
+              ).toLocaleString()}
             </p>
 
           </div>
 
-          {application.message && (
-            <div>
-
-              <p className="text-xs uppercase tracking-wide text-gray-400">
-                Message
-              </p>
-
-              <p className="mt-2 leading-7 text-gray-700">
-                {application.message}
-              </p>
-
-            </div>
-          )}
-
-          <p className="text-sm text-gray-400">
-            Applied{" "}
-            {new Date(
-              application.createdAt,
-            ).toLocaleString()}
-          </p>
-
-        </div>
-
-        <div className="flex w-full flex-col gap-4 lg:w-52">
-
-          <span
-            className={`rounded-full px-4 py-3 text-center text-sm font-semibold ${
-              application.status ===
-              "APPROVED"
-                ? "bg-green-100 text-green-700"
-                : application.status ===
-                  "REJECTED"
-                ? "bg-red-100 text-red-700"
-                : "bg-yellow-100 text-yellow-700"
-            }`}
-          >
-            {application.status}
-          </span>
+          {/* Actions */}
 
           {application.status ===
             "PENDING" && (
-            <>
+            <div className="flex shrink-0 flex-col justify-start gap-3 border-t border-white/10 pt-6 xl:w-48 xl:border-l xl:border-t-0 xl:pl-8 xl:pt-0">
+
+              <p className="mb-1 text-xs font-medium text-white/35">
+                Review application
+              </p>
 
               <button
                 disabled={
@@ -572,12 +721,14 @@ function VendorCard({
                 }
                 onClick={() =>
                   onApprove?.(
-                    application.id,
+                    application.id
                   )
                 }
-                className="rounded-xl bg-green-600 px-5 py-3 font-medium text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-xl bg-[#D4AF37] px-5 py-3.5 text-sm font-bold text-black transition hover:bg-[#e0bd48] disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Approve
+                {processing
+                  ? "Processing..."
+                  : "Approve Vendor"}
               </button>
 
               <button
@@ -586,20 +737,99 @@ function VendorCard({
                 }
                 onClick={() =>
                   onReject?.(
-                    application.id,
+                    application.id
                   )
                 }
-                className="rounded-xl bg-red-600 px-5 py-3 font-medium text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-xl border border-white/10 bg-white/[0.03] px-5 py-3.5 text-sm font-semibold text-white/60 transition hover:border-red-500/30 hover:bg-red-500/[0.07] hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Reject
               </button>
 
-            </>
+            </div>
           )}
 
         </div>
 
       </div>
+
+    </article>
+  );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Small Components
+|--------------------------------------------------------------------------
+*/
+
+function Information({
+  label,
+  value,
+}: {
+  label: string;
+  value:
+    | string
+    | null
+    | undefined;
+}) {
+  return (
+    <div className="min-w-0">
+
+      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/25">
+        {label}
+      </p>
+
+      <p className="mt-2 break-words text-sm font-medium text-white/70">
+        {value || "—"}
+      </p>
+
+    </div>
+  );
+}
+
+function StatusBadge({
+  status,
+}: {
+  status: string;
+}) {
+  const styles =
+    status === "APPROVED"
+      ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-300"
+      : status ===
+        "REJECTED"
+      ? "border-red-500/20 bg-red-500/10 text-red-300"
+      : "border-[#D4AF37]/20 bg-[#D4AF37]/10 text-[#D4AF37]";
+
+  return (
+    <span
+      className={`rounded-full border px-3 py-1 text-[10px] font-bold tracking-[0.12em] ${styles}`}
+    >
+      {status}
+    </span>
+  );
+}
+
+function EmptyState({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="rounded-[24px] border border-dashed border-white/10 bg-white/[0.02] px-6 py-14 text-center">
+
+      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-lg text-[#D4AF37]">
+        ✓
+      </div>
+
+      <p className="mt-5 font-semibold">
+        {title}
+      </p>
+
+      <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-white/35">
+        {description}
+      </p>
 
     </div>
   );

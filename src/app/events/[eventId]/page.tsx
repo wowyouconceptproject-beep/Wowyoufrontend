@@ -1,10 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
 
-import { useParams } from "next/navigation";
+import {
+  useParams,
+} from "next/navigation";
 
-import { getEvent } from "@/services/event";
+import {
+  getEvent,
+} from "@/services/event";
 
 export default function EventPage() {
   const params =
@@ -26,7 +33,9 @@ export default function EventPage() {
             params.eventId,
           );
 
-        setEvent(result.event);
+        setEvent(
+          result.event,
+        );
       } finally {
         setLoading(false);
       }
@@ -36,68 +45,203 @@ export default function EventPage() {
   }, [params.eventId]);
 
   if (loading) {
-    return null;
+    return (
+      <main className="min-h-screen bg-[#050505] text-white">
+
+        <section className="relative h-[88vh] overflow-hidden">
+
+          <div className="absolute inset-0 animate-pulse bg-white/[0.04]" />
+
+          <div className="relative mx-auto flex h-full max-w-7xl items-end px-6 pb-20 md:px-10 lg:px-12">
+
+            <div className="w-full max-w-3xl animate-pulse">
+
+              <div className="h-4 w-32 rounded bg-white/10" />
+
+              <div className="mt-7 h-16 w-3/4 rounded bg-white/10" />
+
+              <div className="mt-4 h-16 w-1/2 rounded bg-white/10" />
+
+              <div className="mt-8 h-5 w-full rounded bg-white/[0.06]" />
+
+              <div className="mt-3 h-5 w-2/3 rounded bg-white/[0.06]" />
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </main>
+    );
   }
 
   if (!event) {
-    return null;
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-[#050505] px-6 text-white">
+
+        <div className="text-center">
+
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
+            WOWYOU
+          </p>
+
+          <h1 className="mt-5 text-4xl font-bold">
+            Event unavailable
+          </h1>
+
+          <p className="mt-3 text-white/40">
+            This event could not be found.
+          </p>
+
+        </div>
+
+      </main>
+    );
   }
 
+  const startDate =
+    new Date(
+      event.startDate,
+    );
+
+  const endDate =
+    new Date(
+      event.endDate,
+    );
+
   return (
-    <main>
+    <main className="min-h-screen bg-[#050505] text-white">
 
-      {/* Hero */}
+      {/* ------------------------------------------------ */}
+      {/* HERO */}
+      {/* ------------------------------------------------ */}
 
-      <section className="relative h-[90vh]">
+      <section className="relative min-h-[88vh] overflow-hidden">
 
         <img
           src={
             event.coverImage ??
+            event.featuredImage ??
             "/images/placeholder-event.jpg"
           }
           alt={event.title}
           className="absolute inset-0 h-full w-full object-cover"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent" />
+        {/* Cinematic overlays */}
 
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-black/25" />
 
-        <div className="relative mx-auto flex h-full max-w-7xl items-end px-8 pb-24">
+        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/75 to-black/10" />
 
-          <div className="max-w-3xl">
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-black/30" />
 
-            <p className="text-sm uppercase tracking-[0.4em] text-gold">
+        {/* Content */}
 
-              {event.category}
+        <div className="relative mx-auto flex min-h-[88vh] max-w-7xl items-end px-6 pb-16 pt-32 md:px-10 md:pb-20 lg:px-12 lg:pb-24">
 
-            </p>
+          <div className="max-w-4xl">
 
-            <h1 className="mt-6 text-7xl font-black">
+            {/* Category */}
 
+            {event.category && (
+              <div className="mb-6 flex items-center gap-3">
+
+                <div className="h-px w-10 bg-[#D4AF37]" />
+
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
+                  {event.category}
+                </p>
+
+              </div>
+            )}
+
+            {/* Title */}
+
+            <h1 className="max-w-4xl text-5xl font-black leading-[0.98] tracking-[-0.04em] md:text-7xl lg:text-[88px]">
               {event.title}
-
             </h1>
 
-            <p className="mt-8 text-xl leading-9 text-muted">
+            {/* Event quick information */}
 
+            <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-3 text-sm text-white/70">
+
+              <div className="flex items-center gap-2">
+
+                <span className="text-[#D4AF37]">
+                  ◷
+                </span>
+
+                <span>
+                  {startDate.toLocaleDateString(
+                    "en-US",
+                    {
+                      weekday:
+                        "short",
+                      month:
+                        "short",
+                      day:
+                        "numeric",
+                      year:
+                        "numeric",
+                    },
+                  )}
+                </span>
+
+              </div>
+
+              <div className="hidden h-1 w-1 rounded-full bg-white/30 sm:block" />
+
+              <div className="flex items-center gap-2">
+
+                <span className="text-[#D4AF37]">
+                  ◉
+                </span>
+
+                <span>
+                  {event.venue}
+                </span>
+
+              </div>
+
+              {event.organization
+                ?.name && (
+                <>
+                  <div className="hidden h-1 w-1 rounded-full bg-white/30 sm:block" />
+
+                  <span>
+                    By{" "}
+                    <strong className="font-medium text-white">
+                      {
+                        event
+                          .organization
+                          .name
+                      }
+                    </strong>
+                  </span>
+                </>
+              )}
+
+            </div>
+
+            {/* Description */}
+
+            <p className="mt-8 max-w-2xl text-base leading-8 text-white/60 md:text-lg">
               {event.description}
-
             </p>
 
-            <div className="mt-10 flex gap-4">
+            {/* CTA */}
 
-              <button className="rounded-full bg-gold px-8 py-4 font-semibold text-black">
+            <div className="mt-10 flex flex-wrap gap-3">
 
+              <button className="rounded-full bg-[#D4AF37] px-8 py-4 text-sm font-bold text-black transition hover:bg-[#e1bd46]">
                 Get Tickets
-
               </button>
 
               {event.vendorApplicationsOpen && (
-                <button className="rounded-full border border-divider px-8 py-4">
-
+                <button className="rounded-full border border-white/20 bg-white/[0.06] px-8 py-4 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/10">
                   Apply as Vendor
-
                 </button>
               )}
 
@@ -109,78 +253,190 @@ export default function EventPage() {
 
       </section>
 
-      {/* Details */}
+      {/* ------------------------------------------------ */}
+      {/* EVENT INFORMATION STRIP */}
+      {/* ------------------------------------------------ */}
 
-      <section className="mx-auto max-w-7xl px-8 py-24">
+      <section className="border-y border-white/[0.07] bg-white/[0.02]">
 
-        <div className="grid gap-20 lg:grid-cols-3">
+        <div className="mx-auto grid max-w-7xl divide-y divide-white/[0.07] px-6 md:grid-cols-3 md:divide-x md:divide-y-0 md:px-10 lg:px-12">
 
-          <div className="lg:col-span-2">
+          <QuickDetail
+            label="Date"
+            value={startDate.toLocaleDateString(
+              "en-US",
+              {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              },
+            )}
+          />
 
-            <h2 className="text-4xl font-bold">
+          <QuickDetail
+            label="Location"
+            value={
+              event.venue
+            }
+          />
 
+          <QuickDetail
+            label="Hosted By"
+            value={
+              event.organization
+                ?.name ??
+              "WOWYOU Organizer"
+            }
+          />
+
+        </div>
+
+      </section>
+
+      {/* ------------------------------------------------ */}
+      {/* ABOUT */}
+      {/* ------------------------------------------------ */}
+
+      <section className="mx-auto max-w-7xl px-6 py-20 md:px-10 md:py-28 lg:px-12">
+
+        <div className="grid gap-16 lg:grid-cols-[1fr_380px] lg:gap-24">
+
+          {/* Description */}
+
+          <article>
+
+            <div className="flex items-center gap-3">
+
+              <div className="h-px w-8 bg-[#D4AF37]" />
+
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
+                The Experience
+              </p>
+
+            </div>
+
+            <h2 className="mt-5 text-4xl font-bold tracking-tight md:text-5xl">
               About this Event
-
             </h2>
 
-            <p className="mt-8 text-lg leading-9 text-muted">
-
+            <p className="mt-8 whitespace-pre-line text-base leading-8 text-white/55 md:text-lg md:leading-9">
               {event.description}
-
             </p>
 
-          </div>
+          </article>
 
-          <aside className="rounded-[28px] bg-surface p-8">
+          {/* Event Card */}
 
-            <div className="space-y-8">
+          <aside>
 
-              <div>
+            <div className="sticky top-8 overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.035]">
 
-                <p className="text-xs uppercase tracking-[0.3em] text-muted">
+              {event.featuredImage && (
+                <div className="aspect-[16/9] overflow-hidden">
 
-                  Venue
+                  <img
+                    src={
+                      event.featuredImage
+                    }
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
 
+                </div>
+              )}
+
+              <div className="p-7">
+
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
+                  Event Details
                 </p>
 
-                <h3 className="mt-2 text-xl">
+                <div className="mt-7 space-y-7">
 
-                  {event.venue}
+                  <Detail
+                    label="Starts"
+                    value={startDate.toLocaleString(
+                      "en-US",
+                      {
+                        weekday:
+                          "long",
+                        month:
+                          "long",
+                        day:
+                          "numeric",
+                        year:
+                          "numeric",
+                        hour:
+                          "numeric",
+                        minute:
+                          "2-digit",
+                      },
+                    )}
+                  />
 
-                </h3>
+                  <Detail
+                    label="Ends"
+                    value={endDate.toLocaleString(
+                      "en-US",
+                      {
+                        weekday:
+                          "long",
+                        month:
+                          "long",
+                        day:
+                          "numeric",
+                        year:
+                          "numeric",
+                        hour:
+                          "numeric",
+                        minute:
+                          "2-digit",
+                      },
+                    )}
+                  />
 
-              </div>
+                  <Detail
+                    label="Venue"
+                    value={
+                      event.venue
+                    }
+                  />
 
-              <div>
+                  {event.capacity && (
+                    <Detail
+                      label="Capacity"
+                      value={`${Number(
+                        event.capacity,
+                      ).toLocaleString(
+                        "en-US",
+                      )} guests`}
+                    />
+                  )}
 
-                <p className="text-xs uppercase tracking-[0.3em] text-muted">
+                  <Detail
+                    label="Organizer"
+                    value={
+                      event.organization
+                        ?.name ??
+                      "Event Organizer"
+                    }
+                  />
 
-                  Starts
+                </div>
 
-                </p>
+                <div className="mt-8 border-t border-white/10 pt-7">
 
-                <h3 className="mt-2 text-xl">
+                  <button className="w-full rounded-full bg-[#D4AF37] px-6 py-4 text-sm font-bold text-black transition hover:bg-[#e1bd46]">
+                    Get Tickets
+                  </button>
 
-                  {new Date(
-                    event.startDate,
-                  ).toLocaleDateString()}
-                </h3>
+                  {event.vendorApplicationsOpen && (
+                    <button className="mt-3 w-full rounded-full border border-white/15 px-6 py-4 text-sm font-semibold text-white/80 transition hover:bg-white/[0.05]">
+                      Apply as Vendor
+                    </button>
+                  )}
 
-              </div>
-
-              <div>
-
-                <p className="text-xs uppercase tracking-[0.3em] text-muted">
-
-                  Organizer
-
-                </p>
-
-                <h3 className="mt-2 text-xl">
-
-                  {event.organization.name}
-
-                </h3>
+                </div>
 
               </div>
 
@@ -192,6 +448,161 @@ export default function EventPage() {
 
       </section>
 
+      {/* ------------------------------------------------ */}
+      {/* VENDOR OPPORTUNITY */}
+      {/* ------------------------------------------------ */}
+
+      {event.vendorApplicationsOpen && (
+        <section className="border-t border-white/[0.07]">
+
+          <div className="mx-auto max-w-7xl px-6 py-20 md:px-10 lg:px-12">
+
+            <div className="relative overflow-hidden rounded-[32px] border border-[#D4AF37]/15 bg-[#D4AF37]/[0.04] px-7 py-12 md:px-12 md:py-14">
+
+              <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#D4AF37]/[0.06] blur-3xl" />
+
+              <div className="relative flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+
+                <div className="max-w-2xl">
+
+                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
+                    Vendor Marketplace
+                  </p>
+
+                  <h2 className="mt-4 text-3xl font-bold md:text-4xl">
+                    Want to showcase your
+                    business here?
+                  </h2>
+
+                  <p className="mt-4 max-w-xl leading-7 text-white/45">
+                    Vendor applications
+                    are currently open for
+                    this event. Submit your
+                    business for consideration
+                    by the organizer.
+                  </p>
+
+                  {event
+                    .vendorApplicationDeadline && (
+                    <p className="mt-5 text-sm text-white/35">
+                      Applications close{" "}
+                      {new Date(
+                        event.vendorApplicationDeadline,
+                      ).toLocaleDateString(
+                        "en-US",
+                        {
+                          month:
+                            "long",
+                          day:
+                            "numeric",
+                          year:
+                            "numeric",
+                        },
+                      )}
+                    </p>
+                  )}
+
+                </div>
+
+                <button className="shrink-0 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37] px-8 py-4 text-sm font-bold text-black transition hover:bg-[#e1bd46]">
+                  Apply as Vendor
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+      )}
+
+      {/* ------------------------------------------------ */}
+      {/* FINAL CTA */}
+      {/* ------------------------------------------------ */}
+
+      <section className="border-t border-white/[0.07]">
+
+        <div className="mx-auto max-w-7xl px-6 py-24 text-center md:px-10 lg:px-12">
+
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
+            Be There
+          </p>
+
+          <h2 className="mx-auto mt-5 max-w-3xl text-4xl font-bold tracking-tight md:text-5xl">
+            Ready for the experience?
+          </h2>
+
+          <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-white/40">
+            Secure your place and get
+            everything you need for the
+            event through WOWYOU.
+          </p>
+
+          <button className="mt-9 rounded-full bg-[#D4AF37] px-9 py-4 text-sm font-bold text-black transition hover:bg-[#e1bd46]">
+            Get Tickets
+          </button>
+
+        </div>
+
+      </section>
+
     </main>
+  );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Quick Detail
+|--------------------------------------------------------------------------
+*/
+
+function QuickDetail({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="py-7 md:px-8 md:py-8 first:md:pl-0">
+
+      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/30">
+        {label}
+      </p>
+
+      <p className="mt-2 text-sm font-medium text-white/75">
+        {value}
+      </p>
+
+    </div>
+  );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Detail
+|--------------------------------------------------------------------------
+*/
+
+function Detail({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div>
+
+      <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">
+        {label}
+      </p>
+
+      <p className="mt-2 text-sm leading-6 text-white/75">
+        {value}
+      </p>
+
+    </div>
   );
 }

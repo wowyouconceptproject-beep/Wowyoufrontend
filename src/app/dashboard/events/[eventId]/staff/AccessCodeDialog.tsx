@@ -1,6 +1,10 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import {
+  useEffect,
+  useState,
+  useTransition,
+} from "react";
 
 import {
   Dialog,
@@ -12,9 +16,16 @@ import {
 import { Button } from "@/components/ui/button";
 
 import {
-  Copy,
-  RefreshCw,
   Ban,
+  Check,
+  Copy,
+  KeyRound,
+  Mail,
+  MapPin,
+  Phone,
+  RefreshCw,
+  ShieldCheck,
+  UserRound,
 } from "lucide-react";
 
 import {
@@ -51,40 +62,122 @@ export function AccessCodeDialog({
   eventId,
   staff,
 }: Props) {
-  const [pending, startTransition] =
-    useTransition();
+  const [
+    pending,
+    startTransition,
+  ] = useTransition();
 
-  const [code, setCode] =
-    useState(staff.accessCode);
+  const [
+    code,
+    setCode,
+  ] = useState(
+    staff.accessCode
+  );
 
-  async function regenerate() {
-    startTransition(async () => {
-      const result =
-        await regenerateCode(
-          staff.id,
-          eventId
-        );
+  const [
+    copied,
+    setCopied,
+  ] = useState(false);
 
-      if (
-        result?.accessCode
-      ) {
-        setCode(
-          result.accessCode
-        );
-      }
-    });
+  useEffect(() => {
+    setCode(
+      staff.accessCode
+    );
+
+    setCopied(false);
+  }, [
+    staff.id,
+    staff.accessCode,
+  ]);
+
+  async function copyCode() {
+    try {
+      await navigator.clipboard
+        .writeText(code);
+
+      setCopied(true);
+
+      window.setTimeout(
+        () => {
+          setCopied(false);
+        },
+        1800
+      );
+    } catch (error) {
+      console.error(
+        "Unable to copy access code:",
+        error
+      );
+    }
   }
 
-  async function disable() {
-    startTransition(async () => {
-      await disableStaff(
-        staff.id,
-        eventId
+  function regenerate() {
+    startTransition(
+      async () => {
+        try {
+          const result =
+            await regenerateCode(
+              staff.id,
+              eventId
+            );
+
+          if (
+            result?.accessCode
+          ) {
+            setCode(
+              result.accessCode
+            );
+
+            setCopied(false);
+          }
+        } catch (error) {
+          console.error(
+            "Unable to regenerate access code:",
+            error
+          );
+        }
+      }
+    );
+  }
+
+  function disable() {
+    startTransition(
+      async () => {
+        try {
+          await disableStaff(
+            staff.id,
+            eventId
+          );
+
+          onOpenChange(
+            false
+          );
+        } catch (error) {
+          console.error(
+            "Unable to disable staff:",
+            error
+          );
+        }
+      }
+    );
+  }
+
+  const formattedRole =
+    staff.role
+      .replaceAll("_", " ")
+      .toLowerCase()
+      .replace(
+        /\b\w/g,
+        (letter) =>
+          letter.toUpperCase()
       );
 
-      onOpenChange(false);
-    });
-  }
+  const statusLabel =
+    staff.isRevoked
+      ? "Revoked"
+      : staff.isActive
+        ? "Active"
+        : "Inactive";
 
   return (
     <Dialog
@@ -93,128 +186,342 @@ export function AccessCodeDialog({
         onOpenChange
       }
     >
-      <DialogContent className="max-w-lg">
+      <DialogContent>
 
-        <DialogHeader>
+        <div className="w-full max-w-lg">
 
-          <DialogTitle>
-            {staff.name}
-          </DialogTitle>
+          {/* Header */}
 
-        </DialogHeader>
+          <DialogHeader>
 
-        <div className="space-y-6">
+            <div className="flex items-start gap-4">
 
-          <div>
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#D4AF37]/20 bg-[#D4AF37]/10">
 
-            <div className="text-sm text-muted-foreground">
-              Role
+                <UserRound className="h-5 w-5 text-[#D4AF37]" />
+
+              </div>
+
+              <div className="min-w-0 flex-1">
+
+                <DialogTitle>
+                  {staff.name}
+                </DialogTitle>
+
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+
+                  <span className="text-sm text-muted-foreground">
+                    {formattedRole}
+                  </span>
+
+                  <span className="text-muted-foreground/30">
+                    •
+                  </span>
+
+                  <span
+                    className={`
+                      inline-flex
+                      items-center
+                      gap-1.5
+                      rounded-full
+                      border
+                      px-2.5
+                      py-1
+                      text-xs
+                      font-semibold
+                      ${
+                        staff.isRevoked
+                          ? "border-red-500/20 bg-red-500/10 text-red-500"
+                          : staff.isActive
+                            ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-500"
+                            : "border-border bg-muted text-muted-foreground"
+                      }
+                    `}
+                  >
+
+                    <span
+                      className={`
+                        h-1.5
+                        w-1.5
+                        rounded-full
+                        ${
+                          staff.isRevoked
+                            ? "bg-red-500"
+                            : staff.isActive
+                              ? "bg-emerald-500"
+                              : "bg-muted-foreground"
+                        }
+                      `}
+                    />
+
+                    {statusLabel}
+
+                  </span>
+
+                </div>
+
+              </div>
+
             </div>
 
-            <div className="font-semibold">
-              {staff.role.replaceAll(
-                "_",
-                " "
+          </DialogHeader>
+
+          <div className="mt-7 space-y-6">
+
+            {/* Access Credential */}
+
+            <section className="overflow-hidden rounded-3xl border border-[#D4AF37]/20 bg-[#D4AF37]/[0.04]">
+
+              <div className="flex items-center gap-3 border-b border-[#D4AF37]/10 px-5 py-4">
+
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#D4AF37]/10">
+
+                  <KeyRound className="h-4 w-4 text-[#D4AF37]" />
+
+                </div>
+
+                <div>
+
+                  <p className="text-sm font-semibold">
+                    Staff Access Code
+                  </p>
+
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    Used to access event operations.
+                  </p>
+
+                </div>
+
+              </div>
+
+              <div className="px-5 py-7 text-center">
+
+                <p className="break-all font-mono text-3xl font-black tracking-[0.22em] sm:text-4xl">
+                  {code}
+                </p>
+
+              </div>
+
+              <div className="grid grid-cols-2 border-t border-[#D4AF37]/10">
+
+                <button
+                  type="button"
+                  onClick={
+                    copyCode
+                  }
+                  className="flex min-h-12 items-center justify-center gap-2 border-r border-[#D4AF37]/10 px-4 text-sm font-semibold transition hover:bg-[#D4AF37]/10"
+                >
+
+                  {copied ? (
+                    <>
+                      <Check className="h-4 w-4 text-emerald-500" />
+
+                      Copied
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-4 w-4" />
+
+                      Copy Code
+                    </>
+                  )}
+
+                </button>
+
+                <button
+                  type="button"
+                  disabled={
+                    pending
+                  }
+                  onClick={
+                    regenerate
+                  }
+                  className="flex min-h-12 items-center justify-center gap-2 px-4 text-sm font-semibold transition hover:bg-[#D4AF37]/10 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+
+                  <RefreshCw
+                    className={`h-4 w-4 ${
+                      pending
+                        ? "animate-spin"
+                        : ""
+                    }`}
+                  />
+
+                  Regenerate
+
+                </button>
+
+              </div>
+
+            </section>
+
+            {/* Staff Details */}
+
+            <section>
+
+              <div className="mb-3 flex items-center gap-2">
+
+                <ShieldCheck className="h-4 w-4 text-[#D4AF37]" />
+
+                <h3 className="text-sm font-bold">
+                  Staff Details
+                </h3>
+
+              </div>
+
+              <div className="overflow-hidden rounded-2xl border">
+
+                <DetailRow
+                  icon={
+                    MapPin
+                  }
+                  label="Station"
+                  value={
+                    staff.station ??
+                    "Not assigned"
+                  }
+                />
+
+                <DetailRow
+                  icon={
+                    Phone
+                  }
+                  label="Phone"
+                  value={
+                    staff.phone ??
+                    "Not provided"
+                  }
+                />
+
+                <DetailRow
+                  icon={
+                    Mail
+                  }
+                  label="Email"
+                  value={
+                    staff.email ??
+                    "Not provided"
+                  }
+                  last
+                />
+
+              </div>
+
+            </section>
+
+            {/* Permissions */}
+
+            <section>
+
+              <p className="mb-3 text-sm font-bold">
+                Permissions
+              </p>
+
+              {staff.permissions
+                .length >
+              0 ? (
+
+                <div className="flex flex-wrap gap-2">
+
+                  {staff.permissions.map(
+                    (
+                      permission
+                    ) => (
+                      <span
+                        key={
+                          permission
+                        }
+                        className="rounded-full border bg-muted/30 px-3 py-1.5 text-xs font-medium text-muted-foreground"
+                      >
+                        {permission
+                          .replaceAll(
+                            "_",
+                            " "
+                          )
+                          .toLowerCase()
+                          .replace(
+                            /\b\w/g,
+                            (
+                              letter
+                            ) =>
+                              letter.toUpperCase()
+                          )}
+                      </span>
+                    )
+                  )}
+
+                </div>
+
+              ) : (
+
+                <p className="text-sm text-muted-foreground">
+                  No permissions assigned.
+                </p>
+
               )}
-            </div>
 
-          </div>
+            </section>
 
-          <div>
+            {/* Last Activity */}
 
-            <div className="text-sm text-muted-foreground">
-              Station
-            </div>
+            {staff.lastUsedAt && (
 
-            <div className="font-semibold">
-              {staff.station ??
-                "-"}
-            </div>
+              <div className="flex items-center justify-between border-t pt-5">
 
-          </div>
+                <span className="text-sm text-muted-foreground">
+                  Last access
+                </span>
 
-          <div>
+                <span className="text-sm font-medium">
+                  {new Date(
+                    staff.lastUsedAt
+                  ).toLocaleString()}
+                </span>
 
-            <div className="text-sm text-muted-foreground">
-              Phone
-            </div>
+              </div>
 
-            <div>
-              {staff.phone ??
-                "-"}
-            </div>
+            )}
 
-          </div>
+            {/* Danger Zone */}
 
-          <div>
+            <section className="rounded-2xl border border-red-500/15 bg-red-500/[0.03] p-4">
 
-            <div className="text-sm text-muted-foreground">
-              Email
-            </div>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
-            <div>
-              {staff.email ??
-                "-"}
-            </div>
+                <div>
 
-          </div>
+                  <p className="text-sm font-semibold">
+                    Disable staff access
+                  </p>
 
-          <div>
+                  <p className="mt-1 max-w-xs text-xs leading-5 text-muted-foreground">
+                    This staff member will no longer be able to access event operations.
+                  </p>
 
-            <div className="text-sm text-muted-foreground mb-2">
-              Access Code
-            </div>
+                </div>
 
-            <div className="rounded-xl border p-4 text-center text-2xl font-black tracking-widest">
-              {code}
-            </div>
+                <Button
+                  variant="destructive"
+                  disabled={
+                    pending ||
+                    staff.isRevoked
+                  }
+                  onClick={
+                    disable
+                  }
+                >
 
-          </div>
+                  <Ban className="mr-2 h-4 w-4" />
 
-          <div className="space-y-2">
+                  {staff.isRevoked
+                    ? "Disabled"
+                    : "Disable"}
 
-            <Button
-              className="w-full"
-              onClick={() =>
-                navigator.clipboard.writeText(
-                  code
-                )
-              }
-            >
-              <Copy className="mr-2 h-4 w-4" />
+                </Button>
 
-              Copy Access Code
-            </Button>
+              </div>
 
-            <Button
-              variant="outline"
-              className="w-full"
-              disabled={
-                pending
-              }
-              onClick={
-                regenerate
-              }
-            >
-              <RefreshCw className="mr-2 h-4 w-4" />
-
-              Regenerate Code
-            </Button>
-
-            <Button
-              variant="destructive"
-              className="w-full"
-              disabled={
-                pending
-              }
-              onClick={
-                disable
-              }
-            >
-              <Ban className="mr-2 h-4 w-4" />
-
-              Disable Staff
-            </Button>
+            </section>
 
           </div>
 
@@ -222,5 +529,47 @@ export function AccessCodeDialog({
 
       </DialogContent>
     </Dialog>
+  );
+}
+
+function DetailRow({
+  icon: Icon,
+  label,
+  value,
+  last = false,
+}: {
+  icon: React.ElementType;
+  label: string;
+  value: string;
+  last?: boolean;
+}) {
+  return (
+    <div
+      className={`flex items-center gap-4 px-4 py-4 ${
+        last
+          ? ""
+          : "border-b"
+      }`}
+    >
+
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-muted">
+
+        <Icon className="h-4 w-4 text-muted-foreground" />
+
+      </div>
+
+      <div className="min-w-0 flex-1">
+
+        <p className="text-xs text-muted-foreground">
+          {label}
+        </p>
+
+        <p className="mt-0.5 truncate text-sm font-semibold">
+          {value}
+        </p>
+
+      </div>
+
+    </div>
   );
 }

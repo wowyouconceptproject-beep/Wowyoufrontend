@@ -2,28 +2,84 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <main className="flex min-h-screen items-center justify-center">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#050505] px-6 text-white">
 
-      <div className="text-center">
+      {/* Ambient brand glow */}
 
-        <h1 className="text-5xl font-black">
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#D4AF37]/[0.06] blur-[120px]" />
 
-          Event Not Found
+      {/* Decorative lines */}
 
-        </h1>
+      <div className="absolute left-0 top-1/2 h-px w-[18%] bg-gradient-to-r from-transparent to-[#D4AF37]/20" />
 
-        <p className="mt-4 text-muted">
+      <div className="absolute right-0 top-1/2 h-px w-[18%] bg-gradient-to-l from-transparent to-[#D4AF37]/20" />
 
-          The event you're looking for doesn't exist.
+      <div className="relative z-10 mx-auto max-w-2xl text-center">
 
+        {/* Brand */}
+
+        <div className="mb-10 flex items-center justify-center gap-3">
+
+          <div className="h-px w-8 bg-[#D4AF37]" />
+
+          <p className="text-xs font-bold uppercase tracking-[0.35em] text-[#D4AF37]">
+            WOWYOU
+          </p>
+
+          <div className="h-px w-8 bg-[#D4AF37]" />
+
+        </div>
+
+        {/* 404 */}
+
+        <p className="select-none text-[110px] font-black leading-none tracking-[-0.07em] text-white/[0.06] sm:text-[150px] md:text-[190px]">
+          404
         </p>
 
-        <Link
-          href="/"
-          className="mt-10 inline-flex rounded-full bg-gold px-8 py-4 font-semibold text-black"
-        >
-          Back to Discovery
-        </Link>
+        {/* Message */}
+
+        <div className="-mt-8 sm:-mt-12">
+
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
+            Experience Unavailable
+          </p>
+
+          <h1 className="mt-5 text-4xl font-black tracking-tight sm:text-5xl">
+            Event Not Found
+          </h1>
+
+          <p className="mx-auto mt-5 max-w-md text-base leading-7 text-white/45">
+            The event you&apos;re looking for
+            doesn&apos;t exist, has been removed,
+            or is no longer publicly available.
+          </p>
+
+        </div>
+
+        {/* Action */}
+
+        <div className="mt-10">
+
+          <Link
+            href="/"
+            className="inline-flex items-center gap-3 rounded-full bg-[#D4AF37] px-8 py-4 text-sm font-bold text-black transition duration-300 hover:bg-[#e1bd46]"
+          >
+            <span>
+              Back to Discovery
+            </span>
+
+            <span aria-hidden="true">
+              →
+            </span>
+          </Link>
+
+        </div>
+
+        {/* Footer brand */}
+
+        <p className="mt-16 text-[10px] font-medium uppercase tracking-[0.3em] text-white/20">
+          Discover · Connect · Experience
+        </p>
 
       </div>
 
