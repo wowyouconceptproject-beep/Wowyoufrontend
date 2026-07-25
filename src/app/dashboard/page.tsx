@@ -5,6 +5,15 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 import {
+  ArrowRight,
+  Building2,
+  CalendarDays,
+  MapPin,
+  Plus,
+  Users,
+} from "lucide-react";
+
+import {
   createOrganization,
   getMyOrganization,
 } from "@/services/organization";
@@ -61,9 +70,7 @@ export default function Dashboard() {
           orgResult.organization
         );
       }
-
     } catch (error) {
-
       console.error(error);
 
       localStorage.removeItem(
@@ -72,11 +79,8 @@ export default function Dashboard() {
 
       window.location.href =
         "/login";
-
     } finally {
-
       setLoading(false);
-
     }
   }
 
@@ -104,14 +108,11 @@ export default function Dashboard() {
       );
 
       await loadDashboard();
-
     } catch (error: any) {
-
       alert(
         error.message ??
           "Failed to create organization."
       );
-
     }
   }
 
@@ -119,157 +120,583 @@ export default function Dashboard() {
     loadDashboard();
   }, []);
 
+  /*
+  |--------------------------------------------------------------------------
+  | Loading
+  |--------------------------------------------------------------------------
+  */
+
   if (loading) {
     return (
-      <main className="p-8">
-        Loading...
+      <main className="min-h-screen bg-background px-6 py-10 lg:px-10">
+        <div className="mx-auto max-w-7xl">
+
+          <div className="animate-pulse">
+
+            <div className="h-4 w-32 rounded-full bg-surface" />
+
+            <div className="mt-5 h-12 w-80 rounded-xl bg-surface" />
+
+            <div className="mt-4 h-5 w-56 rounded-lg bg-surface" />
+
+            <div className="mt-12 grid gap-6 md:grid-cols-3">
+
+              {[1, 2, 3].map(
+                (item) => (
+                  <div
+                    key={item}
+                    className="h-36 rounded-[28px] bg-surface"
+                  />
+                )
+              )}
+
+            </div>
+
+          </div>
+
+        </div>
       </main>
     );
   }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Organization Setup
+  |--------------------------------------------------------------------------
+  */
 
   if (!organization) {
     return (
-      <main className="max-w-xl p-8">
+      <main className="flex min-h-screen items-center justify-center bg-background px-6 py-16">
 
-        <h1 className="mb-6 text-3xl font-bold">
-          Create Organization
-        </h1>
+        <div className="w-full max-w-xl">
 
-        <p className="mb-6 text-gray-500">
-          Welcome {user?.firstName}
-        </p>
+          <div className="mb-10">
 
-        <input
-          className="mb-4 w-full border p-3"
-          placeholder="Organization Name"
-          value={name}
-          onChange={(e) =>
-            setName(
-              e.target.value
-            )
-          }
-        />
+            <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl border border-divider bg-surface">
 
-        <input
-          className="mb-6 w-full border p-3"
-          placeholder="Organization Slug"
-          value={slug}
-          onChange={(e) =>
-            setSlug(
-              e.target.value
-            )
-          }
-        />
+              <Building2
+                className="h-6 w-6 text-gold"
+              />
 
-        <button
-          onClick={
-            handleCreate
-          }
-          className="rounded bg-black px-6 py-3 text-white"
-        >
-          Create Organization
-        </button>
+            </div>
 
-      </main>
-    );
-  }
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-gold">
+              Organizer Setup
+            </p>
 
-  return (
-    <main className="space-y-8 p-8">
+            <h1 className="mt-4 text-4xl font-black tracking-tight md:text-5xl">
+              Create your
+              organization.
+            </h1>
 
-      <div className="flex items-center justify-between">
-
-        <div>
-
-          <h1 className="text-4xl font-bold">
-            {organization.name}
-          </h1>
-
-          <p className="mt-2 text-gray-500">
-            Welcome{" "}
-            {user?.firstName}
-          </p>
-
-          <p className="mt-1">
-            Slug:{" "}
-            {organization.slug}
-          </p>
-
-          <p className="mt-1">
-            Events:{" "}
-            {
-              organization.events
-                ?.length ?? 0
-            }
-          </p>
-
-        </div>
-
-        <Link
-          href="/dashboard/events/create"
-          className="rounded bg-black px-6 py-3 text-white"
-        >
-          Create Event
-        </Link>
-
-      </div>
-
-      <div className="grid gap-4">
-
-        {organization.events?.length ===
-          0 && (
-
-          <div className="rounded border p-6">
-
-            <h3 className="font-semibold">
-              No events yet
-            </h3>
-
-            <p className="mt-2 text-gray-500">
-              Create your first
-              event to get
-              started.
+            <p className="mt-5 max-w-md leading-7 text-muted">
+              Welcome{" "}
+              {user?.firstName}.
+              Your organization is
+              the home for your
+              events, teams and
+              operations.
             </p>
 
           </div>
 
-        )}
+          <div className="rounded-[32px] border border-divider bg-surface p-6 md:p-8">
 
-        {organization.events?.map(
-          (event: any) => (
+            <div>
 
-            <Link
-              key={event.id}
-              href={`/dashboard/events/${event.id}`}
-              className="block rounded border p-6 transition hover:border-gray-400"
+              <label className="mb-3 block text-xs font-semibold uppercase tracking-[0.2em] text-muted">
+                Organization Name
+              </label>
+
+              <input
+                className="
+                  w-full
+                  rounded-2xl
+                  border
+                  border-divider
+                  bg-background
+                  px-5
+                  py-4
+                  outline-none
+                  transition
+                  placeholder:text-muted
+                  focus:border-gold
+                "
+                placeholder="e.g. WOWYOU Experiences"
+                value={name}
+                onChange={(e) =>
+                  setName(
+                    e.target.value
+                  )
+                }
+              />
+
+            </div>
+
+            <div className="mt-6">
+
+              <label className="mb-3 block text-xs font-semibold uppercase tracking-[0.2em] text-muted">
+                Organization Slug
+              </label>
+
+              <input
+                className="
+                  w-full
+                  rounded-2xl
+                  border
+                  border-divider
+                  bg-background
+                  px-5
+                  py-4
+                  outline-none
+                  transition
+                  placeholder:text-muted
+                  focus:border-gold
+                "
+                placeholder="e.g. wowyou-experiences"
+                value={slug}
+                onChange={(e) =>
+                  setSlug(
+                    e.target.value
+                  )
+                }
+              />
+
+              <p className="mt-3 text-sm text-muted">
+                This becomes your
+                unique organization
+                identifier.
+              </p>
+
+            </div>
+
+            <button
+              onClick={
+                handleCreate
+              }
+              className="
+                mt-8
+                flex
+                w-full
+                items-center
+                justify-center
+                gap-2
+                rounded-full
+                bg-gold
+                px-6
+                py-4
+                font-semibold
+                text-black
+                transition
+                hover:scale-[1.01]
+              "
             >
+              Create Organization
 
-              <h3 className="text-xl font-bold">
-                {event.title}
+              <ArrowRight className="h-4 w-4" />
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </main>
+    );
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Organizer Dashboard
+  |--------------------------------------------------------------------------
+  */
+
+  const eventCount =
+    organization.events
+      ?.length ?? 0;
+
+  const publishedCount =
+    organization.events
+      ?.filter(
+        (event: any) =>
+          event.status ===
+          "PUBLISHED"
+      ).length ?? 0;
+
+  const draftCount =
+    organization.events
+      ?.filter(
+        (event: any) =>
+          event.status ===
+          "DRAFT"
+      ).length ?? 0;
+
+  return (
+    <main className="min-h-screen bg-background px-6 py-10 lg:px-10">
+
+      <div className="mx-auto max-w-7xl">
+
+        {/* Header */}
+
+        <section className="flex flex-col gap-8 border-b border-divider pb-10 lg:flex-row lg:items-end lg:justify-between">
+
+          <div>
+
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-gold">
+              Organizer Dashboard
+            </p>
+
+            <h1 className="mt-4 text-4xl font-black tracking-tight md:text-5xl">
+              {organization.name}
+            </h1>
+
+            <p className="mt-4 text-muted">
+              Welcome back,{" "}
+              <span className="text-foreground">
+                {user?.firstName}
+              </span>
+              . Manage your events
+              and operations from
+              here.
+            </p>
+
+          </div>
+
+          <Link
+            href="/dashboard/events/create"
+            className="
+              inline-flex
+              items-center
+              justify-center
+              gap-2
+              rounded-full
+              bg-gold
+              px-6
+              py-4
+              font-semibold
+              text-black
+              transition
+              hover:scale-[1.02]
+            "
+          >
+            <Plus className="h-5 w-5" />
+
+            Create Event
+          </Link>
+
+        </section>
+
+        {/* Overview */}
+
+        <section className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+
+          <div className="rounded-[28px] border border-divider bg-surface p-6">
+
+            <div className="flex items-center justify-between">
+
+              <p className="text-sm text-muted">
+                Total Events
+              </p>
+
+              <CalendarDays className="h-5 w-5 text-gold" />
+
+            </div>
+
+            <h2 className="mt-8 text-4xl font-black">
+              {eventCount}
+            </h2>
+
+          </div>
+
+          <div className="rounded-[28px] border border-divider bg-surface p-6">
+
+            <p className="text-sm text-muted">
+              Published
+            </p>
+
+            <h2 className="mt-8 text-4xl font-black">
+              {publishedCount}
+            </h2>
+
+            <p className="mt-2 text-xs uppercase tracking-[0.18em] text-green-400">
+              Live Events
+            </p>
+
+          </div>
+
+          <div className="rounded-[28px] border border-divider bg-surface p-6">
+
+            <p className="text-sm text-muted">
+              Drafts
+            </p>
+
+            <h2 className="mt-8 text-4xl font-black">
+              {draftCount}
+            </h2>
+
+            <p className="mt-2 text-xs uppercase tracking-[0.18em] text-muted">
+              In Preparation
+            </p>
+
+          </div>
+
+          <div className="rounded-[28px] border border-divider bg-surface p-6">
+
+            <p className="text-sm text-muted">
+              Organization
+            </p>
+
+            <h2 className="mt-8 truncate text-xl font-bold">
+              {organization.slug}
+            </h2>
+
+            <p className="mt-2 text-xs uppercase tracking-[0.18em] text-muted">
+              Organization ID
+            </p>
+
+          </div>
+
+        </section>
+
+        {/* Events Header */}
+
+        <section className="mt-16">
+
+          <div className="flex items-end justify-between gap-6">
+
+            <div>
+
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gold">
+                Event Portfolio
+              </p>
+
+              <h2 className="mt-3 text-3xl font-bold">
+                Your Events
+              </h2>
+
+              <p className="mt-2 text-muted">
+                Open an event to
+                manage tickets,
+                attendees, staff,
+                revenue and live
+                operations.
+              </p>
+
+            </div>
+
+          </div>
+
+          {/* Empty */}
+
+          {eventCount === 0 && (
+
+            <div className="mt-8 flex min-h-[360px] flex-col items-center justify-center rounded-[32px] border border-dashed border-divider bg-surface/50 px-6 text-center">
+
+              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-divider bg-background">
+
+                <CalendarDays className="h-7 w-7 text-gold" />
+
+              </div>
+
+              <h3 className="mt-6 text-2xl font-bold">
+                Your first event
+                starts here.
               </h3>
 
-              <p className="mt-2">
-                📍 {event.venue}
+              <p className="mt-3 max-w-md leading-7 text-muted">
+                Create an event,
+                configure tickets,
+                build your staff
+                team and start
+                preparing your live
+                operations.
               </p>
 
-              <p className="mt-1">
-                👥 Capacity:{" "}
-                {event.capacity}
-              </p>
+              <Link
+                href="/dashboard/events/create"
+                className="mt-8 inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 font-semibold text-black"
+              >
+                <Plus className="h-4 w-4" />
 
-              <p className="mt-1">
-                Status:{" "}
-                {event.status}
-              </p>
+                Create Event
+              </Link>
 
-              <p className="mt-4 text-sm text-gray-500">
-                View Event →
-              </p>
+            </div>
 
-            </Link>
+          )}
 
-          )
-        )}
+          {/* Event Cards */}
+
+          {eventCount > 0 && (
+
+            <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+
+              {organization.events?.map(
+                (event: any) => (
+
+                  <Link
+                    key={
+                      event.id
+                    }
+                    href={`/dashboard/events/${event.id}`}
+                    className="
+                      group
+                      overflow-hidden
+                      rounded-[28px]
+                      border
+                      border-divider
+                      bg-surface
+                      transition
+                      duration-300
+                      hover:-translate-y-1
+                      hover:border-gold/40
+                    "
+                  >
+
+                    {/* Image */}
+
+                    <div className="relative h-52 overflow-hidden bg-background">
+
+                      {event.coverImage ? (
+
+                        <img
+                          src={
+                            event.coverImage
+                          }
+                          alt={
+                            event.title
+                          }
+                          className="
+                            h-full
+                            w-full
+                            object-cover
+                            transition
+                            duration-500
+                            group-hover:scale-105
+                          "
+                        />
+
+                      ) : (
+
+                        <div className="flex h-full items-center justify-center">
+
+                          <CalendarDays className="h-10 w-10 text-muted" />
+
+                        </div>
+
+                      )}
+
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+
+                      <div
+                        className={`
+                          absolute
+                          right-4
+                          top-4
+                          rounded-full
+                          border
+                          px-3
+                          py-1.5
+                          text-xs
+                          font-semibold
+                          uppercase
+                          tracking-wider
+                          backdrop-blur-md
+                          ${
+                            event.status ===
+                            "PUBLISHED"
+                              ? "border-green-400/30 bg-green-500/20 text-green-300"
+                              : "border-white/10 bg-black/40 text-white"
+                          }
+                        `}
+                      >
+                        {event.status}
+                      </div>
+
+                    </div>
+
+                    {/* Content */}
+
+                    <div className="p-6">
+
+                      <h3 className="text-2xl font-bold transition group-hover:text-gold">
+                        {event.title}
+                      </h3>
+
+                      <div className="mt-5 space-y-3">
+
+                        <div className="flex items-center gap-3 text-sm text-muted">
+
+                          <MapPin className="h-4 w-4 shrink-0" />
+
+                          <span className="truncate">
+                            {event.venue}
+                          </span>
+
+                        </div>
+
+                        <div className="flex items-center gap-3 text-sm text-muted">
+
+                          <Users className="h-4 w-4 shrink-0" />
+
+                          <span>
+                            Capacity{" "}
+                            {event.capacity?.toLocaleString()}
+                          </span>
+
+                        </div>
+
+                        {event.startDate && (
+
+                          <div className="flex items-center gap-3 text-sm text-muted">
+
+                            <CalendarDays className="h-4 w-4 shrink-0" />
+
+                            <span>
+                              {new Date(
+                                event.startDate
+                              ).toLocaleDateString(
+                                "en-US",
+                                {
+                                  month:
+                                    "short",
+                                  day:
+                                    "numeric",
+                                  year:
+                                    "numeric",
+                                }
+                              )}
+                            </span>
+
+                          </div>
+
+                        )}
+
+                      </div>
+
+                      <div className="mt-7 flex items-center justify-between border-t border-divider pt-5">
+
+                        <span className="text-sm font-medium">
+                          Manage Event
+                        </span>
+
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:text-gold" />
+
+                      </div>
+
+                    </div>
+
+                  </Link>
+
+                )
+              )}
+
+            </div>
+
+          )}
+
+        </section>
 
       </div>
 
