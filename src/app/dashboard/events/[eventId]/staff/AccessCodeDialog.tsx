@@ -13,8 +13,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import { Button } from "@/components/ui/button";
-
 import {
   Ban,
   Check,
@@ -92,8 +90,9 @@ export function AccessCodeDialog({
 
   async function copyCode() {
     try {
-      await navigator.clipboard
-        .writeText(code);
+      await navigator.clipboard.writeText(
+        code
+      );
 
       setCopied(true);
 
@@ -186,35 +185,94 @@ export function AccessCodeDialog({
         onOpenChange
       }
     >
-      <DialogContent>
+      <DialogContent
+        className="
+          max-h-[90vh]
+          w-[calc(100%-2rem)]
+          max-w-[560px]
+          overflow-y-auto
+          rounded-[28px]
+          border
+          border-white/10
+          bg-[#0A0A0A]
+          p-0
+          text-white
+          shadow-2xl
+          sm:w-full
+        "
+      >
+        {/* Header */}
 
-        <div className="w-full max-w-lg">
-
-          {/* Header */}
-
+        <div
+          className="
+            border-b
+            border-white/[0.08]
+            px-6
+            pb-6
+            pt-7
+            sm:px-8
+          "
+        >
           <DialogHeader>
 
             <div className="flex items-start gap-4">
 
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#D4AF37]/20 bg-[#D4AF37]/10">
-
-                <UserRound className="h-5 w-5 text-[#D4AF37]" />
-
+              <div
+                className="
+                  flex
+                  h-12
+                  w-12
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-2xl
+                  border
+                  border-[#D4AF37]/20
+                  bg-[#D4AF37]/10
+                "
+              >
+                <UserRound
+                  className="
+                    h-5
+                    w-5
+                    text-[#D4AF37]
+                  "
+                />
               </div>
 
               <div className="min-w-0 flex-1">
 
-                <DialogTitle>
+                <DialogTitle
+                  className="
+                    text-left
+                    text-xl
+                    font-bold
+                    tracking-tight
+                    text-white
+                  "
+                >
                   {staff.name}
                 </DialogTitle>
 
-                <div className="mt-2 flex flex-wrap items-center gap-2">
-
-                  <span className="text-sm text-muted-foreground">
+                <div
+                  className="
+                    mt-2
+                    flex
+                    flex-wrap
+                    items-center
+                    gap-2
+                  "
+                >
+                  <span
+                    className="
+                      text-sm
+                      text-white/45
+                    "
+                  >
                     {formattedRole}
                   </span>
 
-                  <span className="text-muted-foreground/30">
+                  <span className="text-white/20">
                     •
                   </span>
 
@@ -231,14 +289,13 @@ export function AccessCodeDialog({
                       font-semibold
                       ${
                         staff.isRevoked
-                          ? "border-red-500/20 bg-red-500/10 text-red-500"
+                          ? "border-red-500/20 bg-red-500/10 text-red-400"
                           : staff.isActive
-                            ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-500"
-                            : "border-border bg-muted text-muted-foreground"
+                            ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
+                            : "border-white/10 bg-white/5 text-white/50"
                       }
                     `}
                   >
-
                     <span
                       className={`
                         h-1.5
@@ -246,16 +303,15 @@ export function AccessCodeDialog({
                         rounded-full
                         ${
                           staff.isRevoked
-                            ? "bg-red-500"
+                            ? "bg-red-400"
                             : staff.isActive
-                              ? "bg-emerald-500"
-                              : "bg-muted-foreground"
+                              ? "bg-emerald-400"
+                              : "bg-white/30"
                         }
                       `}
                     />
 
                     {statusLabel}
-
                   </span>
 
                 </div>
@@ -265,265 +321,546 @@ export function AccessCodeDialog({
             </div>
 
           </DialogHeader>
+        </div>
 
-          <div className="mt-7 space-y-6">
+        {/* Content */}
 
-            {/* Access Credential */}
+        <div
+          className="
+            space-y-7
+            px-6
+            py-7
+            sm:px-8
+          "
+        >
 
-            <section className="overflow-hidden rounded-3xl border border-[#D4AF37]/20 bg-[#D4AF37]/[0.04]">
+          {/* Access Code */}
 
-              <div className="flex items-center gap-3 border-b border-[#D4AF37]/10 px-5 py-4">
+          <section
+            className="
+              overflow-hidden
+              rounded-[22px]
+              border
+              border-[#D4AF37]/20
+              bg-[#D4AF37]/[0.035]
+            "
+          >
 
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#D4AF37]/10">
+            <div
+              className="
+                flex
+                items-center
+                gap-3
+                border-b
+                border-[#D4AF37]/10
+                px-5
+                py-4
+              "
+            >
 
-                  <KeyRound className="h-4 w-4 text-[#D4AF37]" />
-
-                </div>
-
-                <div>
-
-                  <p className="text-sm font-semibold">
-                    Staff Access Code
-                  </p>
-
-                  <p className="mt-0.5 text-xs text-muted-foreground">
-                    Used to access event operations.
-                  </p>
-
-                </div>
-
+              <div
+                className="
+                  flex
+                  h-9
+                  w-9
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-xl
+                  bg-[#D4AF37]/10
+                "
+              >
+                <KeyRound
+                  className="
+                    h-4
+                    w-4
+                    text-[#D4AF37]
+                  "
+                />
               </div>
 
-              <div className="px-5 py-7 text-center">
+              <div>
 
-                <p className="break-all font-mono text-3xl font-black tracking-[0.22em] sm:text-4xl">
-                  {code}
+                <p
+                  className="
+                    text-sm
+                    font-semibold
+                    text-white
+                  "
+                >
+                  Staff Access Code
+                </p>
+
+                <p
+                  className="
+                    mt-0.5
+                    text-xs
+                    text-white/40
+                  "
+                >
+                  Used to access event
+                  operations.
                 </p>
 
               </div>
 
-              <div className="grid grid-cols-2 border-t border-[#D4AF37]/10">
+            </div>
 
-                <button
-                  type="button"
-                  onClick={
-                    copyCode
-                  }
-                  className="flex min-h-12 items-center justify-center gap-2 border-r border-[#D4AF37]/10 px-4 text-sm font-semibold transition hover:bg-[#D4AF37]/10"
-                >
+            <div
+              className="
+                px-4
+                py-8
+                text-center
+                sm:px-6
+              "
+            >
+              <p
+                className="
+                  break-all
+                  font-mono
+                  text-2xl
+                  font-black
+                  tracking-[0.2em]
+                  text-white
+                  sm:text-3xl
+                "
+              >
+                {code}
+              </p>
+            </div>
 
-                  {copied ? (
-                    <>
-                      <Check className="h-4 w-4 text-emerald-500" />
+            <div
+              className="
+                grid
+                grid-cols-2
+                border-t
+                border-[#D4AF37]/10
+              "
+            >
 
-                      Copied
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-4 w-4" />
+              <button
+                type="button"
+                onClick={
+                  copyCode
+                }
+                className="
+                  flex
+                  min-h-14
+                  items-center
+                  justify-center
+                  gap-2
+                  border-r
+                  border-[#D4AF37]/10
+                  px-4
+                  text-sm
+                  font-semibold
+                  text-white/70
+                  transition
+                  hover:bg-[#D4AF37]/10
+                  hover:text-white
+                "
+              >
+                {copied ? (
+                  <>
+                    <Check
+                      className="
+                        h-4
+                        w-4
+                        text-emerald-400
+                      "
+                    />
 
-                      Copy Code
-                    </>
-                  )}
+                    Copied
+                  </>
+                ) : (
+                  <>
+                    <Copy
+                      className="
+                        h-4
+                        w-4
+                        text-[#D4AF37]
+                      "
+                    />
 
-                </button>
+                    Copy Code
+                  </>
+                )}
+              </button>
 
-                <button
-                  type="button"
-                  disabled={
-                    pending
-                  }
-                  onClick={
-                    regenerate
-                  }
-                  className="flex min-h-12 items-center justify-center gap-2 px-4 text-sm font-semibold transition hover:bg-[#D4AF37]/10 disabled:cursor-not-allowed disabled:opacity-40"
-                >
-
-                  <RefreshCw
-                    className={`h-4 w-4 ${
+              <button
+                type="button"
+                disabled={
+                  pending
+                }
+                onClick={
+                  regenerate
+                }
+                className="
+                  flex
+                  min-h-14
+                  items-center
+                  justify-center
+                  gap-2
+                  px-4
+                  text-sm
+                  font-semibold
+                  text-white/70
+                  transition
+                  hover:bg-[#D4AF37]/10
+                  hover:text-white
+                  disabled:cursor-not-allowed
+                  disabled:opacity-40
+                "
+              >
+                <RefreshCw
+                  className={`
+                    h-4
+                    w-4
+                    text-[#D4AF37]
+                    ${
                       pending
                         ? "animate-spin"
                         : ""
-                    }`}
-                  />
-
-                  Regenerate
-
-                </button>
-
-              </div>
-
-            </section>
-
-            {/* Staff Details */}
-
-            <section>
-
-              <div className="mb-3 flex items-center gap-2">
-
-                <ShieldCheck className="h-4 w-4 text-[#D4AF37]" />
-
-                <h3 className="text-sm font-bold">
-                  Staff Details
-                </h3>
-
-              </div>
-
-              <div className="overflow-hidden rounded-2xl border">
-
-                <DetailRow
-                  icon={
-                    MapPin
-                  }
-                  label="Station"
-                  value={
-                    staff.station ??
-                    "Not assigned"
-                  }
+                    }
+                  `}
                 />
 
-                <DetailRow
-                  icon={
-                    Phone
-                  }
-                  label="Phone"
-                  value={
-                    staff.phone ??
-                    "Not provided"
-                  }
-                />
+                Regenerate
+              </button>
 
-                <DetailRow
-                  icon={
-                    Mail
-                  }
-                  label="Email"
-                  value={
-                    staff.email ??
-                    "Not provided"
-                  }
-                  last
-                />
+            </div>
 
-              </div>
+          </section>
 
-            </section>
+          {/* Staff Details */}
 
-            {/* Permissions */}
+          <section>
 
-            <section>
+            <div
+              className="
+                mb-3
+                flex
+                items-center
+                gap-2
+              "
+            >
+              <ShieldCheck
+                className="
+                  h-4
+                  w-4
+                  text-[#D4AF37]
+                "
+              />
 
-              <p className="mb-3 text-sm font-bold">
+              <h3
+                className="
+                  text-sm
+                  font-bold
+                  text-white
+                "
+              >
+                Staff Details
+              </h3>
+            </div>
+
+            <div
+              className="
+                overflow-hidden
+                rounded-[20px]
+                border
+                border-white/[0.08]
+                bg-white/[0.025]
+              "
+            >
+              <DetailRow
+                icon={MapPin}
+                label="Station"
+                value={
+                  staff.station ??
+                  "Not assigned"
+                }
+              />
+
+              <DetailRow
+                icon={Phone}
+                label="Phone"
+                value={
+                  staff.phone ??
+                  "Not provided"
+                }
+              />
+
+              <DetailRow
+                icon={Mail}
+                label="Email"
+                value={
+                  staff.email ??
+                  "Not provided"
+                }
+                last
+              />
+            </div>
+
+          </section>
+
+          {/* Permissions */}
+
+          <section>
+
+            <div
+              className="
+                mb-3
+                flex
+                items-center
+                justify-between
+              "
+            >
+              <p
+                className="
+                  text-sm
+                  font-bold
+                  text-white
+                "
+              >
                 Permissions
               </p>
 
-              {staff.permissions
-                .length >
-              0 ? (
+              <span
+                className="
+                  text-xs
+                  text-white/30
+                "
+              >
+                {staff.permissions.length}
+                {" "}
+                assigned
+              </span>
+            </div>
 
-                <div className="flex flex-wrap gap-2">
-
-                  {staff.permissions.map(
-                    (
-                      permission
-                    ) => (
-                      <span
-                        key={
-                          permission
-                        }
-                        className="rounded-full border bg-muted/30 px-3 py-1.5 text-xs font-medium text-muted-foreground"
-                      >
-                        {permission
-                          .replaceAll(
-                            "_",
-                            " "
-                          )
-                          .toLowerCase()
-                          .replace(
-                            /\b\w/g,
-                            (
-                              letter
-                            ) =>
-                              letter.toUpperCase()
-                          )}
-                      </span>
-                    )
-                  )}
-
-                </div>
-
-              ) : (
-
-                <p className="text-sm text-muted-foreground">
-                  No permissions assigned.
-                </p>
-
-              )}
-
-            </section>
-
-            {/* Last Activity */}
-
-            {staff.lastUsedAt && (
-
-              <div className="flex items-center justify-between border-t pt-5">
-
-                <span className="text-sm text-muted-foreground">
-                  Last access
-                </span>
-
-                <span className="text-sm font-medium">
-                  {new Date(
-                    staff.lastUsedAt
-                  ).toLocaleString()}
-                </span>
-
+            {staff.permissions.length >
+            0 ? (
+              <div
+                className="
+                  flex
+                  flex-wrap
+                  gap-2
+                "
+              >
+                {staff.permissions.map(
+                  (
+                    permission
+                  ) => (
+                    <span
+                      key={
+                        permission
+                      }
+                      className="
+                        rounded-full
+                        border
+                        border-[#D4AF37]/15
+                        bg-[#D4AF37]/[0.06]
+                        px-3
+                        py-1.5
+                        text-xs
+                        font-medium
+                        text-[#D4AF37]
+                      "
+                    >
+                      {permission
+                        .replaceAll(
+                          "_",
+                          " "
+                        )
+                        .toLowerCase()
+                        .replace(
+                          /\b\w/g,
+                          (
+                            letter
+                          ) =>
+                            letter.toUpperCase()
+                        )}
+                    </span>
+                  )
+                )}
               </div>
-
+            ) : (
+              <div
+                className="
+                  rounded-2xl
+                  border
+                  border-dashed
+                  border-white/10
+                  px-4
+                  py-5
+                "
+              >
+                <p
+                  className="
+                    text-sm
+                    text-white/35
+                  "
+                >
+                  No permissions
+                  assigned.
+                </p>
+              </div>
             )}
 
-            {/* Danger Zone */}
+          </section>
 
-            <section className="rounded-2xl border border-red-500/15 bg-red-500/[0.03] p-4">
+          {/* Last Activity */}
 
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <section
+            className="
+              flex
+              items-center
+              justify-between
+              gap-5
+              border-t
+              border-white/[0.08]
+              pt-6
+            "
+          >
+            <div>
+              <p
+                className="
+                  text-xs
+                  uppercase
+                  tracking-[0.18em]
+                  text-white/30
+                "
+              >
+                Last Access
+              </p>
 
-                <div>
+              <p
+                className="
+                  mt-1
+                  text-sm
+                  font-medium
+                  text-white/70
+                "
+              >
+                {staff.lastUsedAt
+                  ? new Date(
+                      staff.lastUsedAt
+                    ).toLocaleString()
+                  : "Never logged in"}
+              </p>
+            </div>
 
-                  <p className="text-sm font-semibold">
-                    Disable staff access
-                  </p>
+            <div
+              className={`
+                h-2
+                w-2
+                shrink-0
+                rounded-full
+                ${
+                  staff.lastUsedAt
+                    ? "bg-emerald-400"
+                    : "bg-white/20"
+                }
+              `}
+            />
 
-                  <p className="mt-1 max-w-xs text-xs leading-5 text-muted-foreground">
-                    This staff member will no longer be able to access event operations.
-                  </p>
+          </section>
 
-                </div>
+          {/* Danger Zone */}
 
-                <Button
-                  variant="destructive"
-                  disabled={
-                    pending ||
-                    staff.isRevoked
-                  }
-                  onClick={
-                    disable
-                  }
+          <section
+            className="
+              rounded-[20px]
+              border
+              border-red-500/15
+              bg-red-500/[0.035]
+              p-5
+            "
+          >
+
+            <div
+              className="
+                flex
+                flex-col
+                gap-5
+                sm:flex-row
+                sm:items-center
+                sm:justify-between
+              "
+            >
+
+              <div>
+
+                <p
+                  className="
+                    text-sm
+                    font-semibold
+                    text-white
+                  "
                 >
+                  Disable staff access
+                </p>
 
-                  <Ban className="mr-2 h-4 w-4" />
-
-                  {staff.isRevoked
-                    ? "Disabled"
-                    : "Disable"}
-
-                </Button>
+                <p
+                  className="
+                    mt-1
+                    max-w-[290px]
+                    text-xs
+                    leading-5
+                    text-white/40
+                  "
+                >
+                  Immediately revoke this
+                  member&apos;s access to
+                  event operations.
+                </p>
 
               </div>
 
-            </section>
+              <button
+                type="button"
+                disabled={
+                  pending ||
+                  staff.isRevoked
+                }
+                onClick={
+                  disable
+                }
+                className="
+                  inline-flex
+                  h-11
+                  shrink-0
+                  items-center
+                  justify-center
+                  gap-2
+                  rounded-xl
+                  border
+                  border-red-500/20
+                  bg-red-500/10
+                  px-4
+                  text-sm
+                  font-semibold
+                  text-red-400
+                  transition
+                  hover:bg-red-500/20
+                  disabled:cursor-not-allowed
+                  disabled:opacity-40
+                "
+              >
+                <Ban
+                  className="
+                    h-4
+                    w-4
+                  "
+                />
 
-          </div>
+                {staff.isRevoked
+                  ? "Disabled"
+                  : "Disable"}
+              </button>
+
+            </div>
+
+          </section>
 
         </div>
 
@@ -545,31 +882,68 @@ function DetailRow({
 }) {
   return (
     <div
-      className={`flex items-center gap-4 px-4 py-4 ${
-        last
-          ? ""
-          : "border-b"
-      }`}
+      className={`
+        flex
+        items-center
+        gap-4
+        px-4
+        py-4
+        ${
+          last
+            ? ""
+            : "border-b border-white/[0.06]"
+        }
+      `}
     >
-
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-muted">
-
-        <Icon className="h-4 w-4 text-muted-foreground" />
-
+      <div
+        className="
+          flex
+          h-9
+          w-9
+          shrink-0
+          items-center
+          justify-center
+          rounded-xl
+          border
+          border-white/[0.06]
+          bg-white/[0.04]
+        "
+      >
+        <Icon
+          className="
+            h-4
+            w-4
+            text-[#D4AF37]
+          "
+        />
       </div>
 
       <div className="min-w-0 flex-1">
 
-        <p className="text-xs text-muted-foreground">
+        <p
+          className="
+            text-xs
+            uppercase
+            tracking-[0.12em]
+            text-white/30
+          "
+        >
           {label}
         </p>
 
-        <p className="mt-0.5 truncate text-sm font-semibold">
+        <p
+          className="
+            mt-1
+            truncate
+            text-sm
+            font-semibold
+            text-white/80
+          "
+        >
           {value}
         </p>
 
       </div>
-
     </div>
   );
 }
