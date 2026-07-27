@@ -366,18 +366,21 @@ export function AddStaffModal({
                 </div>
 
                 <DialogHeader>
-                  <DialogTitle
-                    className="
-                      text-left
-                      text-2xl
-                      font-bold
-                      tracking-tight
-                      text-white
-                    "
-                  >
-                    Add Event Staff
-                  </DialogTitle>
-                </DialogHeader>
+  <DialogTitle>
+    <span
+      className="
+        block
+        text-left
+        text-2xl
+        font-bold
+        tracking-tight
+        text-white
+      "
+    >
+      Add Event Staff
+    </span>
+  </DialogTitle>
+</DialogHeader>
 
                 <p
                   className="
