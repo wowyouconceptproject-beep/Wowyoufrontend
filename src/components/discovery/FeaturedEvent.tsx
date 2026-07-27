@@ -2,23 +2,109 @@
 
 import Link from "next/link";
 
-import { DiscoveryEvent } from "./EventCard";
+import {
+  ArrowUpRight,
+  Bookmark,
+  CalendarDays,
+  MapPin,
+  Store,
+} from "lucide-react";
+
+import {
+  DiscoveryEvent,
+} from "./EventCard";
 
 interface Props {
   event: DiscoveryEvent;
+
+  saved?: boolean;
+
+  onSave?: (
+    eventId: string,
+  ) => void;
 }
+
+/*
+|--------------------------------------------------------------------------
+| Date Formatting
+|--------------------------------------------------------------------------
+*/
+
+function formatDate(
+  value: string,
+) {
+  return new Intl.DateTimeFormat(
+    "en-US",
+    {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    },
+  ).format(
+    new Date(value),
+  );
+}
+
+function formatTime(
+  value: string,
+) {
+  return new Intl.DateTimeFormat(
+    "en-US",
+    {
+      hour: "numeric",
+      minute: "2-digit",
+    },
+  ).format(
+    new Date(value),
+  );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Featured Event
+|--------------------------------------------------------------------------
+*/
 
 export default function FeaturedEvent({
   event,
+  saved = false,
+  onSave,
 }: Props) {
   return (
-    <section className="overflow-hidden rounded-[36px] bg-surface">
+    <section
+      className="
+        group
+        relative
+        overflow-hidden
+        rounded-[32px]
+        border
+        border-divider
+        bg-surface
+        lg:rounded-[36px]
+      "
+    >
 
-      <div className="grid lg:grid-cols-2">
+      <div
+        className="
+          grid
+          lg:grid-cols-[1.05fr_0.95fr]
+        "
+      >
 
         {/* Image */}
 
-        <div className="relative h-[650px] overflow-hidden">
+        <Link
+          href={`/events/${event.id}`}
+          className="
+            relative
+            block
+            min-h-[420px]
+            overflow-hidden
+            sm:min-h-[520px]
+            lg:min-h-[680px]
+          "
+        >
 
           <img
             src={
@@ -26,124 +112,484 @@ export default function FeaturedEvent({
               "/images/placeholder-event.jpg"
             }
             alt={event.title}
-            className="h-full w-full object-cover transition duration-700 hover:scale-105"
+            className="
+              absolute
+              inset-0
+              h-full
+              w-full
+              object-cover
+              transition-transform
+              duration-1000
+              group-hover:scale-[1.03]
+            "
           />
 
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/30" />
+          {/* Image overlays */}
 
-        </div>
+          <div
+            className="
+              absolute
+              inset-0
+              bg-gradient-to-t
+              from-black/70
+              via-transparent
+              to-black/10
+              lg:bg-gradient-to-r
+              lg:from-transparent
+              lg:via-transparent
+              lg:to-black/30
+            "
+          />
+
+          {/* Category */}
+
+          {event.category && (
+            <div
+              className="
+                absolute
+                left-6
+                top-6
+                rounded-full
+                border
+                border-white/15
+                bg-black/40
+                px-4
+                py-2
+                text-[10px]
+                font-bold
+                uppercase
+                tracking-[0.2em]
+                text-white
+                backdrop-blur-xl
+              "
+            >
+              {event.category}
+            </div>
+          )}
+
+          {/* Vendor Badge */}
+
+          {event.acceptingVendors && (
+            <div
+              className="
+                absolute
+                bottom-6
+                left-6
+                inline-flex
+                items-center
+                gap-2
+                rounded-full
+                bg-gold
+                px-4
+                py-2.5
+                text-xs
+                font-bold
+                text-black
+              "
+            >
+              <Store
+                className="
+                  h-4
+                  w-4
+                "
+              />
+
+              Vendor Applications Open
+            </div>
+          )}
+
+        </Link>
 
         {/* Content */}
 
-        <div className="flex flex-col justify-center px-16 py-20">
+        <div
+          className="
+            flex
+            flex-col
+            justify-center
+            px-7
+            py-12
+            sm:px-10
+            sm:py-14
+            lg:px-14
+            lg:py-16
+            xl:px-16
+          "
+        >
 
-          <span className="inline-flex w-fit rounded-full border border-gold/30 bg-gold/10 px-5 py-2 text-xs uppercase tracking-[0.35em] text-gold">
+          {/* Label */}
 
-            Featured Experience
+          <div
+            className="
+              flex
+              items-center
+              gap-3
+            "
+          >
+            <span
+              className="
+                h-px
+                w-8
+                bg-gold
+              "
+            />
 
-          </span>
+            <p
+              className="
+                text-[10px]
+                font-bold
+                uppercase
+                tracking-[0.35em]
+                text-gold
+              "
+            >
+              Featured Experience
+            </p>
+          </div>
 
-          <h2 className="mt-8 text-6xl font-black leading-tight">
+          {/* Title */}
 
-            {event.title}
+          <Link
+            href={`/events/${event.id}`}
+          >
+            <h2
+              className="
+                mt-7
+                text-4xl
+                font-black
+                leading-[1.05]
+                tracking-tight
+                transition-colors
+                hover:text-gold
+                sm:text-5xl
+                xl:text-6xl
+              "
+            >
+              {event.title}
+            </h2>
+          </Link>
 
-          </h2>
+          {/* Description */}
 
-          <p className="mt-8 text-lg leading-9 text-muted">
-
+          <p
+            className="
+              mt-6
+              line-clamp-4
+              max-w-xl
+              text-base
+              leading-8
+              text-muted
+              sm:text-lg
+            "
+          >
             {event.description ??
-              "An unforgettable experience carefully selected by the WowYou discovery engine."}
-
+              "Discover one of the experiences currently standing out on WowYou."}
           </p>
 
-          <div className="mt-10 grid grid-cols-2 gap-8">
+          {/* Details */}
 
-            <div>
+          <div
+            className="
+              mt-9
+              grid
+              gap-6
+              border-y
+              border-divider
+              py-7
+              sm:grid-cols-2
+            "
+          >
 
-              <p className="text-xs uppercase tracking-[0.2em] text-muted">
+            {/* Date */}
 
-                Venue
+            <div
+              className="
+                flex
+                items-start
+                gap-4
+              "
+            >
+              <div
+                className="
+                  flex
+                  h-10
+                  w-10
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-gold/10
+                "
+              >
+                <CalendarDays
+                  className="
+                    h-4
+                    w-4
+                    text-gold
+                  "
+                />
+              </div>
 
-              </p>
+              <div>
+                <p
+                  className="
+                    text-[10px]
+                    font-bold
+                    uppercase
+                    tracking-[0.2em]
+                    text-muted
+                  "
+                >
+                  Date & Time
+                </p>
 
-              <p className="mt-2 text-xl">
+                <p
+                  className="
+                    mt-1.5
+                    text-sm
+                    font-semibold
+                    leading-6
+                    sm:text-base
+                  "
+                >
+                  {formatDate(
+                    event.startDate,
+                  )}
+                </p>
 
-                {event.venue}
-
-              </p>
-
+                <p
+                  className="
+                    mt-0.5
+                    text-sm
+                    text-muted
+                  "
+                >
+                  {formatTime(
+                    event.startDate,
+                  )}
+                </p>
+              </div>
             </div>
 
-            <div>
+            {/* Venue */}
 
-              <p className="text-xs uppercase tracking-[0.2em] text-muted">
+            <div
+              className="
+                flex
+                items-start
+                gap-4
+              "
+            >
+              <div
+                className="
+                  flex
+                  h-10
+                  w-10
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-gold/10
+                "
+              >
+                <MapPin
+                  className="
+                    h-4
+                    w-4
+                    text-gold
+                  "
+                />
+              </div>
 
-                Category
+              <div>
+                <p
+                  className="
+                    text-[10px]
+                    font-bold
+                    uppercase
+                    tracking-[0.2em]
+                    text-muted
+                  "
+                >
+                  Venue
+                </p>
 
-              </p>
-
-              <p className="mt-2 text-xl">
-
-                {event.category ?? "General"}
-
-              </p>
-
-            </div>
-
-            <div>
-
-              <p className="text-xs uppercase tracking-[0.2em] text-muted">
-
-                Starts
-
-              </p>
-
-              <p className="mt-2 text-xl">
-
-                {new Date(
-                  event.startDate,
-                ).toLocaleDateString()}
-              </p>
-
-            </div>
-
-            <div>
-
-              <p className="text-xs uppercase tracking-[0.2em] text-muted">
-
-                Discovery Score
-
-              </p>
-
-              <p className="mt-2 text-xl text-gold">
-
-                {Math.round(
-                  event.homepageScore ??
-                    0,
-                )}
-
-              </p>
-
+                <p
+                  className="
+                    mt-1.5
+                    text-sm
+                    font-semibold
+                    leading-6
+                    sm:text-base
+                  "
+                >
+                  {event.venue}
+                </p>
+              </div>
             </div>
 
           </div>
 
-          <div className="mt-14 flex gap-5">
+          {/* Actions */}
+
+          <div
+            className="
+              mt-9
+              flex
+              flex-col
+              gap-3
+              sm:flex-row
+            "
+          >
 
             <Link
               href={`/events/${event.id}`}
-              className="rounded-full bg-gold px-8 py-4 font-semibold text-black transition hover:scale-105"
+              className="
+                inline-flex
+                min-h-13
+                items-center
+                justify-center
+                gap-2
+                rounded-full
+                bg-gold
+                px-7
+                py-4
+                text-sm
+                font-bold
+                text-black
+                transition-all
+                duration-300
+                hover:scale-[1.02]
+              "
             >
               Explore Event
+
+              <ArrowUpRight
+                className="
+                  h-4
+                  w-4
+                "
+              />
             </Link>
 
-            <button className="rounded-full border border-divider px-8 py-4 transition hover:bg-surface-hover">
+            {onSave && (
+              <button
+                type="button"
+                onClick={() =>
+                  onSave(
+                    event.id,
+                  )
+                }
+                className={`
+                  inline-flex
+                  min-h-13
+                  items-center
+                  justify-center
+                  gap-2
+                  rounded-full
+                  border
+                  px-7
+                  py-4
+                  text-sm
+                  font-semibold
+                  transition-all
+                  duration-300
 
-              Save for Later
+                  ${
+                    saved
+                      ? `
+                        border-gold/40
+                        bg-gold/10
+                        text-gold
+                      `
+                      : `
+                        border-divider
+                        bg-transparent
+                        text-foreground
+                        hover:border-gold/40
+                        hover:bg-surface-hover
+                      `
+                  }
+                `}
+              >
+                <Bookmark
+                  className={`
+                    h-4
+                    w-4
 
-            </button>
+                    ${
+                      saved
+                        ? "fill-current"
+                        : ""
+                    }
+                  `}
+                />
+
+                {saved
+                  ? "Saved"
+                  : "Save for Later"}
+              </button>
+            )}
 
           </div>
+
+          {/* Vendor CTA */}
+
+          {event.acceptingVendors && (
+            <div
+              className="
+                mt-7
+                flex
+                flex-col
+                gap-3
+                rounded-2xl
+                border
+                border-gold/15
+                bg-gold/[0.04]
+                p-5
+                sm:flex-row
+                sm:items-center
+                sm:justify-between
+              "
+            >
+              <div>
+                <p
+                  className="
+                    text-sm
+                    font-semibold
+                  "
+                >
+                  Want to sell at this event?
+                </p>
+
+                <p
+                  className="
+                    mt-1
+                    text-xs
+                    text-muted
+                  "
+                >
+                  The organizer is
+                  currently accepting
+                  vendor applications.
+                </p>
+              </div>
+
+              <Link
+                href={`/vendor/apply/${event.id}`}
+                className="
+                  shrink-0
+                  text-sm
+                  font-bold
+                  text-gold
+                  transition-opacity
+                  hover:opacity-70
+                "
+              >
+                Apply as Vendor
+              </Link>
+            </div>
+          )}
 
         </div>
 

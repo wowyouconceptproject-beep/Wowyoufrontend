@@ -9,6 +9,10 @@ import {
 import Link from "next/link";
 
 import {
+  useRouter,
+} from "next/navigation";
+
+import {
   CalendarDays,
   Search,
   UserRound,
@@ -25,6 +29,9 @@ import {
 } from "@/services/discovery";
 
 export default function DiscoverPage() {
+  const router =
+    useRouter();
+
   const [data, setData] =
     useState<DiscoveryResponse>();
 
@@ -33,6 +40,12 @@ export default function DiscoverPage() {
 
   const [search, setSearch] =
     useState("");
+
+  /*
+  |--------------------------------------------------------------------------
+  | Discovery
+  |--------------------------------------------------------------------------
+  */
 
   useEffect(() => {
     async function load() {
@@ -44,7 +57,7 @@ export default function DiscoverPage() {
       } catch (error) {
         console.error(
           "Discovery error:",
-          error
+          error,
         );
       } finally {
         setLoading(false);
@@ -54,8 +67,14 @@ export default function DiscoverPage() {
     load();
   }, []);
 
+  /*
+  |--------------------------------------------------------------------------
+  | Search
+  |--------------------------------------------------------------------------
+  */
+
   function handleSearch(
-    event: FormEvent
+    event: FormEvent,
   ) {
     event.preventDefault();
 
@@ -66,10 +85,11 @@ export default function DiscoverPage() {
       return;
     }
 
-    window.location.href =
+    router.push(
       `/search?q=${encodeURIComponent(
-        query
-      )}`;
+        query,
+      )}`,
+    );
   }
 
   /*
@@ -82,13 +102,34 @@ export default function DiscoverPage() {
     return (
       <main className="min-h-screen bg-background">
 
-        <div className="mx-auto max-w-7xl px-6 py-8 md:px-10">
+        <div
+          className="
+            mx-auto
+            max-w-7xl
+            px-6
+            py-8
+            md:px-10
+          "
+        >
 
           <div className="animate-pulse">
 
-            <div className="h-12 rounded-2xl bg-surface" />
+            <div
+              className="
+                h-12
+                rounded-2xl
+                bg-surface
+              "
+            />
 
-            <div className="mt-10 h-[65vh] rounded-[32px] bg-surface" />
+            <div
+              className="
+                mt-10
+                h-[70vh]
+                rounded-[32px]
+                bg-surface
+              "
+            />
 
           </div>
 
@@ -106,18 +147,69 @@ export default function DiscoverPage() {
 
   if (!data) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-background px-6">
+      <main
+        className="
+          flex
+          min-h-screen
+          items-center
+          justify-center
+          bg-background
+          px-6
+        "
+      >
 
         <div className="text-center">
 
-          <h1 className="text-3xl font-bold">
+          <p
+            className="
+              text-xs
+              font-bold
+              uppercase
+              tracking-[0.35em]
+              text-gold
+            "
+          >
+            WowYou
+          </p>
+
+          <h1
+            className="
+              mt-4
+              text-3xl
+              font-black
+            "
+          >
             Discovery unavailable
           </h1>
 
-          <p className="mt-3 text-muted">
+          <p
+            className="
+              mt-3
+              text-muted
+            "
+          >
             We couldn&apos;t load
-            events right now.
+            experiences right now.
           </p>
+
+          <button
+            type="button"
+            onClick={() =>
+              window.location.reload()
+            }
+            className="
+              mt-8
+              rounded-full
+              bg-gold
+              px-6
+              py-3
+              text-sm
+              font-bold
+              text-black
+            "
+          >
+            Try Again
+          </button>
 
         </div>
 
@@ -126,7 +218,13 @@ export default function DiscoverPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background pb-32">
+    <main
+      className="
+        min-h-screen
+        bg-background
+        pb-32
+      "
+    >
 
       {/* Navigation */}
 
@@ -141,6 +239,7 @@ export default function DiscoverPage() {
           backdrop-blur-xl
         "
       >
+
         <div
           className="
             mx-auto
@@ -194,6 +293,7 @@ export default function DiscoverPage() {
                 px-5
                 transition
                 focus-within:border-gold/60
+                focus-within:bg-surface-hover
               "
             >
 
@@ -208,12 +308,13 @@ export default function DiscoverPage() {
 
               <input
                 value={search}
-                onChange={(e) =>
+                onChange={(event) =>
                   setSearch(
-                    e.target.value
+                    event.target.value,
                   )
                 }
                 placeholder="Search events, experiences or places"
+                aria-label="Search events"
                 className="
                   min-w-0
                   flex-1
@@ -230,14 +331,14 @@ export default function DiscoverPage() {
 
           </form>
 
-          {/* Navigation */}
+          {/* Actions */}
 
           <nav
             className="
               ml-auto
               flex
               items-center
-              gap-2
+              gap-3
             "
           >
 
@@ -253,20 +354,26 @@ export default function DiscoverPage() {
                 px-5
                 py-2.5
                 text-sm
-                font-medium
+                font-semibold
                 transition
+                hover:border-gold/40
                 hover:bg-surface
                 lg:flex
               "
             >
-              <CalendarDays className="h-4 w-4" />
+              <CalendarDays
+                className="
+                  h-4
+                  w-4
+                "
+              />
 
               Organize
             </Link>
 
             <Link
               href="/login"
-              aria-label="Organizer login"
+              aria-label="Login"
               className="
                 flex
                 h-10
@@ -281,7 +388,12 @@ export default function DiscoverPage() {
                 hover:bg-surface
               "
             >
-              <UserRound className="h-4 w-4" />
+              <UserRound
+                className="
+                  h-4
+                  w-4
+                "
+              />
             </Link>
 
           </nav>
@@ -290,7 +402,15 @@ export default function DiscoverPage() {
 
         {/* Mobile Search */}
 
-        <div className="px-6 pb-4 md:hidden">
+        <div
+          className="
+            mx-auto
+            max-w-7xl
+            px-6
+            pb-4
+            md:hidden
+          "
+        >
 
           <form
             onSubmit={
@@ -307,19 +427,28 @@ export default function DiscoverPage() {
                 border-divider
                 bg-surface
                 px-5
+                transition
+                focus-within:border-gold/60
               "
             >
 
-              <Search className="h-4 w-4 text-muted" />
+              <Search
+                className="
+                  h-4
+                  w-4
+                  text-muted
+                "
+              />
 
               <input
                 value={search}
-                onChange={(e) =>
+                onChange={(event) =>
                   setSearch(
-                    e.target.value
+                    event.target.value,
                   )
                 }
                 placeholder="Search events or places"
+                aria-label="Search events"
                 className="
                   min-w-0
                   flex-1
@@ -328,6 +457,7 @@ export default function DiscoverPage() {
                   py-3
                   text-sm
                   outline-none
+                  placeholder:text-muted
                 "
               />
 
@@ -356,7 +486,7 @@ export default function DiscoverPage() {
         <p
           className="
             text-xs
-            font-semibold
+            font-bold
             uppercase
             tracking-[0.35em]
             text-gold
@@ -412,40 +542,57 @@ export default function DiscoverPage() {
 
       {data.hero?.length >
         0 && (
-        <section className="mt-4">
-
+        <section
+          className="
+            mx-auto
+            mt-4
+            max-w-[1600px]
+            px-4
+            sm:px-6
+            lg:px-8
+          "
+        >
           <HeroCarousel
             events={
               data.hero
             }
           />
-
         </section>
       )}
 
       {/* Featured */}
 
       {data.featured && (
-
-        <section className="mt-28">
-
+        <section
+          className="
+            mx-auto
+            mt-28
+            max-w-7xl
+            px-6
+            md:px-10
+          "
+        >
           <FeaturedEvent
             event={
               data.featured
             }
           />
-
         </section>
-
       )}
 
       {/* Trending */}
 
       {data.trending?.length >
         0 && (
-
-        <section className="mt-28">
-
+        <section
+          className="
+            mx-auto
+            mt-28
+            max-w-7xl
+            px-6
+            md:px-10
+          "
+        >
           <EventRail
             title="Now Showing"
             subtitle="Experiences people are discovering right now."
@@ -453,35 +600,43 @@ export default function DiscoverPage() {
               data.trending
             }
           />
-
         </section>
-
       )}
 
       {/* Categories */}
 
       {data.categories?.length >
         0 && (
-
-        <section className="mt-28">
-
+        <section
+          className="
+            mx-auto
+            mt-28
+            max-w-7xl
+            px-6
+            md:px-10
+          "
+        >
           <CategoryStrip
             categories={
               data.categories
             }
           />
-
         </section>
-
       )}
 
       {/* Upcoming */}
 
       {data.upcoming?.length >
         0 && (
-
-        <section className="mt-28">
-
+        <section
+          className="
+            mx-auto
+            mt-28
+            max-w-7xl
+            px-6
+            md:px-10
+          "
+        >
           <EventRail
             title="Coming Soon"
             subtitle="Experiences worth planning ahead for."
@@ -489,9 +644,7 @@ export default function DiscoverPage() {
               data.upcoming
             }
           />
-
         </section>
-
       )}
 
       {/* Organizer CTA */}
@@ -521,6 +674,8 @@ export default function DiscoverPage() {
           "
         >
 
+          {/* Glow */}
+
           <div
             className="
               pointer-events-none
@@ -547,12 +702,16 @@ export default function DiscoverPage() {
             "
           >
 
-            <div className="max-w-2xl">
+            <div
+              className="
+                max-w-2xl
+              "
+            >
 
               <p
                 className="
                   text-xs
-                  font-semibold
+                  font-bold
                   uppercase
                   tracking-[0.35em]
                   text-gold
@@ -584,10 +743,10 @@ export default function DiscoverPage() {
                 "
               >
                 Create your event,
-                sell tickets and
-                manage the entire
-                experience with
-                WOWYOU.
+                sell tickets, manage
+                vendors and run the
+                entire experience
+                with WOWYOU.
               </p>
 
             </div>
@@ -603,7 +762,7 @@ export default function DiscoverPage() {
                 bg-gold
                 px-7
                 py-4
-                font-semibold
+                font-bold
                 text-black
                 transition
                 hover:scale-[1.02]
