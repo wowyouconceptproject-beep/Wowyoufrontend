@@ -55,7 +55,7 @@ export default function AnnouncementList({
             rounded-2xl
             border
             border-[#D4AF37]/15
-            bg-[#D4AF37]/[0.05]
+            bg-[#0F766E]/[0.05]
           "
         >
           <Megaphone

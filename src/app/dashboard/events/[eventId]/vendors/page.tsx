@@ -261,7 +261,7 @@ export default function VendorApplicationsPage() {
         <header className="mb-12">
 
           <div className="mb-5 flex items-center gap-3">
-            <div className="h-px w-10 bg-[#D4AF37]" />
+            <div className="h-px w-10 bg-[#0F766E]" />
 
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
               Vendor Operations
@@ -288,9 +288,9 @@ export default function VendorApplicationsPage() {
             <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5">
 
               <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#D4AF37] opacity-40" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#0F766E] opacity-40" />
 
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#D4AF37]" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#0F766E]" />
               </span>
 
               <span className="text-xs font-medium text-white/55">
@@ -395,7 +395,7 @@ function SummaryCard({
 }) {
   const accent =
     tone === "gold"
-      ? "bg-[#D4AF37]"
+      ? "bg-[#0F766E]"
       : tone === "green"
       ? "bg-emerald-500"
       : "bg-white/25";
@@ -724,7 +724,7 @@ function VendorCard({
                     application.id
                   )
                 }
-                className="rounded-xl bg-[#D4AF37] px-5 py-3.5 text-sm font-bold text-black transition hover:bg-[#e0bd48] disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-xl bg-[#0F766E] px-5 py-3.5 text-sm font-bold text-white transition hover:bg-[#e0bd48] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {processing
                   ? "Processing..."
@@ -798,7 +798,7 @@ function StatusBadge({
       : status ===
         "REJECTED"
       ? "border-red-500/20 bg-red-500/10 text-red-300"
-      : "border-[#D4AF37]/20 bg-[#D4AF37]/10 text-[#D4AF37]";
+      : "border-[#D4AF37]/20 bg-[#0F766E]/10 text-[#D4AF37]";
 
   return (
     <span

@@ -868,7 +868,7 @@ export default function SearchPageContent() {
                   px-7
                   py-4
                   font-bold
-                  text-black
+                  text-white
                   transition
                   hover:scale-[1.02]
                   disabled:cursor-not-allowed
@@ -1276,7 +1276,7 @@ export default function SearchPageContent() {
                   px-6
                   py-3
                   font-semibold
-                  text-black
+                  text-white
                 "
               >
                 Try Again
@@ -1352,7 +1352,7 @@ export default function SearchPageContent() {
                   px-6
                   py-3
                   font-semibold
-                  text-black
+                  text-white
                   transition
                   hover:scale-[1.02]
                 "
@@ -1775,7 +1775,7 @@ function EventCard({
               transition
               group-hover:border-gold
               group-hover:bg-gold
-              group-hover:text-black
+              group-hover:text-white
             "
           >
             <ArrowRight

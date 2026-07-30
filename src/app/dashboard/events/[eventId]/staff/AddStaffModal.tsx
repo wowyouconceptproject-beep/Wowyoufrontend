@@ -335,7 +335,7 @@ export function AddStaffModal({
           px-6
           text-sm
           font-bold
-          text-black
+          text-white
           transition
           duration-200
           hover:bg-[#e4b500]
@@ -920,7 +920,7 @@ export function AddStaffModal({
                       px-7
                       text-sm
                       font-bold
-                      text-black
+                      text-white
                       transition
                       hover:bg-[#e4b500]
                       disabled:cursor-not-allowed
@@ -1182,7 +1182,7 @@ export function AddStaffModal({
                     px-6
                     text-sm
                     font-bold
-                    text-black
+                    text-white
                     transition
                     hover:bg-[#e4b500]
                   "

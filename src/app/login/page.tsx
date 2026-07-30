@@ -84,7 +84,7 @@ export default function LoginPage() {
           w-[620px]
           -translate-x-1/2
           rounded-full
-          bg-[#D4AF37]/10
+          bg-[#0F766E]/10
           blur-[150px]
         "
       />
@@ -98,7 +98,7 @@ export default function LoginPage() {
           h-[600px]
           w-[600px]
           rounded-full
-          bg-[#D4AF37]/5
+          bg-[#0F766E]/5
           blur-[160px]
         "
       />
@@ -129,7 +129,7 @@ export default function LoginPage() {
                 rounded-2xl
                 border
                 border-[#D4AF37]/20
-                bg-[#D4AF37]/10
+                bg-[#0F766E]/10
               "
             >
               <span
@@ -331,11 +331,11 @@ export default function LoginPage() {
                 items-center
                 justify-center
                 rounded-2xl
-                bg-[#D4AF37]
+                bg-[#0F766E]
                 px-6
                 text-[15px]
                 font-bold
-                text-black
+                text-white
                 transition
                 hover:bg-[#E0BD48]
                 disabled:cursor-not-allowed

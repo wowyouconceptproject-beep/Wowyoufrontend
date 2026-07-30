@@ -215,7 +215,7 @@ export default function CategoryStrip({
                       ? `
                         border-gold
                         bg-gold
-                        text-black
+                        text-white
                         shadow-[0_12px_40px_rgba(212,175,55,0.18)]
                       `
                       : `
@@ -252,7 +252,7 @@ export default function CategoryStrip({
                           selected
                             ? `
                               bg-black/10
-                              text-black/70
+                              text-white/70
                             `
                             : `
                               bg-white/5

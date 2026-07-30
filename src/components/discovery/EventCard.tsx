@@ -264,7 +264,7 @@ export default function EventCard({
               font-bold
               uppercase
               tracking-[0.15em]
-              text-black
+              text-white
             "
           >
             <Store className="h-3.5 w-3.5" />
@@ -297,7 +297,7 @@ export default function EventCard({
               rounded-2xl
               bg-white
               px-3
-              text-black
+              text-white
               shadow-xl
             "
           >
@@ -464,7 +464,7 @@ export default function EventCard({
               py-3
               text-sm
               font-bold
-              text-black
+              text-white
               transition-all
               duration-300
               hover:scale-[1.03]

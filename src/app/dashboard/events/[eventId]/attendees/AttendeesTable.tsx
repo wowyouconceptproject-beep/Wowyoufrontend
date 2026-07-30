@@ -309,7 +309,7 @@ export function AttendeesTable({
                           rounded-xl
                           border
                           border-[#D4AF37]/15
-                          bg-[#D4AF37]/[0.06]
+                          bg-[#0F766E]/[0.06]
                           text-xs
                           font-black
                           tracking-wide
@@ -466,7 +466,7 @@ export function AttendeesTable({
                           rounded-full
                           border
                           border-[#D4AF37]/15
-                          bg-[#D4AF37]/[0.06]
+                          bg-[#0F766E]/[0.06]
                           px-3
                           py-1.5
                         "
@@ -477,7 +477,7 @@ export function AttendeesTable({
                             h-1.5
                             w-1.5
                             rounded-full
-                            bg-[#D4AF37]
+                            bg-[#0F766E]
                           "
                         />
 
@@ -596,7 +596,7 @@ export function AttendeesTable({
                     rounded-xl
                     border
                     border-[#D4AF37]/15
-                    bg-[#D4AF37]/[0.06]
+                    bg-[#0F766E]/[0.06]
                     text-xs
                     font-black
                     text-[#D4AF37]
@@ -752,7 +752,7 @@ function FilterButton({
         transition-all
         ${
           active
-            ? "bg-[#D4AF37] text-black"
+            ? "bg-[#0F766E] text-white"
             : "text-white/40 hover:bg-white/[0.05] hover:text-white"
         }
       `}
@@ -767,7 +767,7 @@ function FilterButton({
           text-[10px]
           ${
             active
-              ? "bg-black/10 text-black/70"
+              ? "bg-black/10 text-white/70"
               : "bg-white/[0.06] text-white/30"
           }
         `}

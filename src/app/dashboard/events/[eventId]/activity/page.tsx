@@ -214,7 +214,7 @@ export default function ActivityPage() {
 
           <div className="flex items-center gap-2">
 
-            <span className="h-px w-8 bg-[#D4AF37]" />
+            <span className="h-px w-8 bg-[#0F766E]" />
 
             <p
               className="
@@ -283,7 +283,7 @@ export default function ActivityPage() {
                 py-3
                 text-sm
                 font-bold
-                text-black
+                text-white
                 transition
                 hover:bg-white/90
               "
@@ -329,7 +329,7 @@ export default function ActivityPage() {
 
             <div className="flex items-center gap-2">
 
-              <span className="h-px w-8 bg-[#D4AF37]" />
+              <span className="h-px w-8 bg-[#0F766E]" />
 
               <p
                 className="
@@ -509,7 +509,7 @@ export default function ActivityPage() {
                   rounded-xl
                   border
                   border-[#D4AF37]/15
-                  bg-[#D4AF37]/[0.06]
+                  bg-[#0F766E]/[0.06]
                 "
               >
                 <ActivityIcon className="h-5 w-5 text-[#D4AF37]" />
@@ -544,7 +544,7 @@ export default function ActivityPage() {
               "
             >
 
-              <span className="h-1.5 w-1.5 rounded-full bg-[#D4AF37]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[#0F766E]" />
 
               <span
                 className="
@@ -583,7 +583,7 @@ export default function ActivityPage() {
                   rounded-full
                   border
                   border-[#D4AF37]/15
-                  bg-[#D4AF37]/[0.05]
+                  bg-[#0F766E]/[0.05]
                 "
               >
 
@@ -785,7 +785,7 @@ function ActivityItem({
               rounded-lg
               border
               border-[#D4AF37]/15
-              bg-[#D4AF37]/[0.05]
+              bg-[#0F766E]/[0.05]
               px-2.5
               py-1.5
               text-[9px]
@@ -951,7 +951,7 @@ function OverviewCard({
           h-32
           w-32
           rounded-full
-          bg-[#D4AF37]/[0.035]
+          bg-[#0F766E]/[0.035]
           blur-3xl
         "
       />
@@ -968,7 +968,7 @@ function OverviewCard({
             rounded-xl
             border
             border-[#D4AF37]/15
-            bg-[#D4AF37]/[0.06]
+            bg-[#0F766E]/[0.06]
           "
         >
           <Icon className="h-4 w-4 text-[#D4AF37]" />

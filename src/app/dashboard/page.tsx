@@ -287,7 +287,7 @@ export default function Dashboard() {
                 px-6
                 py-4
                 font-semibold
-                text-black
+                text-white
                 transition
                 hover:scale-[1.01]
               "
@@ -375,7 +375,7 @@ export default function Dashboard() {
               px-6
               py-4
               font-semibold
-              text-black
+              text-white
               transition
               hover:scale-[1.02]
             "
@@ -515,7 +515,7 @@ export default function Dashboard() {
 
               <Link
                 href="/dashboard/events/create"
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 font-semibold text-black"
+                className="mt-8 inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 font-semibold text-white"
               >
                 <Plus className="h-4 w-4" />
 

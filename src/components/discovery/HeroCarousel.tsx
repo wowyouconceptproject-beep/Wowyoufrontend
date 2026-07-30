@@ -502,7 +502,7 @@ export default function HeroCarousel({
                 py-4
                 text-sm
                 font-bold
-                text-black
+                text-white
                 transition-all
                 duration-300
                 hover:scale-[1.03]

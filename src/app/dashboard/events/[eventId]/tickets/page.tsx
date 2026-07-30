@@ -317,7 +317,7 @@ export default function TicketsPage() {
 
           <div className="mb-5 flex items-center gap-3">
 
-            <div className="h-px w-10 bg-[#D4AF37]" />
+            <div className="h-px w-10 bg-[#0F766E]" />
 
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
               Ticketing
@@ -417,7 +417,7 @@ export default function TicketsPage() {
             <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-white/[0.07]">
 
               <div
-                className="h-full rounded-full bg-[#D4AF37] transition-all duration-500"
+                className="h-full rounded-full bg-[#0F766E] transition-all duration-500"
                 style={{
                   width:
                     `${salesPercentage}%`,
@@ -545,7 +545,7 @@ export default function TicketsPage() {
                 onClick={
                   submit
                 }
-                className="mt-7 w-full rounded-2xl bg-[#D4AF37] px-6 py-4 text-sm font-bold text-black transition hover:bg-[#e0bd48] disabled:cursor-not-allowed disabled:opacity-50"
+                className="mt-7 w-full rounded-2xl bg-[#0F766E] px-6 py-4 text-sm font-bold text-white transition hover:bg-[#e0bd48] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {creating
                   ? "Creating Ticket..."
@@ -787,7 +787,7 @@ function TicketCard({
           <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.07]">
 
             <div
-              className="h-full rounded-full bg-[#D4AF37] transition-all duration-500"
+              className="h-full rounded-full bg-[#0F766E] transition-all duration-500"
               style={{
                 width:
                   `${percentage}%`,
@@ -827,7 +827,7 @@ function MetricCard({
       <div
         className={`absolute left-0 top-0 h-full w-[3px] ${
           accent
-            ? "bg-[#D4AF37]"
+            ? "bg-[#0F766E]"
             : "bg-white/20"
         }`}
       />
@@ -890,7 +890,7 @@ function EmptyTickets() {
   return (
     <div className="rounded-[26px] border border-dashed border-white/10 bg-white/[0.02] px-6 py-16 text-center">
 
-      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[#D4AF37]/15 bg-[#D4AF37]/[0.07] text-2xl font-light text-[#D4AF37]">
+      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[#D4AF37]/15 bg-[#0F766E]/[0.07] text-2xl font-light text-[#D4AF37]">
         +
       </div>
 

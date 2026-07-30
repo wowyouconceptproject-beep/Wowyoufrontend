@@ -400,7 +400,7 @@ export default function CreateEventPage() {
 
         <div className="mb-12 max-w-3xl">
           <div className="mb-5 flex items-center gap-3">
-            <div className="h-px w-10 bg-[#D4AF37]" />
+            <div className="h-px w-10 bg-[#0F766E]" />
 
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
               Event Creation
@@ -479,7 +479,7 @@ export default function CreateEventPage() {
                     </>
                   ) : (
                     <div className="m-auto flex flex-col items-center px-6 text-center">
-                      <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#D4AF37]/10 text-2xl text-[#D4AF37]">
+                      <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0F766E]/10 text-2xl text-[#D4AF37]">
                         +
                       </div>
 
@@ -878,7 +878,7 @@ export default function CreateEventPage() {
               onClick={
                 submit
               }
-              className="min-w-[190px] rounded-2xl bg-[#D4AF37] px-7 py-4 font-bold text-black transition hover:bg-[#e0bd48] disabled:cursor-not-allowed disabled:opacity-50"
+              className="min-w-[190px] rounded-2xl bg-[#0F766E] px-7 py-4 font-bold text-white transition hover:bg-[#e0bd48] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading
                 ? "Creating Event..."
@@ -944,7 +944,7 @@ function VisibilityOption({
       }
       className={`flex items-start gap-4 rounded-2xl border p-5 text-left transition ${
         active
-          ? "border-[#D4AF37]/60 bg-[#D4AF37]/[0.08]"
+          ? "border-[#D4AF37]/60 bg-[#0F766E]/[0.08]"
           : "border-white/10 bg-black/20 hover:border-white/20"
       }`}
     >
@@ -956,7 +956,7 @@ function VisibilityOption({
         }`}
       >
         {active && (
-          <span className="h-2.5 w-2.5 rounded-full bg-[#D4AF37]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#0F766E]" />
         )}
       </span>
 

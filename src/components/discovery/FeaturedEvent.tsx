@@ -184,7 +184,7 @@ export default function FeaturedEvent({
                 py-2.5
                 text-xs
                 font-bold
-                text-black
+                text-white
               "
             >
               <Store
@@ -456,7 +456,7 @@ export default function FeaturedEvent({
                 py-4
                 text-sm
                 font-bold
-                text-black
+                text-white
                 transition-all
                 duration-300
                 hover:scale-[1.02]

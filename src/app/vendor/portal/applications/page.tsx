@@ -192,7 +192,7 @@ export default function VendorApplicationsPage() {
 
               <div className="flex items-center gap-3">
 
-                <span className="h-px w-8 bg-[#D4AF37]" />
+                <span className="h-px w-8 bg-[#0F766E]" />
 
                 <p
                   className="
@@ -817,7 +817,7 @@ function StatusBadge({
         rounded-full
         border
         border-[#D4AF37]/15
-        bg-[#D4AF37]/[0.06]
+        bg-[#0F766E]/[0.06]
         px-4
         py-2
         text-xs
@@ -900,13 +900,13 @@ function EmptyApplications() {
           items-center
           gap-3
           rounded-xl
-          bg-[#D4AF37]
+          bg-[#0F766E]
           px-6
           text-sm
           font-black
-          text-black
+          text-white
           transition
-          hover:bg-[#E0BE4A]
+          hover:bg-[#115E59]
         "
       >
         Find Opportunities

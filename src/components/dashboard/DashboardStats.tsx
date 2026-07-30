@@ -228,7 +228,7 @@ function StatCard({
               accent
                 ? `
                   border-[#D4AF37]/15
-                  bg-[#D4AF37]/[0.06]
+                  bg-[#0F766E]/[0.06]
                   text-[#D4AF37]
                 `
                 : `

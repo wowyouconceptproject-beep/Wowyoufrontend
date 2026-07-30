@@ -241,7 +241,7 @@ export default function VendorApplyPage() {
                     h-1.5
                     w-1.5
                     rounded-full
-                    bg-[#D4AF37]
+                    bg-[#0F766E]
                   "
                 />
 
@@ -300,7 +300,7 @@ export default function VendorApplyPage() {
 
               <div className="flex items-center gap-2">
 
-                <span className="h-px w-7 bg-[#D4AF37]" />
+                <span className="h-px w-7 bg-[#0F766E]" />
 
                 <p
                   className="
@@ -404,7 +404,7 @@ export default function VendorApplyPage() {
                   rounded-xl
                   border
                   border-[#D4AF37]/15
-                  bg-[#D4AF37]/[0.06]
+                  bg-[#0F766E]/[0.06]
                 "
               >
                 <Store className="h-5 w-5 text-[#D4AF37]" />
@@ -582,7 +582,7 @@ export default function VendorApplyPage() {
                     rounded-2xl
                     border
                     border-[#D4AF37]/10
-                    bg-[#D4AF37]/[0.025]
+                    bg-[#0F766E]/[0.025]
                     p-5
                   "
                 >
@@ -598,7 +598,7 @@ export default function VendorApplyPage() {
                         items-center
                         justify-center
                         rounded-lg
-                        bg-[#D4AF37]/10
+                        bg-[#0F766E]/10
                       "
                     >
                       <LockKeyhole className="h-4 w-4 text-[#D4AF37]" />
@@ -663,14 +663,14 @@ export default function VendorApplyPage() {
                     justify-center
                     gap-3
                     rounded-xl
-                    bg-[#D4AF37]
+                    bg-[#0F766E]
                     px-6
                     text-sm
                     font-black
-                    text-black
+                    text-white
                     transition
                     duration-300
-                    hover:bg-[#E0BE4A]
+                    hover:bg-[#115E59]
                   "
                 >
                   Submit Application
@@ -821,7 +821,7 @@ function FormSection({
             rounded-lg
             border
             border-[#D4AF37]/15
-            bg-[#D4AF37]/[0.05]
+            bg-[#0F766E]/[0.05]
             text-[10px]
             font-black
             text-[#D4AF37]

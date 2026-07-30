@@ -204,7 +204,7 @@ export default function AttendeesPage() {
 
             <div className="flex items-center gap-2">
 
-              <span className="h-px w-8 bg-[#D4AF37]" />
+              <span className="h-px w-8 bg-[#0F766E]" />
 
               <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#D4AF37]">
                 Guest Management
@@ -266,7 +266,7 @@ export default function AttendeesPage() {
                 py-3
                 text-sm
                 font-bold
-                text-black
+                text-white
                 transition
                 hover:bg-white/90
               "
@@ -312,7 +312,7 @@ export default function AttendeesPage() {
 
             <div className="flex items-center gap-2">
 
-              <span className="h-px w-8 bg-[#D4AF37]" />
+              <span className="h-px w-8 bg-[#0F766E]" />
 
               <p
                 className="
@@ -550,7 +550,7 @@ export default function AttendeesPage() {
                   rounded-full
                   border
                   border-[#D4AF37]/15
-                  bg-[#D4AF37]/[0.05]
+                  bg-[#0F766E]/[0.05]
                 "
               >
 
@@ -704,7 +704,7 @@ function StatCard({
           h-32
           w-32
           rounded-full
-          bg-[#D4AF37]/[0.035]
+          bg-[#0F766E]/[0.035]
           blur-3xl
         "
       />
@@ -721,7 +721,7 @@ function StatCard({
             rounded-xl
             border
             border-[#D4AF37]/15
-            bg-[#D4AF37]/[0.06]
+            bg-[#0F766E]/[0.06]
           "
         >
           <Icon className="h-4 w-4 text-[#D4AF37]" />

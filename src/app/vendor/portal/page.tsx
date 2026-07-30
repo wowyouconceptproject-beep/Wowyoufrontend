@@ -273,7 +273,7 @@ export default function VendorPortalPage() {
 
               <div className="flex items-center gap-3">
 
-                <span className="h-px w-8 bg-[#D4AF37]" />
+                <span className="h-px w-8 bg-[#14B8A6]" />
 
                 <p
                   className="
@@ -281,7 +281,7 @@ export default function VendorPortalPage() {
                     font-bold
                     uppercase
                     tracking-[0.24em]
-                    text-[#D4AF37]
+                    text-[#14B8A6]
                   "
                 >
                   Vendor Portal
@@ -442,7 +442,7 @@ export default function VendorPortalPage() {
                 font-bold
                 uppercase
                 tracking-[0.22em]
-                text-[#D4AF37]
+                text-[#14B8A6]
               "
             >
               Vendor Marketplace
@@ -520,7 +520,7 @@ export default function VendorPortalPage() {
                 bg-white/[0.03]
               "
             >
-              <Store className="h-5 w-5 text-[#D4AF37]" />
+              <Store className="h-5 w-5 text-[#14B8A6]" />
             </div>
 
             <h3 className="mt-6 text-xl font-bold">
@@ -627,7 +627,7 @@ export default function VendorPortalPage() {
                           font-bold
                           uppercase
                           tracking-[0.16em]
-                          text-[#D4AF37]
+                          text-[#14B8A6]
                         "
                       >
                         Accepting Vendors
@@ -703,13 +703,13 @@ export default function VendorPortalPage() {
                           items-center
                           justify-between
                           rounded-xl
-                          bg-[#D4AF37]
+                          bg-[#14B8A6]
                           px-5
                           text-sm
                           font-black
-                          text-black
+                          text-white
                           transition
-                          hover:bg-[#E0BE4A]
+                          hover:bg-[#115E59]
                         "
                       >
                         Apply as Vendor
@@ -818,7 +818,7 @@ function StatCard({
             bg-white/[0.03]
           "
         >
-          <Icon className="h-4 w-4 text-[#D4AF37]" />
+          <Icon className="h-4 w-4 text-[#14B8A6]" />
         </div>
 
       </div>

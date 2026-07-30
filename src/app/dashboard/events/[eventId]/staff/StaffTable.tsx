@@ -86,7 +86,7 @@ export function StaffTable({
             w-40
             -translate-x-1/2
             rounded-full
-            bg-[#D4AF37]/[0.06]
+            bg-[#0F766E]/[0.06]
             blur-3xl
           "
         />
@@ -104,7 +104,7 @@ export function StaffTable({
               rounded-2xl
               border
               border-[#D4AF37]/20
-              bg-[#D4AF37]/10
+              bg-[#0F766E]/10
             "
           >
             <UsersRound className="h-7 w-7 text-[#D4AF37]" />
@@ -199,7 +199,7 @@ export function StaffTable({
                   rounded-xl
                   border
                   border-[#D4AF37]/20
-                  bg-[#D4AF37]/10
+                  bg-[#0F766E]/10
                 "
               >
                 <UsersRound className="h-4 w-4 text-[#D4AF37]" />
@@ -366,7 +366,7 @@ function SummaryBadge({
           danger
             ? "border-red-500/15 bg-red-500/[0.05]"
             : highlight
-              ? "border-[#D4AF37]/15 bg-[#D4AF37]/[0.05]"
+              ? "border-[#D4AF37]/15 bg-[#0F766E]/[0.05]"
               : "border-white/[0.07] bg-white/[0.025]"
         }
       `}

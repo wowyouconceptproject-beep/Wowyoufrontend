@@ -23,7 +23,7 @@ export default function HomePage() {
             -translate-x-1/2
             -translate-y-1/2
             rounded-full
-            bg-[#D4AF37]/[0.06]
+            bg-[#0F766E]/[0.08]
             blur-[160px]
           "
         />
@@ -130,7 +130,7 @@ export default function HomePage() {
               font-semibold
               uppercase
               tracking-[0.42em]
-              text-[#D4AF37]
+              text-[#14B8A6]
             "
           >
             Discover. Experience. Connect.
@@ -151,7 +151,7 @@ export default function HomePage() {
             at your
             <br />
 
-            <span className="text-[#D4AF37]">
+            <span className="text-[#14B8A6]">
               fingertips.
             </span>
 
@@ -203,13 +203,14 @@ export default function HomePage() {
                 justify-between
                 gap-8
                 rounded-full
-                bg-[#D4AF37]
+                bg-[#0F766E]
                 px-7
                 py-4
                 font-semibold
-                text-black
+                text-white
                 transition
                 duration-300
+                hover:bg-[#115E59]
                 hover:scale-[1.02]
               "
             >
@@ -255,7 +256,7 @@ export default function HomePage() {
                 className="
                   h-4
                   w-4
-                  text-[#D4AF37]
+                  text-[#14B8A6]
                 "
               />
 
@@ -282,6 +283,34 @@ export default function HomePage() {
         </div>
 
       </section>
+
+      <footer
+        className="
+          relative
+          z-10
+          border-t
+          border-white/10
+          py-8
+        "
+      >
+        <div
+          className="
+            mx-auto
+            flex
+            max-w-7xl
+            items-center
+            justify-center
+            px-6
+            text-sm
+            font-semibold
+            uppercase
+            tracking-[0.25em]
+            text-[#14B8A6]
+          "
+        >
+          WOWYOU EVENTTECH
+        </div>
+      </footer>
 
     </main>
   );

@@ -148,7 +148,7 @@ export default function EventPage() {
             {event.category && (
               <div className="mb-6 flex items-center gap-3">
 
-                <div className="h-px w-10 bg-[#D4AF37]" />
+                <div className="h-px w-10 bg-[#0F766E]" />
 
                 <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
                   {event.category}
@@ -235,7 +235,7 @@ export default function EventPage() {
 
             <div className="mt-10 flex flex-wrap gap-3">
 
-              <button className="rounded-full bg-[#D4AF37] px-8 py-4 text-sm font-bold text-black transition hover:bg-[#e1bd46]">
+              <button className="rounded-full bg-[#0F766E] px-8 py-4 text-sm font-bold text-white transition hover:bg-[#e1bd46]">
                 Get Tickets
               </button>
 
@@ -307,7 +307,7 @@ export default function EventPage() {
 
             <div className="flex items-center gap-3">
 
-              <div className="h-px w-8 bg-[#D4AF37]" />
+              <div className="h-px w-8 bg-[#0F766E]" />
 
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
                 The Experience
@@ -426,7 +426,7 @@ export default function EventPage() {
 
                 <div className="mt-8 border-t border-white/10 pt-7">
 
-                  <button className="w-full rounded-full bg-[#D4AF37] px-6 py-4 text-sm font-bold text-black transition hover:bg-[#e1bd46]">
+                  <button className="w-full rounded-full bg-[#0F766E] px-6 py-4 text-sm font-bold text-white transition hover:bg-[#e1bd46]">
                     Get Tickets
                   </button>
 
@@ -457,9 +457,9 @@ export default function EventPage() {
 
           <div className="mx-auto max-w-7xl px-6 py-20 md:px-10 lg:px-12">
 
-            <div className="relative overflow-hidden rounded-[32px] border border-[#D4AF37]/15 bg-[#D4AF37]/[0.04] px-7 py-12 md:px-12 md:py-14">
+            <div className="relative overflow-hidden rounded-[32px] border border-[#D4AF37]/15 bg-[#0F766E]/[0.04] px-7 py-12 md:px-12 md:py-14">
 
-              <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#D4AF37]/[0.06] blur-3xl" />
+              <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#0F766E]/[0.06] blur-3xl" />
 
               <div className="relative flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
 
@@ -504,7 +504,7 @@ export default function EventPage() {
 
                 </div>
 
-                <button className="shrink-0 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37] px-8 py-4 text-sm font-bold text-black transition hover:bg-[#e1bd46]">
+                <button className="shrink-0 rounded-full border border-[#D4AF37]/30 bg-[#0F766E] px-8 py-4 text-sm font-bold text-white transition hover:bg-[#e1bd46]">
                   Apply as Vendor
                 </button>
 
@@ -539,7 +539,7 @@ export default function EventPage() {
             event through WOWYOU.
           </p>
 
-          <button className="mt-9 rounded-full bg-[#D4AF37] px-9 py-4 text-sm font-bold text-black transition hover:bg-[#e1bd46]">
+          <button className="mt-9 rounded-full bg-[#0F766E] px-9 py-4 text-sm font-bold text-white transition hover:bg-[#e1bd46]">
             Get Tickets
           </button>
 

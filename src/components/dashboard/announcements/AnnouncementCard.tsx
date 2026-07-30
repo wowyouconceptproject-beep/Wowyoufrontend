@@ -147,7 +147,7 @@ export default function AnnouncementCard({
             top-0
             h-full
             w-[3px]
-            bg-[#D4AF37]
+            bg-[#0F766E]
           "
         />
       )}
@@ -227,7 +227,7 @@ export default function AnnouncementCard({
                       rounded-full
                       border
                       border-[#D4AF37]/20
-                      bg-[#D4AF37]/[0.07]
+                      bg-[#0F766E]/[0.07]
                       px-2.5
                       py-1
                       text-[10px]

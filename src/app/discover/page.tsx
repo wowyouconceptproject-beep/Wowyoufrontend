@@ -205,7 +205,7 @@ export default function DiscoverPage() {
               py-3
               text-sm
               font-bold
-              text-black
+              text-white
             "
           >
             Try Again
@@ -763,7 +763,7 @@ export default function DiscoverPage() {
                 px-7
                 py-4
                 font-bold
-                text-black
+                text-white
                 transition
                 hover:scale-[1.02]
               "

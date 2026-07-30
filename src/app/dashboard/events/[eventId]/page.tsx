@@ -260,7 +260,7 @@ export default function EventPage() {
           h-[600px]
           w-[600px]
           rounded-full
-          bg-[#D4AF37]/[0.06]
+          bg-[#0F766E]/[0.06]
           blur-[160px]
         "
       />
@@ -341,7 +341,7 @@ export default function EventPage() {
               h-[320px]
               w-[320px]
               rounded-full
-              bg-[#D4AF37]/10
+              bg-[#0F766E]/10
               blur-[100px]
             "
           />
@@ -382,7 +382,7 @@ export default function EventPage() {
                     rounded-full
                     border
                     border-[#D4AF37]/20
-                    bg-[#D4AF37]/10
+                    bg-[#0F766E]/10
                     px-3
                     py-1.5
                     text-xs
@@ -396,7 +396,7 @@ export default function EventPage() {
                       h-1.5
                       w-1.5
                       rounded-full
-                      bg-[#D4AF37]
+                      bg-[#0F766E]
                     "
                   />
 
@@ -500,11 +500,11 @@ export default function EventPage() {
                   className="
                     h-12
                     rounded-xl
-                    bg-[#D4AF37]
+                    bg-[#0F766E]
                     px-6
                     text-sm
                     font-bold
-                    text-black
+                    text-white
                     transition
                     hover:bg-[#E2BF4A]
                   "
@@ -704,7 +704,7 @@ export default function EventPage() {
                         rounded-xl
                         border
                         border-[#D4AF37]/15
-                        bg-[#D4AF37]/10
+                        bg-[#0F766E]/10
                         text-lg
                         font-bold
                         text-[#D4AF37]

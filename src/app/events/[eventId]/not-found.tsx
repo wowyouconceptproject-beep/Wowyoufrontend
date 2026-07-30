@@ -6,7 +6,7 @@ export default function NotFound() {
 
       {/* Ambient brand glow */}
 
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#D4AF37]/[0.06] blur-[120px]" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#0F766E]/[0.06] blur-[120px]" />
 
       {/* Decorative lines */}
 
@@ -20,13 +20,13 @@ export default function NotFound() {
 
         <div className="mb-10 flex items-center justify-center gap-3">
 
-          <div className="h-px w-8 bg-[#D4AF37]" />
+          <div className="h-px w-8 bg-[#0F766E]" />
 
           <p className="text-xs font-bold uppercase tracking-[0.35em] text-[#D4AF37]">
             WOWYOU
           </p>
 
-          <div className="h-px w-8 bg-[#D4AF37]" />
+          <div className="h-px w-8 bg-[#0F766E]" />
 
         </div>
 
@@ -62,7 +62,7 @@ export default function NotFound() {
 
           <Link
             href="/"
-            className="inline-flex items-center gap-3 rounded-full bg-[#D4AF37] px-8 py-4 text-sm font-bold text-black transition duration-300 hover:bg-[#e1bd46]"
+            className="inline-flex items-center gap-3 rounded-full bg-[#0F766E] px-8 py-4 text-sm font-bold text-white transition duration-300 hover:bg-[#e1bd46]"
           >
             <span>
               Back to Discovery

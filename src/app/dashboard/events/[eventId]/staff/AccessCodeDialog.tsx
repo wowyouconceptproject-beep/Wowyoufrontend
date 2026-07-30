@@ -378,7 +378,7 @@ export function AccessCodeDialog({
                 rounded-2xl
                 border
                 border-[#D4AF37]/20
-                bg-[#D4AF37]/10
+                bg-[#0F766E]/10
               "
             >
               <UserRound
@@ -557,7 +557,7 @@ export function AccessCodeDialog({
                 rounded-[22px]
                 border
                 border-[#D4AF37]/20
-                bg-[#D4AF37]/[0.04]
+                bg-[#0F766E]/[0.04]
               "
             >
 
@@ -582,7 +582,7 @@ export function AccessCodeDialog({
                     items-center
                     justify-center
                     rounded-xl
-                    bg-[#D4AF37]/10
+                    bg-[#0F766E]/10
                   "
                 >
                   <KeyRound
@@ -672,7 +672,7 @@ export function AccessCodeDialog({
                     font-semibold
                     text-white/65
                     transition
-                    hover:bg-[#D4AF37]/10
+                    hover:bg-[#0F766E]/10
                     hover:text-white
                   "
                 >
@@ -724,7 +724,7 @@ export function AccessCodeDialog({
                     font-semibold
                     text-white/65
                     transition
-                    hover:bg-[#D4AF37]/10
+                    hover:bg-[#0F766E]/10
                     hover:text-white
                     disabled:cursor-not-allowed
                     disabled:opacity-40
@@ -898,7 +898,7 @@ export function AccessCodeDialog({
                           rounded-full
                           border
                           border-[#D4AF37]/15
-                          bg-[#D4AF37]/[0.06]
+                          bg-[#0F766E]/[0.06]
                           px-3
                           py-1.5
                           text-xs

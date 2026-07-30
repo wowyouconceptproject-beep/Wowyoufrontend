@@ -191,7 +191,7 @@ export default function RevenuePage() {
                 rounded-2xl
                 border
                 border-[#D4AF37]/20
-                bg-[#D4AF37]/10
+                bg-[#0F766E]/10
               "
             >
               <BarChart3 className="h-7 w-7 text-[#D4AF37]" />
@@ -282,7 +282,7 @@ export default function RevenuePage() {
 
             <div className="flex items-center gap-2">
 
-              <span className="h-px w-8 bg-[#D4AF37]" />
+              <span className="h-px w-8 bg-[#0F766E]" />
 
               <p
                 className="
@@ -379,7 +379,7 @@ export default function RevenuePage() {
                 h-72
                 w-72
                 rounded-full
-                bg-[#D4AF37]/[0.08]
+                bg-[#0F766E]/[0.08]
                 blur-3xl
               "
             />
@@ -411,7 +411,7 @@ export default function RevenuePage() {
                     rounded-xl
                     border
                     border-[#D4AF37]/20
-                    bg-[#D4AF37]/10
+                    bg-[#0F766E]/10
                   "
                 >
                   <Banknote className="h-5 w-5 text-[#D4AF37]" />
@@ -425,7 +425,7 @@ export default function RevenuePage() {
                     rounded-full
                     border
                     border-[#D4AF37]/15
-                    bg-[#D4AF37]/[0.05]
+                    bg-[#0F766E]/[0.05]
                     px-3
                     py-1.5
                     text-xs
@@ -678,7 +678,7 @@ export default function RevenuePage() {
                   rounded-2xl
                   border
                   border-[#D4AF37]/15
-                  bg-[#D4AF37]/[0.05]
+                  bg-[#0F766E]/[0.05]
                 "
               >
                 <Ticket className="h-6 w-6 text-[#D4AF37]" />
@@ -850,7 +850,7 @@ export default function RevenuePage() {
                             className="
                               h-full
                               rounded-full
-                              bg-[#D4AF37]
+                              bg-[#0F766E]
                               transition-all
                               duration-500
                             "
@@ -918,7 +918,7 @@ function MetricCard({
             rounded-xl
             border
             border-[#D4AF37]/15
-            bg-[#D4AF37]/[0.06]
+            bg-[#0F766E]/[0.06]
           "
         >
           <Icon className="h-4 w-4 text-[#D4AF37]" />
