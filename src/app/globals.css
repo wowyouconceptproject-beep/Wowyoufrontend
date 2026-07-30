@@ -9,29 +9,41 @@
 :root {
   /* Backgrounds */
 
-  --background: #090909;
+  --background: #050505;
 
-  --surface: #141414;
+  --background-secondary: #0b0b0b;
 
-  --surface-elevated: #1d1d1d;
+  --surface: #111111;
 
-  --surface-hover: #262626;
+  --surface-elevated: #171717;
 
-  /* Brand */
+  --surface-hover: #222222;
 
-  --gold: #d4af37;
+  /* WowYou Brand */
 
-  --gold-light: #f1d06a;
+  --primary: #3e86a4;
+
+  --primary-dark: #1f7197;
+
+  --primary-light: #53a6c7;
+
+  --primary-glow: #8fc8dd;
 
   /* Typography */
 
-  --foreground: #f7f4ec;
+  --foreground: #ffffff;
 
-  --muted: #a6a6a6;
+  --text-secondary: rgba(255, 255, 255, 0.72);
+
+  --muted: rgba(255, 255, 255, 0.42);
+
+  --disabled: rgba(255, 255, 255, 0.25);
 
   /* Borders */
 
-  --divider: #2a2a2a;
+  --divider: rgba(255, 255, 255, 0.08);
+
+  --divider-strong: rgba(255, 255, 255, 0.14);
 
   /* Status */
 
@@ -59,7 +71,15 @@
 @theme inline {
   --color-background: var(--background);
 
+  --color-background-secondary: var(--background-secondary);
+
   --color-foreground: var(--foreground);
+
+  --color-text-secondary: var(--text-secondary);
+
+  --color-muted: var(--muted);
+
+  --color-disabled: var(--disabled);
 
   --color-surface: var(--surface);
 
@@ -67,13 +87,17 @@
 
   --color-surface-hover: var(--surface-hover);
 
-  --color-gold: var(--gold);
+  --color-primary: var(--primary);
 
-  --color-gold-light: var(--gold-light);
+  --color-primary-dark: var(--primary-dark);
 
-  --color-muted: var(--muted);
+  --color-primary-light: var(--primary-light);
+
+  --color-primary-glow: var(--primary-glow);
 
   --color-divider: var(--divider);
+
+  --color-divider-strong: var(--divider-strong);
 
   --color-success: var(--success);
 
@@ -104,13 +128,18 @@ body {
   background:
     radial-gradient(
       circle at top,
-      rgba(212, 175, 55, 0.08),
-      transparent 40%
+      rgba(62, 134, 164, 0.12),
+      transparent 42%
     ),
     radial-gradient(
       circle at bottom right,
-      rgba(255, 255, 255, 0.03),
-      transparent 45%
+      rgba(83, 166, 199, 0.08),
+      transparent 48%
+    ),
+    radial-gradient(
+      circle at center,
+      rgba(143, 200, 221, 0.04),
+      transparent 60%
     ),
     var(--background);
 
@@ -156,7 +185,7 @@ body {
 */
 
 ::selection {
-  background: rgba(212, 175, 55, 0.35);
+  background: rgba(62, 134, 164, 0.35);
 
   color: white;
 }
@@ -184,6 +213,44 @@ img {
   user-select: none;
 
   -webkit-user-drag: none;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Utility Classes
+|--------------------------------------------------------------------------
+*/
+
+.bg-brand {
+  background: var(--primary);
+}
+
+.bg-brand-dark {
+  background: var(--primary-dark);
+}
+
+.bg-brand-light {
+  background: var(--primary-light);
+}
+
+.text-brand {
+  color: var(--primary);
+}
+
+.text-brand-light {
+  color: var(--primary-light);
+}
+
+.border-brand {
+  border-color: var(--primary);
+}
+
+.ring-brand {
+  --tw-ring-color: var(--primary);
+}
+
+.glow-brand {
+  box-shadow: 0 0 40px rgba(62, 134, 164, 0.35);
 }
 
 /* Discovery Rails */
