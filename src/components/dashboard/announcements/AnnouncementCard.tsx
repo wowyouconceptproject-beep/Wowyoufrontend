@@ -50,9 +50,9 @@ export default function AnnouncementCard({
       label: "Warning",
       icon: AlertTriangle,
       badge:
-        "border-amber-500/15 bg-amber-500/[0.07] text-amber-400",
+        "border-amber-500/15 bg-amber-500/[0.07] text-teal-500",
       iconStyle:
-        "border-amber-500/15 bg-amber-500/[0.07] text-amber-400",
+        "border-amber-500/15 bg-amber-500/[0.07] text-teal-500",
     },
 
     URGENT: {

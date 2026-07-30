@@ -227,7 +227,7 @@ export function StaffCard({
                           ? "text-red-400"
                           : staff.isActive
                             ? "text-emerald-400"
-                            : "text-amber-400"
+                            : "text-teal-500"
                       }
                     `}
                   >
