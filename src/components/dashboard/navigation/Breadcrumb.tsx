@@ -25,25 +25,33 @@ export default function Breadcrumb({
             key={item.label}
             className="flex items-center gap-2"
           >
-            {item.href && !last ? (
-              <Link
-                href={item.href}
-                className="text-white/40 hover:text-[#53A6C7] transition"
-              >
-                {item.label}
-              </Link>
-            ) : (
-              <span className="font-medium text-white">
-                {item.label}
-              </span>
-            )}
+            {items.map((item, index) => {
+  const last = index === items.length - 1;
 
-            {!last && (
-              <ChevronRight className="h-4 w-4 text-white/20" />
-            )}
-          </div>
-        );
-      })}
-    </nav>
+  return (
+    <div
+      key={item.href ?? `${item.label}-${index}`}
+      className="flex items-center gap-2"
+    >
+      {item.href && !last ? (
+        <Link
+          href={item.href}
+          className="text-white/40 transition hover:text-[#53A6C7]"
+        >
+          {item.label}
+        </Link>
+      ) : (
+        <span
+          className="font-medium text-white"
+          aria-current={last ? "page" : undefined}
+        >
+          {item.label}
+        </span>
+      )}
+
+      {!last && (
+        <ChevronRight className="h-4 w-4 text-white/20" />
+      )}
+    </div>
   );
-}
+})}
