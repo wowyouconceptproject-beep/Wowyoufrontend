@@ -80,7 +80,7 @@ export default function RegisterPage() {
           w-[620px]
           -translate-x-1/2
           rounded-full
-          bg-[#0F766E]/10
+          bg-[#53A6C7]/12
           blur-[150px]
         "
       />
@@ -94,7 +94,7 @@ export default function RegisterPage() {
           h-[600px]
           w-[600px]
           rounded-full
-          bg-[#0F766E]/5
+          bg-[#53A6C7]/8
           blur-[160px]
         "
       />
@@ -124,15 +124,15 @@ export default function RegisterPage() {
                 justify-center
                 rounded-2xl
                 border
-                border-[#D4AF37]/20
-                bg-[#0F766E]/10
+                border-[#3E86A4]/20
+                bg-[#53A6C7]/12
               "
             >
               <span
                 className="
                   text-xl
                   font-black
-                  text-[#D4AF37]
+                  text-[#3E86A4]
                 "
               >
                 W
@@ -144,7 +144,7 @@ export default function RegisterPage() {
                 text-2xl
                 font-black
                 tracking-[0.28em]
-                text-[#D4AF37]
+                text-[#3E86A4]
               "
             >
               WOWYOU
@@ -247,9 +247,9 @@ export default function RegisterPage() {
                     outline-none
                     transition
                     placeholder:text-white/25
-                    focus:border-[#D4AF37]/70
+                    focus:border-[#3E86A4]/70
                     focus:ring-4
-                    focus:ring-[#D4AF37]/5
+                    focus:ring-[#3E86A4]/10
                   "
                   placeholder="First name"
                   value={form.firstName}
@@ -290,9 +290,9 @@ export default function RegisterPage() {
                     outline-none
                     transition
                     placeholder:text-white/25
-                    focus:border-[#D4AF37]/70
+                    focus:border-[#3E86A4]/70
                     focus:ring-4
-                    focus:ring-[#D4AF37]/5
+                    focus:ring-[#3E86A4]/10
                   "
                   placeholder="Last name"
                   value={form.lastName}
@@ -337,9 +337,9 @@ export default function RegisterPage() {
                   outline-none
                   transition
                   placeholder:text-white/25
-                  focus:border-[#D4AF37]/70
+                  focus:border-[#3E86A4]/70
                   focus:ring-4
-                  focus:ring-[#D4AF37]/5
+                  focus:ring-[#3E86A4]/10
                 "
                 placeholder="Enter your email"
                 value={form.email}
@@ -383,9 +383,9 @@ export default function RegisterPage() {
                   outline-none
                   transition
                   placeholder:text-white/25
-                  focus:border-[#D4AF37]/70
+                  focus:border-[#3E86A4]/70
                   focus:ring-4
-                  focus:ring-[#D4AF37]/5
+                  focus:ring-[#3E86A4]/10
                 "
                 placeholder="Create a password"
                 value={form.password}
@@ -411,13 +411,13 @@ export default function RegisterPage() {
                 items-center
                 justify-center
                 rounded-2xl
-                bg-[#0F766E]
+                bg-[#3E86A4]
                 px-6
                 text-[15px]
                 font-bold
                 text-white
                 transition
-                hover:bg-[#E0BD48]
+                hover:bg-[#1F7197]
                 disabled:cursor-not-allowed
                 disabled:opacity-50
               "
@@ -447,9 +447,9 @@ export default function RegisterPage() {
               }
               className="
                 font-semibold
-                text-[#D4AF37]
+                text-[#3E86A4]
                 transition
-                hover:text-[#E4C55A]
+                hover:text-[#53A6C7]
               "
             >
               Sign In

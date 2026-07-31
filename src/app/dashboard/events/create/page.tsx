@@ -400,9 +400,9 @@ export default function CreateEventPage() {
 
         <div className="mb-12 max-w-3xl">
           <div className="mb-5 flex items-center gap-3">
-            <div className="h-px w-10 bg-[#0F766E]" />
+            <div className="h-px w-10 bg-[#3E86A4]" />
 
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#3E86A4]">
               Event Creation
             </p>
           </div>
@@ -427,7 +427,7 @@ export default function CreateEventPage() {
           <section className="overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.035]">
 
             <div className="border-b border-white/10 px-6 py-6 md:px-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#3E86A4]">
                 01 · Event Identity
               </p>
 
@@ -459,7 +459,7 @@ export default function CreateEventPage() {
                       .current
                       ?.click()
                   }
-                  className="group relative flex aspect-[16/7] w-full overflow-hidden rounded-2xl border border-dashed border-white/15 bg-black/30 transition hover:border-[#D4AF37]/60"
+                  className="group relative flex aspect-[16/7] w-full overflow-hidden rounded-2xl border border-dashed border-white/15 bg-black/30 transition hover:border-[#3E86A4]/60"
                 >
                   {coverPreview ? (
                     <>
@@ -479,7 +479,7 @@ export default function CreateEventPage() {
                     </>
                   ) : (
                     <div className="m-auto flex flex-col items-center px-6 text-center">
-                      <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0F766E]/10 text-2xl text-[#D4AF37]">
+                      <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#53A6C7]/12 text-2xl text-[#3E86A4]">
                         +
                       </div>
 
@@ -605,7 +605,7 @@ export default function CreateEventPage() {
           {/* Location + Time */}
 
           <section className="rounded-[28px] border border-white/10 bg-white/[0.035] p-6 md:p-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#3E86A4]">
               02 · Place & Time
             </p>
 
@@ -734,7 +734,7 @@ export default function CreateEventPage() {
           {/* Configuration */}
 
           <section className="rounded-[28px] border border-white/10 bg-white/[0.035] p-6 md:p-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#3E86A4]">
               03 · Configuration
             </p>
 
@@ -878,7 +878,7 @@ export default function CreateEventPage() {
               onClick={
                 submit
               }
-              className="min-w-[190px] rounded-2xl bg-[#0F766E] px-7 py-4 font-bold text-white transition hover:bg-[#e0bd48] disabled:cursor-not-allowed disabled:opacity-50"
+              className="min-w-[190px] rounded-2xl bg-[#3E86A4] px-7 py-4 font-bold text-white transition hover:bg-[#1F7197] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading
                 ? "Creating Event..."
@@ -898,7 +898,7 @@ export default function CreateEventPage() {
 */
 
 const inputClass =
-  "w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-[#D4AF37]/60 focus:ring-1 focus:ring-[#D4AF37]/20";
+  "w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-[#3E86A4]/60 focus:ring-1 focus:ring-[#3E86A4]/20";
 
 function Field({
   label,
@@ -944,19 +944,19 @@ function VisibilityOption({
       }
       className={`flex items-start gap-4 rounded-2xl border p-5 text-left transition ${
         active
-          ? "border-[#D4AF37]/60 bg-[#0F766E]/[0.08]"
+          ? "border-[#3E86A4]/60 bg-[#3E86A4]/[0.08]"
           : "border-white/10 bg-black/20 hover:border-white/20"
       }`}
     >
       <span
         className={`mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
           active
-            ? "border-[#D4AF37]"
+            ? "border-[#3E86A4]"
             : "border-white/30"
         }`}
       >
         {active && (
-          <span className="h-2.5 w-2.5 rounded-full bg-[#0F766E]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#3E86A4]" />
         )}
       </span>
 

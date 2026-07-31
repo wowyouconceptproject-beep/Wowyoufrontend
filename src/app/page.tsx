@@ -23,7 +23,7 @@ export default function HomePage() {
             -translate-x-1/2
             -translate-y-1/2
             rounded-full
-            bg-[#0F766E]/[0.08]
+            bg-[#3E86A4]/[0.08]
             blur-[160px]
           "
         />
@@ -203,14 +203,14 @@ export default function HomePage() {
                 justify-between
                 gap-8
                 rounded-full
-                bg-[#0F766E]
+                bg-[#3E86A4]
                 px-7
                 py-4
                 font-semibold
                 text-white
                 transition
                 duration-300
-                hover:bg-[#115E59]
+                hover:bg-[#1F7197]
                 hover:scale-[1.02]
               "
             >

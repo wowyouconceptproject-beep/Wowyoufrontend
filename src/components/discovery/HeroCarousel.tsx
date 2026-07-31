@@ -326,7 +326,7 @@ export default function HeroCarousel({
               className="
                 h-px
                 w-10
-                bg-gold
+                bg-[#3E86A4]
               "
             />
 
@@ -336,7 +336,7 @@ export default function HeroCarousel({
                 font-bold
                 uppercase
                 tracking-[0.4em]
-                text-gold
+                text-[#3E86A4]
                 sm:text-xs
               "
             >
@@ -431,7 +431,7 @@ export default function HeroCarousel({
                 className="
                   h-4
                   w-4
-                  text-gold
+                  text-[#3E86A4]
                 "
               />
 
@@ -461,7 +461,7 @@ export default function HeroCarousel({
                   h-4
                   w-4
                   shrink-0
-                  text-gold
+                  text-[#3E86A4]
                 "
               />
 
@@ -497,7 +497,7 @@ export default function HeroCarousel({
                 justify-center
                 gap-2
                 rounded-full
-                bg-gold
+                bg-[#3E86A4]
                 px-7
                 py-4
                 text-sm
@@ -671,7 +671,7 @@ export default function HeroCarousel({
                   ${
                     index ===
                     activeIndex
-                      ? "w-10 bg-gold"
+                      ? "w-10 bg-[#3E86A4]"
                       : "w-4 bg-white/25 hover:bg-white/50"
                   }
                 `}

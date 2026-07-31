@@ -178,9 +178,9 @@ export default function StaffPage() {
 
           <div className="mb-5 flex items-center gap-3">
 
-            <div className="h-px w-10 bg-[#0F766E]" />
+            <div className="h-px w-10 bg-[#3E86A4]" />
 
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#3E86A4]">
               Event Operations
             </p>
 
@@ -243,9 +243,9 @@ export default function StaffPage() {
 
           <div className="mb-5 flex items-center gap-3">
 
-            <div className="h-px w-10 bg-[#0F766E]" />
+            <div className="h-px w-10 bg-[#3E86A4]" />
 
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#3E86A4]">
               Event Operations
             </p>
 
@@ -294,7 +294,7 @@ export default function StaffPage() {
 
             <div>
 
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#3E86A4]">
                 Team Overview
               </p>
 
@@ -306,7 +306,7 @@ export default function StaffPage() {
 
             <div className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs text-white/40 sm:flex">
 
-              <span className="h-2 w-2 rounded-full bg-[#0F766E]" />
+              <span className="h-2 w-2 rounded-full bg-[#3E86A4]" />
 
               {totalStaff}{" "}
               {totalStaff === 1
@@ -366,7 +366,7 @@ export default function StaffPage() {
 
             <div>
 
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#3E86A4]">
                 Team Directory
               </p>
 
@@ -429,9 +429,9 @@ export default function StaffPage() {
 
                     <span className="relative flex h-2 w-2">
 
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#0F766E] opacity-30" />
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#3E86A4] opacity-30" />
 
-                      <span className="relative inline-flex h-2 w-2 rounded-full bg-[#0F766E]" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-[#3E86A4]" />
 
                     </span>
 
@@ -523,7 +523,7 @@ function MetricCard({
       <div
         className={`absolute left-0 top-0 h-full w-[3px] ${
           accent
-            ? "bg-[#0F766E]"
+            ? "bg-[#3E86A4]"
             : "bg-white/20"
         }`}
       />
@@ -543,7 +543,7 @@ function MetricCard({
         <div
           className={`mb-2 h-2.5 w-2.5 rounded-full ${
             accent
-              ? "bg-[#0F766E]"
+              ? "bg-[#3E86A4]"
               : "bg-white/20"
           }`}
         />
@@ -572,11 +572,11 @@ function EmptyStaff({
   return (
     <div className="relative overflow-hidden rounded-[28px] border border-dashed border-white/10 bg-white/[0.02] px-6 py-16 text-center">
 
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#0F766E]/[0.04] blur-3xl" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#3E86A4]/[0.04] blur-3xl" />
 
       <div className="relative">
 
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-[#D4AF37]/15 bg-[#0F766E]/[0.07]">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-[#3E86A4]/15 bg-[#3E86A4]/[0.07]">
 
           <StaffIcon />
 
@@ -627,7 +627,7 @@ function OperationCard({
   return (
     <div className="rounded-[22px] border border-white/[0.07] bg-white/[0.02] p-6">
 
-      <p className="text-xs font-bold tracking-[0.2em] text-[#D4AF37]">
+      <p className="text-xs font-bold tracking-[0.2em] text-[#3E86A4]">
         {number}
       </p>
 
@@ -658,7 +658,7 @@ function StaffIcon() {
       fill="none"
       stroke="currentColor"
       strokeWidth="1.5"
-      className="text-[#D4AF37]"
+      className="text-[#3E86A4]"
       aria-hidden="true"
     >
       <path

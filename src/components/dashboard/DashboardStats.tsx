@@ -227,9 +227,9 @@ function StatCard({
             ${
               accent
                 ? `
-                  border-[#D4AF37]/15
-                  bg-[#0F766E]/[0.06]
-                  text-[#D4AF37]
+                  border-[#3E86A4]/15
+                  bg-[#3E86A4]/[0.06]
+                  text-[#3E86A4]
                 `
                 : `
                   border-white/[0.07]
@@ -263,7 +263,7 @@ function StatCard({
 
             ${
               accent
-                ? "text-[#D4AF37]"
+                ? "text-[#3E86A4]"
                 : "text-white"
             }
           `}

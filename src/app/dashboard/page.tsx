@@ -176,12 +176,12 @@ export default function Dashboard() {
             <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl border border-divider bg-surface">
 
               <Building2
-                className="h-6 w-6 text-gold"
+                className="h-6 w-6 text-[#3E86A4]"
               />
 
             </div>
 
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-gold">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#3E86A4]">
               Organizer Setup
             </p>
 
@@ -283,7 +283,7 @@ export default function Dashboard() {
                 justify-center
                 gap-2
                 rounded-full
-                bg-gold
+                bg-[#3E86A4]
                 px-6
                 py-4
                 font-semibold
@@ -343,7 +343,7 @@ export default function Dashboard() {
 
           <div>
 
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-gold">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#3E86A4]">
               Organizer Dashboard
             </p>
 
@@ -371,7 +371,7 @@ export default function Dashboard() {
               justify-center
               gap-2
               rounded-full
-              bg-gold
+              bg-[#3E86A4]
               px-6
               py-4
               font-semibold
@@ -399,7 +399,7 @@ export default function Dashboard() {
                 Total Events
               </p>
 
-              <CalendarDays className="h-5 w-5 text-gold" />
+              <CalendarDays className="h-5 w-5 text-[#3E86A4]" />
 
             </div>
 
@@ -467,7 +467,7 @@ export default function Dashboard() {
 
             <div>
 
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gold">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#3E86A4]">
                 Event Portfolio
               </p>
 
@@ -495,7 +495,7 @@ export default function Dashboard() {
 
               <div className="flex h-16 w-16 items-center justify-center rounded-full border border-divider bg-background">
 
-                <CalendarDays className="h-7 w-7 text-gold" />
+                <CalendarDays className="h-7 w-7 text-[#3E86A4]" />
 
               </div>
 
@@ -515,7 +515,7 @@ export default function Dashboard() {
 
               <Link
                 href="/dashboard/events/create"
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 font-semibold text-white"
+                className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#3E86A4] px-6 py-3 font-semibold text-white"
               >
                 <Plus className="h-4 w-4" />
 
@@ -550,7 +550,7 @@ export default function Dashboard() {
                       transition
                       duration-300
                       hover:-translate-y-1
-                      hover:border-gold/40
+                      hover:border-[#3E86A4]/40
                     "
                   >
 
@@ -620,7 +620,7 @@ export default function Dashboard() {
 
                     <div className="p-6">
 
-                      <h3 className="text-2xl font-bold transition group-hover:text-gold">
+                      <h3 className="text-2xl font-bold transition group-hover:text-[#3E86A4]">
                         {event.title}
                       </h3>
 
@@ -681,7 +681,7 @@ export default function Dashboard() {
                           Manage Event
                         </span>
 
-                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:text-gold" />
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:text-[#3E86A4]" />
 
                       </div>
 

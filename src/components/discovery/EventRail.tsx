@@ -148,7 +148,7 @@ export default function EventRail({
               className="
                 h-px
                 w-8
-                bg-gold
+                bg-[#3E86A4]
               "
             />
 
@@ -158,7 +158,7 @@ export default function EventRail({
                 font-bold
                 uppercase
                 tracking-[0.35em]
-                text-gold
+                text-[#3E86A4]
               "
             >
               Discover
@@ -257,7 +257,7 @@ export default function EventRail({
               text-foreground
               transition-all
               duration-300
-              hover:border-gold/40
+              hover:border-[#3E86A4]/40
               hover:bg-surface-hover
               active:scale-95
             "
@@ -297,7 +297,7 @@ export default function EventRail({
               text-foreground
               transition-all
               duration-300
-              hover:border-gold/40
+              hover:border-[#3E86A4]/40
               hover:bg-surface-hover
               active:scale-95
             "
@@ -406,7 +406,7 @@ export default function EventRail({
               gap-2
               text-sm
               font-semibold
-              text-gold
+              text-[#3E86A4]
             "
           >
             View all {title}

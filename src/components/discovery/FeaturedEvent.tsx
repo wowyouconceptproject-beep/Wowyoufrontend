@@ -179,7 +179,7 @@ export default function FeaturedEvent({
                 items-center
                 gap-2
                 rounded-full
-                bg-gold
+                bg-[#3E86A4]
                 px-4
                 py-2.5
                 text-xs
@@ -230,7 +230,7 @@ export default function FeaturedEvent({
               className="
                 h-px
                 w-8
-                bg-gold
+                bg-[#3E86A4]
               "
             />
 
@@ -240,7 +240,7 @@ export default function FeaturedEvent({
                 font-bold
                 uppercase
                 tracking-[0.35em]
-                text-gold
+                text-[#3E86A4]
               "
             >
               Featured Experience
@@ -260,7 +260,7 @@ export default function FeaturedEvent({
                 leading-[1.05]
                 tracking-tight
                 transition-colors
-                hover:text-gold
+                hover:text-[#3E86A4]
                 sm:text-5xl
                 xl:text-6xl
               "
@@ -318,14 +318,14 @@ export default function FeaturedEvent({
                   items-center
                   justify-center
                   rounded-full
-                  bg-gold/10
+                  bg-[#53A6C7]/12
                 "
               >
                 <CalendarDays
                   className="
                     h-4
                     w-4
-                    text-gold
+                    text-[#3E86A4]
                   "
                 />
               </div>
@@ -389,14 +389,14 @@ export default function FeaturedEvent({
                   items-center
                   justify-center
                   rounded-full
-                  bg-gold/10
+                  bg-[#53A6C7]/12
                 "
               >
                 <MapPin
                   className="
                     h-4
                     w-4
-                    text-gold
+                    text-[#3E86A4]
                   "
                 />
               </div>
@@ -451,7 +451,7 @@ export default function FeaturedEvent({
                 justify-center
                 gap-2
                 rounded-full
-                bg-gold
+                bg-[#3E86A4]
                 px-7
                 py-4
                 text-sm
@@ -499,14 +499,14 @@ export default function FeaturedEvent({
                     saved
                       ? `
                         border-gold/40
-                        bg-gold/10
-                        text-gold
+                        bg-[#53A6C7]/12
+                        text-[#3E86A4]
                       `
                       : `
                         border-divider
                         bg-transparent
                         text-foreground
-                        hover:border-gold/40
+                        hover:border-[#3E86A4]/40
                         hover:bg-surface-hover
                       `
                   }
@@ -545,7 +545,7 @@ export default function FeaturedEvent({
                 rounded-2xl
                 border
                 border-gold/15
-                bg-gold/[0.04]
+                bg-[#3E86A4]/[0.04]
                 p-5
                 sm:flex-row
                 sm:items-center
@@ -581,7 +581,7 @@ export default function FeaturedEvent({
                   shrink-0
                   text-sm
                   font-bold
-                  text-gold
+                  text-[#3E86A4]
                   transition-opacity
                   hover:opacity-70
                 "

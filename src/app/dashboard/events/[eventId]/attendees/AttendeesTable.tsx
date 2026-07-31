@@ -308,12 +308,12 @@ export function AttendeesTable({
                           justify-center
                           rounded-xl
                           border
-                          border-[#D4AF37]/15
-                          bg-[#0F766E]/[0.06]
+                          border-[#3E86A4]/15
+                          bg-[#3E86A4]/[0.06]
                           text-xs
                           font-black
                           tracking-wide
-                          text-[#D4AF37]
+                          text-[#3E86A4]
                         "
                       >
                         {initials(
@@ -406,7 +406,7 @@ export function AttendeesTable({
                         text-white/65
                       "
                     >
-                      <Ticket className="h-3.5 w-3.5 text-[#D4AF37]" />
+                      <Ticket className="h-3.5 w-3.5 text-[#3E86A4]" />
 
                       {
                         attendee.ticketType
@@ -465,8 +465,8 @@ export function AttendeesTable({
                           gap-2
                           rounded-full
                           border
-                          border-[#D4AF37]/15
-                          bg-[#0F766E]/[0.06]
+                          border-[#3E86A4]/15
+                          bg-[#3E86A4]/[0.06]
                           px-3
                           py-1.5
                         "
@@ -477,7 +477,7 @@ export function AttendeesTable({
                             h-1.5
                             w-1.5
                             rounded-full
-                            bg-[#0F766E]
+                            bg-[#3E86A4]
                           "
                         />
 
@@ -485,7 +485,7 @@ export function AttendeesTable({
                           className="
                             text-xs
                             font-bold
-                            text-[#D4AF37]
+                            text-[#3E86A4]
                           "
                         >
                           Pending
@@ -595,11 +595,11 @@ export function AttendeesTable({
                     justify-center
                     rounded-xl
                     border
-                    border-[#D4AF37]/15
-                    bg-[#0F766E]/[0.06]
+                    border-[#3E86A4]/15
+                    bg-[#3E86A4]/[0.06]
                     text-xs
                     font-black
-                    text-[#D4AF37]
+                    text-[#3E86A4]
                   "
                 >
                   {initials(
@@ -637,7 +637,7 @@ export function AttendeesTable({
                 {attendee.checkedIn ? (
                   <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-400" />
                 ) : (
-                  <Clock3 className="h-5 w-5 shrink-0 text-[#D4AF37]" />
+                  <Clock3 className="h-5 w-5 shrink-0 text-[#3E86A4]" />
                 )}
 
               </div>
@@ -752,7 +752,7 @@ function FilterButton({
         transition-all
         ${
           active
-            ? "bg-[#0F766E] text-white"
+            ? "bg-[#3E86A4] text-white"
             : "text-white/40 hover:bg-white/[0.05] hover:text-white"
         }
       `}

@@ -261,9 +261,9 @@ export default function VendorApplicationsPage() {
         <header className="mb-12">
 
           <div className="mb-5 flex items-center gap-3">
-            <div className="h-px w-10 bg-[#0F766E]" />
+            <div className="h-px w-10 bg-[#3E86A4]" />
 
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#3E86A4]">
               Vendor Operations
             </p>
           </div>
@@ -288,9 +288,9 @@ export default function VendorApplicationsPage() {
             <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5">
 
               <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#0F766E] opacity-40" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#3E86A4] opacity-40" />
 
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#0F766E]" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#3E86A4]" />
               </span>
 
               <span className="text-xs font-medium text-white/55">
@@ -395,7 +395,7 @@ function SummaryCard({
 }) {
   const accent =
     tone === "gold"
-      ? "bg-[#0F766E]"
+      ? "bg-[#3E86A4]"
       : tone === "green"
       ? "bg-emerald-500"
       : "bg-white/25";
@@ -473,7 +473,7 @@ function ApplicationSection({
 
         <div>
 
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#3E86A4]">
             {eyebrow}
           </p>
 
@@ -581,7 +581,7 @@ function VendorCard({
     <article
       className={`overflow-hidden rounded-[26px] border bg-white/[0.035] transition ${
         priority
-          ? "border-[#D4AF37]/20 hover:border-[#D4AF37]/40"
+          ? "border-[#3E86A4]/20 hover:border-[#3E86A4]/40"
           : "border-white/10 hover:border-white/15"
       }`}
     >
@@ -596,7 +596,7 @@ function VendorCard({
 
             <div className="flex items-start gap-4">
 
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-sm font-bold text-[#D4AF37]">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-sm font-bold text-[#3E86A4]">
                 {initials}
               </div>
 
@@ -724,7 +724,7 @@ function VendorCard({
                     application.id
                   )
                 }
-                className="rounded-xl bg-[#0F766E] px-5 py-3.5 text-sm font-bold text-white transition hover:bg-[#e0bd48] disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-xl bg-[#3E86A4] px-5 py-3.5 text-sm font-bold text-white transition hover:bg-[#1F7197] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {processing
                   ? "Processing..."
@@ -798,7 +798,7 @@ function StatusBadge({
       : status ===
         "REJECTED"
       ? "border-red-500/20 bg-red-500/10 text-red-300"
-      : "border-[#D4AF37]/20 bg-[#0F766E]/10 text-[#D4AF37]";
+      : "border-[#3E86A4]/20 bg-[#53A6C7]/12 text-[#3E86A4]";
 
   return (
     <span
@@ -819,7 +819,7 @@ function EmptyState({
   return (
     <div className="rounded-[24px] border border-dashed border-white/10 bg-white/[0.02] px-6 py-14 text-center">
 
-      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-lg text-[#D4AF37]">
+      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-lg text-[#3E86A4]">
         ✓
       </div>
 

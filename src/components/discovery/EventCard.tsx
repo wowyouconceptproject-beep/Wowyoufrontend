@@ -169,7 +169,7 @@ export default function EventCard({
         duration-500
 
         hover:-translate-y-1
-        hover:border-gold/30
+        hover:border-[#3E86A4]/30
         hover:bg-surface-elevated
 
         sm:w-[360px]
@@ -257,7 +257,7 @@ export default function EventCard({
               items-center
               gap-2
               rounded-full
-              bg-gold
+              bg-[#3E86A4]
               px-4
               py-2
               text-[10px]
@@ -355,7 +355,7 @@ export default function EventCard({
               leading-tight
               tracking-tight
               transition-colors
-              group-hover:text-gold
+              group-hover:text-[#3E86A4]
             "
           >
             {event.title}
@@ -385,7 +385,7 @@ export default function EventCard({
                 h-4
                 w-4
                 shrink-0
-                text-gold
+                text-[#3E86A4]
               "
             />
 
@@ -414,7 +414,7 @@ export default function EventCard({
                 h-4
                 w-4
                 shrink-0
-                text-gold
+                text-[#3E86A4]
               "
             />
 
@@ -459,7 +459,7 @@ export default function EventCard({
               items-center
               gap-2
               rounded-full
-              bg-gold
+              bg-[#3E86A4]
               px-5
               py-3
               text-sm

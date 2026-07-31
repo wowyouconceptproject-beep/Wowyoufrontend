@@ -129,7 +129,7 @@ export default function VendorApplyPage() {
       >
         <div className="text-center">
 
-          <Store className="mx-auto h-8 w-8 text-[#D4AF37]" />
+          <Store className="mx-auto h-8 w-8 text-[#3E86A4]" />
 
           <h1 className="mt-5 text-3xl font-black">
             Event Unavailable
@@ -241,7 +241,7 @@ export default function VendorApplyPage() {
                     h-1.5
                     w-1.5
                     rounded-full
-                    bg-[#0F766E]
+                    bg-[#3E86A4]
                   "
                 />
 
@@ -251,7 +251,7 @@ export default function VendorApplyPage() {
                     font-bold
                     uppercase
                     tracking-[0.18em]
-                    text-[#D4AF37]
+                    text-[#3E86A4]
                   "
                 >
                   Vendor Applications
@@ -270,7 +270,7 @@ export default function VendorApplyPage() {
                       font-bold
                       uppercase
                       tracking-[0.22em]
-                      text-[#D4AF37]
+                      text-[#3E86A4]
                     "
                   >
                     {event.category}
@@ -300,7 +300,7 @@ export default function VendorApplyPage() {
 
               <div className="flex items-center gap-2">
 
-                <span className="h-px w-7 bg-[#0F766E]" />
+                <span className="h-px w-7 bg-[#3E86A4]" />
 
                 <p
                   className="
@@ -308,7 +308,7 @@ export default function VendorApplyPage() {
                     font-bold
                     uppercase
                     tracking-[0.2em]
-                    text-[#D4AF37]
+                    text-[#3E86A4]
                   "
                 >
                   About the Event
@@ -403,11 +403,11 @@ export default function VendorApplyPage() {
                   justify-center
                   rounded-xl
                   border
-                  border-[#D4AF37]/15
-                  bg-[#0F766E]/[0.06]
+                  border-[#3E86A4]/15
+                  bg-[#3E86A4]/[0.06]
                 "
               >
-                <Store className="h-5 w-5 text-[#D4AF37]" />
+                <Store className="h-5 w-5 text-[#3E86A4]" />
               </div>
 
               <p
@@ -417,7 +417,7 @@ export default function VendorApplyPage() {
                   font-bold
                   uppercase
                   tracking-[0.22em]
-                  text-[#D4AF37]
+                  text-[#3E86A4]
                 "
               >
                 Vendor Marketplace
@@ -581,8 +581,8 @@ export default function VendorApplyPage() {
                   className="
                     rounded-2xl
                     border
-                    border-[#D4AF37]/10
-                    bg-[#0F766E]/[0.025]
+                    border-[#3E86A4]/10
+                    bg-[#3E86A4]/[0.025]
                     p-5
                   "
                 >
@@ -598,10 +598,10 @@ export default function VendorApplyPage() {
                         items-center
                         justify-center
                         rounded-lg
-                        bg-[#0F766E]/10
+                        bg-[#53A6C7]/12
                       "
                     >
-                      <LockKeyhole className="h-4 w-4 text-[#D4AF37]" />
+                      <LockKeyhole className="h-4 w-4 text-[#3E86A4]" />
                     </div>
 
                     <div>
@@ -663,14 +663,14 @@ export default function VendorApplyPage() {
                     justify-center
                     gap-3
                     rounded-xl
-                    bg-[#0F766E]
+                    bg-[#3E86A4]
                     px-6
                     text-sm
                     font-black
                     text-white
                     transition
                     duration-300
-                    hover:bg-[#115E59]
+                    hover:bg-[#1F7197]
                   "
                 >
                   Submit Application
@@ -754,7 +754,7 @@ function EventDetail({
           bg-white/[0.04]
         "
       >
-        <Icon className="h-4 w-4 text-[#D4AF37]" />
+        <Icon className="h-4 w-4 text-[#3E86A4]" />
       </div>
 
       <p
@@ -820,11 +820,11 @@ function FormSection({
             justify-center
             rounded-lg
             border
-            border-[#D4AF37]/15
-            bg-[#0F766E]/[0.05]
+            border-[#3E86A4]/15
+            bg-[#3E86A4]/[0.05]
             text-[10px]
             font-black
-            text-[#D4AF37]
+            text-[#3E86A4]
           "
         >
           {number}
@@ -924,7 +924,7 @@ const inputClass = `
   transition
   placeholder:text-white/20
   hover:border-white/[0.13]
-  focus:border-[#D4AF37]/50
+  focus:border-[#3E86A4]/50
   focus:ring-2
-  focus:ring-[#D4AF37]/5
+  focus:ring-[#3E86A4]/5
 `;

@@ -377,15 +377,15 @@ export function AccessCodeDialog({
                 justify-center
                 rounded-2xl
                 border
-                border-[#D4AF37]/20
-                bg-[#0F766E]/10
+                border-[#3E86A4]/20
+                bg-[#53A6C7]/12
               "
             >
               <UserRound
                 className="
                   h-5
                   w-5
-                  text-[#D4AF37]
+                  text-[#3E86A4]
                 "
               />
             </div>
@@ -556,8 +556,8 @@ export function AccessCodeDialog({
                 overflow-hidden
                 rounded-[22px]
                 border
-                border-[#D4AF37]/20
-                bg-[#0F766E]/[0.04]
+                border-[#3E86A4]/20
+                bg-[#3E86A4]/[0.04]
               "
             >
 
@@ -567,7 +567,7 @@ export function AccessCodeDialog({
                   items-center
                   gap-3
                   border-b
-                  border-[#D4AF37]/10
+                  border-[#3E86A4]/10
                   px-5
                   py-4
                 "
@@ -582,14 +582,14 @@ export function AccessCodeDialog({
                     items-center
                     justify-center
                     rounded-xl
-                    bg-[#0F766E]/10
+                    bg-[#53A6C7]/12
                   "
                 >
                   <KeyRound
                     className="
                       h-4
                       w-4
-                      text-[#D4AF37]
+                      text-[#3E86A4]
                     "
                   />
                 </div>
@@ -650,7 +650,7 @@ export function AccessCodeDialog({
                   grid
                   grid-cols-2
                   border-t
-                  border-[#D4AF37]/10
+                  border-[#3E86A4]/10
                 "
               >
 
@@ -666,13 +666,13 @@ export function AccessCodeDialog({
                     justify-center
                     gap-2
                     border-r
-                    border-[#D4AF37]/10
+                    border-[#3E86A4]/10
                     px-3
                     text-sm
                     font-semibold
                     text-white/65
                     transition
-                    hover:bg-[#0F766E]/10
+                    hover:bg-[#53A6C7]/12
                     hover:text-white
                   "
                 >
@@ -695,7 +695,7 @@ export function AccessCodeDialog({
                         className="
                           h-4
                           w-4
-                          text-[#D4AF37]
+                          text-[#3E86A4]
                         "
                       />
 
@@ -724,7 +724,7 @@ export function AccessCodeDialog({
                     font-semibold
                     text-white/65
                     transition
-                    hover:bg-[#0F766E]/10
+                    hover:bg-[#53A6C7]/12
                     hover:text-white
                     disabled:cursor-not-allowed
                     disabled:opacity-40
@@ -735,7 +735,7 @@ export function AccessCodeDialog({
                     className={`
                       h-4
                       w-4
-                      text-[#D4AF37]
+                      text-[#3E86A4]
 
                       ${
                         pending
@@ -770,7 +770,7 @@ export function AccessCodeDialog({
                   className="
                     h-4
                     w-4
-                    text-[#D4AF37]
+                    text-[#3E86A4]
                   "
                 />
 
@@ -897,13 +897,13 @@ export function AccessCodeDialog({
                         className="
                           rounded-full
                           border
-                          border-[#D4AF37]/15
-                          bg-[#0F766E]/[0.06]
+                          border-[#3E86A4]/15
+                          bg-[#3E86A4]/[0.06]
                           px-3
                           py-1.5
                           text-xs
                           font-medium
-                          text-[#D4AF37]
+                          text-[#3E86A4]
                         "
                       >
                         {formatText(
@@ -1162,7 +1162,7 @@ function DetailRow({
           className="
             h-4
             w-4
-            text-[#D4AF37]
+            text-[#3E86A4]
           "
         />
 

@@ -82,7 +82,7 @@ export default function EventPage() {
 
         <div className="text-center">
 
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#3E86A4]">
             WOWYOU
           </p>
 
@@ -148,9 +148,9 @@ export default function EventPage() {
             {event.category && (
               <div className="mb-6 flex items-center gap-3">
 
-                <div className="h-px w-10 bg-[#0F766E]" />
+                <div className="h-px w-10 bg-[#3E86A4]" />
 
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#3E86A4]">
                   {event.category}
                 </p>
 
@@ -169,7 +169,7 @@ export default function EventPage() {
 
               <div className="flex items-center gap-2">
 
-                <span className="text-[#D4AF37]">
+                <span className="text-[#3E86A4]">
                   ◷
                 </span>
 
@@ -195,7 +195,7 @@ export default function EventPage() {
 
               <div className="flex items-center gap-2">
 
-                <span className="text-[#D4AF37]">
+                <span className="text-[#3E86A4]">
                   ◉
                 </span>
 
@@ -235,7 +235,7 @@ export default function EventPage() {
 
             <div className="mt-10 flex flex-wrap gap-3">
 
-              <button className="rounded-full bg-[#0F766E] px-8 py-4 text-sm font-bold text-white transition hover:bg-[#e1bd46]">
+              <button className="rounded-full bg-[#3E86A4] px-8 py-4 text-sm font-bold text-white transition hover:bg-[#1F7197]">
                 Get Tickets
               </button>
 
@@ -307,9 +307,9 @@ export default function EventPage() {
 
             <div className="flex items-center gap-3">
 
-              <div className="h-px w-8 bg-[#0F766E]" />
+              <div className="h-px w-8 bg-[#3E86A4]" />
 
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#3E86A4]">
                 The Experience
               </p>
 
@@ -347,7 +347,7 @@ export default function EventPage() {
 
               <div className="p-7">
 
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#3E86A4]">
                   Event Details
                 </p>
 
@@ -426,7 +426,7 @@ export default function EventPage() {
 
                 <div className="mt-8 border-t border-white/10 pt-7">
 
-                  <button className="w-full rounded-full bg-[#0F766E] px-6 py-4 text-sm font-bold text-white transition hover:bg-[#e1bd46]">
+                  <button className="w-full rounded-full bg-[#3E86A4] px-6 py-4 text-sm font-bold text-white transition hover:bg-[#1F7197]">
                     Get Tickets
                   </button>
 
@@ -457,15 +457,15 @@ export default function EventPage() {
 
           <div className="mx-auto max-w-7xl px-6 py-20 md:px-10 lg:px-12">
 
-            <div className="relative overflow-hidden rounded-[32px] border border-[#D4AF37]/15 bg-[#0F766E]/[0.04] px-7 py-12 md:px-12 md:py-14">
+            <div className="relative overflow-hidden rounded-[32px] border border-[#3E86A4]/15 bg-[#3E86A4]/[0.04] px-7 py-12 md:px-12 md:py-14">
 
-              <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#0F766E]/[0.06] blur-3xl" />
+              <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#3E86A4]/[0.06] blur-3xl" />
 
               <div className="relative flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
 
                 <div className="max-w-2xl">
 
-                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#3E86A4]">
                     Vendor Marketplace
                   </p>
 
@@ -504,7 +504,7 @@ export default function EventPage() {
 
                 </div>
 
-                <button className="shrink-0 rounded-full border border-[#D4AF37]/30 bg-[#0F766E] px-8 py-4 text-sm font-bold text-white transition hover:bg-[#e1bd46]">
+                <button className="shrink-0 rounded-full border border-[#3E86A4]/30 bg-[#3E86A4] px-8 py-4 text-sm font-bold text-white transition hover:bg-[#1F7197]">
                   Apply as Vendor
                 </button>
 
@@ -525,7 +525,7 @@ export default function EventPage() {
 
         <div className="mx-auto max-w-7xl px-6 py-24 text-center md:px-10 lg:px-12">
 
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#3E86A4]">
             Be There
           </p>
 
@@ -539,7 +539,7 @@ export default function EventPage() {
             event through WOWYOU.
           </p>
 
-          <button className="mt-9 rounded-full bg-[#0F766E] px-9 py-4 text-sm font-bold text-white transition hover:bg-[#e1bd46]">
+          <button className="mt-9 rounded-full bg-[#3E86A4] px-9 py-4 text-sm font-bold text-white transition hover:bg-[#1F7197]">
             Get Tickets
           </button>
 

@@ -16,9 +16,7 @@ function SearchLoading() {
           <div className="mt-12 h-16 w-full rounded-2xl bg-surface" />
 
           <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {Array.from({
-              length: 6,
-            }).map((_, index) => (
+            {Array.from({ length: 6 }).map((_, index) => (
               <div
                 key={index}
                 className="h-80 rounded-[28px] bg-surface"
@@ -33,11 +31,7 @@ function SearchLoading() {
 
 export default function SearchPage() {
   return (
-    <Suspense
-      fallback={
-        <SearchLoading />
-      }
-    >
+    <Suspense fallback={<SearchLoading />}>
       <SearchPageContent />
     </Suspense>
   );

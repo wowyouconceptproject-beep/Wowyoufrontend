@@ -317,9 +317,9 @@ export default function TicketsPage() {
 
           <div className="mb-5 flex items-center gap-3">
 
-            <div className="h-px w-10 bg-[#0F766E]" />
+            <div className="h-px w-10 bg-[#3E86A4]" />
 
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#D4AF37]">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#3E86A4]">
               Ticketing
             </p>
 
@@ -346,7 +346,7 @@ export default function TicketsPage() {
 
               <p className="text-xs font-medium text-white/45">
                 Event Currency
-                <span className="ml-2 font-bold text-[#D4AF37]">
+                <span className="ml-2 font-bold text-[#3E86A4]">
                   {currency}
                 </span>
               </p>
@@ -408,7 +408,7 @@ export default function TicketsPage() {
 
               </div>
 
-              <p className="text-2xl font-bold text-[#D4AF37]">
+              <p className="text-2xl font-bold text-[#3E86A4]">
                 {salesPercentage}%
               </p>
 
@@ -417,7 +417,7 @@ export default function TicketsPage() {
             <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-white/[0.07]">
 
               <div
-                className="h-full rounded-full bg-[#0F766E] transition-all duration-500"
+                className="h-full rounded-full bg-[#3E86A4] transition-all duration-500"
                 style={{
                   width:
                     `${salesPercentage}%`,
@@ -439,7 +439,7 @@ export default function TicketsPage() {
 
             <div className="rounded-[28px] border border-white/10 bg-white/[0.035] p-6 xl:sticky xl:top-8">
 
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#3E86A4]">
                 New Ticket Type
               </p>
 
@@ -480,7 +480,7 @@ export default function TicketsPage() {
                 >
                   <div className="relative">
 
-                    <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-sm font-semibold text-[#D4AF37]">
+                    <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-sm font-semibold text-[#3E86A4]">
                       {currencySymbol(
                         currency
                       )}
@@ -545,7 +545,7 @@ export default function TicketsPage() {
                 onClick={
                   submit
                 }
-                className="mt-7 w-full rounded-2xl bg-[#0F766E] px-6 py-4 text-sm font-bold text-white transition hover:bg-[#e0bd48] disabled:cursor-not-allowed disabled:opacity-50"
+                className="mt-7 w-full rounded-2xl bg-[#3E86A4] px-6 py-4 text-sm font-bold text-white transition hover:bg-[#1F7197] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {creating
                   ? "Creating Ticket..."
@@ -571,7 +571,7 @@ export default function TicketsPage() {
 
               <div>
 
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#D4AF37]">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#3E86A4]">
                   Inventory
                 </p>
 
@@ -787,7 +787,7 @@ function TicketCard({
           <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.07]">
 
             <div
-              className="h-full rounded-full bg-[#0F766E] transition-all duration-500"
+              className="h-full rounded-full bg-[#3E86A4] transition-all duration-500"
               style={{
                 width:
                   `${percentage}%`,
@@ -827,7 +827,7 @@ function MetricCard({
       <div
         className={`absolute left-0 top-0 h-full w-[3px] ${
           accent
-            ? "bg-[#0F766E]"
+            ? "bg-[#3E86A4]"
             : "bg-white/20"
         }`}
       />
@@ -890,7 +890,7 @@ function EmptyTickets() {
   return (
     <div className="rounded-[26px] border border-dashed border-white/10 bg-white/[0.02] px-6 py-16 text-center">
 
-      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[#D4AF37]/15 bg-[#0F766E]/[0.07] text-2xl font-light text-[#D4AF37]">
+      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[#3E86A4]/15 bg-[#3E86A4]/[0.07] text-2xl font-light text-[#3E86A4]">
         +
       </div>
 
@@ -915,7 +915,7 @@ function EmptyTickets() {
 */
 
 const inputClass =
-  "w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-white/20 focus:border-[#D4AF37]/60 focus:ring-1 focus:ring-[#D4AF37]/20";
+  "w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-white/20 focus:border-[#3E86A4]/60 focus:ring-1 focus:ring-[#3E86A4]/20";
 
 function Field({
   label,

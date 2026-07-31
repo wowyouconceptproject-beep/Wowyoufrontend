@@ -54,15 +54,15 @@ export default function AnnouncementList({
             justify-center
             rounded-2xl
             border
-            border-[#D4AF37]/15
-            bg-[#0F766E]/[0.05]
+            border-[#3E86A4]/15
+            bg-[#3E86A4]/[0.05]
           "
         >
           <Megaphone
             className="
               h-6
               w-6
-              text-[#D4AF37]
+              text-[#3E86A4]
             "
           />
         </div>

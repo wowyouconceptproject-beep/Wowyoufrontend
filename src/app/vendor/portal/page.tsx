@@ -709,7 +709,7 @@ export default function VendorPortalPage() {
                           font-black
                           text-white
                           transition
-                          hover:bg-[#115E59]
+                          hover:bg-[#1F7197]
                         "
                       >
                         Apply as Vendor

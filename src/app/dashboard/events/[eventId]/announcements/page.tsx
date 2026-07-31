@@ -244,7 +244,7 @@ export default function AnnouncementPage() {
 
           <div className="flex items-center gap-2">
 
-            <span className="h-px w-8 bg-[#0F766E]" />
+            <span className="h-px w-8 bg-[#3E86A4]" />
 
             <p
               className="
@@ -252,7 +252,7 @@ export default function AnnouncementPage() {
                 font-bold
                 uppercase
                 tracking-[0.24em]
-                text-[#D4AF37]
+                text-[#3E86A4]
               "
             >
               Event Communications
@@ -359,7 +359,7 @@ export default function AnnouncementPage() {
 
             <div className="flex items-center gap-2">
 
-              <span className="h-px w-8 bg-[#0F766E]" />
+              <span className="h-px w-8 bg-[#3E86A4]" />
 
               <p
                 className="
@@ -367,7 +367,7 @@ export default function AnnouncementPage() {
                   font-bold
                   uppercase
                   tracking-[0.24em]
-                  text-[#D4AF37]
+                  text-[#3E86A4]
                 "
               >
                 Event Communications
@@ -539,11 +539,11 @@ export default function AnnouncementPage() {
                   justify-center
                   rounded-xl
                   border
-                  border-[#D4AF37]/15
-                  bg-[#0F766E]/[0.06]
+                  border-[#3E86A4]/15
+                  bg-[#3E86A4]/[0.06]
                 "
               >
-                <Bell className="h-5 w-5 text-[#D4AF37]" />
+                <Bell className="h-5 w-5 text-[#3E86A4]" />
               </div>
 
               <div>
@@ -575,7 +575,7 @@ export default function AnnouncementPage() {
               "
             >
 
-              <span className="h-1.5 w-1.5 rounded-full bg-[#0F766E]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[#3E86A4]" />
 
               <span
                 className="
@@ -613,8 +613,8 @@ export default function AnnouncementPage() {
                   justify-center
                   rounded-full
                   border
-                  border-[#D4AF37]/15
-                  bg-[#0F766E]/[0.05]
+                  border-[#3E86A4]/15
+                  bg-[#3E86A4]/[0.05]
                 "
               >
 
@@ -624,11 +624,11 @@ export default function AnnouncementPage() {
                     inset-2
                     rounded-full
                     border
-                    border-[#D4AF37]/10
+                    border-[#3E86A4]/10
                   "
                 />
 
-                <Megaphone className="relative h-8 w-8 text-[#D4AF37]" />
+                <Megaphone className="relative h-8 w-8 text-[#3E86A4]" />
 
               </div>
 
@@ -706,7 +706,7 @@ function OverviewCard({
         bg-[#0D0D0D]
         p-6
         transition
-        hover:border-[#D4AF37]/20
+        hover:border-[#3E86A4]/20
       "
     >
 
@@ -719,7 +719,7 @@ function OverviewCard({
           h-32
           w-32
           rounded-full
-          bg-[#0F766E]/[0.035]
+          bg-[#3E86A4]/[0.035]
           blur-3xl
         "
       />
@@ -735,11 +735,11 @@ function OverviewCard({
             justify-center
             rounded-xl
             border
-            border-[#D4AF37]/15
-            bg-[#0F766E]/[0.06]
+            border-[#3E86A4]/15
+            bg-[#3E86A4]/[0.06]
           "
         >
-          <Icon className="h-4 w-4 text-[#D4AF37]" />
+          <Icon className="h-4 w-4 text-[#3E86A4]" />
         </div>
 
         <p

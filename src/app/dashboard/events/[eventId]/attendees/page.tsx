@@ -204,9 +204,9 @@ export default function AttendeesPage() {
 
             <div className="flex items-center gap-2">
 
-              <span className="h-px w-8 bg-[#0F766E]" />
+              <span className="h-px w-8 bg-[#3E86A4]" />
 
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#D4AF37]">
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#3E86A4]">
                 Guest Management
               </p>
 
@@ -312,7 +312,7 @@ export default function AttendeesPage() {
 
             <div className="flex items-center gap-2">
 
-              <span className="h-px w-8 bg-[#0F766E]" />
+              <span className="h-px w-8 bg-[#3E86A4]" />
 
               <p
                 className="
@@ -320,7 +320,7 @@ export default function AttendeesPage() {
                   font-bold
                   uppercase
                   tracking-[0.24em]
-                  text-[#D4AF37]
+                  text-[#3E86A4]
                 "
               >
                 Guest Management
@@ -362,7 +362,7 @@ export default function AttendeesPage() {
             "
           >
 
-            <Users className="h-4 w-4 text-[#D4AF37]" />
+            <Users className="h-4 w-4 text-[#3E86A4]" />
 
             <div>
 
@@ -521,7 +521,7 @@ export default function AttendeesPage() {
                     outline-none
                     transition
                     placeholder:text-white/25
-                    focus:border-[#D4AF37]/40
+                    focus:border-[#3E86A4]/40
                     focus:bg-white/[0.05]
                   "
                 />
@@ -549,8 +549,8 @@ export default function AttendeesPage() {
                   justify-center
                   rounded-full
                   border
-                  border-[#D4AF37]/15
-                  bg-[#0F766E]/[0.05]
+                  border-[#3E86A4]/15
+                  bg-[#3E86A4]/[0.05]
                 "
               >
 
@@ -560,11 +560,11 @@ export default function AttendeesPage() {
                     inset-2
                     rounded-full
                     border
-                    border-[#D4AF37]/10
+                    border-[#3E86A4]/10
                   "
                 />
 
-                <Users className="relative h-8 w-8 text-[#D4AF37]" />
+                <Users className="relative h-8 w-8 text-[#3E86A4]" />
 
               </div>
 
@@ -628,9 +628,9 @@ export default function AttendeesPage() {
                   mt-5
                   text-sm
                   font-semibold
-                  text-[#D4AF37]
+                  text-[#3E86A4]
                   transition
-                  hover:text-[#E7C85A]
+                  hover:text-[#53A6C7]
                 "
               >
                 Clear search
@@ -691,7 +691,7 @@ function StatCard({
         bg-[#0D0D0D]
         p-6
         transition
-        hover:border-[#D4AF37]/20
+        hover:border-[#3E86A4]/20
       "
     >
 
@@ -704,7 +704,7 @@ function StatCard({
           h-32
           w-32
           rounded-full
-          bg-[#0F766E]/[0.035]
+          bg-[#3E86A4]/[0.035]
           blur-3xl
         "
       />
@@ -720,11 +720,11 @@ function StatCard({
             justify-center
             rounded-xl
             border
-            border-[#D4AF37]/15
-            bg-[#0F766E]/[0.06]
+            border-[#3E86A4]/15
+            bg-[#3E86A4]/[0.06]
           "
         >
-          <Icon className="h-4 w-4 text-[#D4AF37]" />
+          <Icon className="h-4 w-4 text-[#3E86A4]" />
         </div>
 
         <p

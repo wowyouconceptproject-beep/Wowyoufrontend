@@ -120,7 +120,7 @@ export default function EventPage() {
                 rounded-full
                 border-2
                 border-white/10
-                border-t-[#D4AF37]
+                border-t-[#3E86A4]
               "
             />
 
@@ -260,7 +260,7 @@ export default function EventPage() {
           h-[600px]
           w-[600px]
           rounded-full
-          bg-[#0F766E]/[0.06]
+          bg-[#3E86A4]/[0.06]
           blur-[160px]
         "
       />
@@ -341,7 +341,7 @@ export default function EventPage() {
               h-[320px]
               w-[320px]
               rounded-full
-              bg-[#0F766E]/10
+              bg-[#53A6C7]/12
               blur-[100px]
             "
           />
@@ -381,14 +381,14 @@ export default function EventPage() {
                     gap-2
                     rounded-full
                     border
-                    border-[#D4AF37]/20
-                    bg-[#0F766E]/10
+                    border-[#3E86A4]/20
+                    bg-[#53A6C7]/12
                     px-3
                     py-1.5
                     text-xs
                     font-bold
                     tracking-wider
-                    text-[#D4AF37]
+                    text-[#3E86A4]
                   "
                 >
                   <span
@@ -396,7 +396,7 @@ export default function EventPage() {
                       h-1.5
                       w-1.5
                       rounded-full
-                      bg-[#0F766E]
+                      bg-[#3E86A4]
                     "
                   />
 
@@ -500,13 +500,13 @@ export default function EventPage() {
                   className="
                     h-12
                     rounded-xl
-                    bg-[#0F766E]
+                    bg-[#3E86A4]
                     px-6
                     text-sm
                     font-bold
                     text-white
                     transition
-                    hover:bg-[#E2BF4A]
+                    hover:bg-[#1F7197]
                   "
                 >
                   Publish Event
@@ -558,7 +558,7 @@ export default function EventPage() {
                   font-bold
                   uppercase
                   tracking-[0.22em]
-                  text-[#D4AF37]
+                  text-[#3E86A4]
                 "
               >
                 Live Performance
@@ -620,7 +620,7 @@ export default function EventPage() {
                 font-bold
                 uppercase
                 tracking-[0.22em]
-                text-[#D4AF37]
+                text-[#3E86A4]
               "
             >
               Management
@@ -681,7 +681,7 @@ export default function EventPage() {
                     transition
                     duration-300
                     hover:-translate-y-1
-                    hover:border-[#D4AF37]/25
+                    hover:border-[#3E86A4]/25
                     hover:bg-[#101010]
                   "
                 >
@@ -703,11 +703,11 @@ export default function EventPage() {
                         justify-center
                         rounded-xl
                         border
-                        border-[#D4AF37]/15
-                        bg-[#0F766E]/10
+                        border-[#3E86A4]/15
+                        bg-[#53A6C7]/12
                         text-lg
                         font-bold
-                        text-[#D4AF37]
+                        text-[#3E86A4]
                       "
                     >
                       {item.icon}
@@ -719,7 +719,7 @@ export default function EventPage() {
                         text-white/20
                         transition
                         group-hover:translate-x-1
-                        group-hover:text-[#D4AF37]
+                        group-hover:text-[#3E86A4]
                       "
                     >
                       →
@@ -785,7 +785,7 @@ export default function EventPage() {
                 font-bold
                 uppercase
                 tracking-[0.2em]
-                text-[#D4AF37]
+                text-[#3E86A4]
               "
             >
               About
@@ -833,7 +833,7 @@ export default function EventPage() {
                 font-bold
                 uppercase
                 tracking-[0.2em]
-                text-[#D4AF37]
+                text-[#3E86A4]
               "
             >
               Event Details
@@ -1011,7 +1011,7 @@ function DateCard({
           mt-2
           text-sm
           font-medium
-          text-[#D4AF37]
+          text-[#3E86A4]
         "
       >
         {date.toLocaleTimeString(

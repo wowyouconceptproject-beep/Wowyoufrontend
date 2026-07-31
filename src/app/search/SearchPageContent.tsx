@@ -636,7 +636,7 @@ export default function SearchPageContent() {
               text-sm
               font-black
               tracking-[0.22em]
-              text-gold
+              text-[#3E86A4]
             "
           >
             WOWYOU
@@ -666,7 +666,7 @@ export default function SearchPageContent() {
             w-[800px]
             -translate-x-1/2
             rounded-full
-            bg-gold/5
+            bg-[#53A6C7]/8
             blur-[140px]
           "
         />
@@ -691,7 +691,7 @@ export default function SearchPageContent() {
                 font-bold
                 uppercase
                 tracking-[0.4em]
-                text-gold
+                text-[#3E86A4]
               "
             >
               Discover
@@ -758,7 +758,7 @@ export default function SearchPageContent() {
                 shadow-2xl
                 shadow-black/5
                 transition
-                focus-within:border-gold/50
+                focus-within:border-[#3E86A4]/50
               "
             >
 
@@ -864,7 +864,7 @@ export default function SearchPageContent() {
                   hidden
                   shrink-0
                   rounded-[18px]
-                  bg-gold
+                  bg-[#3E86A4]
                   px-7
                   py-4
                   font-bold
@@ -1006,7 +1006,7 @@ export default function SearchPageContent() {
                                     className="
                                       h-4
                                       w-4
-                                      text-gold
+                                      text-[#3E86A4]
                                     "
                                   />
                                 ) : (
@@ -1014,7 +1014,7 @@ export default function SearchPageContent() {
                                     className="
                                       h-4
                                       w-4
-                                      text-gold
+                                      text-[#3E86A4]
                                     "
                                   />
                                 )}
@@ -1161,7 +1161,7 @@ export default function SearchPageContent() {
                 className="
                   h-6
                   w-6
-                  text-gold
+                  text-[#3E86A4]
                 "
               />
             </div>
@@ -1272,7 +1272,7 @@ export default function SearchPageContent() {
                 className="
                   mt-7
                   rounded-full
-                  bg-gold
+                  bg-[#3E86A4]
                   px-6
                   py-3
                   font-semibold
@@ -1348,7 +1348,7 @@ export default function SearchPageContent() {
                   items-center
                   gap-2
                   rounded-full
-                  bg-gold
+                  bg-[#3E86A4]
                   px-6
                   py-3
                   font-semibold
@@ -1394,7 +1394,7 @@ export default function SearchPageContent() {
                       font-bold
                       uppercase
                       tracking-[0.35em]
-                      text-gold
+                      text-[#3E86A4]
                     "
                   >
                     Search Results
@@ -1507,7 +1507,7 @@ function EventCard({
         transition-all
         duration-300
         hover:-translate-y-1
-        hover:border-gold/30
+        hover:border-[#3E86A4]/30
         hover:shadow-2xl
       "
     >
@@ -1593,7 +1593,7 @@ function EventCard({
               font-bold
               uppercase
               tracking-[0.2em]
-              text-gold
+              text-[#3E86A4]
             "
           >
             {formatDate(
@@ -1614,7 +1614,7 @@ function EventCard({
             font-bold
             leading-tight
             transition
-            group-hover:text-gold
+            group-hover:text-[#3E86A4]
           "
         >
           {event.title}
@@ -1678,7 +1678,7 @@ function EventCard({
                 h-4
                 w-4
                 shrink-0
-                text-gold
+                text-[#3E86A4]
               "
             />
 
@@ -1701,7 +1701,7 @@ function EventCard({
                 h-4
                 w-4
                 shrink-0
-                text-gold
+                text-[#3E86A4]
               "
             />
 
@@ -1726,7 +1726,7 @@ function EventCard({
                 h-4
                 w-4
                 shrink-0
-                text-gold
+                text-[#3E86A4]
               "
             />
 
@@ -1773,8 +1773,8 @@ function EventCard({
               border
               border-divider
               transition
-              group-hover:border-gold
-              group-hover:bg-gold
+              group-hover:border-[#3E86A4]
+              group-hover:bg-[#3E86A4]
               group-hover:text-white
             "
           >

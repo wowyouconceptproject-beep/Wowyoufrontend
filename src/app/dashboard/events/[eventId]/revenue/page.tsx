@@ -190,11 +190,11 @@ export default function RevenuePage() {
                 justify-center
                 rounded-2xl
                 border
-                border-[#D4AF37]/20
-                bg-[#0F766E]/10
+                border-[#3E86A4]/20
+                bg-[#53A6C7]/12
               "
             >
-              <BarChart3 className="h-7 w-7 text-[#D4AF37]" />
+              <BarChart3 className="h-7 w-7 text-[#3E86A4]" />
             </div>
 
             <h2 className="mt-6 text-2xl font-bold text-white">
@@ -282,7 +282,7 @@ export default function RevenuePage() {
 
             <div className="flex items-center gap-2">
 
-              <span className="h-px w-8 bg-[#0F766E]" />
+              <span className="h-px w-8 bg-[#3E86A4]" />
 
               <p
                 className="
@@ -290,7 +290,7 @@ export default function RevenuePage() {
                   font-bold
                   uppercase
                   tracking-[0.24em]
-                  text-[#D4AF37]
+                  text-[#3E86A4]
                 "
               >
                 Financial Performance
@@ -332,7 +332,7 @@ export default function RevenuePage() {
             "
           >
 
-            <CircleDollarSign className="h-4 w-4 text-[#D4AF37]" />
+            <CircleDollarSign className="h-4 w-4 text-[#3E86A4]" />
 
             <div>
 
@@ -362,7 +362,7 @@ export default function RevenuePage() {
               overflow-hidden
               rounded-[28px]
               border
-              border-[#D4AF37]/20
+              border-[#3E86A4]/20
               bg-[#0D0D0D]
               p-7
               lg:col-span-2
@@ -379,7 +379,7 @@ export default function RevenuePage() {
                 h-72
                 w-72
                 rounded-full
-                bg-[#0F766E]/[0.08]
+                bg-[#3E86A4]/[0.08]
                 blur-3xl
               "
             />
@@ -392,7 +392,7 @@ export default function RevenuePage() {
                 h-px
                 bg-gradient-to-r
                 from-transparent
-                via-[#D4AF37]/70
+                via-[#3E86A4]/70
                 to-transparent
               "
             />
@@ -410,11 +410,11 @@ export default function RevenuePage() {
                     justify-center
                     rounded-xl
                     border
-                    border-[#D4AF37]/20
-                    bg-[#0F766E]/10
+                    border-[#3E86A4]/20
+                    bg-[#53A6C7]/12
                   "
                 >
-                  <Banknote className="h-5 w-5 text-[#D4AF37]" />
+                  <Banknote className="h-5 w-5 text-[#3E86A4]" />
                 </div>
 
                 <div
@@ -424,13 +424,13 @@ export default function RevenuePage() {
                     gap-2
                     rounded-full
                     border
-                    border-[#D4AF37]/15
-                    bg-[#0F766E]/[0.05]
+                    border-[#3E86A4]/15
+                    bg-[#3E86A4]/[0.05]
                     px-3
                     py-1.5
                     text-xs
                     font-semibold
-                    text-[#D4AF37]
+                    text-[#3E86A4]
                   "
                 >
                   <TrendingUp className="h-3.5 w-3.5" />
@@ -466,7 +466,7 @@ export default function RevenuePage() {
                     lg:text-6xl
                   "
                 >
-                  <span className="text-[#D4AF37]">
+                  <span className="text-[#3E86A4]">
                     {symbol}
                   </span>
 
@@ -515,7 +515,7 @@ export default function RevenuePage() {
                   bg-white/[0.04]
                 "
               >
-                <Ticket className="h-5 w-5 text-[#D4AF37]" />
+                <Ticket className="h-5 w-5 text-[#3E86A4]" />
               </div>
 
               <span className="text-xs font-semibold text-white/25">
@@ -625,7 +625,7 @@ export default function RevenuePage() {
 
               <div className="flex items-center gap-2">
 
-                <BarChart3 className="h-4 w-4 text-[#D4AF37]" />
+                <BarChart3 className="h-4 w-4 text-[#3E86A4]" />
 
                 <h2 className="text-lg font-bold">
                   Ticket Performance
@@ -677,11 +677,11 @@ export default function RevenuePage() {
                   justify-center
                   rounded-2xl
                   border
-                  border-[#D4AF37]/15
-                  bg-[#0F766E]/[0.05]
+                  border-[#3E86A4]/15
+                  bg-[#3E86A4]/[0.05]
                 "
               >
-                <Ticket className="h-6 w-6 text-[#D4AF37]" />
+                <Ticket className="h-6 w-6 text-[#3E86A4]" />
               </div>
 
               <h3 className="mt-5 font-bold">
@@ -764,7 +764,7 @@ export default function RevenuePage() {
                               bg-white/[0.03]
                               text-sm
                               font-black
-                              text-[#D4AF37]
+                              text-[#3E86A4]
                             "
                           >
                             {String(
@@ -812,7 +812,7 @@ export default function RevenuePage() {
                           </p>
 
                           <p className="mt-1 text-xl font-black text-white">
-                            <span className="text-[#D4AF37]">
+                            <span className="text-[#3E86A4]">
                               {symbol}
                             </span>
 
@@ -850,7 +850,7 @@ export default function RevenuePage() {
                             className="
                               h-full
                               rounded-full
-                              bg-[#0F766E]
+                              bg-[#3E86A4]
                               transition-all
                               duration-500
                             "
@@ -917,11 +917,11 @@ function MetricCard({
             justify-center
             rounded-xl
             border
-            border-[#D4AF37]/15
-            bg-[#0F766E]/[0.06]
+            border-[#3E86A4]/15
+            bg-[#3E86A4]/[0.06]
           "
         >
-          <Icon className="h-4 w-4 text-[#D4AF37]" />
+          <Icon className="h-4 w-4 text-[#3E86A4]" />
         </div>
 
         <div className="min-w-0">

@@ -192,7 +192,7 @@ export default function VendorApplicationsPage() {
 
               <div className="flex items-center gap-3">
 
-                <span className="h-px w-8 bg-[#0F766E]" />
+                <span className="h-px w-8 bg-[#3E86A4]" />
 
                 <p
                   className="
@@ -200,7 +200,7 @@ export default function VendorApplicationsPage() {
                     font-bold
                     uppercase
                     tracking-[0.24em]
-                    text-[#D4AF37]
+                    text-[#3E86A4]
                   "
                 >
                   Vendor Portal
@@ -435,7 +435,7 @@ function SummaryCard({
             bg-white/[0.03]
           "
         >
-          <Icon className="h-4 w-4 text-[#D4AF37]" />
+          <Icon className="h-4 w-4 text-[#3E86A4]" />
         </div>
 
       </div>
@@ -486,7 +486,7 @@ function ApplicationSection({
 
           <div className="flex items-center gap-3">
 
-            <Icon className="h-4 w-4 text-[#D4AF37]" />
+            <Icon className="h-4 w-4 text-[#3E86A4]" />
 
             <h2
               className="
@@ -636,7 +636,7 @@ function ApplicationCard({
               font-bold
               uppercase
               tracking-[0.16em]
-              text-[#D4AF37]
+              text-[#3E86A4]
             "
           >
             <Building2 className="h-3.5 w-3.5" />
@@ -816,13 +816,13 @@ function StatusBadge({
         gap-2
         rounded-full
         border
-        border-[#D4AF37]/15
-        bg-[#0F766E]/[0.06]
+        border-[#3E86A4]/15
+        bg-[#3E86A4]/[0.06]
         px-4
         py-2
         text-xs
         font-bold
-        text-[#D4AF37]
+        text-[#3E86A4]
       "
     >
       <Clock3 className="h-3.5 w-3.5" />
@@ -870,7 +870,7 @@ function EmptyApplications() {
           bg-white/[0.03]
         "
       >
-        <FileText className="h-6 w-6 text-[#D4AF37]" />
+        <FileText className="h-6 w-6 text-[#3E86A4]" />
       </div>
 
       <h2 className="mt-7 text-2xl font-black">
@@ -900,13 +900,13 @@ function EmptyApplications() {
           items-center
           gap-3
           rounded-xl
-          bg-[#0F766E]
+          bg-[#3E86A4]
           px-6
           text-sm
           font-black
           text-white
           transition
-          hover:bg-[#115E59]
+          hover:bg-[#1F7197]
         "
       >
         Find Opportunities

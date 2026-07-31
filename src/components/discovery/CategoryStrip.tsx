@@ -94,7 +94,7 @@ export default function CategoryStrip({
 
         <div className="flex items-center gap-3">
 
-          <span className="h-px w-10 bg-gold" />
+          <span className="h-px w-10 bg-[#3E86A4]" />
 
           <p
             className="
@@ -102,7 +102,7 @@ export default function CategoryStrip({
               font-semibold
               uppercase
               tracking-[0.45em]
-              text-gold
+              text-[#3E86A4]
             "
           >
             Explore
@@ -214,7 +214,7 @@ export default function CategoryStrip({
                     selected
                       ? `
                         border-gold
-                        bg-gold
+                        bg-[#3E86A4]
                         text-white
                         shadow-[0_12px_40px_rgba(212,175,55,0.18)]
                       `

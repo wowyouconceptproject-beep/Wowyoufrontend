@@ -166,7 +166,7 @@ export default function DiscoverPage() {
               font-bold
               uppercase
               tracking-[0.35em]
-              text-gold
+              text-[#3E86A4]
             "
           >
             WowYou
@@ -200,7 +200,7 @@ export default function DiscoverPage() {
             className="
               mt-8
               rounded-full
-              bg-gold
+              bg-[#3E86A4]
               px-6
               py-3
               text-sm
@@ -292,7 +292,7 @@ export default function DiscoverPage() {
                 bg-surface
                 px-5
                 transition
-                focus-within:border-gold/60
+                focus-within:border-[#3E86A4]/60
                 focus-within:bg-surface-hover
               "
             >
@@ -356,7 +356,7 @@ export default function DiscoverPage() {
                 text-sm
                 font-semibold
                 transition
-                hover:border-gold/40
+                hover:border-[#3E86A4]/40
                 hover:bg-surface
                 lg:flex
               "
@@ -384,7 +384,7 @@ export default function DiscoverPage() {
                 border
                 border-divider
                 transition
-                hover:border-gold/40
+                hover:border-[#3E86A4]/40
                 hover:bg-surface
               "
             >
@@ -428,7 +428,7 @@ export default function DiscoverPage() {
                 bg-surface
                 px-5
                 transition
-                focus-within:border-gold/60
+                focus-within:border-[#3E86A4]/60
               "
             >
 
@@ -489,7 +489,7 @@ export default function DiscoverPage() {
             font-bold
             uppercase
             tracking-[0.35em]
-            text-gold
+            text-[#3E86A4]
           "
         >
           Discover
@@ -685,7 +685,7 @@ export default function DiscoverPage() {
               h-[400px]
               w-[400px]
               rounded-full
-              bg-gold/[0.07]
+              bg-[#3E86A4]/[0.07]
               blur-[100px]
             "
           />
@@ -714,7 +714,7 @@ export default function DiscoverPage() {
                   font-bold
                   uppercase
                   tracking-[0.35em]
-                  text-gold
+                  text-[#3E86A4]
                 "
               >
                 Create Experiences
@@ -754,19 +754,20 @@ export default function DiscoverPage() {
             <Link
               href="/register"
               className="
-                inline-flex
-                shrink-0
-                items-center
-                justify-center
-                rounded-full
-                bg-gold
-                px-7
-                py-4
-                font-bold
-                text-white
-                transition
-                hover:scale-[1.02]
-              "
+  inline-flex
+  shrink-0
+  items-center
+  justify-center
+  rounded-full
+  bg-[#3E86A4]
+  px-7
+  py-4
+  font-bold
+  text-white
+  transition
+  hover:bg-[#1F7197]
+  hover:scale-[1.02]
+"
             >
               Organize Your Event
             </Link>

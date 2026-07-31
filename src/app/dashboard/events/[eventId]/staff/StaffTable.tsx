@@ -86,7 +86,7 @@ export function StaffTable({
             w-40
             -translate-x-1/2
             rounded-full
-            bg-[#0F766E]/[0.06]
+            bg-[#3E86A4]/[0.06]
             blur-3xl
           "
         />
@@ -103,11 +103,11 @@ export function StaffTable({
               justify-center
               rounded-2xl
               border
-              border-[#D4AF37]/20
-              bg-[#0F766E]/10
+              border-[#3E86A4]/20
+              bg-[#53A6C7]/12
             "
           >
-            <UsersRound className="h-7 w-7 text-[#D4AF37]" />
+            <UsersRound className="h-7 w-7 text-[#3E86A4]" />
           </div>
 
           <h2 className="mt-6 text-xl font-bold text-white">
@@ -146,7 +146,7 @@ export function StaffTable({
               text-white/40
             "
           >
-            <ShieldCheck className="h-3.5 w-3.5 text-[#D4AF37]" />
+            <ShieldCheck className="h-3.5 w-3.5 text-[#3E86A4]" />
 
             Staff access is managed securely
           </div>
@@ -198,11 +198,11 @@ export function StaffTable({
                   justify-center
                   rounded-xl
                   border
-                  border-[#D4AF37]/20
-                  bg-[#0F766E]/10
+                  border-[#3E86A4]/20
+                  bg-[#53A6C7]/12
                 "
               >
-                <UsersRound className="h-4 w-4 text-[#D4AF37]" />
+                <UsersRound className="h-4 w-4 text-[#3E86A4]" />
               </div>
 
               <div>
@@ -366,7 +366,7 @@ function SummaryBadge({
           danger
             ? "border-red-500/15 bg-red-500/[0.05]"
             : highlight
-              ? "border-[#D4AF37]/15 bg-[#0F766E]/[0.05]"
+              ? "border-[#3E86A4]/15 bg-[#3E86A4]/[0.05]"
               : "border-white/[0.07] bg-white/[0.025]"
         }
       `}
@@ -380,7 +380,7 @@ function SummaryBadge({
             danger
               ? "text-red-400"
               : highlight
-                ? "text-[#D4AF37]"
+                ? "text-[#3E86A4]"
                 : "text-white/35"
           }
         `}
@@ -396,7 +396,7 @@ function SummaryBadge({
               danger
                 ? "text-red-400"
                 : highlight
-                  ? "text-[#D4AF37]"
+                  ? "text-[#3E86A4]"
                   : "text-white"
             }
           `}
