@@ -12,6 +12,7 @@ import {
 } from "next/navigation";
 
 import DashboardStats from "@/components/dashboard/DashboardStats";
+import ShareButton from "@/components/dashboard/events/ShareButton";
 
 import {
   getEvent,
@@ -321,48 +322,49 @@ export default function EventPage() {
         ================================================== */}
 
         <section
-          className="
-            relative
-            overflow-hidden
-            rounded-[28px]
-            border
-            border-white/[0.07]
-            bg-[#0B0B0B]
-            p-7
-            lg:p-9
-          "
-        >
-          <div
-            className="
-              pointer-events-none
-              absolute
-              right-[-80px]
-              top-[-100px]
-              h-[320px]
-              w-[320px]
-              rounded-full
-              bg-[#53A6C7]/12
-              blur-[100px]
-            "
-          />
+  className="
+    relative
+    overflow-hidden
+    rounded-[28px]
+    border
+    border-white/[0.07]
+    bg-[#0B0B0B]
+    p-7
+    lg:p-9
+  "
+>
+  <div
+    className="
+      pointer-events-none
+      absolute
+      right-[-80px]
+      top-[-100px]
+      h-[320px]
+      w-[320px]
+      rounded-full
+      bg-[#53A6C7]/12
+      blur-[100px]
+    "
+  />
 
-          <div
-            className="
-              relative
-              z-10
-              flex
-              flex-col
-              gap-8
-              xl:flex-row
-              xl:items-end
-              xl:justify-between
-            "
-          >
-            <div
-              className="
-                max-w-3xl
-              "
-            >
+  <div
+    className="
+      relative
+      z-10
+      flex
+      flex-col
+      gap-8
+      xl:flex-row
+      xl:items-end
+      xl:justify-between
+    "
+  >
+    <div
+      className="
+        max-w-3xl
+      "
+    >
+            
               {/* Status */}
 
               <div
@@ -485,55 +487,62 @@ export default function EventPage() {
             {/* Actions */}
 
             <div
-              className="
-                flex
-                flex-wrap
-                gap-3
-              "
-            >
-              {event.status ===
-                "DRAFT" && (
-                <button
-                  onClick={
-                    handlePublish
-                  }
-                  className="
-                    h-12
-                    rounded-xl
-                    bg-[#3E86A4]
-                    px-6
-                    text-sm
-                    font-bold
-                    text-white
-                    transition
-                    hover:bg-[#1F7197]
-                  "
-                >
-                  Publish Event
-                </button>
-              )}
+  className="
+    flex
+    flex-wrap
+    gap-3
+  "
+>
+  {event.status === "DRAFT" && (
+    <button
+      onClick={handlePublish}
+      className="
+        h-12
+        rounded-xl
+        bg-[#3E86A4]
+        px-6
+        text-sm
+        font-bold
+        text-white
+        transition
+        hover:bg-[#1F7197]
+      "
+    >
+      Publish Event
+    </button>
+  )}
 
-              <button
-                className="
-                  h-12
-                  rounded-xl
-                  border
-                  border-white/10
-                  bg-white/[0.04]
-                  px-6
-                  text-sm
-                  font-semibold
-                  text-white
-                  transition
-                  hover:bg-white/[0.08]
-                "
-              >
-                Edit Event
-              </button>
-            </div>
-          </div>
-        </section>
+  <button
+    className="
+      h-12
+      rounded-xl
+      border
+      border-white/10
+      bg-white/[0.04]
+      px-6
+      text-sm
+      font-semibold
+      text-white
+      transition
+      hover:border-[#3E86A4]/30
+      hover:bg-white/[0.08]
+    "
+  >
+    Edit Event
+  </button>
 
+  <ShareButton
+  event={{
+    id: event.id,
+    title: event.title,
+    description: event.description,
+  }}
+/>
+</div>
+
+</div>
+
+</section>
         {/* ==================================================
             PERFORMANCE
         ================================================== */}
