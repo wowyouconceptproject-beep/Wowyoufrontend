@@ -10,7 +10,7 @@ import {
 } from "next/navigation";
 
 import {
-  getEvent,
+  getPublicEvent,
 } from "@/services/event";
 
 export default function EventPage() {
@@ -29,9 +29,9 @@ export default function EventPage() {
     async function load() {
       try {
         const result =
-          await getEvent(
-            params.eventId,
-          );
+  await getPublicEvent(
+    params.eventId,
+  );
 
         setEvent(
           result.event,
