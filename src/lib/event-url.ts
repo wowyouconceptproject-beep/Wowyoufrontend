@@ -1,7 +1,7 @@
 export function getEventUrl(eventId: string) {
-  const base =
+  const baseUrl =
     process.env.NEXT_PUBLIC_APP_URL ??
-    "http://localhost:3000";
+    window.location.origin;
 
-  return `${base}/events/${eventId}`;
+  return `${baseUrl}/events/${eventId}`;
 }
