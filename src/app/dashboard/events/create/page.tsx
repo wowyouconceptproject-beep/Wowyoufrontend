@@ -14,6 +14,8 @@ import {
   createEvent,
 } from "@/services/event";
 
+import DateTimePicker from "@/components/ui/date-time-picker";
+
 const categories = [
   "BUSINESS",
   "TECHNOLOGY",
@@ -629,7 +631,7 @@ export default function CreateEventPage() {
                       e.target.value
                     )
                   }
-                  placeholder="e.g. Eko Convention Centre"
+                  placeholder="e.g. Dublin Royal Convention Centre"
                   className={
                     inputClass
                   }
@@ -693,41 +695,21 @@ export default function CreateEventPage() {
                 />
               </Field>
 
-              <Field label="Starts">
-                <input
-                  type="datetime-local"
-                  value={
-                    form.startDate
-                  }
-                  onChange={(e) =>
-                    updateField(
-                      "startDate",
-                      e.target.value
-                    )
-                  }
-                  className={
-                    inputClass
-                  }
-                />
-              </Field>
+              <DateTimePicker
+  label="Starts"
+  value={form.startDate}
+  onChange={(value) =>
+    updateField("startDate", value)
+  }
+/>
 
-              <Field label="Ends">
-                <input
-                  type="datetime-local"
-                  value={
-                    form.endDate
-                  }
-                  onChange={(e) =>
-                    updateField(
-                      "endDate",
-                      e.target.value
-                    )
-                  }
-                  className={
-                    inputClass
-                  }
-                />
-              </Field>
+              <DateTimePicker
+  label="Ends"
+  value={form.endDate}
+  onChange={(value) =>
+    updateField("endDate", value)
+  }
+/>
             </div>
           </section>
 

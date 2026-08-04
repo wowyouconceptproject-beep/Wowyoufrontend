@@ -6,6 +6,7 @@ import {
 } from "next/font/google";
 
 import "./globals.css";
+import "./react-datepicker.css";
 
 const inter = Inter({
   subsets: ["latin"],
