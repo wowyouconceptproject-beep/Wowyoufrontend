@@ -670,7 +670,7 @@ export default function CreateEventPage() {
                       e.target.value
                     )
                   }
-                  placeholder="Lagos"
+                  placeholder="Dublin"
                   className={
                     inputClass
                   }
@@ -688,7 +688,7 @@ export default function CreateEventPage() {
                       e.target.value
                     )
                   }
-                  placeholder="Nigeria"
+                  placeholder="Ireland"
                   className={
                     inputClass
                   }

@@ -277,7 +277,7 @@ export default function HomePage() {
               lg:block
             "
           >
-            Wowyou Event Tech- Events, people and
+            Events, people and
             experiences — connected
             through one platform.
           </p>
