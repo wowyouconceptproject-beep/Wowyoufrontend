@@ -15,7 +15,7 @@ export interface PoliciesResponse {
 
 export interface ConsentResponse {
   success: boolean;
-  accepted: boolean;
+  accepted?: boolean;
   consent: {
     id: string;
     consentType: string;
@@ -42,7 +42,7 @@ export interface AcceptPoliciesPayload {
 
 export function getCurrentPolicies() {
   return apiFetch<PoliciesResponse>(
-    "/legal/policies",
+    "/api/legal/policies",
     {
       method: "GET",
       withAuth: false,
@@ -52,7 +52,7 @@ export function getCurrentPolicies() {
 
 export function getConsentStatus() {
   return apiFetch<ConsentResponse>(
-    "/legal/consent",
+    "/api/legal/consent",
     {
       method: "GET",
       withAuth: true,
@@ -64,7 +64,7 @@ export function acceptPolicies(
   data: AcceptPoliciesPayload,
 ) {
   return apiFetch<ConsentResponse>(
-    "/legal/consent",
+    "/api/legal/consent",
     {
       method: "POST",
       withAuth: true,
