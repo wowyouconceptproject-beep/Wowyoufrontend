@@ -5,9 +5,11 @@ import {
   CalendarDays,
 } from "lucide-react";
 
+import { LegalFooter } from "@/components/legal";
+
 export default function HomePage() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#080808] text-white">
+    <main className="relative min-h-screen overflow-hidden bg-[#050708] text-white">
 
       {/* Ambient background */}
 
@@ -210,8 +212,8 @@ export default function HomePage() {
                 text-white
                 transition
                 duration-300
-                hover:bg-[#1F7197]
                 hover:scale-[1.02]
+                hover:bg-[#1F7197]
               "
             >
               Discover
@@ -275,7 +277,7 @@ export default function HomePage() {
               lg:block
             "
           >
-            Events, people and
+            Wowyou Event Tech- Events, people and
             experiences — connected
             through one platform.
           </p>
@@ -284,33 +286,9 @@ export default function HomePage() {
 
       </section>
 
-      <footer
-        className="
-          relative
-          z-10
-          border-t
-          border-white/10
-          py-8
-        "
-      >
-        <div
-          className="
-            mx-auto
-            flex
-            max-w-7xl
-            items-center
-            justify-center
-            px-6
-            text-sm
-            font-semibold
-            uppercase
-            tracking-[0.25em]
-            text-[#14B8A6]
-          "
-        >
-          WOWYOU EVENTTECH
-        </div>
-      </footer>
+      {/* Legal Footer */}
+
+      <LegalFooter />
 
     </main>
   );
