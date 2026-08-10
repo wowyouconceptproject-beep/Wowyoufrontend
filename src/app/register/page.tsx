@@ -26,36 +26,45 @@ export default function RegisterPage() {
       setLoading(true);
       setError("");
 
-      const data =
-        await registerUser({
-          ...form,
-          role: "ORGANIZER",
-        });
+      const data = await registerUser({
+  ...form,
+  role: "ORGANIZER",
+});
 
-      console.log(
-        "REGISTER RESPONSE:",
-        data
-      );
+console.log(
+  "REGISTER RESPONSE:",
+  data,
+);
 
-      if (!data.success) {
-        setError(
-          data.message ||
-            "Registration failed"
-        );
+if (!data.success) {
+  setError(
+    data.message ||
+      "Registration failed",
+  );
 
-        return;
-      }
+  return;
+}
 
-      if (data.token) {
-        localStorage.setItem(
-          "token",
-          data.token
-        );
+if (data.token) {
+  localStorage.setItem(
+    "token",
+    data.token,
+  );
 
-        router.push(
-          "/dashboard"
-        );
-      }
+  localStorage.setItem(
+    "userFullName",
+    `${data.user.firstName} ${data.user.lastName}`,
+  );
+
+  localStorage.setItem(
+    "userEmail",
+    data.user.email,
+  );
+
+  router.push(
+    "/legal/accept",
+  );
+}
     } catch (err) {
       console.error(err);
 
