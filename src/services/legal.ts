@@ -72,3 +72,32 @@ export function acceptPolicies(
     },
   );
 }
+
+export interface AcceptCookieConsentPayload {
+  userId?: string;
+  fullName?: string;
+  email?: string;
+  role?: string;
+  consentSource: string;
+  cookieCategories: Record<
+    string,
+    boolean
+  >;
+  consentStatus:
+    | "ACCEPTED_ALL"
+    | "REJECTED_NON_ESSENTIAL"
+    | "CUSTOMISED";
+}
+
+export function acceptCookieConsent(
+  data: AcceptCookieConsentPayload,
+) {
+  return apiFetch<ConsentResponse>(
+    "/api/legal/cookie-consent",
+    {
+      method: "POST",
+      withAuth: false,
+      body: JSON.stringify(data),
+    },
+  );
+}
