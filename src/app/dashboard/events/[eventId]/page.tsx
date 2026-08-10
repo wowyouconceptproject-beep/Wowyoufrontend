@@ -204,6 +204,14 @@ export default function EventPage() {
       icon: "◎",
     },
     {
+  title: "Live Capacity",
+  description:
+    "Monitor event occupancy and capacity in real time.",
+  href: `/dashboard/events/${event.id}/capacity`,
+  icon: "◉",
+},
+
+    {
       title: "Staff",
       description:
         "Manage your event team and staff access.",
