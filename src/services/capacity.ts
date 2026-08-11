@@ -20,7 +20,7 @@ export function getEventCapacity(
   eventId: string,
 ) {
   return apiFetch<CapacityResponse>(
-    `/capacity/${eventId}`,
+    `/operations/capacity/${eventId}`,
     {
       method: "GET",
       withAuth: true,
