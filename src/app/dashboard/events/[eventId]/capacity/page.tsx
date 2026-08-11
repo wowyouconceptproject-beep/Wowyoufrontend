@@ -115,60 +115,62 @@ export default function CapacityPage({
   /*
    * Load capacity.
    */
-  useEffect(() => {
-    if (!eventId) {
-      return;
-    }
+useEffect(() => {
+  if (!eventId) {
+    return;
+  }
 
-    let active = true;
+  const currentEventId = eventId;
 
-    async function loadCapacity() {
-      try {
-        setLoading(true);
-        setError("");
+  let active = true;
 
-        const response =
-          await getEventCapacity(
-            eventId,
-          );
+  async function loadCapacity() {
+    try {
+      setLoading(true);
+      setError("");
 
-        if (!active) {
-          return;
-        }
-
-        if (!response.success) {
-          throw new Error(
-            response.message ??
-              "Unable to load event capacity.",
-          );
-        }
-
-        setCapacity(
-          response.capacity,
+      const response =
+        await getEventCapacity(
+          currentEventId,
         );
-      } catch (err) {
-        if (!active) {
-          return;
-        }
 
-        setError(
-          err instanceof Error
-            ? err.message
-            : "Unable to load event capacity.",
+      if (!active) {
+        return;
+      }
+
+      if (!response.success) {
+        throw new Error(
+          response.message ??
+            "Unable to load event capacity.",
         );
-      } finally {
-        if (active) {
-          setLoading(false);
-        }
+      }
+
+      setCapacity(
+        response.capacity,
+      );
+    } catch (err) {
+      if (!active) {
+        return;
+      }
+
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to load event capacity.",
+      );
+    } finally {
+      if (active) {
+        setLoading(false);
       }
     }
+  }
 
-    loadCapacity();
+  loadCapacity();
 
-    return () => {
-      active = false;
-    };
-  }, [eventId]);
+  return () => {
+    active = false;
+  };
+}, [eventId]);
 
   const intensity = useMemo(
     () =>
