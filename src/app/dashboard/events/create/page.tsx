@@ -15,6 +15,7 @@ import {
 } from "@/services/event";
 
 import DateTimePicker from "@/components/ui/date-time-picker";
+import EventLocationPicker from "@/components/events/event-location-picker";
 
 const categories = [
   "BUSINESS",
@@ -99,9 +100,12 @@ export default function CreateEventPage() {
       category: "",
 
       venue: "",
-      venueAddress: "",
-      city: "",
-      country: "",
+venueAddress: "",
+city: "",
+country: "",
+
+venueLatitude: undefined as number | undefined,
+venueLongitude: undefined as number | undefined,
 
       capacity: 100,
       currency: "USD",
@@ -266,14 +270,17 @@ export default function CreateEventPage() {
     }
 
     if (
-      !form.venue.trim()
-    ) {
-      setError(
-        "Venue is required."
-      );
+  form.venueLatitude ==
+    null ||
+  form.venueLongitude ==
+    null
+) {
+  setError(
+    "Please select your event location on the map.",
+  );
 
-      return;
-    }
+  return;
+}
 
     if (
       !form.startDate ||
@@ -639,25 +646,43 @@ export default function CreateEventPage() {
               </Field>
 
               <Field
-                label="Venue Address"
-                className="md:col-span-2"
-              >
-                <input
-                  value={
-                    form.venueAddress
-                  }
-                  onChange={(e) =>
-                    updateField(
-                      "venueAddress",
-                      e.target.value
-                    )
-                  }
-                  placeholder="Street address"
-                  className={
-                    inputClass
-                  }
-                />
-              </Field>
+  label="Venue Address"
+  className="md:col-span-2"
+>
+  <EventLocationPicker
+    address={
+      form.venueAddress
+    }
+    latitude={
+      form.venueLatitude
+    }
+    longitude={
+      form.venueLongitude
+    }
+    onAddressChange={(
+      value,
+    ) =>
+      updateField(
+        "venueAddress",
+        value,
+      )
+    }
+    onLocationChange={(
+      latitude,
+      longitude,
+    ) => {
+      updateField(
+        "venueLatitude",
+        latitude,
+      );
+
+      updateField(
+        "venueLongitude",
+        longitude,
+      );
+    }}
+  />
+</Field>
 
               <Field label="City">
                 <input

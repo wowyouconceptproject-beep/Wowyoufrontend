@@ -5,17 +5,65 @@ export interface EventPayload {
 
   description?: string;
 
+  /*
+  |--------------------------------------------------------------------------
+  | Location
+  |--------------------------------------------------------------------------
+  */
+
   venue: string;
+  venueAddress?: string;
+  city?: string;
+  country?: string;
+
+  /*
+  | Google Maps coordinates
+  */
+
+  venueLatitude?: number;
+  venueLongitude?: number;
+
+  /*
+  |--------------------------------------------------------------------------
+  | Time
+  |--------------------------------------------------------------------------
+  */
 
   startDate: string;
-
   endDate: string;
 
+  /*
+  |--------------------------------------------------------------------------
+  | Configuration
+  |--------------------------------------------------------------------------
+  */
+
+  capacity: number;
   currency: string;
 
+  isPublic?: boolean;
+
+  /*
+  |--------------------------------------------------------------------------
+  | Media
+  |--------------------------------------------------------------------------
+  */
+
+  coverImage?: string;
+  featuredImage?: string;
   bannerUrl?: string;
 
-  [key: string]: any;
+  /*
+  |--------------------------------------------------------------------------
+  | Discovery / Marketplace
+  |--------------------------------------------------------------------------
+  */
+
+  category?: string;
+
+  vendorApplicationsOpen?: boolean;
+  vendorApplicationDeadline?: string;
+  maxVendorSlots?: number;
 }
 
 export interface Event {
@@ -25,15 +73,52 @@ export interface Event {
 
   description?: string;
 
+  /*
+  |--------------------------------------------------------------------------
+  | Location
+  |--------------------------------------------------------------------------
+  */
+
   venue: string;
 
-  startDate: string;
+  venueAddress?: string;
+  city?: string;
+  country?: string;
 
+  venueLatitude?: number;
+  venueLongitude?: number;
+
+  /*
+  |--------------------------------------------------------------------------
+  | Time
+  |--------------------------------------------------------------------------
+  */
+
+  startDate: string;
   endDate: string;
+
+  /*
+  |--------------------------------------------------------------------------
+  | Configuration
+  |--------------------------------------------------------------------------
+  */
 
   currency: string;
 
+  capacity?: number;
+
+  isPublic?: boolean;
+
+  /*
+  |--------------------------------------------------------------------------
+  | Media
+  |--------------------------------------------------------------------------
+  */
+
   bannerUrl?: string;
+
+  coverImage?: string;
+  featuredImage?: string;
 
   /*
   |--------------------------------------------------------------------------
@@ -42,10 +127,6 @@ export interface Event {
   */
 
   category?: string;
-
-  coverImage?: string;
-
-  featuredImage?: string;
 
   homepageScore?: number;
 
@@ -57,7 +138,11 @@ export interface Event {
 
   featuredUntil?: string;
 
-  isPublic?: boolean;
+  /*
+  |--------------------------------------------------------------------------
+  | Vendor Marketplace
+  |--------------------------------------------------------------------------
+  */
 
   vendorApplicationsOpen?: boolean;
 
@@ -73,13 +158,10 @@ export interface Event {
 
   status: string;
 
-  capacity?: number;
-
   organizationId?: string;
 
   organization?: {
     id: string;
-
     name: string;
   };
 
@@ -95,13 +177,9 @@ export interface Event {
 
   stats?: {
     ticketSold: number;
-
     checkedIn: number;
-
     revenue: number;
-
     staff: number;
-
     onlineStaff: number;
   };
 }
@@ -141,7 +219,6 @@ export function createEvent(
     "/events",
     {
       method: "POST",
-
       body: JSON.stringify(data),
     },
   );
@@ -221,7 +298,6 @@ export function updateEvent(
     `/events/${eventId}`,
     {
       method: "PATCH",
-
       body: JSON.stringify(data),
     },
   );
