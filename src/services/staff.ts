@@ -36,8 +36,6 @@ export interface CreateStaffPayload {
   role: string;
 
   station?: string;
-
-  permissions: string[];
 }
 
 export interface StaffResponse {
@@ -56,76 +54,120 @@ export interface StaffListResponse {
   message?: string;
 }
 
+/*
+|--------------------------------------------------------------------------
+| Get Event Staff
+|--------------------------------------------------------------------------
+*/
+
 export function getStaff(
-  eventId: string
+  eventId: string,
 ) {
   return apiFetch<StaffListResponse>(
-    `/events/${eventId}/staff`
+    `/events/${eventId}/staff`,
   );
 }
 
+/*
+|--------------------------------------------------------------------------
+| Create Staff
+|--------------------------------------------------------------------------
+|
+| Role is supplied by the organizer.
+|
+| Permissions are NOT supplied by the frontend.
+| The backend derives permissions from the role.
+|
+*/
+
 export function createStaff(
   eventId: string,
-  data: CreateStaffPayload
+  data: CreateStaffPayload,
 ) {
   return apiFetch<StaffResponse>(
     `/events/${eventId}/staff`,
     {
       method: "POST",
+
       body: JSON.stringify(data),
-    }
+    },
   );
 }
+
+/*
+|--------------------------------------------------------------------------
+| Update Staff
+|--------------------------------------------------------------------------
+*/
 
 export function updateStaff(
   eventId: string,
   staffId: string,
-  data: Partial<CreateStaffPayload>
+  data: Partial<CreateStaffPayload>,
 ) {
   return apiFetch<StaffResponse>(
     `/events/${eventId}/staff/${staffId}`,
     {
       method: "PATCH",
+
       body: JSON.stringify(data),
-    }
+    },
   );
 }
 
+/*
+|--------------------------------------------------------------------------
+| Delete Staff
+|--------------------------------------------------------------------------
+*/
+
 export function deleteStaff(
   eventId: string,
-  staffId: string
+  staffId: string,
 ) {
   return apiFetch<{
     success: boolean;
     message?: string;
   }>(
-    `/events/${eventId}/staff/${staffId}`,
+    `/events/${eventId}/staff/${staffId}/delete`,
     {
       method: "DELETE",
-    }
+    },
   );
 }
 
+/*
+|--------------------------------------------------------------------------
+| Toggle Staff
+|--------------------------------------------------------------------------
+*/
+
 export function toggleStaff(
   eventId: string,
-  staffId: string
+  staffId: string,
 ) {
   return apiFetch<StaffResponse>(
     `/events/${eventId}/staff/${staffId}/toggle`,
     {
       method: "PATCH",
-    }
+    },
   );
 }
 
+/*
+|--------------------------------------------------------------------------
+| Regenerate Access Code
+|--------------------------------------------------------------------------
+*/
+
 export function regenerateAccessCode(
   eventId: string,
-  staffId: string
+  staffId: string,
 ) {
   return apiFetch<StaffResponse>(
     `/events/${eventId}/staff/${staffId}/regenerate`,
     {
       method: "PATCH",
-    }
+    },
   );
 }

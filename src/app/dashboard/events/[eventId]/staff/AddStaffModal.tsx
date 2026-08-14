@@ -251,7 +251,7 @@ export function AddStaffModal({
                   form.station.trim() ||
                   undefined,
 
-                permissions: [],
+                
               },
             );
 
