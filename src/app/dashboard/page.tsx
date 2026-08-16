@@ -1,6 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
 
 import Link from "next/link";
 
@@ -14,22 +17,39 @@ import {
 } from "lucide-react";
 
 import {
+  useAuth,
+} from "@/context/AuthContext";
+
+import {
   createOrganization,
   getMyOrganization,
 } from "@/services/organization";
 
 import {
-  getCurrentUser,
-} from "@/services/auth";
+  OrganizerPlan,
+} from "@/services/billing";
 
 export default function Dashboard() {
+  const {
+    user: authUser,
+    organization: authOrganization,
+    subscription,
+    loading: authLoading,
+    isTrialing,
+    trialDaysRemaining,
+    hasActiveSubscription,
+    refresh: refreshAuth,
+  } = useAuth();
+
   const [user, setUser] =
-    useState<any>(null);
+    useState<any>(authUser);
 
   const [
     organization,
     setOrganization,
-  ] = useState<any>(null);
+  ] = useState<any>(
+    authOrganization,
+  );
 
   const [name, setName] =
     useState("");
@@ -40,26 +60,40 @@ export default function Dashboard() {
   const [loading, setLoading] =
     useState(true);
 
+  const [
+    creatingOrganization,
+    setCreatingOrganization,
+  ] = useState(false);
+
+  /*
+  |--------------------------------------------------------------------------
+  | Sync Auth Context
+  |--------------------------------------------------------------------------
+  */
+
+  useEffect(() => {
+    if (authUser) {
+      setUser(authUser);
+    }
+
+    if (authOrganization) {
+      setOrganization(
+        authOrganization,
+      );
+    }
+  }, [
+    authUser,
+    authOrganization,
+  ]);
+
+  /*
+  |--------------------------------------------------------------------------
+  | Load Dashboard
+  |--------------------------------------------------------------------------
+  */
+
   async function loadDashboard() {
     try {
-      const userResult =
-        await getCurrentUser();
-
-      if (!userResult.success) {
-        localStorage.removeItem(
-          "token"
-        );
-
-        window.location.href =
-          "/login";
-
-        return;
-      }
-
-      setUser(
-        userResult.user
-      );
-
       const orgResult =
         await getMyOrganization();
 
@@ -67,29 +101,48 @@ export default function Dashboard() {
         orgResult.success
       ) {
         setOrganization(
-          orgResult.organization
+          orgResult.organization,
         );
       }
     } catch (error) {
       console.error(error);
-
-      localStorage.removeItem(
-        "token"
-      );
-
-      window.location.href =
-        "/login";
     } finally {
       setLoading(false);
     }
   }
 
+  /*
+  |--------------------------------------------------------------------------
+  | Create Organization
+  |--------------------------------------------------------------------------
+  */
+
   async function handleCreate() {
+    if (!name.trim()) {
+      alert(
+        "Please enter your organization name.",
+      );
+
+      return;
+    }
+
+    if (!slug.trim()) {
+      alert(
+        "Please enter an organization slug.",
+      );
+
+      return;
+    }
+
     try {
+      setCreatingOrganization(
+        true,
+      );
+
       const result =
         await createOrganization(
-          name,
-          slug
+          name.trim(),
+          slug.trim(),
         );
 
       if (
@@ -97,28 +150,39 @@ export default function Dashboard() {
       ) {
         alert(
           result.message ??
-            "Unable to create organization."
+            "Unable to create organization.",
         );
 
         return;
       }
 
       setOrganization(
-        result.organization
+        result.organization,
       );
+
+      /*
+      |--------------------------------------------------------------------------
+      | Refresh Auth Context
+      |--------------------------------------------------------------------------
+      |
+      | The backend creates the organization's 14-day trial at the same time.
+      |
+      */
+
+      await refreshAuth();
 
       await loadDashboard();
     } catch (error: any) {
       alert(
         error.message ??
-          "Failed to create organization."
+          "Failed to create organization.",
+      );
+    } finally {
+      setCreatingOrganization(
+        false,
       );
     }
   }
-
-  useEffect(() => {
-    loadDashboard();
-  }, []);
 
   /*
   |--------------------------------------------------------------------------
@@ -126,7 +190,10 @@ export default function Dashboard() {
   |--------------------------------------------------------------------------
   */
 
-  if (loading) {
+  if (
+    authLoading ||
+    loading
+  ) {
     return (
       <main className="min-h-screen bg-background px-6 py-10 lg:px-10">
         <div className="mx-auto max-w-7xl">
@@ -147,7 +214,7 @@ export default function Dashboard() {
                     key={item}
                     className="h-36 rounded-[28px] bg-surface"
                   />
-                )
+                ),
               )}
 
             </div>
@@ -227,7 +294,7 @@ export default function Dashboard() {
                 value={name}
                 onChange={(e) =>
                   setName(
-                    e.target.value
+                    e.target.value,
                   )
                 }
               />
@@ -258,7 +325,7 @@ export default function Dashboard() {
                 value={slug}
                 onChange={(e) =>
                   setSlug(
-                    e.target.value
+                    e.target.value,
                   )
                 }
               />
@@ -272,6 +339,10 @@ export default function Dashboard() {
             </div>
 
             <button
+              type="button"
+              disabled={
+                creatingOrganization
+              }
               onClick={
                 handleCreate
               }
@@ -290,13 +361,24 @@ export default function Dashboard() {
                 text-white
                 transition
                 hover:scale-[1.01]
+                disabled:cursor-not-allowed
+                disabled:opacity-60
               "
             >
-              Create Organization
+              {creatingOrganization
+                ? "Creating..."
+                : "Create Organization"}
 
-              <ArrowRight className="h-4 w-4" />
+              {!creatingOrganization && (
+                <ArrowRight className="h-4 w-4" />
+              )}
 
             </button>
+
+            <p className="mt-4 text-center text-xs text-muted">
+              Your organization starts
+              with a 14-day free trial.
+            </p>
 
           </div>
 
@@ -308,7 +390,7 @@ export default function Dashboard() {
 
   /*
   |--------------------------------------------------------------------------
-  | Organizer Dashboard
+  | Event Statistics
   |--------------------------------------------------------------------------
   */
 
@@ -321,7 +403,7 @@ export default function Dashboard() {
       ?.filter(
         (event: any) =>
           event.status ===
-          "PUBLISHED"
+          "PUBLISHED",
       ).length ?? 0;
 
   const draftCount =
@@ -329,15 +411,23 @@ export default function Dashboard() {
       ?.filter(
         (event: any) =>
           event.status ===
-          "DRAFT"
+          "DRAFT",
       ).length ?? 0;
+
+  /*
+  |--------------------------------------------------------------------------
+  | Dashboard
+  |--------------------------------------------------------------------------
+  */
 
   return (
     <main className="min-h-screen bg-background px-6 py-10 lg:px-10">
 
       <div className="mx-auto max-w-7xl">
 
+        {/* --------------------------------------------------------------- */}
         {/* Header */}
+        {/* --------------------------------------------------------------- */}
 
         <section className="flex flex-col gap-8 border-b border-divider pb-10 lg:flex-row lg:items-end lg:justify-between">
 
@@ -387,7 +477,175 @@ export default function Dashboard() {
 
         </section>
 
+        {/* --------------------------------------------------------------- */}
+        {/* Subscription / Trial Banner */}
+        {/* --------------------------------------------------------------- */}
+
+        {isTrialing &&
+          subscription && (
+            <section className="mt-8 rounded-[28px] border border-[#3E86A4]/20 bg-[#3E86A4]/5 p-6">
+
+              <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+
+                <div>
+
+                  <div className="flex flex-wrap items-center gap-3">
+
+                    <span className="rounded-full bg-[#3E86A4] px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
+                      Free Trial
+                    </span>
+
+                    <span className="text-sm font-semibold">
+                      {subscription.plan}
+                    </span>
+
+                  </div>
+
+                  <h2 className="mt-3 text-xl font-bold">
+                    Your 14-day trial is
+                    active.
+                  </h2>
+
+                  <p className="mt-2 max-w-xl text-sm leading-6 text-muted">
+                    You have{" "}
+                    <span className="font-semibold text-foreground">
+                      {trialDaysRemaining}{" "}
+                      {trialDaysRemaining ===
+                      1
+                        ? "day"
+                        : "days"}
+                    </span>{" "}
+                    remaining to explore
+                    WowYou before choosing
+                    your monthly plan.
+                  </p>
+
+                </div>
+
+                <Link
+                  href="/dashboard/billing"
+                  className="
+                    inline-flex
+                    shrink-0
+                    items-center
+                    justify-center
+                    gap-2
+                    rounded-full
+                    border
+                    border-divider
+                    bg-surface
+                    px-5
+                    py-3
+                    text-sm
+                    font-semibold
+                    transition
+                    hover:border-[#3E86A4]
+                    hover:text-[#3E86A4]
+                  "
+                >
+                  View Plans
+
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+
+              </div>
+
+            </section>
+          )}
+
+        {/* --------------------------------------------------------------- */}
+        {/* Expired / Inactive Subscription */}
+        {/* --------------------------------------------------------------- */}
+
+        {!hasActiveSubscription &&
+          subscription &&
+          !isTrialing && (
+            <section className="mt-8 rounded-[28px] border border-red-200 bg-red-50 p-6">
+
+              <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+
+                <div>
+
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-red-600">
+                    Subscription Required
+                  </p>
+
+                  <h2 className="mt-2 text-xl font-bold text-red-950">
+                    Choose a plan to continue.
+                  </h2>
+
+                  <p className="mt-2 text-sm leading-6 text-red-800">
+                    Your organizer access
+                    requires an active
+                    subscription.
+                  </p>
+
+                </div>
+
+                <Link
+                  href="/dashboard/billing"
+                  className="
+                    inline-flex
+                    shrink-0
+                    items-center
+                    justify-center
+                    gap-2
+                    rounded-full
+                    bg-[#3E86A4]
+                    px-5
+                    py-3
+                    text-sm
+                    font-semibold
+                    text-white
+                  "
+                >
+                  Choose Plan
+
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+
+              </div>
+
+            </section>
+          )}
+
+        {/* --------------------------------------------------------------- */}
+        {/* Paid Subscription */}
+        {/* --------------------------------------------------------------- */}
+
+        {subscription?.status ===
+          "ACTIVE" && (
+            <section className="mt-8 flex flex-col gap-4 rounded-[24px] border border-divider bg-surface px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+
+              <div className="flex items-center gap-3">
+
+                <span className="h-2.5 w-2.5 rounded-full bg-green-500" />
+
+                <p className="text-sm text-muted">
+                  You're on the{" "}
+                  <span className="font-semibold text-foreground">
+                    {subscription.plan}
+                  </span>{" "}
+                  plan.
+                </p>
+
+              </div>
+
+              <Link
+                href="/dashboard/billing"
+                className="inline-flex items-center gap-2 text-sm font-semibold hover:text-[#3E86A4]"
+              >
+                Manage plan
+
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+
+            </section>
+          )}
+
+        {/* --------------------------------------------------------------- */}
         {/* Overview */}
+        {/* --------------------------------------------------------------- */}
 
         <section className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
 
@@ -459,7 +717,9 @@ export default function Dashboard() {
 
         </section>
 
-        {/* Events Header */}
+        {/* --------------------------------------------------------------- */}
+        {/* Events */}
+        {/* --------------------------------------------------------------- */}
 
         <section className="mt-16">
 
@@ -523,7 +783,6 @@ export default function Dashboard() {
               </Link>
 
             </div>
-
           )}
 
           {/* Event Cards */}
@@ -553,8 +812,6 @@ export default function Dashboard() {
                       hover:border-[#3E86A4]/40
                     "
                   >
-
-                    {/* Image */}
 
                     <div className="relative h-52 overflow-hidden bg-background">
 
@@ -616,8 +873,6 @@ export default function Dashboard() {
 
                     </div>
 
-                    {/* Content */}
-
                     <div className="p-6">
 
                       <h3 className="text-2xl font-bold transition group-hover:text-[#3E86A4]">
@@ -655,7 +910,7 @@ export default function Dashboard() {
 
                             <span>
                               {new Date(
-                                event.startDate
+                                event.startDate,
                               ).toLocaleDateString(
                                 "en-US",
                                 {
@@ -665,7 +920,7 @@ export default function Dashboard() {
                                     "numeric",
                                   year:
                                     "numeric",
-                                }
+                                },
                               )}
                             </span>
 
@@ -688,12 +943,10 @@ export default function Dashboard() {
                     </div>
 
                   </Link>
-
-                )
+                ),
               )}
 
             </div>
-
           )}
 
         </section>

@@ -12,10 +12,8 @@ import {
 import {
   createBillingCheckout,
   getBillingPlans,
-  getBillingSubscription,
   OrganizerPlan,
   OrganizerPlanConfig,
-  OrganizationSubscription,
 } from "@/services/billing";
 
 /*
@@ -104,20 +102,16 @@ export default function BillingPage() {
   const {
     user,
     organization,
+    subscription,
     loading: authLoading,
+    isTrialing,
+    trialDaysRemaining,
+    hasActiveSubscription,
   } = useAuth();
 
   const [plans, setPlans] =
     useState<OrganizerPlanConfig[]>(
       FALLBACK_PLANS,
-    );
-
-  const [
-    subscription,
-    setSubscription,
-  ] =
-    useState<OrganizationSubscription | null>(
-      null,
     );
 
   const [billingLoading, setBillingLoading] =
@@ -133,7 +127,7 @@ export default function BillingPage() {
 
   /*
   |--------------------------------------------------------------------------
-  | Load Billing
+  | Load Billing Plans
   |--------------------------------------------------------------------------
   */
 
@@ -150,40 +144,27 @@ export default function BillingPage() {
       setBillingLoading(true);
       setError(null);
 
-      const [
-        plansResponse,
-        subscriptionResponse,
-      ] = await Promise.all([
-        getBillingPlans(),
-        getBillingSubscription(),
-      ]);
+      const response =
+        await getBillingPlans();
 
       if (
-        plansResponse.success &&
-        plansResponse.plans?.length
+        response.success &&
+        response.plans?.length
       ) {
         setPlans(
-          plansResponse.plans,
-        );
-      }
-
-      if (
-        subscriptionResponse.success
-      ) {
-        setSubscription(
-          subscriptionResponse.subscription,
+          response.plans,
         );
       }
     } catch (err) {
       console.error(
-        "Failed to load billing:",
+        "Failed to load billing plans:",
         err,
       );
 
       setError(
         err instanceof Error
           ? err.message
-          : "Unable to load your billing information.",
+          : "Unable to load billing information.",
       );
     } finally {
       setBillingLoading(false);
@@ -308,21 +289,147 @@ export default function BillingPage() {
   function isCurrentPlan(
     plan: OrganizerPlan,
   ) {
+    if (!subscription) {
+      return false;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Active Paid Subscription
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+      subscription.status ===
+      "ACTIVE"
+    ) {
+      return (
+        subscription.plan ===
+        plan
+      );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Active Trial
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+      subscription.status ===
+        "TRIALING" &&
+      hasActiveSubscription
+    ) {
+      return (
+        subscription.plan ===
+        plan
+      );
+    }
+
+    return false;
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Trial Banner
+  |--------------------------------------------------------------------------
+  */
+
+  function renderTrialBanner() {
+    if (!isTrialing) {
+      return null;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Expired Trial
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+      trialDaysRemaining <= 0
+    ) {
+      return (
+        <div className="mx-auto mt-8 max-w-4xl rounded-2xl border border-red-200 bg-red-50 p-5">
+          <p className="text-sm font-semibold text-red-800">
+            Your free trial has ended
+          </p>
+
+          <p className="mt-1 text-sm leading-6 text-red-700">
+            Choose a plan below to
+            continue using WowYou
+            organizer features.
+          </p>
+        </div>
+      );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Active Trial
+    |--------------------------------------------------------------------------
+    */
+
     return (
-      subscription?.plan ===
-        plan &&
-      (
-        subscription.status ===
-          "ACTIVE" ||
-        subscription.status ===
-          "TRIALING"
-      )
+      <div className="mx-auto mt-8 max-w-4xl rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+
+          <div>
+            <div className="flex items-center gap-2">
+
+              <span className="rounded-full bg-neutral-950 px-3 py-1 text-xs font-semibold text-white">
+                FREE TRIAL
+              </span>
+
+              <span className="text-sm font-semibold text-neutral-950">
+                {subscription?.plan}
+              </span>
+
+            </div>
+
+            <p className="mt-2 text-sm leading-6 text-neutral-600">
+              Your 14-day organizer trial
+              is active. You have{" "}
+              <strong className="text-neutral-950">
+                {trialDaysRemaining}{" "}
+                {trialDaysRemaining ===
+                1
+                  ? "day"
+                  : "days"}
+              </strong>{" "}
+              remaining.
+            </p>
+          </div>
+
+          <div className="text-left md:text-right">
+            <p className="text-xs text-neutral-500">
+              Trial ends
+            </p>
+
+            <p className="mt-1 text-sm font-semibold text-neutral-950">
+              {subscription?.currentPeriodEnd
+                ? new Date(
+                    subscription.currentPeriodEnd,
+                  ).toLocaleDateString(
+                    "en-GB",
+                    {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    },
+                  )
+                : "—"}
+            </p>
+          </div>
+
+        </div>
+      </div>
     );
   }
 
   /*
   |--------------------------------------------------------------------------
-  | Loading State
+  | Loading
   |--------------------------------------------------------------------------
   */
 
@@ -386,56 +493,61 @@ export default function BillingPage() {
         )}
 
         {/* --------------------------------------------------------------- */}
+        {/* Trial */}
+        {/* --------------------------------------------------------------- */}
+
+        {renderTrialBanner()}
+
+        {/* --------------------------------------------------------------- */}
         {/* Current Subscription */}
         {/* --------------------------------------------------------------- */}
 
-        {subscription && (
-          <div className="mx-auto mt-8 max-w-4xl rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+        {subscription &&
+          !isTrialing && (
+            <div className="mx-auto mt-8 max-w-4xl rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
 
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 
-              <div>
+                <div>
 
-                <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
-                  Current plan
-                </p>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
+                    Current plan
+                  </p>
 
-                <p className="mt-1 text-lg font-semibold text-neutral-950">
-                  {subscription.plan}
-                </p>
+                  <p className="mt-1 text-lg font-semibold text-neutral-950">
+                    {subscription.plan}
+                  </p>
 
-              </div>
+                </div>
 
-              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3">
 
-                <span
-                  className={[
-                    "rounded-full px-3 py-1 text-xs font-semibold",
-                    subscription.status ===
-                      "ACTIVE" ||
-                    subscription.status ===
-                      "TRIALING"
-                      ? "bg-green-50 text-green-700"
-                      : "bg-neutral-100 text-neutral-600",
-                  ].join(" ")}
-                >
-                  {subscription.status}
-                </span>
+                  <span
+                    className={[
+                      "rounded-full px-3 py-1 text-xs font-semibold",
+                      subscription.status ===
+                        "ACTIVE"
+                        ? "bg-green-50 text-green-700"
+                        : "bg-neutral-100 text-neutral-600",
+                    ].join(" ")}
+                  >
+                    {subscription.status}
+                  </span>
 
-                <span className="text-sm text-neutral-500">
-                  £
-                  {Number(
-                    subscription.amount,
-                  ).toLocaleString()}
-                  /month
-                </span>
+                  <span className="text-sm text-neutral-500">
+                    £
+                    {Number(
+                      subscription.amount,
+                    ).toLocaleString()}
+                    /month
+                  </span>
+
+                </div>
 
               </div>
 
             </div>
-
-          </div>
-        )}
+          )}
 
         {/* --------------------------------------------------------------- */}
         {/* Error */}
@@ -467,6 +579,34 @@ export default function BillingPage() {
             const featured =
               plan.plan ===
               "PROFESSIONAL";
+
+            /*
+            |--------------------------------------------------------------------------
+            | Button State
+            |--------------------------------------------------------------------------
+            */
+
+            let buttonLabel =
+              "Start Free Trial";
+
+            if (current) {
+              buttonLabel =
+                isTrialing
+                  ? "Current Trial"
+                  : "Current Plan";
+            } else if (
+              subscription?.status ===
+              "ACTIVE"
+            ) {
+              buttonLabel =
+                "Switch Plan";
+            } else if (
+              subscription?.status ===
+                "PENDING"
+            ) {
+              buttonLabel =
+                "Choose Plan";
+            }
 
             return (
               <div
@@ -520,6 +660,10 @@ export default function BillingPage() {
 
                   </div>
 
+                  <p className="mt-2 text-xs font-medium text-neutral-500">
+                    14-day free trial
+                  </p>
+
                 </div>
 
                 <div className="my-7 h-px bg-neutral-200" />
@@ -555,7 +699,8 @@ export default function BillingPage() {
                   type="button"
                   disabled={
                     billingLoading ||
-                    checkoutPlan !== null ||
+                    checkoutPlan !==
+                      null ||
                     current
                   }
                   onClick={() =>
@@ -577,9 +722,7 @@ export default function BillingPage() {
                 >
                   {loadingPlan
                     ? "Preparing checkout..."
-                    : current
-                      ? "Current Plan"
-                      : "Choose Plan"}
+                    : buttonLabel}
                 </button>
 
               </div>

@@ -17,9 +17,6 @@ import {
 
 import {
   getBillingSubscription,
-} from "@/services/billing";
-
-import {
   OrganizationSubscription,
 } from "@/services/billing";
 
@@ -37,6 +34,10 @@ interface AuthContextType {
   refresh: () => Promise<void>;
 
   hasActiveSubscription: boolean;
+
+  isTrialing: boolean;
+
+  trialDaysRemaining: number;
 }
 
 const AuthContext =
@@ -67,6 +68,12 @@ export function AuthProvider({
 
   const [loading, setLoading] =
     useState(true);
+
+  /*
+  |--------------------------------------------------------------------------
+  | Refresh Authentication State
+  |--------------------------------------------------------------------------
+  */
 
   async function refresh() {
     try {
@@ -104,6 +111,8 @@ export function AuthProvider({
         setOrganization(
           orgResult.organization,
         );
+      } else {
+        setOrganization(null);
       }
 
       /*
@@ -122,27 +131,34 @@ export function AuthProvider({
           setSubscription(
             billingResult.subscription,
           );
+        } else {
+          setSubscription(null);
         }
       } catch {
         /*
         |--------------------------------------------------------------------------
-        | Billing is deliberately isolated.
-        |
-        | An unavailable billing endpoint should not destroy the user's
-        | authentication session.
+        | Billing Isolation
         |--------------------------------------------------------------------------
+        |
+        | Billing failure must not destroy authentication.
+        |
         */
+
         setSubscription(null);
       }
-
     } catch {
+      /*
+      |--------------------------------------------------------------------------
+      | Authentication Failure
+      |--------------------------------------------------------------------------
+      */
+
       localStorage.removeItem(
         "token",
       );
 
       window.location.href =
         "/login";
-
     } finally {
       setLoading(false);
     }
@@ -152,13 +168,75 @@ export function AuthProvider({
     refresh();
   }, []);
 
+  /*
+  |--------------------------------------------------------------------------
+  | Valid Trial Period
+  |--------------------------------------------------------------------------
+  */
+
+  const hasValidTrialPeriod =
+    subscription?.status ===
+      "TRIALING" &&
+    !!subscription.currentPeriodEnd &&
+    new Date(
+      subscription.currentPeriodEnd,
+    ).getTime() >
+      Date.now();
+
+  /*
+  |--------------------------------------------------------------------------
+  | Trial Status
+  |--------------------------------------------------------------------------
+  */
+
+  const isTrialing =
+    hasValidTrialPeriod;
+
+  /*
+  |--------------------------------------------------------------------------
+  | Trial Days Remaining
+  |--------------------------------------------------------------------------
+  */
+
+  const trialDaysRemaining =
+    hasValidTrialPeriod &&
+    subscription.currentPeriodEnd
+      ? Math.max(
+          0,
+          Math.ceil(
+            (
+              new Date(
+                subscription.currentPeriodEnd,
+              ).getTime() -
+              Date.now()
+            ) /
+              (
+                1000 *
+                60 *
+                60 *
+                24
+              ),
+          ),
+        )
+      : 0;
+
+  /*
+  |--------------------------------------------------------------------------
+  | Active Subscription
+  |--------------------------------------------------------------------------
+  |
+  | ACTIVE = active paid subscription.
+  |
+  | TRIALING = active only when the trial end date is still in the future.
+  |
+  */
+
   const hasActiveSubscription =
     subscription !== null &&
     (
       subscription.status ===
         "ACTIVE" ||
-      subscription.status ===
-        "TRIALING"
+      hasValidTrialPeriod
     );
 
   return (
@@ -175,6 +253,10 @@ export function AuthProvider({
         refresh,
 
         hasActiveSubscription,
+
+        isTrialing,
+
+        trialDaysRemaining,
       }}
     >
       {children}
