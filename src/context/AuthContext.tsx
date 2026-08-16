@@ -89,7 +89,9 @@ export function AuthProvider({
         await getCurrentUser();
 
       if (!userResult.success) {
-        throw new Error();
+        throw new Error(
+          "Unable to authenticate user.",
+        );
       }
 
       setUser(
@@ -100,58 +102,92 @@ export function AuthProvider({
       |--------------------------------------------------------------------------
       | Organization
       |--------------------------------------------------------------------------
+      |
+      | Organization is checked before billing.
+      |
+      | A newly registered organizer may not have an organization yet.
+      | That is a valid onboarding state and must NOT trigger a billing
+      | request.
+      |
       */
 
       const orgResult =
         await getMyOrganization();
 
       if (
-        orgResult.success
+        orgResult.success &&
+        orgResult.organization
       ) {
         setOrganization(
           orgResult.organization,
         );
-      } else {
-        setOrganization(null);
-      }
 
-      /*
-      |--------------------------------------------------------------------------
-      | Organizer Subscription
-      |--------------------------------------------------------------------------
-      */
-
-      try {
-        const billingResult =
-          await getBillingSubscription();
-
-        if (
-          billingResult.success
-        ) {
-          setSubscription(
-            billingResult.subscription,
-          );
-        } else {
-          setSubscription(null);
-        }
-      } catch {
         /*
         |--------------------------------------------------------------------------
-        | Billing Isolation
+        | Organizer Subscription
         |--------------------------------------------------------------------------
         |
-        | Billing failure must not destroy authentication.
+        | Billing only applies once an organization exists.
         |
         */
 
+        try {
+          const billingResult =
+            await getBillingSubscription();
+
+          if (
+            billingResult.success &&
+            billingResult.subscription
+          ) {
+            setSubscription(
+              billingResult.subscription,
+            );
+          } else {
+            setSubscription(null);
+          }
+        } catch {
+          /*
+          |--------------------------------------------------------------------------
+          | Billing Isolation
+          |--------------------------------------------------------------------------
+          |
+          | Billing failure must never destroy authentication or organization
+          | state.
+          |
+          */
+
+          setSubscription(null);
+        }
+      } else {
+        /*
+        |--------------------------------------------------------------------------
+        | No Organization Yet
+        |--------------------------------------------------------------------------
+        |
+        | This is the normal state immediately after registration.
+        |
+        | The dashboard will display the existing organization creation
+        | interface.
+        |
+        | IMPORTANT:
+        | Do NOT call billing here.
+        |
+        */
+
+        setOrganization(null);
         setSubscription(null);
       }
-    } catch {
+    } catch (error) {
       /*
       |--------------------------------------------------------------------------
       | Authentication Failure
       |--------------------------------------------------------------------------
       */
+
+      console.error(
+        "AUTH CONTEXT REFRESH ERROR:",
+        error,
+      );
 
       localStorage.removeItem(
         "token",
@@ -164,6 +200,12 @@ export function AuthProvider({
     }
   }
 
+  /*
+  |--------------------------------------------------------------------------
+  | Initial Authentication Load
+  |--------------------------------------------------------------------------
+  */
+
   useEffect(() => {
     refresh();
   }, []);
@@ -172,12 +214,18 @@ export function AuthProvider({
   |--------------------------------------------------------------------------
   | Valid Trial Period
   |--------------------------------------------------------------------------
+  |
+  | A TRIALING subscription is only considered active while its
+  | currentPeriodEnd is in the future.
+  |
   */
 
   const hasValidTrialPeriod =
     subscription?.status ===
       "TRIALING" &&
-    !!subscription.currentPeriodEnd &&
+    typeof subscription.currentPeriodEnd ===
+      "string" &&
+    subscription.currentPeriodEnd.length > 0 &&
     new Date(
       subscription.currentPeriodEnd,
     ).getTime() >
@@ -200,7 +248,8 @@ export function AuthProvider({
 
   const trialDaysRemaining =
     hasValidTrialPeriod &&
-    subscription.currentPeriodEnd
+    typeof subscription?.currentPeriodEnd ===
+      "string"
       ? Math.max(
           0,
           Math.ceil(
@@ -225,9 +274,11 @@ export function AuthProvider({
   | Active Subscription
   |--------------------------------------------------------------------------
   |
-  | ACTIVE = active paid subscription.
+  | ACTIVE:
+  | Paid subscription is active.
   |
-  | TRIALING = active only when the trial end date is still in the future.
+  | TRIALING:
+  | Trial is active only while currentPeriodEnd is in the future.
   |
   */
 
@@ -238,6 +289,12 @@ export function AuthProvider({
         "ACTIVE" ||
       hasValidTrialPeriod
     );
+
+  /*
+  |--------------------------------------------------------------------------
+  | Context
+  |--------------------------------------------------------------------------
+  */
 
   return (
     <AuthContext.Provider
