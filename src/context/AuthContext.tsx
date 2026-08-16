@@ -15,16 +15,33 @@ import {
   getMyOrganization,
 } from "@/services/organization";
 
+import {
+  getBillingSubscription,
+} from "@/services/billing";
+
+import {
+  OrganizationSubscription,
+} from "@/services/billing";
+
 interface AuthContextType {
   user: any;
+
   organization: any;
+
+  subscription:
+    | OrganizationSubscription
+    | null;
+
   loading: boolean;
+
   refresh: () => Promise<void>;
+
+  hasActiveSubscription: boolean;
 }
 
 const AuthContext =
   createContext<AuthContextType>(
-    {} as AuthContextType
+    {} as AuthContextType,
   );
 
 export function AuthProvider({
@@ -40,11 +57,27 @@ export function AuthProvider({
     setOrganization,
   ] = useState<any>(null);
 
+  const [
+    subscription,
+    setSubscription,
+  ] =
+    useState<OrganizationSubscription | null>(
+      null,
+    );
+
   const [loading, setLoading] =
     useState(true);
 
   async function refresh() {
     try {
+      setLoading(true);
+
+      /*
+      |--------------------------------------------------------------------------
+      | Current User
+      |--------------------------------------------------------------------------
+      */
+
       const userResult =
         await getCurrentUser();
 
@@ -53,8 +86,14 @@ export function AuthProvider({
       }
 
       setUser(
-        userResult.user
+        userResult.user,
       );
+
+      /*
+      |--------------------------------------------------------------------------
+      | Organization
+      |--------------------------------------------------------------------------
+      */
 
       const orgResult =
         await getMyOrganization();
@@ -63,23 +102,49 @@ export function AuthProvider({
         orgResult.success
       ) {
         setOrganization(
-          orgResult.organization
+          orgResult.organization,
         );
       }
 
-    } catch {
+      /*
+      |--------------------------------------------------------------------------
+      | Organizer Subscription
+      |--------------------------------------------------------------------------
+      */
 
+      try {
+        const billingResult =
+          await getBillingSubscription();
+
+        if (
+          billingResult.success
+        ) {
+          setSubscription(
+            billingResult.subscription,
+          );
+        }
+      } catch {
+        /*
+        |--------------------------------------------------------------------------
+        | Billing is deliberately isolated.
+        |
+        | An unavailable billing endpoint should not destroy the user's
+        | authentication session.
+        |--------------------------------------------------------------------------
+        */
+        setSubscription(null);
+      }
+
+    } catch {
       localStorage.removeItem(
-        "token"
+        "token",
       );
 
       window.location.href =
         "/login";
 
     } finally {
-
       setLoading(false);
-
     }
   }
 
@@ -87,13 +152,29 @@ export function AuthProvider({
     refresh();
   }, []);
 
+  const hasActiveSubscription =
+    subscription !== null &&
+    (
+      subscription.status ===
+        "ACTIVE" ||
+      subscription.status ===
+        "TRIALING"
+    );
+
   return (
     <AuthContext.Provider
       value={{
         user,
+
         organization,
+
+        subscription,
+
         loading,
+
         refresh,
+
+        hasActiveSubscription,
       }}
     >
       {children}
@@ -103,6 +184,6 @@ export function AuthProvider({
 
 export function useAuth() {
   return useContext(
-    AuthContext
+    AuthContext,
   );
 }
