@@ -29,6 +29,7 @@ function DashboardAccessGuard({
 
   const {
     loading,
+    organization,
     hasActiveSubscription,
   } = useAuth();
 
@@ -37,8 +38,8 @@ function DashboardAccessGuard({
   | Billing Is Always Accessible
   |--------------------------------------------------------------------------
   |
-  | An organization without a subscription must be able to reach the
-  | billing page to purchase a plan.
+  | An organization without an active subscription must be able to reach
+  | the billing page to purchase a plan.
   |
   */
 
@@ -51,7 +52,22 @@ function DashboardAccessGuard({
 
   /*
   |--------------------------------------------------------------------------
-  | Payment Wall
+  | Dashboard Home
+  |--------------------------------------------------------------------------
+  |
+  | The dashboard already contains the existing organization creation flow.
+  |
+  | Therefore, a user who has not created an organization yet must be
+  | allowed to access /dashboard.
+  |
+  */
+
+  const isDashboardHome =
+    pathname === "/dashboard";
+
+  /*
+  |--------------------------------------------------------------------------
+  | Access Control
   |--------------------------------------------------------------------------
   */
 
@@ -60,19 +76,50 @@ function DashboardAccessGuard({
       return;
     }
 
-    if (isBillingPage) {
+    /*
+    |--------------------------------------------------------------------------
+    | No Organization
+    |--------------------------------------------------------------------------
+    |
+    | Do NOT send the user to billing.
+    |
+    | The existing dashboard handles organization creation.
+    |
+    */
+
+    if (!organization) {
+      if (!isDashboardHome) {
+        router.replace(
+          "/dashboard",
+        );
+      }
+
       return;
     }
 
-    if (!hasActiveSubscription) {
+    /*
+    |--------------------------------------------------------------------------
+    | Organization Exists
+    |--------------------------------------------------------------------------
+    |
+    | Subscription enforcement only starts after an organization exists.
+    |
+    */
+
+    if (
+      !isBillingPage &&
+      !hasActiveSubscription
+    ) {
       router.replace(
         "/dashboard/billing",
       );
     }
   }, [
     loading,
+    organization,
     hasActiveSubscription,
     isBillingPage,
+    isDashboardHome,
     router,
   ]);
 
@@ -94,7 +141,24 @@ function DashboardAccessGuard({
 
   /*
   |--------------------------------------------------------------------------
-  | Unpaid Organization
+  | No Organization
+  |--------------------------------------------------------------------------
+  |
+  | Allow the existing dashboard organization creation UI to render.
+  |
+  */
+
+  if (!organization) {
+    return (
+      <>
+        {children}
+      </>
+    );
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Subscription Inactive
   |--------------------------------------------------------------------------
   */
 
@@ -146,7 +210,6 @@ export default function DashboardLayout({
           segment,
         ),
     )
-
     .map(
       (
         segment,
