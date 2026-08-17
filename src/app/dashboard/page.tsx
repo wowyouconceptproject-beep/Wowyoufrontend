@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  useEffect,
   useState,
 } from "react";
 
@@ -22,34 +21,19 @@ import {
 
 import {
   createOrganization,
-  getMyOrganization,
 } from "@/services/organization";
-
-import {
-  OrganizerPlan,
-} from "@/services/billing";
 
 export default function Dashboard() {
   const {
-    user: authUser,
-    organization: authOrganization,
+    user,
+    organization,
     subscription,
-    loading: authLoading,
+    loading,
     isTrialing,
     trialDaysRemaining,
     hasActiveSubscription,
-    refresh: refreshAuth,
+    refresh,
   } = useAuth();
-
-  const [user, setUser] =
-    useState<any>(authUser);
-
-  const [
-    organization,
-    setOrganization,
-  ] = useState<any>(
-    authOrganization,
-  );
 
   const [name, setName] =
     useState("");
@@ -57,59 +41,10 @@ export default function Dashboard() {
   const [slug, setSlug] =
     useState("");
 
-  const [loading, setLoading] =
-    useState(true);
-
   const [
     creatingOrganization,
     setCreatingOrganization,
   ] = useState(false);
-
-  /*
-  |--------------------------------------------------------------------------
-  | Sync Auth Context
-  |--------------------------------------------------------------------------
-  */
-
-  useEffect(() => {
-    if (authUser) {
-      setUser(authUser);
-    }
-
-    if (authOrganization) {
-      setOrganization(
-        authOrganization,
-      );
-    }
-  }, [
-    authUser,
-    authOrganization,
-  ]);
-
-  /*
-  |--------------------------------------------------------------------------
-  | Load Dashboard
-  |--------------------------------------------------------------------------
-  */
-
-  async function loadDashboard() {
-    try {
-      const orgResult =
-        await getMyOrganization();
-
-      if (
-        orgResult.success
-      ) {
-        setOrganization(
-          orgResult.organization,
-        );
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   /*
   |--------------------------------------------------------------------------
@@ -145,9 +80,7 @@ export default function Dashboard() {
           slug.trim(),
         );
 
-      if (
-        !result.success
-      ) {
+      if (!result.success) {
         alert(
           result.message ??
             "Unable to create organization.",
@@ -156,25 +89,30 @@ export default function Dashboard() {
         return;
       }
 
-      setOrganization(
-        result.organization,
-      );
-
       /*
       |--------------------------------------------------------------------------
       | Refresh Auth Context
       |--------------------------------------------------------------------------
       |
-      | The backend creates the organization's 14-day trial at the same time.
+      | The backend creates the organization and its 14-day trial together.
+      |
+      | AuthContext then reloads:
+      |
+      | User
+      | Organization
+      | Subscription
       |
       */
 
-      await refreshAuth();
-
-      await loadDashboard();
+      await refresh();
     } catch (error: any) {
+      console.error(
+        "CREATE ORGANIZATION ERROR:",
+        error,
+      );
+
       alert(
-        error.message ??
+        error?.message ??
           "Failed to create organization.",
       );
     } finally {
@@ -190,10 +128,7 @@ export default function Dashboard() {
   |--------------------------------------------------------------------------
   */
 
-  if (
-    authLoading ||
-    loading
-  ) {
+  if (loading) {
     return (
       <main className="min-h-screen bg-background px-6 py-10 lg:px-10">
         <div className="mx-auto max-w-7xl">
@@ -230,6 +165,12 @@ export default function Dashboard() {
   |--------------------------------------------------------------------------
   | Organization Setup
   |--------------------------------------------------------------------------
+  |
+  | This is the existing onboarding flow.
+  |
+  | A newly registered organizer reaches this state before an organization
+  | exists.
+  |
   */
 
   if (!organization) {
