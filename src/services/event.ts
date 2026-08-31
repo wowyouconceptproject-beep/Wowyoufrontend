@@ -1,5 +1,35 @@
 import { apiFetch } from "@/lib/api";
 
+/*
+|--------------------------------------------------------------------------
+| Ticket
+|--------------------------------------------------------------------------
+*/
+
+export interface EventTicket {
+  id: string;
+
+  name: string;
+
+  description?: string | null;
+
+  color?: string | null;
+
+  price: number | string;
+
+  quantity: number;
+
+  sold: number;
+
+  isActive: boolean;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Event Payload
+|--------------------------------------------------------------------------
+*/
+
 export interface EventPayload {
   title: string;
 
@@ -62,9 +92,17 @@ export interface EventPayload {
   category?: string;
 
   vendorApplicationsOpen?: boolean;
+
   vendorApplicationDeadline?: string;
+
   maxVendorSlots?: number;
 }
+
+/*
+|--------------------------------------------------------------------------
+| Event
+|--------------------------------------------------------------------------
+*/
 
 export interface Event {
   id: string;
@@ -82,10 +120,13 @@ export interface Event {
   venue: string;
 
   venueAddress?: string;
+
   city?: string;
+
   country?: string;
 
   venueLatitude?: number;
+
   venueLongitude?: number;
 
   /*
@@ -95,6 +136,7 @@ export interface Event {
   */
 
   startDate: string;
+
   endDate: string;
 
   /*
@@ -118,6 +160,7 @@ export interface Event {
   bannerUrl?: string;
 
   coverImage?: string;
+
   featuredImage?: string;
 
   /*
@@ -137,6 +180,19 @@ export interface Event {
   shareCount?: number;
 
   featuredUntil?: string;
+
+  /*
+  |--------------------------------------------------------------------------
+  | Ticketing
+  |--------------------------------------------------------------------------
+  |
+  | Returned by:
+  |
+  | GET /events/public/:id
+  |
+  */
+
+  tickets?: EventTicket[];
 
   /*
   |--------------------------------------------------------------------------
@@ -162,6 +218,7 @@ export interface Event {
 
   organization?: {
     id: string;
+
     name: string;
   };
 
@@ -177,12 +234,22 @@ export interface Event {
 
   stats?: {
     ticketSold: number;
+
     checkedIn: number;
+
     revenue: number;
+
     staff: number;
+
     onlineStaff: number;
   };
 }
+
+/*
+|--------------------------------------------------------------------------
+| Event Response
+|--------------------------------------------------------------------------
+*/
 
 export interface EventResponse {
   success: boolean;
@@ -192,6 +259,12 @@ export interface EventResponse {
   message?: string;
 }
 
+/*
+|--------------------------------------------------------------------------
+| Events Response
+|--------------------------------------------------------------------------
+*/
+
 export interface EventsResponse {
   success: boolean;
 
@@ -199,6 +272,12 @@ export interface EventsResponse {
 
   message?: string;
 }
+
+/*
+|--------------------------------------------------------------------------
+| Delete Event Response
+|--------------------------------------------------------------------------
+*/
 
 export interface DeleteEventResponse {
   success: boolean;
@@ -219,6 +298,7 @@ export function createEvent(
     "/events",
     {
       method: "POST",
+
       body: JSON.stringify(data),
     },
   );
@@ -254,6 +334,15 @@ export function getEvent(
 |--------------------------------------------------------------------------
 | Public Event Details
 |--------------------------------------------------------------------------
+|
+| No authentication is required.
+|
+| The backend returns:
+|
+| - Event information
+| - Organization information
+| - Active ticket types
+|
 */
 
 export function getPublicEvent(
@@ -298,6 +387,7 @@ export function updateEvent(
     `/events/${eventId}`,
     {
       method: "PATCH",
+
       body: JSON.stringify(data),
     },
   );
@@ -336,3 +426,4 @@ export function archiveEvent(
     },
   );
 }
+
