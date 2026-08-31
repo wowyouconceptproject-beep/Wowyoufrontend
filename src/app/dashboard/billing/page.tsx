@@ -18,6 +18,19 @@ import {
 
 /*
 |--------------------------------------------------------------------------
+| WOWYOU Brand
+|--------------------------------------------------------------------------
+|
+| This page intentionally does NOT import a font.
+| It inherits the font configured by the application layout.
+|
+*/
+
+const BRAND = "#3E86A4";
+const BRAND_HOVER = "#1F7197";
+
+/*
+|--------------------------------------------------------------------------
 | Fallback Plans
 |--------------------------------------------------------------------------
 */
@@ -30,7 +43,7 @@ const FALLBACK_PLANS: OrganizerPlanConfig[] = [
     currency: "GBP",
     interval: "MONTH",
     description:
-      "Everything you need to start running events.",
+      "Everything you need to start running professional events.",
     features: [
       "Event creation",
       "Event publishing",
@@ -109,21 +122,31 @@ export default function BillingPage() {
     hasActiveSubscription,
   } = useAuth();
 
-  const [plans, setPlans] =
-    useState<OrganizerPlanConfig[]>(
-      FALLBACK_PLANS,
-    );
+  const [
+    plans,
+    setPlans,
+  ] = useState<OrganizerPlanConfig[]>(
+    FALLBACK_PLANS,
+  );
 
-  const [billingLoading, setBillingLoading] =
-    useState(true);
+  const [
+    billingLoading,
+    setBillingLoading,
+  ] = useState(true);
 
-  const [checkoutPlan, setCheckoutPlan] =
-    useState<OrganizerPlan | null>(
-      null,
-    );
+  const [
+    checkoutPlan,
+    setCheckoutPlan,
+  ] = useState<OrganizerPlan | null>(
+    null,
+  );
 
-  const [error, setError] =
-    useState<string | null>(null);
+  const [
+    error,
+    setError,
+  ] = useState<string | null>(
+    null,
+  );
 
   /*
   |--------------------------------------------------------------------------
@@ -169,6 +192,136 @@ export default function BillingPage() {
     } finally {
       setBillingLoading(false);
     }
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Currency Formatting
+  |--------------------------------------------------------------------------
+  */
+
+  function getCurrencySymbol(
+    currency?: string,
+  ) {
+    switch (
+      String(
+        currency ?? "GBP",
+      ).toUpperCase()
+    ) {
+      case "USD":
+        return "$";
+
+      case "EUR":
+        return "€";
+
+      case "GBP":
+        return "£";
+
+      case "NGN":
+        return "₦";
+
+      case "KES":
+        return "KSh";
+
+      case "ZAR":
+        return "R";
+
+      default:
+        return currency ?? "£";
+    }
+  }
+
+  function formatAmount(
+    amount: string | number,
+    currency?: string,
+  ) {
+    const numericAmount =
+      Number(amount);
+
+    if (
+      Number.isNaN(
+        numericAmount,
+      )
+    ) {
+      return `${getCurrencySymbol(
+        currency,
+      )}${amount}`;
+    }
+
+    return `${getCurrencySymbol(
+      currency,
+    )}${numericAmount.toLocaleString(
+      "en-US",
+    )}`;
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Humanize Feature Names
+  |--------------------------------------------------------------------------
+  |
+  | Protects the UI if the backend returns:
+  |
+  | EVENT_CREATION
+  | STAFF_MANAGEMENT
+  | AI_FEATURES
+  |
+  | Instead of:
+  |
+  | Event Creation
+  | Staff Management
+  | AI Features
+  |
+  */
+
+  function formatFeature(
+    feature: string,
+  ) {
+    const normalized =
+      String(feature)
+        .trim()
+        .replace(
+          /[_-]+/g,
+          " ",
+        )
+        .replace(
+          /\s+/g,
+          " ",
+        );
+
+    return normalized
+      .toLowerCase()
+      .replace(
+        /\b\w/g,
+        (letter) =>
+          letter.toUpperCase(),
+      );
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Plan Name
+  |--------------------------------------------------------------------------
+  */
+
+  function formatPlanName(
+    plan?: string,
+  ) {
+    if (!plan) {
+      return "Organizer Plan";
+    }
+
+    return String(plan)
+      .replace(
+        /[_-]+/g,
+        " ",
+      )
+      .toLowerCase()
+      .replace(
+        /\b\w/g,
+        (letter) =>
+          letter.toUpperCase(),
+      );
   }
 
   /*
@@ -258,7 +411,7 @@ export default function BillingPage() {
 
       /*
       |--------------------------------------------------------------------------
-      | Redirect to Revolut
+      | Redirect
       |--------------------------------------------------------------------------
       */
 
@@ -350,17 +503,29 @@ export default function BillingPage() {
       trialDaysRemaining <= 0
     ) {
       return (
-        <div className="mx-auto mt-8 max-w-4xl rounded-2xl border border-red-200 bg-red-50 p-5">
-          <p className="text-sm font-semibold text-red-800">
-            Your free trial has ended
-          </p>
+        <section className="mx-auto mt-10 max-w-5xl overflow-hidden rounded-[28px] border border-red-500/20 bg-red-500/[0.06]">
+          <div className="flex flex-col gap-5 px-6 py-6 md:flex-row md:items-center md:justify-between md:px-8">
 
-          <p className="mt-1 text-sm leading-6 text-red-700">
-            Choose a plan below to
-            continue using WowYou
-            organizer features.
-          </p>
-        </div>
+            <div>
+              <div className="flex items-center gap-3">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-red-500/10 text-sm text-red-400">
+                  !
+                </span>
+
+                <p className="text-sm font-semibold text-red-300">
+                  Your free trial has ended
+                </p>
+              </div>
+
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-red-200/50">
+                Choose an organizer plan below
+                to continue using WOWYOU's
+                event management infrastructure.
+              </p>
+            </div>
+
+          </div>
+        </section>
       );
     }
 
@@ -371,26 +536,29 @@ export default function BillingPage() {
     */
 
     return (
-      <div className="mx-auto mt-8 max-w-4xl rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <section className="mx-auto mt-10 max-w-5xl overflow-hidden rounded-[28px] border border-[#3E86A4]/20 bg-[#3E86A4]/[0.06]">
+        <div className="flex flex-col gap-6 px-6 py-6 md:flex-row md:items-center md:justify-between md:px-8">
 
           <div>
-            <div className="flex items-center gap-2">
 
-              <span className="rounded-full bg-neutral-950 px-3 py-1 text-xs font-semibold text-white">
-                FREE TRIAL
+            <div className="flex flex-wrap items-center gap-3">
+
+              <span className="rounded-full bg-[#3E86A4] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white">
+                Free Trial
               </span>
 
-              <span className="text-sm font-semibold text-neutral-950">
-                {subscription?.plan}
+              <span className="text-sm font-semibold text-white/80">
+                {formatPlanName(
+                  subscription?.plan,
+                )}
               </span>
 
             </div>
 
-            <p className="mt-2 text-sm leading-6 text-neutral-600">
-              Your 14-day organizer trial
-              is active. You have{" "}
-              <strong className="text-neutral-950">
+            <p className="mt-3 text-sm leading-6 text-white/50">
+              Your 14-day organizer trial is
+              active. You have{" "}
+              <strong className="text-white">
                 {trialDaysRemaining}{" "}
                 {trialDaysRemaining ===
                 1
@@ -399,14 +567,16 @@ export default function BillingPage() {
               </strong>{" "}
               remaining.
             </p>
+
           </div>
 
-          <div className="text-left md:text-right">
-            <p className="text-xs text-neutral-500">
-              Trial ends
+          <div className="rounded-2xl border border-white/10 bg-black/20 px-5 py-4 md:min-w-[170px] md:text-right">
+
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/30">
+              Trial Ends
             </p>
 
-            <p className="mt-1 text-sm font-semibold text-neutral-950">
+            <p className="mt-1 text-sm font-semibold text-white/80">
               {subscription?.currentPeriodEnd
                 ? new Date(
                     subscription.currentPeriodEnd,
@@ -420,10 +590,11 @@ export default function BillingPage() {
                   )
                 : "—"}
             </p>
+
           </div>
 
         </div>
-      </div>
+      </section>
     );
   }
 
@@ -435,9 +606,15 @@ export default function BillingPage() {
 
   if (authLoading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#f7f7f5]">
-        <div className="text-sm text-neutral-500">
-          Loading your account...
+      <main className="flex min-h-screen items-center justify-center bg-[#050505] text-white">
+        <div className="text-center">
+
+          <div className="mx-auto h-10 w-10 animate-pulse rounded-full bg-[#3E86A4]/30" />
+
+          <p className="mt-5 text-sm text-white/40">
+            Loading your account...
+          </p>
+
         </div>
       </main>
     );
@@ -450,308 +627,431 @@ export default function BillingPage() {
   */
 
   return (
-    <main className="min-h-screen bg-[#f7f7f5] px-6 py-10 md:px-10">
-      <div className="mx-auto max-w-7xl">
+    <main className="min-h-screen bg-[#050505] text-white">
 
-        {/* --------------------------------------------------------------- */}
-        {/* Header */}
-        {/* --------------------------------------------------------------- */}
+      {/* ================================================================ */}
+      {/* HERO */}
+      {/* ================================================================ */}
 
-        <div className="mx-auto max-w-3xl text-center">
+      <section className="relative overflow-hidden border-b border-white/[0.07]">
 
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-neutral-500">
-            Organizer Plans
-          </p>
+        {/* Background glow */}
 
-          <h1 className="text-4xl font-bold tracking-tight text-neutral-950 md:text-5xl">
-            Choose the plan that fits
-            your events.
-          </h1>
+        <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-[#3E86A4]/10 blur-[120px]" />
 
-          <p className="mt-5 text-base leading-7 text-neutral-600 md:text-lg">
-            Everything you need to create,
-            manage, sell and operate
-            professional events.
-          </p>
+        <div className="pointer-events-none absolute -right-40 top-20 h-[450px] w-[450px] rounded-full bg-[#3E86A4]/[0.06] blur-[120px]" />
 
-        </div>
+        <div className="relative mx-auto max-w-7xl px-6 pb-14 pt-12 md:px-10 md:pb-20 md:pt-16 lg:px-12">
 
-        {/* --------------------------------------------------------------- */}
-        {/* Organization */}
-        {/* --------------------------------------------------------------- */}
+          {/* Brand */}
 
-        {organization && (
-          <div className="mx-auto mt-8 max-w-4xl text-center">
-            <p className="text-sm text-neutral-500">
-              Billing for
+          <div className="flex items-center gap-3">
+
+            <div className="h-px w-10 bg-[#3E86A4]" />
+
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#3E86A4]">
+              WOWYOU
             </p>
 
-            <p className="mt-1 text-base font-semibold text-neutral-950">
-              {organization.name}
-            </p>
           </div>
-        )}
 
-        {/* --------------------------------------------------------------- */}
-        {/* Trial */}
-        {/* --------------------------------------------------------------- */}
+          {/* Heading */}
 
-        {renderTrialBanner()}
+          <div className="mt-8 max-w-4xl">
 
-        {/* --------------------------------------------------------------- */}
-        {/* Current Subscription */}
-        {/* --------------------------------------------------------------- */}
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-white/30">
+              Organizer Infrastructure
+            </p>
 
-        {subscription &&
-          !isTrialing && (
-            <div className="mx-auto mt-8 max-w-4xl rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+            <h1 className="mt-4 text-4xl font-black tracking-[-0.04em] md:text-6xl lg:text-7xl">
+              Build events
+              <br />
+              <span className="text-white/35">
+                without the complexity.
+              </span>
+            </h1>
 
-              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <p className="mt-6 max-w-2xl text-base leading-8 text-white/45 md:text-lg">
+              Everything you need to create,
+              sell, manage and operate
+              professional events from one
+              intelligent platform.
+            </p>
 
-                <div>
+          </div>
 
-                  <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
-                    Current plan
-                  </p>
+          {/* Organization */}
 
-                  <p className="mt-1 text-lg font-semibold text-neutral-950">
-                    {subscription.plan}
-                  </p>
+          {organization && (
+            <div className="mt-8 inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.035] px-4 py-2.5">
 
-                </div>
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#3E86A4]/15 text-xs font-bold text-[#3E86A4]">
+                {organization.name
+                  ?.charAt(0)
+                  ?.toUpperCase() ??
+                  "O"}
+              </span>
 
-                <div className="flex items-center gap-3">
+              <span className="text-xs text-white/35">
+                Billing for
+              </span>
 
-                  <span
-                    className={[
-                      "rounded-full px-3 py-1 text-xs font-semibold",
-                      subscription.status ===
-                        "ACTIVE"
-                        ? "bg-green-50 text-green-700"
-                        : "bg-neutral-100 text-neutral-600",
-                    ].join(" ")}
-                  >
-                    {subscription.status}
-                  </span>
-
-                  <span className="text-sm text-neutral-500">
-                    £
-                    {Number(
-                      subscription.amount,
-                    ).toLocaleString()}
-                    /month
-                  </span>
-
-                </div>
-
-              </div>
+              <span className="text-sm font-semibold text-white/80">
+                {organization.name}
+              </span>
 
             </div>
           )}
 
-        {/* --------------------------------------------------------------- */}
-        {/* Error */}
-        {/* --------------------------------------------------------------- */}
+        </div>
 
-        {error && (
-          <div className="mx-auto mt-6 max-w-4xl rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700">
-            {error}
-          </div>
-        )}
+      </section>
 
-        {/* --------------------------------------------------------------- */}
-        {/* Plans */}
-        {/* --------------------------------------------------------------- */}
+      {/* ================================================================ */}
+      {/* CONTENT */}
+      {/* ================================================================ */}
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-4">
+      <div className="mx-auto max-w-7xl px-6 py-10 md:px-10 md:py-14 lg:px-12">
 
-          {plans.map((plan) => {
+        {/* Trial */}
 
-            const current =
-              isCurrentPlan(
-                plan.plan,
-              );
+        {renderTrialBanner()}
 
-            const loadingPlan =
-              checkoutPlan ===
-              plan.plan;
+        {/* ============================================================ */}
+        {/* CURRENT SUBSCRIPTION */}
+        {/* ============================================================ */}
 
-            const featured =
-              plan.plan ===
-              "PROFESSIONAL";
+        {subscription &&
+          !isTrialing && (
+            <section className="mx-auto mt-10 max-w-5xl overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.035]">
 
-            /*
-            |--------------------------------------------------------------------------
-            | Button State
-            |--------------------------------------------------------------------------
-            */
-
-            let buttonLabel =
-              "Start Free Trial";
-
-            if (current) {
-              buttonLabel =
-                isTrialing
-                  ? "Current Trial"
-                  : "Current Plan";
-            } else if (
-              subscription?.status ===
-              "ACTIVE"
-            ) {
-              buttonLabel =
-                "Switch Plan";
-            } else if (
-              subscription?.status ===
-                "PENDING"
-            ) {
-              buttonLabel =
-                "Choose Plan";
-            }
-
-            return (
-              <div
-                key={plan.plan}
-                className={[
-                  "relative flex flex-col rounded-3xl border bg-white p-7 shadow-sm transition",
-                  featured
-                    ? "border-neutral-950 shadow-lg"
-                    : "border-neutral-200",
-                ].join(" ")}
-              >
-
-                {/* Popular Badge */}
-
-                {featured && (
-                  <div className="absolute -top-3 left-6 rounded-full bg-neutral-950 px-4 py-1 text-xs font-semibold text-white">
-                    Most Popular
-                  </div>
-                )}
-
-                {/* Plan Header */}
+              <div className="flex flex-col gap-6 px-6 py-6 md:flex-row md:items-center md:justify-between md:px-8">
 
                 <div>
 
-                  <h2 className="text-xl font-bold text-neutral-950">
-                    {plan.name}
-                  </h2>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">
+                    Current Plan
+                  </p>
 
-                  <p className="mt-3 min-h-[72px] text-sm leading-6 text-neutral-600">
-                    {plan.description}
+                  <p className="mt-2 text-xl font-bold text-white">
+                    {formatPlanName(
+                      subscription.plan,
+                    )}
                   </p>
 
                 </div>
 
-                {/* Price */}
+                <div className="flex flex-wrap items-center gap-3">
 
-                <div className="mt-6">
+                  <span
+                    className={[
+                      "rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.15em]",
+                      subscription.status ===
+                        "ACTIVE"
+                        ? "bg-[#3E86A4]/15 text-[#3E86A4]"
+                        : "bg-white/5 text-white/40",
+                    ].join(" ")}
+                  >
+                    {formatPlanName(
+                      subscription.status,
+                    )}
+                  </span>
 
-                  <div className="flex items-end gap-1">
-
-                    <span className="text-4xl font-bold tracking-tight text-neutral-950">
-                      £
-                      {Number(
-                        plan.amount,
-                      ).toLocaleString()}
+                  <span className="rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-white/70">
+                    {formatAmount(
+                      subscription.amount,
+                      "GBP",
+                    )}
+                    <span className="ml-1 text-xs font-normal text-white/30">
+                      / month
                     </span>
-
-                    <span className="mb-1 text-sm text-neutral-500">
-                      /month
-                    </span>
-
-                  </div>
-
-                  <p className="mt-2 text-xs font-medium text-neutral-500">
-                    14-day free trial
-                  </p>
+                  </span>
 
                 </div>
-
-                <div className="my-7 h-px bg-neutral-200" />
-
-                {/* Features */}
-
-                <ul className="flex flex-1 flex-col gap-3">
-
-                  {plan.features.map(
-                    (feature) => (
-                      <li
-                        key={feature}
-                        className="flex gap-3 text-sm text-neutral-700"
-                      >
-
-                        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-xs font-bold">
-                          ✓
-                        </span>
-
-                        <span>
-                          {feature}
-                        </span>
-
-                      </li>
-                    ),
-                  )}
-
-                </ul>
-
-                {/* Checkout Button */}
-
-                <button
-                  type="button"
-                  disabled={
-                    billingLoading ||
-                    checkoutPlan !==
-                      null ||
-                    current
-                  }
-                  onClick={() =>
-                    handleCheckout(
-                      plan.plan,
-                    )
-                  }
-                  className={[
-                    "mt-8 w-full rounded-xl px-5 py-3.5 text-sm font-semibold transition",
-                    current
-                      ? "cursor-default bg-neutral-100 text-neutral-500"
-                      : featured
-                        ? "bg-neutral-950 text-white hover:bg-neutral-800"
-                        : "border border-neutral-300 bg-white text-neutral-950 hover:bg-neutral-50",
-                    loadingPlan
-                      ? "cursor-wait opacity-60"
-                      : "",
-                  ].join(" ")}
-                >
-                  {loadingPlan
-                    ? "Preparing checkout..."
-                    : buttonLabel}
-                </button>
 
               </div>
-            );
-          })}
 
-        </div>
+            </section>
+          )}
 
-        {/* --------------------------------------------------------------- */}
-        {/* Loading */}
-        {/* --------------------------------------------------------------- */}
+        {/* ============================================================ */}
+        {/* ERROR */}
+        {/* ============================================================ */}
 
-        {billingLoading && (
-          <div className="mt-8 text-center text-sm text-neutral-500">
-            Loading billing information...
+        {error && (
+          <div className="mx-auto mt-8 max-w-5xl rounded-2xl border border-red-500/20 bg-red-500/[0.06] px-5 py-4">
+
+            <p className="text-sm font-medium text-red-300">
+              {error}
+            </p>
+
           </div>
         )}
 
-        {/* --------------------------------------------------------------- */}
-        {/* Footer */}
-        {/* --------------------------------------------------------------- */}
+        {/* ============================================================ */}
+        {/* PLAN INTRO */}
+        {/* ============================================================ */}
 
-        <p className="mt-10 text-center text-xs text-neutral-500">
-          All plans are billed monthly.
-          Payments are securely processed
-          through Revolut.
-        </p>
+        <div className="mt-14">
+
+          <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+
+            <div>
+
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#3E86A4]">
+                Choose Your Infrastructure
+              </p>
+
+              <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
+                Plans built around
+                <br className="hidden sm:block" />
+                how you run events.
+              </h2>
+
+            </div>
+
+            <p className="max-w-md text-sm leading-6 text-white/35 md:text-right">
+              Start small, scale as your
+              operation grows, and unlock
+              the infrastructure your events
+              require.
+            </p>
+
+          </div>
+
+        </div>
+
+        {/* ============================================================ */}
+        {/* PLANS */}
+        {/* ============================================================ */}
+
+        <div className="mt-10 grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
+
+          {plans.map(
+            (plan) => {
+              const current =
+                isCurrentPlan(
+                  plan.plan,
+                );
+
+              const loadingPlan =
+                checkoutPlan ===
+                plan.plan;
+
+              const featured =
+                plan.plan ===
+                "PROFESSIONAL";
+
+              return (
+                <article
+                  key={
+                    plan.plan
+                  }
+                  className={[
+                    "group relative flex flex-col overflow-hidden rounded-[28px] border bg-white/[0.035] transition duration-300",
+                    featured
+                      ? "border-[#3E86A4]/50 shadow-[0_0_60px_rgba(62,134,164,0.08)]"
+                      : "border-white/10 hover:border-white/20",
+                  ].join(" ")}
+                >
+
+                  {/* Featured Top Line */}
+
+                  {featured && (
+                    <div className="h-1 w-full bg-[#3E86A4]" />
+                  )}
+
+                  <div className="flex flex-1 flex-col p-6 md:p-7">
+
+                    {/* Popular */}
+
+                    {featured && (
+                      <div className="mb-5">
+
+                        <span className="inline-flex rounded-full bg-[#3E86A4]/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#3E86A4]">
+                          Most Popular
+                        </span>
+
+                      </div>
+                    )}
+
+                    {/* Plan */}
+
+                    <div>
+
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">
+                        {plan.plan}
+                      </p>
+
+                      <h3 className="mt-2 text-2xl font-bold text-white">
+                        {plan.name}
+                      </h3>
+
+                      <p className="mt-3 min-h-[72px] text-sm leading-6 text-white/40">
+                        {plan.description}
+                      </p>
+
+                    </div>
+
+                    {/* Price */}
+
+                    <div className="mt-7">
+
+                      <div className="flex items-baseline">
+
+                        <span className="text-4xl font-black tracking-tight text-white">
+                          {formatAmount(
+                            plan.amount,
+                            plan.currency,
+                          )}
+                        </span>
+
+                        <span className="ml-2 text-sm text-white/30">
+                          / month
+                        </span>
+
+                      </div>
+
+                      <p className="mt-2 text-xs text-white/25">
+                        14-day free trial
+                      </p>
+
+                    </div>
+
+                    {/* Divider */}
+
+                    <div className="my-7 h-px bg-white/[0.07]" />
+
+                    {/* Features */}
+
+                    <div className="flex-1">
+
+                      <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">
+                        Includes
+                      </p>
+
+                      <ul className="space-y-3.5">
+
+                        {plan.features.map(
+                          (
+                            feature,
+                          ) => (
+                            <li
+                              key={
+                                feature
+                              }
+                              className="flex items-start gap-3 text-sm text-white/60"
+                            >
+
+                              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#3E86A4]/10 text-[10px] font-bold text-[#3E86A4]">
+                                ✓
+                              </span>
+
+                              <span className="leading-5">
+                                {formatFeature(
+                                  feature,
+                                )}
+                              </span>
+
+                            </li>
+                          ),
+                        )}
+
+                      </ul>
+
+                    </div>
+
+                    {/* Button */}
+
+                    <button
+                      type="button"
+                      disabled={
+                        billingLoading ||
+                        checkoutPlan !==
+                          null ||
+                        current
+                      }
+                      onClick={() =>
+                        handleCheckout(
+                          plan.plan,
+                        )
+                      }
+                      className={[
+                        "mt-8 w-full rounded-2xl px-5 py-3.5 text-sm font-bold transition",
+                        current
+                          ? "cursor-default border border-white/10 bg-white/5 text-white/30"
+                          : featured
+                            ? "bg-[#3E86A4] text-white hover:bg-[#1F7197]"
+                            : "border border-white/10 bg-white/[0.04] text-white/80 hover:border-[#3E86A4]/40 hover:bg-[#3E86A4]/10 hover:text-white",
+                        loadingPlan
+                          ? "cursor-wait opacity-60"
+                          : "",
+                      ].join(" ")}
+                    >
+                      {loadingPlan
+                        ? "Preparing checkout..."
+                        : current
+                          ? isTrialing
+                            ? "Current Trial"
+                            : "Current Plan"
+                          : subscription?.status ===
+                              "ACTIVE"
+                            ? "Switch Plan"
+                            : "Start Free Trial"}
+                    </button>
+
+                  </div>
+
+                </article>
+              );
+            },
+          )}
+
+        </div>
+
+        {/* ============================================================ */}
+        {/* BILLING NOTE */}
+        {/* ============================================================ */}
+
+        <section className="mt-12 border-t border-white/[0.07] pt-8">
+
+          <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+
+            <div className="flex items-start gap-4">
+
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#3E86A4]/10 text-sm text-[#3E86A4]">
+                ✓
+              </div>
+
+              <div>
+
+                <p className="text-sm font-semibold text-white/70">
+                  Secure monthly billing
+                </p>
+
+                <p className="mt-1 max-w-xl text-xs leading-5 text-white/30">
+                  All organizer plans include a
+                  14-day free trial. Payments are
+                  securely processed through
+                  Revolut.
+                </p>
+
+              </div>
+
+            </div>
+
+            {billingLoading && (
+              <p className="text-xs text-white/25">
+                Updating plan information...
+              </p>
+            )}
+
+          </div>
+
+        </section>
 
       </div>
+
     </main>
   );
 }
