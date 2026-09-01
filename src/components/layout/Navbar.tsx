@@ -48,7 +48,7 @@ export default function Navbar() {
               href="/organizers"
               className="transition hover:text-white"
             >
-              Organizers
+              organizers
             </Link>
 
           </nav>

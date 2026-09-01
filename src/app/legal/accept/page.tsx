@@ -20,7 +20,7 @@ const policies = [
     title: "Privacy Policy",
     href: "/legal/privacy",
     description:
-      "How WoWYou Concepts Ltd collects, uses and protects personal data.",
+      "How wowyou concepts collects, uses and protects personal data.",
   },
   {
     key: "acceptableUse",
@@ -103,9 +103,9 @@ export default function LegalAcceptancePage() {
         await acceptPolicies({
           fullName,
           email,
-          role: "ORGANIZER",
+          role: "organizer",
           consentSource:
-            "ORGANIZER_WEB",
+            "organizer_WEB",
           policiesAccepted: {
             terms: true,
             privacy: true,

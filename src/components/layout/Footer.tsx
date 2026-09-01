@@ -71,7 +71,7 @@ export default function Footer() {
           <div className="mt-6 flex flex-col gap-4 text-muted">
 
             <Link href="/organizers">
-              Become an Organizer
+              Become an organizer
             </Link>
 
             <Link href="/vendors">

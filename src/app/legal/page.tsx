@@ -12,7 +12,7 @@ const legalPages = [
   {
     title: "Privacy Policy",
     description:
-      "How WoWYou Concepts Ltd collects, uses, protects and manages personal data.",
+      "How wowyou concepts collects, uses, protects and manages personal data.",
     href: "/legal/privacy",
   },
   {
@@ -92,7 +92,7 @@ export default function LegalPage() {
 
         <div className="mt-16 border-t border-white/10 pt-8">
           <p className="text-sm leading-6 text-white/40">
-            WoWYou Concepts Ltd
+            wowyou concepts
             <br />
             enquiries@wowyouconcepts.com
           </p>

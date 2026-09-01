@@ -7,7 +7,7 @@ const sections = [
   {
     title: "1. Introduction",
     paragraphs: [
-      "These Marketplace Vendor Terms govern the registration, listing, promotion, sale and delivery of vendor services through the WoWYou EventTech / EventOS platform operated by WoWYou Concepts Ltd.",
+      "These Marketplace Vendor Terms govern the registration, listing, promotion, sale and delivery of vendor services through the WoWYou EventTech / EventOS platform operated by wowyou concepts.",
       "By creating a vendor account, submitting a listing, accepting a booking, selling a service, receiving a lead, participating in an event marketplace or otherwise using EventOS as a vendor, you agree to these Marketplace Vendor Terms, our Terms of Service, Privacy Policy, Acceptable Use Policy, AI Usage Policy and any applicable Order Form or Marketplace Agreement.",
       "If you are using EventOS on behalf of a company, partnership, charity, venue, agency or other organisation, you confirm that you have authority to bind that organisation to these terms.",
     ],
@@ -16,21 +16,21 @@ const sections = [
   {
     title: "2. Definitions",
     paragraphs: [
-      "Buyer means an event organiser, attendee, enterprise customer, sponsor, venue, agency or other user that purchases, books, requests or receives vendor services through EventOS.",
+      "Buyer means an event organizer, attendee, enterprise customer, sponsor, venue, agency or other user that purchases, books, requests or receives vendor services through EventOS.",
       "EventOS means the WoWYou EventTech Event Operating System, including its website, mobile app, marketplace, event tools, booking flows, payment functions, AI features and related services.",
       "Marketplace means the area of EventOS where vendors may list, advertise, quote, sell, book or deliver services connected with events.",
       "Vendor means any business, sole trader, freelancer, service provider, sponsor, exhibitor, venue, supplier, marketplace partner or other person approved to offer services through EventOS.",
       "Vendor Services means services or products offered by a Vendor, including catering, decoration, AV, photography, event production, staffing, entertainment, venues, accommodation, logistics, wellness experiences, brand activations, training or other event-related services.",
-      "WoWYou means WoWYou Concepts Ltd, operating as WoWYou EventTech / EventOS.",
+      "WoWYou means wowyou concepts, operating as WoWYou EventTech / EventOS.",
     ],
   },
 
   {
-    title: "3. Marketplace Role of WoWYou Concepts Ltd",
+    title: "3. Marketplace Role of wowyou concepts",
     paragraphs: [
       "Unless expressly stated in writing, WoWYou provides the technology platform that enables Vendors and Buyers to connect, transact, communicate and manage bookings.",
       "WoWYou is not automatically the supplier of the Vendor Services and is not responsible for the quality, safety, legality, availability or delivery of Vendor Services provided by independent Vendors.",
-      "Where WoWYou Concepts Ltd separately contracts to provide event management, production, Signature Experiences or other direct services, those services will be governed by the relevant proposal, order form, event contract or service terms.",
+      "Where wowyou concepts separately contracts to provide event management, production, Signature Experiences or other direct services, those services will be governed by the relevant proposal, order form, event contract or service terms.",
       "Vendors act as independent contractors and are not employees, agents, partners, franchisees or representatives of WoWYou unless expressly agreed in writing.",
     ],
   },
@@ -133,7 +133,7 @@ const sections = [
       "Communicate promptly with Buyers and WoWYou where required",
       "Comply with venue rules, event instructions and health and safety requirements",
       "Provide services consistent with descriptions, samples, quotes and agreed specifications",
-      "Treat attendees, organisers, staff, suppliers and WoWYou personnel respectfully",
+      "Treat attendees, organizers, staff, suppliers and WoWYou personnel respectfully",
       "Avoid discriminatory, unsafe, harassing, fraudulent or abusive behaviour",
       "Hold required licences, certifications, insurance and permissions for the services offered",
     ],
@@ -364,7 +364,7 @@ const sections = [
   {
     title: "29. Indemnity",
     paragraphs: [
-      "The Vendor agrees to indemnify and hold harmless WoWYou Concepts Ltd, its directors, officers, employees, contractors and partners from claims, losses, liabilities, damages, costs and expenses arising from:",
+      "The Vendor agrees to indemnify and hold harmless wowyou concepts, its directors, officers, employees, contractors and partners from claims, losses, liabilities, damages, costs and expenses arising from:",
     ],
     bullets: [
       "Vendor Services, listings, content, staff, subcontractors or delivery failures",
@@ -397,7 +397,7 @@ const sections = [
   {
     title: "32. Contact",
     paragraphs: [
-      "Questions about these Marketplace Vendor Terms should be sent to WoWYou Concepts Ltd.",
+      "Questions about these Marketplace Vendor Terms should be sent to wowyou concepts.",
       "Email: enquiries@wowyouconcepts.com",
       "Registered address: Michael Galvin (MG) Building, B.A.S.E Enterprise Centre, Ladyswell Road, D15 NX4W, Damastown, Mulhuddart, Ireland.",
     ],

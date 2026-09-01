@@ -124,7 +124,7 @@ export function AuthProvider({
 
         /*
         |--------------------------------------------------------------------------
-        | Organizer Subscription
+        | organizer Subscription
         |--------------------------------------------------------------------------
         |
         | Billing only applies once an organization exists.

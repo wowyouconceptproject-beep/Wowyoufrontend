@@ -96,7 +96,7 @@ export default function HomePage() {
             hover:text-white
           "
         >
-          Organizer Login
+          organizer Login
         </Link>
 
       </header>

@@ -28,7 +28,7 @@ export default function RegisterPage() {
 
       const data = await registerUser({
   ...form,
-  role: "ORGANIZER",
+  role: "organizer",
 });
 
 console.log(
@@ -482,7 +482,7 @@ if (data.token) {
                 text-white/30
               "
             >
-              WOWYOU Organizer
+              WOWYOU organizer
               <span className="mx-2 text-white/15">
                 •
               </span>

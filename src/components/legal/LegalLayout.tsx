@@ -55,7 +55,7 @@ export function LegalLayout({
 
         <div className="mt-16 border-t border-white/10 pt-8">
           <p className="text-sm leading-6 text-white/40">
-            WoWYou Concepts Ltd
+            wowyou concepts
             <br />
             enquiries@wowyouconcepts.com
           </p>

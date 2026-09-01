@@ -7,16 +7,16 @@ const sections = [
   {
     title: "1. Purpose",
     paragraphs: [
-      "This Acceptable Use Policy explains what users may and may not do when using the WoWYou EventTech / EventOS platform, operated by WoWYou Concepts Ltd.",
-      "It is intended to protect event organisers, attendees, vendors, sponsors, enterprise customers, partners and the wider public from unlawful, unsafe, abusive, fraudulent or harmful use of the platform.",
-      "This Policy forms part of the EventOS Terms of Service and applies in addition to any order form, enterprise agreement, marketplace terms, event rules, refund policy or other contract agreed with WoWYou Concepts Ltd.",
+      "This Acceptable Use Policy explains what users may and may not do when using the WoWYou EventTech / EventOS platform, operated by wowyou concepts.",
+      "It is intended to protect event organizers, attendees, vendors, sponsors, enterprise customers, partners and the wider public from unlawful, unsafe, abusive, fraudulent or harmful use of the platform.",
+      "This Policy forms part of the EventOS Terms of Service and applies in addition to any order form, enterprise agreement, marketplace terms, event rules, refund policy or other contract agreed with wowyou concepts.",
     ],
   },
 
   {
     title: "2. Who This Policy Applies To",
     paragraphs: [
-      "This Policy applies to all users of EventOS, including event organisers and their staff or contractors, corporate and enterprise customers, vendors, suppliers, sponsors, exhibitors, attendees, guests, speakers, panellists, volunteers, marketplace users, service providers, developers, integration partners and API users.",
+      "This Policy applies to all users of EventOS, including event organizers and their staff or contractors, corporate and enterprise customers, vendors, suppliers, sponsors, exhibitors, attendees, guests, speakers, panellists, volunteers, marketplace users, service providers, developers, integration partners and API users.",
       "Anyone accessing EventOS through our websites, dashboards, applications or event tools is expected to comply with this Policy.",
       "Where you use EventOS on behalf of an organisation, you are responsible for ensuring that your organisation, staff, contractors, vendors and authorised users comply with this Policy.",
     ],
@@ -35,7 +35,7 @@ const sections = [
   {
     title: "4. General Standards of Conduct",
     paragraphs: [
-      "Users must use EventOS lawfully, honestly, safely and respectfully. Users must not use the platform in any way that could harm WoWYou Concepts Ltd, other users, event participants, vendors, venues, payment partners, service providers or the public.",
+      "Users must use EventOS lawfully, honestly, safely and respectfully. Users must not use the platform in any way that could harm wowyou concepts, other users, event participants, vendors, venues, payment partners, service providers or the public.",
     ],
     bullets: [
       "Provide accurate information and keep account details up to date.",
@@ -56,7 +56,7 @@ const sections = [
       "Illegal activity, including events or services that violate applicable criminal, civil, regulatory or public order laws.",
       "Promotion or facilitation of illegal goods, services or transactions.",
       "Attempts to evade law enforcement, regulatory requirements, licensing obligations or court orders.",
-      "Fake events, fake tickets, fake organisers, fake vendors or fake sponsors.",
+      "Fake events, fake tickets, fake organizers, fake vendors or fake sponsors.",
       "Misleading event descriptions, pricing, location, speakers, availability or refund information.",
       "Pyramid schemes, advance-fee fraud, investment scams, impersonation or phishing.",
       "Threats, harassment, bullying, stalking, intimidation or targeted abuse.",
@@ -85,9 +85,9 @@ const sections = [
   },
 
   {
-    title: "6. Specific Rules for Event Organisers",
+    title: "6. Specific Rules for Event organizers",
     paragraphs: [
-      "Organisers are responsible for the legality, safety, accuracy and delivery of their events. Organisers must ensure that all event information is clear, truthful, current and not misleading.",
+      "organizers are responsible for the legality, safety, accuracy and delivery of their events. organizers must ensure that all event information is clear, truthful, current and not misleading.",
     ],
     bullets: [
       "Obtain all required venue permissions, licences, permits, insurance, health and safety approvals and public authority permissions.",
@@ -99,7 +99,7 @@ const sections = [
       "Manage cancellations, postponements, refunds, complaints and attendee communications promptly and fairly.",
       "Do not upload attendee or third-party data unless you have the legal right to do so.",
       "Do not use EventOS communications for spam, unrelated marketing or unlawful direct marketing.",
-      "Cooperate with WoWYou Concepts Ltd where we investigate complaints, safety issues, fraud or legal concerns.",
+      "Cooperate with wowyou concepts where we investigate complaints, safety issues, fraud or legal concerns.",
     ],
   },
 
@@ -114,8 +114,8 @@ const sections = [
       "Maintain appropriate insurance, licences, qualifications and approvals where required.",
       "Do not sell counterfeit, unsafe, prohibited, recalled, stolen, age-restricted or illegally regulated goods or services.",
       "Do not misrepresent experience, credentials, endorsements, customer reviews or affiliations.",
-      "Treat organisers, attendees and other vendors respectfully and professionally.",
-      "Comply with vendor verification, due diligence or onboarding requirements requested by WoWYou Concepts Ltd or the organiser.",
+      "Treat organizers, attendees and other vendors respectfully and professionally.",
+      "Comply with vendor verification, due diligence or onboarding requirements requested by wowyou concepts or the organizer.",
     ],
   },
 
@@ -128,7 +128,7 @@ const sections = [
       "Provide accurate registration and ticketing information.",
       "Do not duplicate, tamper with, resell or misuse tickets, QR codes, digital passes, credentials or badges unless expressly permitted.",
       "Do not attempt to gain unauthorised access to events, sessions, VIP areas, speaker areas, dashboards or restricted content.",
-      "Respect organiser instructions, venue rules, staff, speakers, vendors and other attendees.",
+      "Respect organizer instructions, venue rules, staff, speakers, vendors and other attendees.",
       "Do not harass, threaten, abuse, discriminate against or endanger others.",
       "Do not use networking or messaging features for spam, scams, harassment, unlawful marketing or inappropriate contact.",
       "Report safety concerns, fraud, abusive behaviour or suspicious activity promptly.",
@@ -169,7 +169,7 @@ const sections = [
   title: "11. Payments, Ticketing and Financial Misuse",
   paragraphs: [
     "Users must not misuse EventOS payment, ticketing, refund, payout or marketplace features.",
-    "WoWYou Concepts Ltd may withhold, delay, reverse, freeze or investigate payments and payouts where we reasonably suspect fraud, chargebacks, legal violations, policy breaches, security concerns or payment provider requirements.",
+    "wowyou concepts may withhold, delay, reverse, freeze or investigate payments and payouts where we reasonably suspect fraud, chargebacks, legal violations, policy breaches, security concerns or payment provider requirements.",
   ],
   bullets: [
     "Creating fake events to collect funds or personal data.",
@@ -248,7 +248,7 @@ const sections = [
       "Designate appropriate administrators and limit access based on role and need.",
       "Ensure event workflows and registration forms are reviewed before publication.",
       "Maintain internal approval processes for public communications, sponsorships and vendor listings.",
-      "Notify WoWYou Concepts Ltd promptly of suspected security incidents, data issues or misuse.",
+      "Notify wowyou concepts promptly of suspected security incidents, data issues or misuse.",
       "Ensure that procurement, public accountability, anti-bribery and conflict-of-interest requirements are met.",
     ],
   },
@@ -256,37 +256,37 @@ const sections = [
   {
     title: "17. Reporting Abuse, Illegal Content and Policy Breaches",
     paragraphs: [
-      "Users may report suspected illegal content, harmful activity, fraud, safety issues, intellectual property infringement, privacy violations, abusive behaviour or other policy breaches using the report tools available in EventOS or by contacting WoWYou Concepts Ltd.",
+      "Users may report suspected illegal content, harmful activity, fraud, safety issues, intellectual property infringement, privacy violations, abusive behaviour or other policy breaches using the report tools available in EventOS or by contacting wowyou concepts.",
       "Reports should include enough information for review, such as the event name, user profile, listing, message, ticket reference, URL, screenshot, reason for concern and any supporting evidence.",
-      "WoWYou Concepts Ltd may review reports, request further information, restrict access, remove content, notify organisers, suspend payouts, preserve evidence, notify affected users or escalate matters to regulators, law enforcement, payment providers or competent authorities where appropriate or legally required.",
+      "wowyou concepts may review reports, request further information, restrict access, remove content, notify organizers, suspend payouts, preserve evidence, notify affected users or escalate matters to regulators, law enforcement, payment providers or competent authorities where appropriate or legally required.",
     ],
   },
 
   {
     title: "18. Moderation and Enforcement",
     paragraphs: [
-      "WoWYou Concepts Ltd may take action where we reasonably believe that this Policy, the Terms of Service, applicable law, payment provider rules, event safety requirements or third-party rights have been breached.",
-      "Enforcement decisions may be based on user reports, automated detection, platform monitoring, payment provider alerts, organiser complaints, legal notices, third-party reports, security signals or internal review.",
+      "wowyou concepts may take action where we reasonably believe that this Policy, the Terms of Service, applicable law, payment provider rules, event safety requirements or third-party rights have been breached.",
+      "Enforcement decisions may be based on user reports, automated detection, platform monitoring, payment provider alerts, organizer complaints, legal notices, third-party reports, security signals or internal review.",
     ],
     bullets: [
       "Issue a warning or request corrective action.",
       "Remove, restrict, hide, demote or disable content, listings, messages, events, profiles or marketplace pages.",
-      "Suspend, restrict or terminate accounts, organiser access, vendor access, API access or administrator privileges.",
+      "Suspend, restrict or terminate accounts, organizer access, vendor access, API access or administrator privileges.",
       "Cancel or pause ticket sales, registrations, communications or event publication.",
       "Delay, freeze, withhold, reverse or investigate payments and payouts.",
       "Require additional verification, documentation, licences, proof of authority, insurance or compliance evidence.",
       "Block users, devices, IP addresses, payment methods, domains or organisations associated with misuse.",
       "Preserve records for legal, security, compliance, audit or dispute purposes.",
-      "Notify relevant organisers, attendees, payment providers, service providers, regulators, law enforcement or other competent authorities where appropriate.",
+      "Notify relevant organizers, attendees, payment providers, service providers, regulators, law enforcement or other competent authorities where appropriate.",
     ],
   },
 
   {
     title: "19. Appeals and Review",
     paragraphs: [
-      "Where appropriate, affected users may request a review of certain moderation or enforcement decisions by contacting WoWYou Concepts Ltd.",
+      "Where appropriate, affected users may request a review of certain moderation or enforcement decisions by contacting wowyou concepts.",
       "Appeals should include the decision being challenged, the reason for the appeal and any supporting information.",
-      "WoWYou Concepts Ltd may decline appeals that are abusive, repetitive, fraudulent, legally restricted, security-sensitive, outside our control, or where the account has been terminated for serious misconduct.",
+      "wowyou concepts may decline appeals that are abusive, repetitive, fraudulent, legally restricted, security-sensitive, outside our control, or where the account has been terminated for serious misconduct.",
       "We may maintain restrictions while an appeal is under review.",
     ],
   },
@@ -294,7 +294,7 @@ const sections = [
   {
     title: "20. Cooperation with Authorities and Legal Notices",
     paragraphs: [
-      "WoWYou Concepts Ltd may cooperate with law enforcement, regulators, courts, supervisory authorities, payment providers, consumer protection bodies, data protection authorities, venue operators, security providers and other competent organisations where legally required or reasonably necessary to protect users, prevent harm, investigate wrongdoing or enforce this Policy.",
+      "wowyou concepts may cooperate with law enforcement, regulators, courts, supervisory authorities, payment providers, consumer protection bodies, data protection authorities, venue operators, security providers and other competent organisations where legally required or reasonably necessary to protect users, prevent harm, investigate wrongdoing or enforce this Policy.",
       "Users must not use EventOS to avoid legal obligations, court orders, regulatory notices, sanctions, tax obligations, consumer protection rules or lawful investigations.",
     ],
   },
@@ -302,7 +302,7 @@ const sections = [
   {
     title: "21. Policy Updates",
     paragraphs: [
-      "WoWYou Concepts Ltd may update this Policy from time to time to reflect changes in platform features, laws, markets, operational risks, payment provider rules or user safety requirements.",
+      "wowyou concepts may update this Policy from time to time to reflect changes in platform features, laws, markets, operational risks, payment provider rules or user safety requirements.",
       "Where changes are material, we will take reasonable steps to notify users.",
       "Continued use of EventOS after the updated Policy takes effect means that you accept the updated Policy.",
     ],
@@ -311,7 +311,7 @@ const sections = [
   {
     title: "22. Contact",
     paragraphs: [
-      "Questions, reports or appeals relating to this Policy should be sent to WoWYou Concepts Ltd.",
+      "Questions, reports or appeals relating to this Policy should be sent to wowyou concepts.",
       "Email: enquiries@wowyouconcepts.com",
       "Registered address: Michael Galvin (MG) Building, B.A.S.E Enterprise Centre, Ladyswell Road, D15 NX4W, Damastown, Mulhuddart, Ireland.",
     ],

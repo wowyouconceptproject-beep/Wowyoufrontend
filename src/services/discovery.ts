@@ -15,7 +15,7 @@ export interface DiscoveryResponse {
 
   live: any[];
 
-  popularOrganizers: any[];
+  popularorganizers: any[];
 
   topVendors: any[];
 

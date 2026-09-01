@@ -2,6 +2,7 @@
 
 import {
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
@@ -12,8 +13,10 @@ import {
 import {
   createBillingCheckout,
   getBillingPlans,
-  OrganizerPlan,
-  OrganizerPlanConfig,
+  organizerPlan,
+  organizerPlanConfig,
+  BillingCountry,
+  BillingInterval,
 } from "@/services/billing";
 
 /*
@@ -21,8 +24,8 @@ import {
 | WOWYOU Brand
 |--------------------------------------------------------------------------
 |
-| This page intentionally does NOT import a font.
-| It inherits the font configured by the application layout.
+| This page intentionally does not import a font.
+| It inherits the application layout font.
 |
 */
 
@@ -31,19 +34,71 @@ const BRAND_HOVER = "#1F7197";
 
 /*
 |--------------------------------------------------------------------------
-| Fallback Plans
+| Billing Countries
 |--------------------------------------------------------------------------
 */
 
-const FALLBACK_PLANS: OrganizerPlanConfig[] = [
+const BILLING_COUNTRIES: {
+  value: BillingCountry;
+  label: string;
+  currency: string;
+}[] = [
+  {
+    value: "GB",
+    label: "United Kingdom",
+    currency: "GBP",
+  },
+  {
+    value: "EU",
+    label: "European Union",
+    currency: "EUR",
+  },
+  {
+    value: "CH",
+    label: "Switzerland",
+    currency: "CHF",
+  },
+  {
+    value: "NO",
+    label: "Norway",
+    currency: "NOK",
+  },
+  {
+    value: "SE",
+    label: "Sweden",
+    currency: "SEK",
+  },
+  {
+    value: "DK",
+    label: "Denmark",
+    currency: "DKK",
+  },
+  {
+    value: "US",
+    label: "United States",
+    currency: "USD",
+  },
+];
+
+/*
+|--------------------------------------------------------------------------
+| Fallback Plans
+|--------------------------------------------------------------------------
+|
+| Used only if the backend cannot return plans.
+| Pricing here mirrors the current GB pricing.
+|
+*/
+
+const FALLBACK_PLANS: organizerPlanConfig[] = [
   {
     plan: "STARTER",
+
     name: "Starter",
-    amount: 49,
-    currency: "GBP",
-    interval: "MONTH",
+
     description:
       "Everything you need to start running professional events.",
+
     features: [
       "Event creation",
       "Event publishing",
@@ -51,16 +106,30 @@ const FALLBACK_PLANS: OrganizerPlanConfig[] = [
       "Attendee management",
       "Basic analytics",
     ],
+
+    pricing: {
+      GB: {
+        MONTH: {
+          amount: 5.99,
+          currency: "GBP",
+        },
+
+        YEAR: {
+          amount: 49.99,
+          currency: "GBP",
+        },
+      },
+    },
   },
 
   {
     plan: "PROFESSIONAL",
+
     name: "Professional",
-    amount: 149,
-    currency: "GBP",
-    interval: "MONTH",
+
     description:
       "Advanced tools for growing event operations.",
+
     features: [
       "Everything in Starter",
       "Staff management",
@@ -69,16 +138,30 @@ const FALLBACK_PLANS: OrganizerPlanConfig[] = [
       "Advanced analytics",
       "Reports",
     ],
+
+    pricing: {
+      GB: {
+        MONTH: {
+          amount: 16.99,
+          currency: "GBP",
+        },
+
+        YEAR: {
+          amount: 149.99,
+          currency: "GBP",
+        },
+      },
+    },
   },
 
   {
     plan: "BUSINESS",
+
     name: "Business",
-    amount: 399,
-    currency: "GBP",
-    interval: "MONTH",
+
     description:
       "Complete infrastructure for serious event businesses.",
+
     features: [
       "Everything in Professional",
       "Vendor management",
@@ -86,22 +169,50 @@ const FALLBACK_PLANS: OrganizerPlanConfig[] = [
       "Multiple events",
       "Advanced operations",
     ],
+
+    pricing: {
+      GB: {
+        MONTH: {
+          amount: 44.99,
+          currency: "GBP",
+        },
+
+        YEAR: {
+          amount: 399.99,
+          currency: "GBP",
+        },
+      },
+    },
   },
 
   {
     plan: "ENTERPRISE",
+
     name: "Enterprise",
-    amount: 1500,
-    currency: "GBP",
-    interval: "MONTH",
+
     description:
       "Enterprise-grade event infrastructure and support.",
+
     features: [
       "Everything in Business",
       "Enterprise support",
       "Custom requirements",
       "Dedicated infrastructure",
     ],
+
+    pricing: {
+      GB: {
+        MONTH: {
+          amount: 169.99,
+          currency: "GBP",
+        },
+
+        YEAR: {
+          amount: 1499.99,
+          currency: "GBP",
+        },
+      },
+    },
   },
 ];
 
@@ -122,10 +233,16 @@ export default function BillingPage() {
     hasActiveSubscription,
   } = useAuth();
 
+  /*
+  |--------------------------------------------------------------------------
+  | Plans
+  |--------------------------------------------------------------------------
+  */
+
   const [
     plans,
     setPlans,
-  ] = useState<OrganizerPlanConfig[]>(
+  ] = useState<organizerPlanConfig[]>(
     FALLBACK_PLANS,
   );
 
@@ -134,10 +251,36 @@ export default function BillingPage() {
     setBillingLoading,
   ] = useState(true);
 
+  /*
+  |--------------------------------------------------------------------------
+  | Billing Selection
+  |--------------------------------------------------------------------------
+  */
+
+  const [
+    billingCountry,
+    setBillingCountry,
+  ] = useState<BillingCountry>(
+    "GB",
+  );
+
+  const [
+    billingInterval,
+    setBillingInterval,
+  ] = useState<BillingInterval>(
+    "YEAR",
+  );
+
+  /*
+  |--------------------------------------------------------------------------
+  | Checkout State
+  |--------------------------------------------------------------------------
+  */
+
   const [
     checkoutPlan,
     setCheckoutPlan,
-  ] = useState<OrganizerPlan | null>(
+  ] = useState<organizerPlan | null>(
     null,
   );
 
@@ -180,7 +323,7 @@ export default function BillingPage() {
       }
     } catch (err) {
       console.error(
-        "Failed to load billing plans:",
+        "FAILED TO LOAD BILLING PLANS:",
         err,
       );
 
@@ -196,6 +339,24 @@ export default function BillingPage() {
 
   /*
   |--------------------------------------------------------------------------
+  | Selected Country
+  |--------------------------------------------------------------------------
+  */
+
+  const selectedCountry =
+    useMemo(
+      () =>
+        BILLING_COUNTRIES.find(
+          (country) =>
+            country.value ===
+            billingCountry,
+        ) ??
+        BILLING_COUNTRIES[0],
+      [billingCountry],
+    );
+
+  /*
+  |--------------------------------------------------------------------------
   | Currency Formatting
   |--------------------------------------------------------------------------
   */
@@ -205,34 +366,43 @@ export default function BillingPage() {
   ) {
     switch (
       String(
-        currency ?? "GBP",
+        currency ?? "",
       ).toUpperCase()
     ) {
-      case "USD":
-        return "$";
+      case "GBP":
+        return "£";
 
       case "EUR":
         return "€";
 
-      case "GBP":
-        return "£";
+      case "CHF":
+        return "CHF ";
+
+      case "NOK":
+        return "kr ";
+
+      case "SEK":
+        return "kr ";
+
+      case "DKK":
+        return "kr ";
+
+      case "USD":
+        return "$";
 
       case "NGN":
         return "₦";
-
-      case "KES":
-        return "KSh";
 
       case "ZAR":
         return "R";
 
       default:
-        return currency ?? "£";
+        return `${currency ?? ""} `;
     }
   }
 
   function formatAmount(
-    amount: string | number,
+    amount: number | string,
     currency?: string,
   ) {
     const numericAmount =
@@ -252,26 +422,36 @@ export default function BillingPage() {
       currency,
     )}${numericAmount.toLocaleString(
       "en-US",
+      {
+        minimumFractionDigits:
+          numericAmount % 1 ===
+          0
+            ? 0
+            : 2,
+
+        maximumFractionDigits: 2,
+      },
     )}`;
   }
 
   /*
   |--------------------------------------------------------------------------
-  | Humanize Feature Names
+  | Get Selected Price
   |--------------------------------------------------------------------------
-  |
-  | Protects the UI if the backend returns:
-  |
-  | EVENT_CREATION
-  | STAFF_MANAGEMENT
-  | AI_FEATURES
-  |
-  | Instead of:
-  |
-  | Event Creation
-  | Staff Management
-  | AI Features
-  |
+  */
+
+  function getPlanPrice(
+    plan: organizerPlanConfig,
+  ) {
+    return plan.pricing?.[
+      billingCountry
+    ]?.[billingInterval] ?? null;
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Feature Formatting
+  |--------------------------------------------------------------------------
   */
 
   function formatFeature(
@@ -300,7 +480,7 @@ export default function BillingPage() {
 
   /*
   |--------------------------------------------------------------------------
-  | Plan Name
+  | Plan Name Formatting
   |--------------------------------------------------------------------------
   */
 
@@ -331,7 +511,7 @@ export default function BillingPage() {
   */
 
   async function handleCheckout(
-    plan: OrganizerPlan,
+    plan: organizerPlan,
   ) {
     try {
       setCheckoutPlan(plan);
@@ -352,6 +532,32 @@ export default function BillingPage() {
       if (!organization) {
         throw new Error(
           "Your organization could not be loaded.",
+        );
+      }
+
+      /*
+      |--------------------------------------------------------------------------
+      | Selected Pricing
+      |--------------------------------------------------------------------------
+      */
+
+      const selectedPlan =
+        plans.find(
+          (item) =>
+            item.plan ===
+            plan,
+        );
+
+      const pricing =
+        selectedPlan
+          ? getPlanPrice(
+              selectedPlan,
+            )
+          : null;
+
+      if (!pricing) {
+        throw new Error(
+          `Pricing is not currently available for ${selectedCountry.label}.`,
         );
       }
 
@@ -383,13 +589,19 @@ export default function BillingPage() {
 
       /*
       |--------------------------------------------------------------------------
-      | Create Revolut Checkout
+      | Create Checkout
       |--------------------------------------------------------------------------
       */
 
       const response =
         await createBillingCheckout({
           plan,
+
+          country:
+            billingCountry,
+
+          interval:
+            billingInterval,
 
           fullName,
 
@@ -419,7 +631,7 @@ export default function BillingPage() {
         response.checkoutUrl;
     } catch (err) {
       console.error(
-        "Billing checkout error:",
+        "BILLING CHECKOUT ERROR:",
         err,
       );
 
@@ -440,17 +652,11 @@ export default function BillingPage() {
   */
 
   function isCurrentPlan(
-    plan: OrganizerPlan,
+    plan: organizerPlan,
   ) {
     if (!subscription) {
       return false;
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Active Paid Subscription
-    |--------------------------------------------------------------------------
-    */
 
     if (
       subscription.status ===
@@ -461,12 +667,6 @@ export default function BillingPage() {
         plan
       );
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Active Trial
-    |--------------------------------------------------------------------------
-    */
 
     if (
       subscription.status ===
@@ -495,7 +695,7 @@ export default function BillingPage() {
 
     /*
     |--------------------------------------------------------------------------
-    | Expired Trial
+    | Expired
     |--------------------------------------------------------------------------
     */
 
@@ -504,25 +704,25 @@ export default function BillingPage() {
     ) {
       return (
         <section className="mx-auto mt-10 max-w-5xl overflow-hidden rounded-[28px] border border-red-500/20 bg-red-500/[0.06]">
-          <div className="flex flex-col gap-5 px-6 py-6 md:flex-row md:items-center md:justify-between md:px-8">
+          <div className="px-6 py-6 md:px-8">
 
-            <div>
-              <div className="flex items-center gap-3">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-red-500/10 text-sm text-red-400">
-                  !
-                </span>
+            <div className="flex items-center gap-3">
 
-                <p className="text-sm font-semibold text-red-300">
-                  Your free trial has ended
-                </p>
-              </div>
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-red-500/10 text-sm text-red-400">
+                !
+              </span>
 
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-red-200/50">
-                Choose an organizer plan below
-                to continue using WOWYOU's
-                event management infrastructure.
+              <p className="text-sm font-semibold text-red-300">
+                Your free trial has ended
               </p>
+
             </div>
+
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-red-200/50">
+              Choose an organizer plan below
+              to continue using WOWYOU's
+              event management infrastructure.
+            </p>
 
           </div>
         </section>
@@ -531,7 +731,7 @@ export default function BillingPage() {
 
     /*
     |--------------------------------------------------------------------------
-    | Active Trial
+    | Active
     |--------------------------------------------------------------------------
     */
 
@@ -635,15 +835,11 @@ export default function BillingPage() {
 
       <section className="relative overflow-hidden border-b border-white/[0.07]">
 
-        {/* Background glow */}
-
         <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-[#3E86A4]/10 blur-[120px]" />
 
         <div className="pointer-events-none absolute -right-40 top-20 h-[450px] w-[450px] rounded-full bg-[#3E86A4]/[0.06] blur-[120px]" />
 
         <div className="relative mx-auto max-w-7xl px-6 pb-14 pt-12 md:px-10 md:pb-20 md:pt-16 lg:px-12">
-
-          {/* Brand */}
 
           <div className="flex items-center gap-3">
 
@@ -655,15 +851,13 @@ export default function BillingPage() {
 
           </div>
 
-          {/* Heading */}
-
           <div className="mt-8 max-w-4xl">
 
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-white/30">
               Organizer Infrastructure
             </p>
 
-            <h1 className="mt-4 text-4xl font-black tracking-[-0.04em] md:text-6xl lg:text-7xl">
+            <h1 className="mt-4 text-4xl font-black leading-[1.05] tracking-[-0.04em] md:text-6xl lg:text-7xl">
               Build events
               <br />
               <span className="text-white/35">
@@ -680,12 +874,10 @@ export default function BillingPage() {
 
           </div>
 
-          {/* Organization */}
-
           {organization && (
-            <div className="mt-8 inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.035] px-4 py-2.5">
+            <div className="mt-8 inline-flex max-w-full flex-wrap items-center gap-3 rounded-full border border-white/10 bg-white/[0.035] px-4 py-2.5">
 
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#3E86A4]/15 text-xs font-bold text-[#3E86A4]">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#3E86A4]/15 text-xs font-bold text-[#3E86A4]">
                 {organization.name
                   ?.charAt(0)
                   ?.toUpperCase() ??
@@ -712,8 +904,6 @@ export default function BillingPage() {
       {/* ================================================================ */}
 
       <div className="mx-auto max-w-7xl px-6 py-10 md:px-10 md:py-14 lg:px-12">
-
-        {/* Trial */}
 
         {renderTrialBanner()}
 
@@ -760,10 +950,14 @@ export default function BillingPage() {
                   <span className="rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-white/70">
                     {formatAmount(
                       subscription.amount,
-                      "GBP",
+                      subscription.currency,
                     )}
+
                     <span className="ml-1 text-xs font-normal text-white/30">
-                      / month
+                      /{" "}
+                      {String(
+                        subscription.interval,
+                      ).toLowerCase()}
                     </span>
                   </span>
 
@@ -789,20 +983,20 @@ export default function BillingPage() {
         )}
 
         {/* ============================================================ */}
-        {/* PLAN INTRO */}
+        {/* PRICING CONTROLS */}
         {/* ============================================================ */}
 
-        <div className="mt-14">
+        <section className="mt-14">
 
-          <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
 
             <div>
 
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#3E86A4]">
+              <p className="text-[10px] font-bold uppercase leading-5 tracking-[0.16em] text-[#3E86A4] sm:text-xs sm:tracking-[0.24em]">
                 Choose Your Infrastructure
               </p>
 
-              <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
+              <h2 className="mt-3 max-w-2xl text-3xl font-black leading-[1.08] tracking-[-0.025em] md:text-4xl">
                 Plans built around
                 <br className="hidden sm:block" />
                 how you run events.
@@ -810,22 +1004,144 @@ export default function BillingPage() {
 
             </div>
 
-            <p className="max-w-md text-sm leading-6 text-white/35 md:text-right">
-              Start small, scale as your
-              operation grows, and unlock
-              the infrastructure your events
-              require.
+            {/* ====================================================== */}
+            {/* CONTROLS */}
+            {/* ====================================================== */}
+
+            <div className="flex flex-col gap-3 sm:flex-row">
+
+              {/* Country */}
+
+              <div className="relative">
+
+                <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-white/25">
+                  Billing Country
+                </label>
+
+                <select
+                  value={
+                    billingCountry
+                  }
+                  onChange={(e) =>
+                    setBillingCountry(
+                      e.target
+                        .value as BillingCountry,
+                    )
+                  }
+                  className="min-w-[220px] appearance-none rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3.5 pr-10 text-sm font-semibold text-white outline-none transition hover:border-white/20 focus:border-[#3E86A4]/50"
+                >
+                  {BILLING_COUNTRIES.map(
+                    (
+                      country,
+                    ) => (
+                      <option
+                        key={
+                          country.value
+                        }
+                        value={
+                          country.value
+                        }
+                        className="bg-[#111]"
+                      >
+                        {
+                          country.label
+                        }{" "}
+                        ·{" "}
+                        {
+                          country.currency
+                        }
+                      </option>
+                    ),
+                  )}
+                </select>
+
+              </div>
+
+              {/* Interval */}
+
+              <div>
+
+                <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-white/25">
+                  Billing Cycle
+                </label>
+
+                <div className="flex rounded-2xl border border-white/10 bg-white/[0.04] p-1">
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setBillingInterval(
+                        "MONTH",
+                      )
+                    }
+                    className={[
+                      "rounded-xl px-4 py-2.5 text-xs font-bold transition",
+                      billingInterval ===
+                        "MONTH"
+                        ? "bg-white text-black"
+                        : "text-white/40 hover:text-white",
+                    ].join(" ")}
+                  >
+                    Monthly
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setBillingInterval(
+                        "YEAR",
+                      )
+                    }
+                    className={[
+                      "rounded-xl px-4 py-2.5 text-xs font-bold transition",
+                      billingInterval ===
+                        "YEAR"
+                        ? "bg-[#3E86A4] text-white"
+                        : "text-white/40 hover:text-white",
+                    ].join(" ")}
+                  >
+                    Yearly
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* Pricing Context */}
+
+          <div className="mt-6 flex flex-col gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.02] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+
+            <p className="text-xs text-white/35">
+              Pricing for{" "}
+              <span className="font-semibold text-white/65">
+                {selectedCountry.label}
+              </span>{" "}
+              ·{" "}
+              <span className="font-semibold text-white/65">
+                {selectedCountry.currency}
+              </span>
+            </p>
+
+            <p className="text-xs text-white/25">
+              {billingInterval ===
+              "YEAR"
+                ? "Annual billing"
+                : "Monthly billing"}
             </p>
 
           </div>
 
-        </div>
+        </section>
 
         {/* ============================================================ */}
         {/* PLANS */}
         {/* ============================================================ */}
 
-        <div className="mt-10 grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-8 grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
 
           {plans.map(
             (plan) => {
@@ -842,6 +1158,11 @@ export default function BillingPage() {
                 plan.plan ===
                 "PROFESSIONAL";
 
+              const price =
+                getPlanPrice(
+                  plan,
+                );
+
               return (
                 <article
                   key={
@@ -854,8 +1175,6 @@ export default function BillingPage() {
                       : "border-white/10 hover:border-white/20",
                   ].join(" ")}
                 >
-
-                  {/* Featured Top Line */}
 
                   {featured && (
                     <div className="h-1 w-full bg-[#3E86A4]" />
@@ -880,7 +1199,9 @@ export default function BillingPage() {
                     <div>
 
                       <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">
-                        {plan.plan}
+                        {formatPlanName(
+                          plan.plan,
+                        )}
                       </p>
 
                       <h3 className="mt-2 text-2xl font-bold text-white">
@@ -897,24 +1218,62 @@ export default function BillingPage() {
 
                     <div className="mt-7">
 
-                      <div className="flex items-baseline">
+                      {price ? (
+                        <>
+                          <div className="flex items-baseline">
 
-                        <span className="text-4xl font-black tracking-tight text-white">
-                          {formatAmount(
-                            plan.amount,
-                            plan.currency,
+                            <span className="text-4xl font-black tracking-tight text-white">
+                              {formatAmount(
+                                price.amount,
+                                price.currency,
+                              )}
+                            </span>
+
+                            <span className="ml-2 text-sm text-white/30">
+                              /{" "}
+                              {billingInterval ===
+                              "YEAR"
+                                ? "year"
+                                : "month"}
+                            </span>
+
+                          </div>
+
+                          {billingInterval ===
+                            "YEAR" && (
+                            <p className="mt-2 text-xs text-[#3E86A4]">
+                              Save with annual
+                              billing
+                            </p>
                           )}
-                        </span>
 
-                        <span className="ml-2 text-sm text-white/30">
-                          / month
-                        </span>
+                          {billingInterval ===
+                            "MONTH" && (
+                            <p className="mt-2 text-xs text-white/25">
+                              Flexible monthly
+                              billing
+                            </p>
+                          )}
 
-                      </div>
+                        </>
+                      ) : (
+                        <div>
 
-                      <p className="mt-2 text-xs text-white/25">
-                        14-day free trial
-                      </p>
+                          <p className="text-lg font-bold text-white/50">
+                            Unavailable
+                          </p>
+
+                          <p className="mt-2 text-xs leading-5 text-white/25">
+                            Pricing for{" "}
+                            {
+                              selectedCountry.label
+                            }{" "}
+                            is not currently
+                            available.
+                          </p>
+
+                        </div>
+                      )}
 
                     </div>
 
@@ -961,7 +1320,7 @@ export default function BillingPage() {
 
                     </div>
 
-                    {/* Button */}
+                    {/* Checkout */}
 
                     <button
                       type="button"
@@ -969,7 +1328,8 @@ export default function BillingPage() {
                         billingLoading ||
                         checkoutPlan !==
                           null ||
-                        current
+                        current ||
+                        !price
                       }
                       onClick={() =>
                         handleCheckout(
@@ -986,6 +1346,9 @@ export default function BillingPage() {
                         loadingPlan
                           ? "cursor-wait opacity-60"
                           : "",
+                        !price
+                          ? "cursor-not-allowed opacity-40"
+                          : "",
                       ].join(" ")}
                     >
                       {loadingPlan
@@ -997,7 +1360,9 @@ export default function BillingPage() {
                           : subscription?.status ===
                               "ACTIVE"
                             ? "Switch Plan"
-                            : "Start Free Trial"}
+                            : price
+                              ? "Start Free Trial"
+                              : "Unavailable"}
                     </button>
 
                   </div>
@@ -1026,14 +1391,16 @@ export default function BillingPage() {
               <div>
 
                 <p className="text-sm font-semibold text-white/70">
-                  Secure monthly billing
+                  Secure billing
                 </p>
 
                 <p className="mt-1 max-w-xl text-xs leading-5 text-white/30">
-                  All organizer plans include a
-                  14-day free trial. Payments are
-                  securely processed through
-                  Revolut.
+                  Choose monthly flexibility or
+                  save with annual billing. Your
+                  currency and pricing are based
+                  on your selected billing country.
+                  Payments are securely processed
+                  through Revolut.
                 </p>
 
               </div>

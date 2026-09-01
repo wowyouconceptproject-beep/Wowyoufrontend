@@ -365,7 +365,7 @@ export default function LoginPage() {
                 text-white/30
               "
             >
-              WOWYOU Organizer
+              WOWYOU organizer
               <span className="mx-2 text-white/15">
                 •
               </span>

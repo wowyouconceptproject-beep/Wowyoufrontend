@@ -100,10 +100,10 @@ export default function CookieConsentPage() {
           email:
             userEmail ?? undefined,
 
-          role: "ORGANIZER",
+          role: "organizer",
 
           consentSource:
-            "ORGANIZER_WEB",
+            "organizer_WEB",
 
           cookieCategories,
 

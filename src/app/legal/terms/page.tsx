@@ -8,7 +8,7 @@ const sections = [
     title: "1. Introduction",
     paragraphs: [
       "These Terms of Service govern your access to and use of the WoWYou EventTech EventOS platform, including our websites, mobile applications, software tools, registration systems, ticketing services, digital passes, check-in tools, attendee engagement features, AI-powered tools, analytics, marketplace features and related services.",
-      "EventOS is operated by WoWYou Concepts Ltd. By creating an account, accessing the platform, registering for an event, creating an event, buying a ticket, using our mobile app or otherwise using EventOS, you agree to these Terms.",
+      "EventOS is operated by wowyou concepts. By creating an account, accessing the platform, registering for an event, creating an event, buying a ticket, using our mobile app or otherwise using EventOS, you agree to these Terms.",
       "If you do not agree to these Terms, you must not use the platform.",
     ],
   },
@@ -16,7 +16,7 @@ const sections = [
   {
     title: "2. Who These Terms Apply To",
     paragraphs: [
-      "These Terms apply to event organisers, corporate clients, public sector organisations, community organisations, vendors and service providers, sponsors and exhibitors, attendees, speakers, platform administrators and any other person or organisation using EventOS.",
+      "These Terms apply to event organizers, corporate clients, public sector organisations, community organisations, vendors and service providers, sponsors and exhibitors, attendees, speakers, platform administrators and any other person or organisation using EventOS.",
       "Where you use EventOS on behalf of an organisation, you confirm that you have authority to accept these Terms on behalf of that organisation.",
     ],
   },
@@ -52,7 +52,7 @@ const sections = [
   },
 
   {
-    title: "5. Organiser Responsibilities",
+    title: "5. organizer Responsibilities",
     paragraphs: [
       "If you create, manage or promote events using EventOS, you are responsible for the following:",
       "You must not use EventOS for unlawful, fraudulent, misleading, abusive, discriminatory, unsafe or harmful activities.",
@@ -73,14 +73,14 @@ const sections = [
     title: "6. Attendee Responsibilities",
     paragraphs: [
       "If you register for or attend an event through EventOS, you agree to follow the applicable event and platform requirements.",
-      "Event admission is ultimately controlled by the event organiser and/or venue.",
+      "Event admission is ultimately controlled by the event organizer and/or venue.",
     ],
     bullets: [
       "Provide accurate registration information",
       "Follow event rules and venue requirements",
       "Use tickets, passes and QR codes only as authorised",
       "Not share, duplicate, tamper with or resell tickets unless permitted",
-      "Behave respectfully towards organisers, attendees, staff and vendors",
+      "Behave respectfully towards organizers, attendees, staff and vendors",
     ],
   },
 
@@ -88,12 +88,12 @@ const sections = [
     title: "7. Ticketing, Payments and Refunds",
     paragraphs: [
       "EventOS may support paid and free events. Where payments are processed through the platform, additional payment provider terms may apply.",
-      "Unless otherwise stated, the event organiser is responsible for the event and its delivery.",
-      "The organiser is responsible for refund decisions, cancellation policies and attendee disputes.",
+      "Unless otherwise stated, the event organizer is responsible for the event and its delivery.",
+      "The organizer is responsible for refund decisions, cancellation policies and attendee disputes.",
       "Platform fees, booking fees, payment processing fees or service charges may be non-refundable where permitted by law.",
-      "WoWYou Concepts Ltd may deduct applicable fees before remitting funds to organisers.",
+      "wowyou concepts may deduct applicable fees before remitting funds to organizers.",
       "We may withhold, suspend or reverse payments where we suspect fraud, chargebacks, legal violations or breach of these Terms.",
-      "We are not responsible for an organiser's failure to deliver an event unless WoWYou Concepts Ltd is expressly acting as the event organiser.",
+      "We are not responsible for an organizer's failure to deliver an event unless wowyou concepts is expressly acting as the event organizer.",
     ],
   },
 
@@ -111,7 +111,7 @@ const sections = [
     paragraphs: [
       "EventOS may include AI-powered tools such as event planning support, attendee recommendations, networking suggestions, content generation, analytics, reporting and workflow automation.",
       "AI outputs are provided to assist users and should not be treated as professional legal, financial, medical, tax, security or compliance advice. Users remain responsible for reviewing, approving and validating AI-generated content or recommendations before use.",
-      "WoWYou Concepts Ltd may monitor AI feature performance to improve accuracy, security, fairness and safety.",
+      "wowyou concepts may monitor AI feature performance to improve accuracy, security, fairness and safety.",
     ],
     bullets: [
       "Make unlawful, discriminatory or harmful decisions",
@@ -126,7 +126,7 @@ const sections = [
     title: "10. User Content",
     paragraphs: [
       "You may upload content such as event descriptions, logos, images, speaker details, agendas, messages, attendee lists, vendor information or other materials.",
-      "You retain ownership of your content. However, you grant WoWYou Concepts Ltd a licence to host, process, display, transmit and use that content as necessary to provide the platform.",
+      "You retain ownership of your content. However, you grant wowyou concepts a licence to host, process, display, transmit and use that content as necessary to provide the platform.",
       "You confirm that you have all necessary rights and permissions for any content you upload.",
       "We may remove content that breaches these Terms or applicable law.",
     ],
@@ -135,9 +135,9 @@ const sections = [
   {
     title: "11. Intellectual Property",
     paragraphs: [
-      "The EventOS platform, software, interface, workflows, branding, designs, AI tools, databases, documentation and related technology are owned by or licensed to WoWYou Concepts Ltd.",
+      "The EventOS platform, software, interface, workflows, branding, designs, AI tools, databases, documentation and related technology are owned by or licensed to wowyou concepts.",
       "You may not copy, modify, reverse engineer, resell, reproduce, distribute or create derivative works from EventOS unless expressly permitted in writing.",
-      "The names WoWYou Concepts, WoWYou EventTech, EventOS, and related marks, logos and branding belong to WoWYou Concepts Ltd or its licensors.",
+      "The names WoWYou Concepts, WoWYou EventTech, EventOS, and related marks, logos and branding belong to wowyou concepts or its licensors.",
     ],
   },
 
@@ -164,8 +164,8 @@ const sections = [
   {
     title: "13. Marketplace, Vendors and Third Parties",
     paragraphs: [
-      "EventOS may allow organisers to connect with vendors, sponsors, venues, service providers or marketplace partners.",
-      "Unless expressly stated, WoWYou Concepts Ltd is not responsible for third-party services, products, availability, quality, safety or performance. Users should conduct their own due diligence before engaging third parties.",
+      "EventOS may allow organizers to connect with vendors, sponsors, venues, service providers or marketplace partners.",
+      "Unless expressly stated, wowyou concepts is not responsible for third-party services, products, availability, quality, safety or performance. Users should conduct their own due diligence before engaging third parties.",
       "Third-party providers may have their own terms and privacy policies.",
     ],
   },
@@ -174,8 +174,8 @@ const sections = [
     title: "14. Data Protection",
     paragraphs: [
       "Our processing of personal data is explained in our Privacy Policy.",
-      "Depending on the activity, WoWYou Concepts Ltd may act as a data controller for account, billing, marketing, platform administration and direct user relationships, and/or as a data processor where we process attendee or event data on behalf of an event organiser.",
-      "Organisers are responsible for ensuring they have a lawful basis to collect and process personal data through EventOS.",
+      "Depending on the activity, wowyou concepts may act as a data controller for account, billing, marketing, platform administration and direct user relationships, and/or as a data processor where we process attendee or event data on behalf of an event organizer.",
+      "organizers are responsible for ensuring they have a lawful basis to collect and process personal data through EventOS.",
     ],
   },
 
@@ -208,7 +208,7 @@ const sections = [
   {
     title: "18. Confidentiality",
     paragraphs: [
-      "Where we receive confidential business information from enterprise clients, organisers, vendors or partners, we will use reasonable care to protect it and use it only for legitimate business purposes connected with the platform.",
+      "Where we receive confidential business information from enterprise clients, organizers, vendors or partners, we will use reasonable care to protect it and use it only for legitimate business purposes connected with the platform.",
     ],
   },
 
@@ -239,8 +239,8 @@ const sections = [
   {
     title: "21. Limitation of Liability",
     paragraphs: [
-      "To the fullest extent permitted by law, WoWYou Concepts Ltd will not be liable for indirect, consequential, special, punitive or loss-of-profit damages.",
-      "Our total liability for claims relating to the platform will not exceed the fees paid by you to WoWYou Concepts Ltd for the relevant service in the 12 months before the claim arose.",
+      "To the fullest extent permitted by law, wowyou concepts will not be liable for indirect, consequential, special, punitive or loss-of-profit damages.",
+      "Our total liability for claims relating to the platform will not exceed the fees paid by you to wowyou concepts for the relevant service in the 12 months before the claim arose.",
       "Nothing in these Terms limits liability where it cannot legally be limited, including liability for fraud, fraudulent misrepresentation, death or personal injury caused by negligence.",
     ],
   },
@@ -248,7 +248,7 @@ const sections = [
   {
     title: "22. Indemnity",
     paragraphs: [
-      "You agree to indemnify WoWYou Concepts Ltd against claims, losses, damages, costs and expenses arising from your breach of these Terms, your event, content, attendees or vendors, your misuse of personal data, your infringement of third-party rights, or your violation of applicable law.",
+      "You agree to indemnify wowyou concepts against claims, losses, damages, costs and expenses arising from your breach of these Terms, your event, content, attendees or vendors, your misuse of personal data, your infringement of third-party rights, or your violation of applicable law.",
     ],
     bullets: [
       "Your breach of these Terms",
@@ -278,7 +278,7 @@ const sections = [
   {
     title: "25. Contact",
     paragraphs: [
-      "For questions about these Terms, contact WoWYou Concepts Ltd.",
+      "For questions about these Terms, contact wowyou concepts.",
       "Email: enquiries@wowyouconcepts.com",
       "Registered address: Michael Galvin (MG) Building, B.A.S.E Enterprise Centre, Ladyswell Road, D15 NX4W, Damastown, Mulhuddart, Ireland.",
     ],

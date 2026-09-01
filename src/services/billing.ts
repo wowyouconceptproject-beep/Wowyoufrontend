@@ -6,26 +6,93 @@ import { apiFetch } from "@/lib/api";
 |--------------------------------------------------------------------------
 */
 
-export type OrganizerPlan =
+export type organizerPlan =
   | "STARTER"
   | "PROFESSIONAL"
   | "BUSINESS"
   | "ENTERPRISE";
 
-export interface OrganizerPlanConfig {
-  plan: OrganizerPlan;
+/*
+|--------------------------------------------------------------------------
+| Billing Interval
+|--------------------------------------------------------------------------
+*/
 
-  name: string;
+export type BillingInterval =
+  | "MONTH"
+  | "YEAR";
 
+/*
+|--------------------------------------------------------------------------
+| Billing Country
+|--------------------------------------------------------------------------
+|
+| Keep this aligned with backend:
+|
+| GB → United Kingdom
+| EU → Eurozone
+| CH → Switzerland
+| NO → Norway
+| SE → Sweden
+| DK → Denmark
+| US → United States
+|
+*/
+
+export type BillingCountry =
+  | "GB"
+  | "EU"
+  | "CH"
+  | "NO"
+  | "SE"
+  | "DK"
+  | "US";
+
+/*
+|--------------------------------------------------------------------------
+| Price
+|--------------------------------------------------------------------------
+*/
+
+export interface BillingPrice {
   amount: number;
 
   currency: string;
+}
 
-  interval: string;
+/*
+|--------------------------------------------------------------------------
+| Plan Pricing
+|--------------------------------------------------------------------------
+*/
+
+export interface PlanPricing {
+  MONTH: BillingPrice;
+
+  YEAR: BillingPrice;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Organizer Plan Configuration
+|--------------------------------------------------------------------------
+*/
+
+export interface organizerPlanConfig {
+  plan: organizerPlan;
+
+  name: string;
 
   description: string;
 
   features: string[];
+
+  pricing?: Partial<
+    Record<
+      BillingCountry,
+      PlanPricing
+    >
+  >;
 }
 
 /*
@@ -37,7 +104,7 @@ export interface OrganizerPlanConfig {
 export interface BillingPlansResponse {
   success: boolean;
 
-  plans: OrganizerPlanConfig[];
+  plans: organizerPlanConfig[];
 
   message?: string;
 }
@@ -53,7 +120,7 @@ export interface OrganizationSubscription {
 
   organizationId: string;
 
-  plan: OrganizerPlan;
+  plan: organizerPlan;
 
   status: string;
 
@@ -86,6 +153,12 @@ export interface OrganizationSubscription {
   updatedAt: string;
 }
 
+/*
+|--------------------------------------------------------------------------
+| Subscription Response
+|--------------------------------------------------------------------------
+*/
+
 export interface SubscriptionResponse {
   success: boolean;
 
@@ -98,12 +171,21 @@ export interface SubscriptionResponse {
 
 /*
 |--------------------------------------------------------------------------
-| Checkout
+| Checkout Payload
 |--------------------------------------------------------------------------
+|
+| Pricing is now resolved by the backend using:
+|
+| plan + country + interval
+|
 */
 
 export interface CreateBillingCheckoutPayload {
-  plan: OrganizerPlan;
+  plan: organizerPlan;
+
+  country: BillingCountry;
+
+  interval: BillingInterval;
 
   fullName: string;
 
@@ -111,6 +193,12 @@ export interface CreateBillingCheckoutPayload {
 
   redirectUrl: string;
 }
+
+/*
+|--------------------------------------------------------------------------
+| Checkout Response
+|--------------------------------------------------------------------------
+*/
 
 export interface CreateBillingCheckoutResponse {
   success: boolean;
@@ -122,6 +210,8 @@ export interface CreateBillingCheckoutResponse {
   revolutSubscriptionId: string;
 
   setupOrderId: string;
+
+  pricing?: BillingPrice;
 
   message?: string;
 }

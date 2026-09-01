@@ -7,7 +7,7 @@ const sections = [
   {
     title: "1. Introduction",
     paragraphs: [
-      "WoWYou Concepts Ltd respects your privacy and is committed to protecting personal data.",
+      "wowyou concepts respects your privacy and is committed to protecting personal data.",
       "This Privacy Policy explains how we collect, use, store, share and protect personal data when you use the WoWYou EventTech / EventOS platform, including our website, mobile app, event registration tools, ticketing features, QR passes, check-in tools, AI features, analytics, communications and related services.",
       "This Policy is designed to support compliance with the EU General Data Protection Regulation (GDPR), Irish data protection law, UK GDPR and applicable data protection laws in the countries where we operate or serve users, including relevant African data protection laws where applicable.",
     ],
@@ -16,9 +16,9 @@ const sections = [
   {
     title: "2. Who We Are",
     paragraphs: [
-      "WoWYou EventTech / EventOS is operated by WoWYou Concepts Ltd.",
-      "For some activities, WoWYou Concepts Ltd acts as a data controller, meaning we decide why and how personal data is processed.",
-      "For other activities, especially where an event organiser uses EventOS to manage attendee data, WoWYou Concepts Ltd may act as a data processor on behalf of that organiser. In those cases, the event organiser is normally the data controller and the processing may also be governed by a separate Data Processing Agreement.",
+      "WoWYou EventTech / EventOS is operated by wowyou concepts.",
+      "For some activities, wowyou concepts acts as a data controller, meaning we decide why and how personal data is processed.",
+      "For other activities, especially where an event organizer uses EventOS to manage attendee data, wowyou concepts may act as a data processor on behalf of that organizer. In those cases, the event organizer is normally the data controller and the processing may also be governed by a separate Data Processing Agreement.",
     ],
   },
 
@@ -44,7 +44,7 @@ const sections = [
   },
 
   {
-    title: "3.3 Organiser and Business Data",
+    title: "3.3 organizer and Business Data",
     paragraphs: [
       "Organisation name, billing details, event details, staff users, vendor details, sponsor details, venue details and business communications.",
     ],
@@ -90,7 +90,7 @@ const sections = [
     title: "4. Special Category Data and Biometric Login",
     paragraphs: [
       "EventOS does not intentionally require users to provide special category data such as health data, biometric identification data, ethnicity, religious beliefs, political opinions or genetic data.",
-      "However, some event organisers may choose to collect information such as accessibility needs, dietary preferences or other sensitive information through registration forms. Where this happens, the organiser is responsible for ensuring there is a valid lawful basis and any required consent.",
+      "However, some event organizers may choose to collect information such as accessibility needs, dietary preferences or other sensitive information through registration forms. Where this happens, the organizer is responsible for ensuring there is a valid lawful basis and any required consent.",
       "Device-native biometric login, such as Face ID, Touch ID or Android biometric authentication, does not mean EventOS collects or stores biometric templates. Biometric authentication should be handled by the user's device operating system.",
     ],
   },
@@ -112,7 +112,7 @@ const sections = [
       "Provide customer support",
       "Improve platform performance and security",
       "Detect fraud, misuse or security threats",
-      "Provide analytics and reports to organisers",
+      "Provide analytics and reports to organizers",
       "Manage subscriptions and contracts",
       "Send marketing communications where permitted",
       "Comply with legal and regulatory obligations",
@@ -161,11 +161,11 @@ const sections = [
   {
   title: "9. Sharing Personal Data",
   paragraphs: [
-    "We may share personal data with service providers, event organisers and other parties where necessary to provide EventOS, fulfil your requests, protect the platform, comply with law or otherwise process data on a lawful basis.",
+    "We may share personal data with service providers, event organizers and other parties where necessary to provide EventOS, fulfil your requests, protect the platform, comply with law or otherwise process data on a lawful basis.",
     "We require service providers to protect personal data and only process it for authorised purposes.",
   ],
   bullets: [
-    "Event organisers, where you register for their events",
+    "Event organizers, where you register for their events",
     "Payment processors",
     "Cloud hosting providers",
     "Email and messaging providers",
@@ -208,8 +208,8 @@ const sections = [
   title: "12. Data Retention",
   paragraphs: [
     "We keep personal data only for as long as necessary for the purposes described in this Policy.",
-    "Retention periods may vary depending on the type of data, user role, legal requirements and organiser instructions.",
-    "Where we process attendee data as a processor, retention may be governed by the organiser's instructions and our Data Processing Agreement.",
+    "Retention periods may vary depending on the type of data, user role, legal requirements and organizer instructions.",
+    "Where we process attendee data as a processor, retention may be governed by the organizer's instructions and our Data Processing Agreement.",
   ],
   bullets: [
     "Providing the platform",
@@ -233,7 +233,7 @@ const sections = [
   title: "14. Your Rights",
   paragraphs: [
     "Depending on where you live and which laws apply, you may have rights in relation to your personal data.",
-    "If your data is processed by an event organiser using EventOS, we may direct your request to that organiser where they are the controller.",
+    "If your data is processed by an event organizer using EventOS, we may direct your request to that organizer where they are the controller.",
   ],
   bullets: [
     "Right to access your personal data",
@@ -259,8 +259,8 @@ const sections = [
   {
     title: "16. Children",
     paragraphs: [
-      "EventOS is not intended for children under 16 unless an event organiser has appropriate authority and safeguards in place.",
-      "Where events involve children or minors, the organiser is responsible for obtaining appropriate parental or guardian consent and complying with safeguarding and child data protection requirements.",
+      "EventOS is not intended for children under 16 unless an event organizer has appropriate authority and safeguards in place.",
+      "Where events involve children or minors, the organizer is responsible for obtaining appropriate parental or guardian consent and complying with safeguarding and child data protection requirements.",
     ],
   },
 
@@ -268,7 +268,7 @@ const sections = [
     title: "17. Data Breaches",
     paragraphs: [
       "Where required by law, we will notify the relevant controller, supervisory authority or affected individuals of personal data breaches within applicable legal timeframes.",
-      "Where we act as a processor, we will notify the relevant organiser or controller without undue delay after becoming aware of a breach.",
+      "Where we act as a processor, we will notify the relevant organizer or controller without undue delay after becoming aware of a breach.",
     ],
   },
 
@@ -293,7 +293,7 @@ const sections = [
   {
     title: "20. Contact Us",
     paragraphs: [
-      "For privacy questions or requests, contact WoWYou Concepts Ltd.",
+      "For privacy questions or requests, contact wowyou concepts.",
       "Email: enquiries@wowyouconcepts.com",
       "Registered address: Michael Galvin (MG) Building, B.A.S.E Enterprise Centre, Ladyswell Road, D15 NX4W, Damastown, Mulhuddart, Ireland.",
       "You may also contact the relevant data protection authority, including the Irish Data Protection Commission where applicable.",

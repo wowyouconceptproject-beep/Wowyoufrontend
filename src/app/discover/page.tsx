@@ -647,7 +647,7 @@ export default function DiscoverPage() {
         </section>
       )}
 
-      {/* Organizer CTA */}
+      {/* organizer CTA */}
 
       <section
         className="

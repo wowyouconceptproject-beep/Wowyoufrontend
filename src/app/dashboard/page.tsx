@@ -190,7 +190,7 @@ export default function Dashboard() {
             </div>
 
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#3E86A4]">
-              Organizer Setup
+              organizer Setup
             </p>
 
             <h1 className="mt-4 text-4xl font-black tracking-tight md:text-5xl">
@@ -375,7 +375,7 @@ export default function Dashboard() {
           <div>
 
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#3E86A4]">
-              Organizer Dashboard
+              organizer Dashboard
             </p>
 
             <h1 className="mt-4 text-4xl font-black tracking-tight md:text-5xl">

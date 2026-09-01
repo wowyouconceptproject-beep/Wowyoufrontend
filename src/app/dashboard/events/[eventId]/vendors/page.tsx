@@ -684,7 +684,7 @@ function VendorCard({
               <div className="mt-6 rounded-2xl border border-white/[0.07] bg-black/20 p-5">
 
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/30">
-                  Message to Organizer
+                  Message to organizer
                 </p>
 
                 <p className="mt-3 text-sm leading-7 text-white/55">

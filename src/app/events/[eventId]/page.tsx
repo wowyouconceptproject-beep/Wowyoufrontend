@@ -317,7 +317,7 @@ export default function EventPage() {
             label="Hosted By"
             value={
               event.organization?.name ??
-              "WOWYOU Organizer"
+              "WOWYOU organizer"
             }
           />
         </div>
@@ -418,10 +418,10 @@ export default function EventPage() {
                   )}
 
                   <Detail
-                    label="Organizer"
+                    label="organizer"
                     value={
                       event.organization?.name ??
-                      "Event Organizer"
+                      "Event organizer"
                     }
                   />
                 </div>

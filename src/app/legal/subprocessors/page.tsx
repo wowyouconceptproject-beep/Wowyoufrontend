@@ -7,7 +7,7 @@ const sections = [
   {
     title: "1. Purpose of this List",
     paragraphs: [
-      "WoWYou Concepts Ltd uses selected third-party service providers to help operate, secure, improve and support the WoWYou EventTech / EventOS platform.",
+      "wowyou concepts uses selected third-party service providers to help operate, secure, improve and support the WoWYou EventTech / EventOS platform.",
       "These providers may process personal data where they provide services such as hosting, payments, email delivery, analytics, AI functionality, authentication, customer support and security monitoring.",
       "This list supports transparency under GDPR, UK GDPR and other applicable data protection laws.",
       "It should be read together with the WoWYou EventOS Privacy Policy, Data Processing Agreement, Cookie Policy and Terms of Service.",
@@ -17,9 +17,9 @@ const sections = [
   {
     title: "2. Controller / Processor Context",
     paragraphs: [
-      "When an event organiser or enterprise customer uses EventOS to manage attendee, speaker, exhibitor, sponsor, vendor or event user data, that customer will usually act as the data controller and WoWYou Concepts Ltd will usually act as a data processor.",
-      "In that context, the providers listed on this page may act as sub-processors of WoWYou Concepts Ltd.",
-      "For WoWYou Concepts Ltd account administration, billing, platform security, marketing, legal compliance and direct communications, WoWYou Concepts Ltd may act as an independent data controller.",
+      "When an event organizer or enterprise customer uses EventOS to manage attendee, speaker, exhibitor, sponsor, vendor or event user data, that customer will usually act as the data controller and wowyou concepts will usually act as a data processor.",
+      "In that context, the providers listed on this page may act as sub-processors of wowyou concepts.",
+      "For wowyou concepts account administration, billing, platform security, marketing, legal compliance and direct communications, wowyou concepts may act as an independent data controller.",
     ],
   },
 
@@ -28,7 +28,7 @@ const sections = [
     paragraphs: [
       "The production providers used by EventOS are being confirmed as part of the platform's pre-launch configuration.",
       "The table below identifies the categories of service providers that may be appointed. Provider names, locations, privacy links and transfer safeguards will be added before the relevant service is enabled in production.",
-      "WoWYou Concepts Ltd will not publish a provider as an active sub-processor unless that provider is actually used or formally appointed.",
+      "wowyou concepts will not publish a provider as an active sub-processor unless that provider is actually used or formally appointed.",
     ],
   },
 
@@ -47,7 +47,7 @@ const sections = [
     title: "3.2 Payment Processing and Fraud Controls",
     paragraphs: [
       "Potential provider category: payment processing and fraud prevention services.",
-      "Purpose: processing ticket payments, refunds, chargebacks, organiser payouts, payment status, transaction references and fraud monitoring.",
+      "Purpose: processing ticket payments, refunds, chargebacks, organizer payouts, payment status, transaction references and fraud monitoring.",
       "Personal data processed may include name, email address, billing details, payment status, transaction references and refund or chargeback information.",
       "Full payment card data should be handled by the payment processor and not stored by EventOS unless expressly required and legally supported.",
       "Provider location, contractual role and transfer safeguards will be confirmed before paid ticketing launches.",
@@ -59,7 +59,7 @@ const sections = [
     title: "3.3 Transactional Email, Marketing Email and Notifications",
     paragraphs: [
       "Potential provider category: transactional email, marketing email and platform notification services.",
-      "Purpose: sending account emails, event confirmations, ticket emails, QR pass emails, password resets, organiser updates, service notices and consented marketing communications.",
+      "Purpose: sending account emails, event confirmations, ticket emails, QR pass emails, password resets, organizer updates, service notices and consented marketing communications.",
       "Personal data processed may include name, email address, event registration status, ticket reference, message content and email delivery or engagement data.",
       "An EU/UK provider is preferred where practical. Appropriate contractual and international transfer safeguards will be required where applicable.",
       "Status: To be confirmed before email deployment.",
@@ -86,7 +86,7 @@ const sections = [
       "Personal data processed may include AI prompts, AI outputs, event information, profile or interest data where enabled and usage metadata.",
       "Special category data should not be submitted to AI providers unless expressly authorised, legally permitted and appropriately safeguarded.",
       "EU/UK data residency and no-training options are preferred where available. AI providers must be subject to appropriate contractual, security, confidentiality and international transfer safeguards.",
-      "WoWYou Concepts Ltd will not use customer event data or attendee personal data to train general-purpose AI models unless expressly agreed with the customer and supported by appropriate legal documentation.",
+      "wowyou concepts will not use customer event data or attendee personal data to train general-purpose AI models unless expressly agreed with the customer and supported by appropriate legal documentation.",
       "Status: To be confirmed before AI production use.",
     ],
   },
@@ -128,7 +128,7 @@ const sections = [
   {
     title: "4. Sub-processor Approval Criteria",
     paragraphs: [
-      "Before any provider is added to the live platform, WoWYou Concepts Ltd should confirm that the provider meets appropriate legal, privacy, security and operational standards.",
+      "Before any provider is added to the live platform, wowyou concepts should confirm that the provider meets appropriate legal, privacy, security and operational standards.",
     ],
     bullets: [
       "A written agreement or Data Processing Agreement is in place where required.",
@@ -144,7 +144,7 @@ const sections = [
   {
     title: "5. Changes to this Sub-processor List",
     paragraphs: [
-      "WoWYou Concepts Ltd may update this list when new service providers are appointed, removed or replaced.",
+      "wowyou concepts may update this list when new service providers are appointed, removed or replaced.",
       "Material changes affecting enterprise customers may be notified through the platform, by email, through the customer account area or through the published website policy page.",
       "Customers with a signed Data Processing Agreement may have additional notification or objection rights as set out in their agreement.",
     ],
@@ -153,8 +153,8 @@ const sections = [
   {
     title: "6. International Transfers",
     paragraphs: [
-      "WoWYou Concepts Ltd aims to use EU/EEA or UK data processing locations where practical.",
-      "Where a provider processes personal data outside the EU/EEA, UK or another jurisdiction recognised as adequate, WoWYou Concepts Ltd will rely on appropriate transfer safeguards.",
+      "wowyou concepts aims to use EU/EEA or UK data processing locations where practical.",
+      "Where a provider processes personal data outside the EU/EEA, UK or another jurisdiction recognised as adequate, wowyou concepts will rely on appropriate transfer safeguards.",
     ],
     bullets: [
       "Adequacy decisions",
@@ -169,7 +169,7 @@ const sections = [
   {
     title: "7. AI Provider Controls",
     paragraphs: [
-      "Where EventOS uses AI providers, WoWYou Concepts Ltd will apply additional controls designed to protect customer and attendee data.",
+      "Where EventOS uses AI providers, wowyou concepts will apply additional controls designed to protect customer and attendee data.",
     ],
     bullets: [
       "Use enterprise or business AI accounts where available.",
@@ -184,9 +184,9 @@ const sections = [
   {
     title: "8. What Is Not Included in this List",
     paragraphs: [
-      "This list does not normally include customers, event organisers, attendees, vendors chosen directly by organisers, venues, speakers or public authorities.",
+      "This list does not normally include customers, event organizers, attendees, vendors chosen directly by organizers, venues, speakers or public authorities.",
       "It may also not include organisations that act as independent controllers rather than processors, although those organisations should have their own privacy policies and contractual terms.",
-      "The fact that an organisation is not listed here does not necessarily mean that it does not process personal data in connection with an EventOS event. The list specifically concerns service providers appointed by WoWYou Concepts Ltd to support the EventOS platform.",
+      "The fact that an organisation is not listed here does not necessarily mean that it does not process personal data in connection with an EventOS event. The list specifically concerns service providers appointed by wowyou concepts to support the EventOS platform.",
     ],
   },
 
@@ -194,16 +194,16 @@ const sections = [
     title: "9. Publication and Maintenance",
     paragraphs: [
       "This page will be maintained as the public record of EventOS sub-processors.",
-      "Before production launch, WoWYou Concepts Ltd will replace all applicable 'To be confirmed' entries with the actual approved provider name, service category, processing purpose, relevant data categories, processing location and applicable transfer safeguard.",
+      "Before production launch, wowyou concepts will replace all applicable 'To be confirmed' entries with the actual approved provider name, service category, processing purpose, relevant data categories, processing location and applicable transfer safeguard.",
       "The published list should remain aligned with the provider schedule contained in applicable Data Processing Agreements.",
-      "WoWYou Concepts Ltd should publish or provide an updated sub-processor list to enterprise customers on request.",
+      "wowyou concepts should publish or provide an updated sub-processor list to enterprise customers on request.",
     ],
   },
 
   {
     title: "10. Contact",
     paragraphs: [
-      "For questions about this Sub-processor List or how WoWYou Concepts Ltd manages service providers, contact WoWYou Concepts Ltd.",
+      "For questions about this Sub-processor List or how wowyou concepts manages service providers, contact wowyou concepts.",
       "Platform: WoWYou EventTech / EventOS",
       "Email: enquiries@wowyouconcepts.com",
       "Registered address: Michael Galvin (MG) Building, B.A.S.E Enterprise Centre, Ladyswell Road, D15 NX4W, Damastown, Mulhuddart, Ireland.",

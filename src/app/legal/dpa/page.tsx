@@ -7,10 +7,10 @@ const sections = [
   {
     title: "1. Purpose of this DPA",
     paragraphs: [
-      "This Data Processing Agreement governs the processing of personal data by WoWYou Concepts Ltd on behalf of the Customer in connection with the Customer's use of the WoWYou EventTech / EventOS platform.",
+      "This Data Processing Agreement governs the processing of personal data by wowyou concepts on behalf of the Customer in connection with the Customer's use of the WoWYou EventTech / EventOS platform.",
       "EventOS may be used for event planning, registration, ticketing, digital passes, QR check-in, attendee engagement, networking, analytics, AI-assisted event workflows, sponsor and vendor management, communications and related platform services.",
-      "This DPA applies where WoWYou Concepts Ltd processes personal data as a processor on behalf of the Customer.",
-      "Where WoWYou Concepts Ltd determines the purposes and means of processing, including for its own account administration, billing, security, platform improvement, marketing or legal compliance, WoWYou Concepts Ltd acts as an independent controller and that processing is governed by the EventOS Privacy Policy.",
+      "This DPA applies where wowyou concepts processes personal data as a processor on behalf of the Customer.",
+      "Where wowyou concepts determines the purposes and means of processing, including for its own account administration, billing, security, platform improvement, marketing or legal compliance, wowyou concepts acts as an independent controller and that processing is governed by the EventOS Privacy Policy.",
     ],
   },
 
@@ -19,8 +19,8 @@ const sections = [
     paragraphs: [
       "Applicable Data Protection Laws means all laws and regulations relating to the protection of personal data that apply to the processing, including where applicable the EU General Data Protection Regulation 2016/679, Irish data protection law, UK GDPR and Data Protection Act 2018, ePrivacy and cookie rules, and applicable African data protection laws in countries where EventOS operates or serves users.",
       "Controller, Processor, Personal Data, Processing, Data Subject, Personal Data Breach, Special Category Data and Sub-processor have the meanings given under Applicable Data Protection Laws.",
-      "Customer Data means personal data processed by WoWYou Concepts Ltd on behalf of the Customer through EventOS.",
-      "Services means the EventOS platform and related services provided by WoWYou Concepts Ltd.",
+      "Customer Data means personal data processed by wowyou concepts on behalf of the Customer through EventOS.",
+      "Services means the EventOS platform and related services provided by wowyou concepts.",
     ],
   },
 
@@ -28,7 +28,7 @@ const sections = [
     title: "3. Roles of the Parties",
     paragraphs: [
       "The Customer is the Controller of Customer Data and determines the purpose and lawful basis for collecting and using personal data through EventOS.",
-      "WoWYou Concepts Ltd is the Processor of Customer Data and processes such data only on documented instructions from the Customer, except where required by law.",
+      "wowyou concepts is the Processor of Customer Data and processes such data only on documented instructions from the Customer, except where required by law.",
       "The Customer remains responsible for:",
     ],
     bullets: [
@@ -45,8 +45,8 @@ const sections = [
   {
   title: "4. Customer Instructions",
   paragraphs: [
-    "The Customer instructs WoWYou Concepts Ltd to process Customer Data only as necessary to provide and operate the Services.",
-    "WoWYou Concepts Ltd will inform the Customer if, in its opinion, an instruction infringes Applicable Data Protection Laws, unless prohibited from doing so by law.",
+    "The Customer instructs wowyou concepts to process Customer Data only as necessary to provide and operate the Services.",
+    "wowyou concepts will inform the Customer if, in its opinion, an instruction infringes Applicable Data Protection Laws, unless prohibited from doing so by law.",
   ],
   bullets: [
     "Provide, operate, maintain and support EventOS.",
@@ -71,7 +71,7 @@ const sections = [
   {
     title: "6. Confidentiality",
     paragraphs: [
-      "WoWYou Concepts Ltd will ensure that persons authorised to process Customer Data are subject to appropriate confidentiality obligations.",
+      "wowyou concepts will ensure that persons authorised to process Customer Data are subject to appropriate confidentiality obligations.",
       "Access to Customer Data will be limited to personnel, contractors and authorised Sub-processors who need access for the purpose of providing the Services.",
     ],
   },
@@ -79,7 +79,7 @@ const sections = [
   {
     title: "7. Security Measures",
     paragraphs: [
-      "WoWYou Concepts Ltd will implement appropriate technical and organisational measures to protect Customer Data against unauthorised or unlawful processing, accidental loss, destruction, damage, alteration or disclosure.",
+      "wowyou concepts will implement appropriate technical and organisational measures to protect Customer Data against unauthorised or unlawful processing, accidental loss, destruction, damage, alteration or disclosure.",
       "These measures may include:",
     ],
     bullets: [
@@ -102,10 +102,10 @@ const sections = [
   {
   title: "8. Personal Data Breach",
   paragraphs: [
-    "WoWYou Concepts Ltd will notify the Customer without undue delay after becoming aware of a Personal Data Breach affecting Customer Data.",
+    "wowyou concepts will notify the Customer without undue delay after becoming aware of a Personal Data Breach affecting Customer Data.",
     "The notification will include, where available:",
-    "WoWYou Concepts Ltd will provide reasonable assistance to the Customer in meeting applicable breach notification obligations.",
-    "The Customer remains responsible for determining whether to notify a supervisory authority or affected data subjects unless WoWYou Concepts Ltd is legally required to do so.",
+    "wowyou concepts will provide reasonable assistance to the Customer in meeting applicable breach notification obligations.",
+    "The Customer remains responsible for determining whether to notify a supervisory authority or affected data subjects unless wowyou concepts is legally required to do so.",
   ],
   bullets: [
     "A description of the nature of the breach.",
@@ -120,9 +120,9 @@ const sections = [
   {
   title: "9. Data Subject Rights",
   paragraphs: [
-    "WoWYou Concepts Ltd will provide reasonable assistance to the Customer to respond to data subject rights requests, including requests for:",
-    "If WoWYou Concepts Ltd receives a request directly from a data subject relating to Customer Data, WoWYou Concepts Ltd will, where appropriate, forward the request to the Customer or advise the requester to contact the Customer directly.",
-    "WoWYou Concepts Ltd will not respond to such requests on behalf of the Customer unless instructed or legally required.",
+    "wowyou concepts will provide reasonable assistance to the Customer to respond to data subject rights requests, including requests for:",
+    "If wowyou concepts receives a request directly from a data subject relating to Customer Data, wowyou concepts will, where appropriate, forward the request to the Customer or advise the requester to contact the Customer directly.",
+    "wowyou concepts will not respond to such requests on behalf of the Customer unless instructed or legally required.",
   ],
   bullets: [
     "Access.",
@@ -138,10 +138,10 @@ const sections = [
   {
     title: "10. Sub-processors",
     paragraphs: [
-      "The Customer authorises WoWYou Concepts Ltd to engage Sub-processors to provide the Services.",
-      "WoWYou Concepts Ltd will ensure that Sub-processors are bound by written obligations that provide an appropriate level of protection for Customer Data.",
-      "WoWYou Concepts Ltd will maintain a current Sub-processor List through the published EventOS Sub-processors page.",
-      "WoWYou Concepts Ltd will provide reasonable notice of material changes to Sub-processors where required by law or contract.",
+      "The Customer authorises wowyou concepts to engage Sub-processors to provide the Services.",
+      "wowyou concepts will ensure that Sub-processors are bound by written obligations that provide an appropriate level of protection for Customer Data.",
+      "wowyou concepts will maintain a current Sub-processor List through the published EventOS Sub-processors page.",
+      "wowyou concepts will provide reasonable notice of material changes to Sub-processors where required by law or contract.",
       "The Customer may object to a new Sub-processor on reasonable data protection grounds. If the Customer objects, the Parties will work in good faith to resolve the concern. Where resolution is not possible, the Customer may stop using the affected Services.",
     ],
   },
@@ -149,8 +149,8 @@ const sections = [
  {
   title: "11. International Transfers",
   paragraphs: [
-    "WoWYou Concepts Ltd will aim to process and store Customer Data within the EU/EEA, UK or other appropriate jurisdictions where practical.",
-    "Where Customer Data is transferred outside the EU/EEA, UK or another jurisdiction with transfer restrictions, WoWYou Concepts Ltd will ensure that appropriate safeguards are in place.",
+    "wowyou concepts will aim to process and store Customer Data within the EU/EEA, UK or other appropriate jurisdictions where practical.",
+    "Where Customer Data is transferred outside the EU/EEA, UK or another jurisdiction with transfer restrictions, wowyou concepts will ensure that appropriate safeguards are in place.",
     "Such safeguards may include:",
     "Further transfer provisions are described in Schedule 4.",
   ],
@@ -169,7 +169,7 @@ const sections = [
     title: "12. Special Category Data",
     paragraphs: [
       "EventOS is not designed to require Special Category Data by default.",
-      "The Customer must not use EventOS to collect Special Category Data unless it has identified a lawful basis and, where required, a special condition for processing, provided clear notices to data subjects, obtained explicit consent where required, configured EventOS appropriately and informed WoWYou Concepts Ltd where additional safeguards are required.",
+      "The Customer must not use EventOS to collect Special Category Data unless it has identified a lawful basis and, where required, a special condition for processing, provided clear notices to data subjects, obtained explicit consent where required, configured EventOS appropriately and informed wowyou concepts where additional safeguards are required.",
       "Examples may include accessibility requirements, dietary requirements, religious preferences, health-related access needs or similar information.",
       "Device-native biometric login, such as Face ID, Touch ID or Android biometric authentication, does not mean EventOS collects or stores biometric templates where authentication remains handled by the user's device operating system.",
     ],
@@ -178,17 +178,17 @@ const sections = [
   {
     title: "13. AI-Assisted Processing",
     paragraphs: [
-      "Where the Customer enables AI-assisted features within EventOS, WoWYou Concepts Ltd may process Customer Data to provide features such as event planning support, attendee recommendations, networking suggestions, analytics, reporting, content generation or workflow automation.",
-      "WoWYou Concepts Ltd will not use Customer Data to train general-purpose AI models unless expressly agreed with the Customer.",
+      "Where the Customer enables AI-assisted features within EventOS, wowyou concepts may process Customer Data to provide features such as event planning support, attendee recommendations, networking suggestions, analytics, reporting, content generation or workflow automation.",
+      "wowyou concepts will not use Customer Data to train general-purpose AI models unless expressly agreed with the Customer.",
       "The Customer remains responsible for reviewing AI outputs before relying on them and for ensuring AI-assisted features are not used unlawfully, unfairly or discriminatorily.",
-      "WoWYou Concepts Ltd will implement reasonable safeguards for AI-assisted features, including transparency, human oversight, security controls and monitoring for accuracy and potential misuse.",
+      "wowyou concepts will implement reasonable safeguards for AI-assisted features, including transparency, human oversight, security controls and monitoring for accuracy and potential misuse.",
     ],
   },
 
   {
   title: "14. Assistance with Compliance",
   paragraphs: [
-    "Taking into account the nature of processing and information available to WoWYou Concepts Ltd, WoWYou Concepts Ltd will provide reasonable assistance to the Customer with:",
+    "Taking into account the nature of processing and information available to wowyou concepts, wowyou concepts will provide reasonable assistance to the Customer with:",
     "The Customer remains responsible for its own compliance decisions and regulatory filings.",
   ],
   bullets: [
@@ -205,19 +205,19 @@ const sections = [
   {
     title: "15. Audit and Information Rights",
     paragraphs: [
-      "WoWYou Concepts Ltd will make available reasonable information necessary to demonstrate compliance with this DPA.",
-      "Where required by Applicable Data Protection Laws, the Customer may request an audit of WoWYou Concepts Ltd's processing of Customer Data.",
+      "wowyou concepts will make available reasonable information necessary to demonstrate compliance with this DPA.",
+      "Where required by Applicable Data Protection Laws, the Customer may request an audit of wowyou concepts's processing of Customer Data.",
       "Audits must be reasonable in scope, subject to confidentiality, limited to once per year unless required by law or following a material breach, conducted with reasonable notice, and conducted in a way that does not compromise the security, confidentiality or availability of EventOS or other customers' data.",
-      "WoWYou Concepts Ltd may satisfy audit requests through security documentation, certifications, policies, questionnaires, third-party reports or other reasonable evidence.",
+      "wowyou concepts may satisfy audit requests through security documentation, certifications, policies, questionnaires, third-party reports or other reasonable evidence.",
     ],
   },
 
   {
   title: "16. Data Return and Deletion",
   paragraphs: [
-    "At the end of the Services, or upon written request, WoWYou Concepts Ltd will delete or return Customer Data unless retention is required by law.",
+    "At the end of the Services, or upon written request, wowyou concepts will delete or return Customer Data unless retention is required by law.",
     "The Customer may export data from EventOS where export functionality is available.",
-    "WoWYou Concepts Ltd may retain limited records where necessary for:",
+    "wowyou concepts may retain limited records where necessary for:",
     "Where data is retained, it will remain protected under this DPA and Applicable Data Protection Laws.",
   ],
   bullets: [
@@ -237,7 +237,7 @@ const sections = [
       "The Customer confirms that:",
     ],
     bullets: [
-      "It has the legal right to provide Customer Data to WoWYou Concepts Ltd.",
+      "It has the legal right to provide Customer Data to wowyou concepts.",
       "It has provided appropriate privacy notices.",
       "It has identified a lawful basis for processing.",
       "It will not upload unlawful, excessive or unnecessary personal data.",
@@ -253,7 +253,7 @@ const sections = [
   paragraphs: [
     "EventOS is not intended by default for the processing of children's data or data relating to vulnerable individuals.",
     "If the Customer uses EventOS for events involving children, minors or vulnerable persons, the Customer is responsible for:",
-    "WoWYou Concepts Ltd may require additional safeguards or refuse processing where the risk is inappropriate.",
+    "wowyou concepts may require additional safeguards or refuse processing where the risk is inappropriate.",
   ],
   bullets: [
     "Obtaining parental or guardian consent where required.",
@@ -268,7 +268,7 @@ const sections = [
     title: "19. African Market Compliance",
     paragraphs: [
       "Where EventOS is used in African countries, the Customer is responsible for complying with applicable local data protection, consumer protection, marketing, event and sector-specific laws applicable to its activities.",
-      "WoWYou Concepts Ltd will take reasonable steps to support compliance with applicable African data protection laws where it operates or directly serves users in those markets.",
+      "wowyou concepts will take reasonable steps to support compliance with applicable African data protection laws where it operates or directly serves users in those markets.",
       "Where local law requires additional terms, local hosting, regulatory registration, data transfer mechanisms or specific notices, the Parties will cooperate in good faith to implement them.",
     ],
   },
@@ -292,7 +292,7 @@ const sections = [
   {
     title: "22. Term",
     paragraphs: [
-      "This DPA remains in effect for as long as WoWYou Concepts Ltd processes Customer Data on behalf of the Customer.",
+      "This DPA remains in effect for as long as wowyou concepts processes Customer Data on behalf of the Customer.",
       "Obligations relating to confidentiality, security, deletion, audit, liability and data protection will survive termination where necessary.",
     ],
   },
@@ -309,7 +309,7 @@ const sections = [
   {
     title: "24. Contact",
     paragraphs: [
-      "Processor: WoWYou Concepts Ltd",
+      "Processor: wowyou concepts",
       "Platform: WoWYou EventTech / EventOS",
       "Privacy Contact: enquiries@wowyouconcepts.com",
       "Registered Address: Michael Galvin (MG) Building, B.A.S.E Enterprise Centre, Ladyswell Road, D15 NX4W, Damastown, Mulhuddart, Ireland.",
@@ -321,12 +321,12 @@ const sections = [
     paragraphs: [
       "Subject Matter: Provision of the EventOS platform and related services for event planning, registration, ticketing, check-in, attendee engagement, analytics, AI-assisted features, communications, vendor and sponsor management and event operations.",
       "Duration: For the term of the Customer's use of EventOS and any additional retention period required by law, contract, backup integrity, dispute resolution or Customer instructions.",
-      "Nature and Purpose of Processing: WoWYou Concepts Ltd processes Customer Data to provide EventOS services, including account setup and user management, attendee registration, ticketing and digital pass creation, QR code generation and validation, secure check-in, event communications, networking and engagement tools, AI-assisted recommendations and automation, analytics and reporting, customer support, security monitoring, troubleshooting, payment status and invoice support, and event workflow management.",
+      "Nature and Purpose of Processing: wowyou concepts processes Customer Data to provide EventOS services, including account setup and user management, attendee registration, ticketing and digital pass creation, QR code generation and validation, secure check-in, event communications, networking and engagement tools, AI-assisted recommendations and automation, analytics and reporting, customer support, security monitoring, troubleshooting, payment status and invoice support, and event workflow management.",
       "Primary Processing Location: EU/EEA and/or UK where practical. Additional locations may apply depending on hosting, support, Sub-processors and Customer configuration, subject to appropriate transfer safeguards.",
     ],
     bullets: [
       "Event attendees.",
-      "Event organisers.",
+      "Event organizers.",
       "Customer staff and administrators.",
       "Speakers.",
       "Panellists.",
@@ -382,7 +382,7 @@ const sections = [
   {
     title: "Schedule 2 — Technical and Organisational Measures",
     paragraphs: [
-      "WoWYou Concepts Ltd will maintain technical and organisational measures appropriate to the nature and risks of the processing and the maturity of the EventOS platform.",
+      "wowyou concepts will maintain technical and organisational measures appropriate to the nature and risks of the processing and the maturity of the EventOS platform.",
     ],
     bullets: [
       "Access Control: role-based permissions, unique user accounts, administrative access restrictions, access logging and periodic access review.",
@@ -402,7 +402,7 @@ const sections = [
     title: "Schedule 3 — Approved Sub-processors",
     paragraphs: [
       "The current approved Sub-processors are maintained through the EventOS Sub-processor List.",
-      "WoWYou Concepts Ltd will keep that list updated when material Sub-processors are added, removed or replaced.",
+      "wowyou concepts will keep that list updated when material Sub-processors are added, removed or replaced.",
       "The Sub-processor List identifies the service category, purpose, relevant data processed, processing location or transfer safeguard and status of applicable providers.",
       "Where an enterprise Customer requires a contractual Sub-processor schedule, the published list and the applicable contractual schedule should remain aligned.",
     ],
@@ -414,7 +414,7 @@ const sections = [
       "EU/EEA Data: Where Customer Data protected by EU GDPR is transferred outside the EU/EEA to a country without an adequacy decision, the Parties will rely on the EU Standard Contractual Clauses or another valid transfer mechanism.",
       "UK Data: Where Customer Data protected by UK GDPR is transferred outside the UK to a country without adequacy regulations, the Parties will rely on the UK International Data Transfer Agreement, the UK Addendum to the EU Standard Contractual Clauses or another valid UK transfer mechanism.",
       "African Data: Where local African data protection laws apply, the Parties will implement any required transfer safeguards, notices, contracts, registrations, consents or regulatory approvals to the extent applicable.",
-      "Transfer Risk: Where required, WoWYou Concepts Ltd and the Customer will cooperate to assess transfer risks and implement supplementary measures such as encryption, access restrictions, data minimisation, contractual controls and supplier due diligence.",
+      "Transfer Risk: Where required, wowyou concepts and the Customer will cooperate to assess transfer risks and implement supplementary measures such as encryption, access restrictions, data minimisation, contractual controls and supplier due diligence.",
     ],
   },
 ];
@@ -423,12 +423,12 @@ export default function DpaPage() {
   return (
     <LegalLayout
       title="Enterprise Data Processing Agreement"
-      description="Data processing terms governing the processing of Customer Data by WoWYou Concepts Ltd when providing WoWYou EventTech / EventOS as a processor."
+      description="Data processing terms governing the processing of Customer Data by wowyou concepts when providing WoWYou EventTech / EventOS as a processor."
       effectiveDate="August 2026"
       version="v1.0"
     >
       <div className="mb-10 rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-sm leading-6 text-white/55">
-        This document is intended for event organisers, enterprise
+        This document is intended for event organizers, enterprise
         customers, corporate clients, venues, agencies, associations
         and public sector organisations using EventOS. It forms part
         of the applicable commercial or service agreement where
@@ -452,7 +452,7 @@ export default function DpaPage() {
         <div className="mt-8 grid gap-8 sm:grid-cols-2">
           <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40">
-              WoWYou Concepts Ltd
+              wowyou concepts
             </p>
 
             <div className="mt-8 space-y-5 text-sm text-white/55">
@@ -473,7 +473,7 @@ export default function DpaPage() {
 
           <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40">
-              Customer / Event Organiser
+              Customer / Event organizer
             </p>
 
             <div className="mt-8 space-y-5 text-sm text-white/55">
