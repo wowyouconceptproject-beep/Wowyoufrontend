@@ -36,6 +36,16 @@ const BRAND_HOVER = "#1F7197";
 |--------------------------------------------------------------------------
 | Billing Countries
 |--------------------------------------------------------------------------
+|
+| These are the markets currently provisioned in Revolut.
+|
+| GB → GBP
+| EU → EUR
+| US → USD
+|
+| Additional markets can be added later without changing
+| the pricing architecture.
+|
 */
 
 const BILLING_COUNTRIES: {
@@ -54,26 +64,6 @@ const BILLING_COUNTRIES: {
     currency: "EUR",
   },
   {
-    value: "CH",
-    label: "Switzerland",
-    currency: "CHF",
-  },
-  {
-    value: "NO",
-    label: "Norway",
-    currency: "NOK",
-  },
-  {
-    value: "SE",
-    label: "Sweden",
-    currency: "SEK",
-  },
-  {
-    value: "DK",
-    label: "Denmark",
-    currency: "DKK",
-  },
-  {
     value: "US",
     label: "United States",
     currency: "USD",
@@ -86,7 +76,9 @@ const BILLING_COUNTRIES: {
 |--------------------------------------------------------------------------
 |
 | Used only if the backend cannot return plans.
-| Pricing here mirrors the current GB pricing.
+|
+| These fallback prices mirror the currently supported
+| GBP pricing.
 |
 */
 
@@ -117,6 +109,30 @@ const FALLBACK_PLANS: organizerPlanConfig[] = [
         YEAR: {
           amount: 49.99,
           currency: "GBP",
+        },
+      },
+
+      EU: {
+        MONTH: {
+          amount: 5.99,
+          currency: "EUR",
+        },
+
+        YEAR: {
+          amount: 49.99,
+          currency: "EUR",
+        },
+      },
+
+      US: {
+        MONTH: {
+          amount: 6.99,
+          currency: "USD",
+        },
+
+        YEAR: {
+          amount: 59.99,
+          currency: "USD",
         },
       },
     },
@@ -151,6 +167,30 @@ const FALLBACK_PLANS: organizerPlanConfig[] = [
           currency: "GBP",
         },
       },
+
+      EU: {
+        MONTH: {
+          amount: 16.99,
+          currency: "EUR",
+        },
+
+        YEAR: {
+          amount: 149.99,
+          currency: "EUR",
+        },
+      },
+
+      US: {
+        MONTH: {
+          amount: 19.99,
+          currency: "USD",
+        },
+
+        YEAR: {
+          amount: 179.99,
+          currency: "USD",
+        },
+      },
     },
   },
 
@@ -182,6 +222,30 @@ const FALLBACK_PLANS: organizerPlanConfig[] = [
           currency: "GBP",
         },
       },
+
+      EU: {
+        MONTH: {
+          amount: 44.99,
+          currency: "EUR",
+        },
+
+        YEAR: {
+          amount: 399.99,
+          currency: "EUR",
+        },
+      },
+
+      US: {
+        MONTH: {
+          amount: 49.99,
+          currency: "USD",
+        },
+
+        YEAR: {
+          amount: 449.99,
+          currency: "USD",
+        },
+      },
     },
   },
 
@@ -210,6 +274,30 @@ const FALLBACK_PLANS: organizerPlanConfig[] = [
         YEAR: {
           amount: 1499.99,
           currency: "GBP",
+        },
+      },
+
+      EU: {
+        MONTH: {
+          amount: 169.99,
+          currency: "EUR",
+        },
+
+        YEAR: {
+          amount: 1499.99,
+          currency: "EUR",
+        },
+      },
+
+      US: {
+        MONTH: {
+          amount: 199.99,
+          currency: "USD",
+        },
+
+        YEAR: {
+          amount: 1699.99,
+          currency: "USD",
         },
       },
     },
@@ -375,6 +463,9 @@ export default function BillingPage() {
       case "EUR":
         return "€";
 
+      case "USD":
+        return "$";
+
       case "CHF":
         return "CHF ";
 
@@ -386,9 +477,6 @@ export default function BillingPage() {
 
       case "DKK":
         return "kr ";
-
-      case "USD":
-        return "$";
 
       case "NGN":
         return "₦";
@@ -436,16 +524,19 @@ export default function BillingPage() {
 
   /*
   |--------------------------------------------------------------------------
-  | Get Selected Price
+  | Selected Plan Price
   |--------------------------------------------------------------------------
   */
 
   function getPlanPrice(
     plan: organizerPlanConfig,
   ) {
-    return plan.pricing?.[
-      billingCountry
-    ]?.[billingInterval] ?? null;
+    return (
+      plan.pricing?.[
+        billingCountry
+      ]?.[billingInterval] ??
+      null
+    );
   }
 
   /*
@@ -519,7 +610,7 @@ export default function BillingPage() {
 
       /*
       |--------------------------------------------------------------------------
-      | Authentication Guard
+      | Authentication
       |--------------------------------------------------------------------------
       */
 
@@ -695,7 +786,7 @@ export default function BillingPage() {
 
     /*
     |--------------------------------------------------------------------------
-    | Expired
+    | Expired Trial
     |--------------------------------------------------------------------------
     */
 
@@ -703,26 +794,31 @@ export default function BillingPage() {
       trialDaysRemaining <= 0
     ) {
       return (
-        <section className="mx-auto mt-10 max-w-5xl overflow-hidden rounded-[28px] border border-red-500/20 bg-red-500/[0.06]">
-          <div className="px-6 py-6 md:px-8">
+        <section className="mx-auto mt-8 w-full max-w-5xl overflow-hidden rounded-[28px] border border-red-500/20 bg-red-500/[0.06]">
+          <div className="px-5 py-6 sm:px-6 md:px-8">
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-start gap-3">
 
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-red-500/10 text-sm text-red-400">
+              <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-500/10 text-sm text-red-400">
                 !
               </span>
 
-              <p className="text-sm font-semibold text-red-300">
-                Your free trial has ended
-              </p>
+              <div className="min-w-0">
+
+                <p className="text-sm font-semibold leading-6 text-red-300">
+                  Your free trial has ended
+                </p>
+
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-red-200/50">
+                  Choose an organizer plan
+                  below to continue using
+                  WOWYOU's event management
+                  infrastructure.
+                </p>
+
+              </div>
 
             </div>
-
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-red-200/50">
-              Choose an organizer plan below
-              to continue using WOWYOU's
-              event management infrastructure.
-            </p>
 
           </div>
         </section>
@@ -731,19 +827,19 @@ export default function BillingPage() {
 
     /*
     |--------------------------------------------------------------------------
-    | Active
+    | Active Trial
     |--------------------------------------------------------------------------
     */
 
     return (
-      <section className="mx-auto mt-10 max-w-5xl overflow-hidden rounded-[28px] border border-[#3E86A4]/20 bg-[#3E86A4]/[0.06]">
-        <div className="flex flex-col gap-6 px-6 py-6 md:flex-row md:items-center md:justify-between md:px-8">
+      <section className="mx-auto mt-8 w-full max-w-5xl overflow-hidden rounded-[28px] border border-[#3E86A4]/20 bg-[#3E86A4]/[0.06]">
+        <div className="flex flex-col gap-6 px-5 py-6 sm:px-6 md:flex-row md:items-center md:justify-between md:px-8">
 
-          <div>
+          <div className="min-w-0">
 
             <div className="flex flex-wrap items-center gap-3">
 
-              <span className="rounded-full bg-[#3E86A4] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white">
+              <span className="rounded-full bg-[#3E86A4] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
                 Free Trial
               </span>
 
@@ -755,7 +851,7 @@ export default function BillingPage() {
 
             </div>
 
-            <p className="mt-3 text-sm leading-6 text-white/50">
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-white/50">
               Your 14-day organizer trial is
               active. You have{" "}
               <strong className="text-white">
@@ -770,9 +866,9 @@ export default function BillingPage() {
 
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-black/20 px-5 py-4 md:min-w-[170px] md:text-right">
+          <div className="w-full rounded-2xl border border-white/10 bg-black/20 px-5 py-4 sm:w-auto md:min-w-[170px] md:text-right">
 
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/30">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/30">
               Trial Ends
             </p>
 
@@ -827,7 +923,7 @@ export default function BillingPage() {
   */
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white">
+    <main className="min-h-screen overflow-x-hidden bg-[#050505] text-white">
 
       {/* ================================================================ */}
       {/* HERO */}
@@ -839,25 +935,25 @@ export default function BillingPage() {
 
         <div className="pointer-events-none absolute -right-40 top-20 h-[450px] w-[450px] rounded-full bg-[#3E86A4]/[0.06] blur-[120px]" />
 
-        <div className="relative mx-auto max-w-7xl px-6 pb-14 pt-12 md:px-10 md:pb-20 md:pt-16 lg:px-12">
+        <div className="relative mx-auto max-w-7xl px-5 pb-12 pt-10 sm:px-6 md:px-10 md:pb-20 md:pt-16 lg:px-12">
 
           <div className="flex items-center gap-3">
 
-            <div className="h-px w-10 bg-[#3E86A4]" />
+            <div className="h-px w-8 shrink-0 bg-[#3E86A4] sm:w-10" />
 
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#3E86A4]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#3E86A4] sm:text-xs sm:tracking-[0.3em]">
               WOWYOU
             </p>
 
           </div>
 
-          <div className="mt-8 max-w-4xl">
+          <div className="mt-7 max-w-4xl sm:mt-8">
 
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-white/30">
+            <p className="text-[10px] font-semibold uppercase leading-5 tracking-[0.16em] text-white/30 sm:text-xs sm:tracking-[0.2em]">
               Organizer Infrastructure
             </p>
 
-            <h1 className="mt-4 text-4xl font-black leading-[1.05] tracking-[-0.04em] md:text-6xl lg:text-7xl">
+            <h1 className="mt-4 max-w-4xl text-[2.75rem] font-black leading-[1.02] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
               Build events
               <br />
               <span className="text-white/35">
@@ -865,7 +961,7 @@ export default function BillingPage() {
               </span>
             </h1>
 
-            <p className="mt-6 max-w-2xl text-base leading-8 text-white/45 md:text-lg">
+            <p className="mt-6 max-w-2xl text-[15px] leading-7 text-white/45 sm:text-base sm:leading-8 md:text-lg">
               Everything you need to create,
               sell, manage and operate
               professional events from one
@@ -875,7 +971,7 @@ export default function BillingPage() {
           </div>
 
           {organization && (
-            <div className="mt-8 inline-flex max-w-full flex-wrap items-center gap-3 rounded-full border border-white/10 bg-white/[0.035] px-4 py-2.5">
+            <div className="mt-8 inline-flex max-w-full flex-wrap items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-2.5 sm:rounded-full">
 
               <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#3E86A4]/15 text-xs font-bold text-[#3E86A4]">
                 {organization.name
@@ -888,7 +984,7 @@ export default function BillingPage() {
                 Billing for
               </span>
 
-              <span className="text-sm font-semibold text-white/80">
+              <span className="min-w-0 break-words text-sm font-semibold text-white/80">
                 {organization.name}
               </span>
 
@@ -903,7 +999,7 @@ export default function BillingPage() {
       {/* CONTENT */}
       {/* ================================================================ */}
 
-      <div className="mx-auto max-w-7xl px-6 py-10 md:px-10 md:py-14 lg:px-12">
+      <div className="mx-auto max-w-7xl px-5 py-8 sm:px-6 md:px-10 md:py-14 lg:px-12">
 
         {renderTrialBanner()}
 
@@ -913,13 +1009,13 @@ export default function BillingPage() {
 
         {subscription &&
           !isTrialing && (
-            <section className="mx-auto mt-10 max-w-5xl overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.035]">
+            <section className="mx-auto mt-8 w-full max-w-5xl overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.035] md:mt-10">
 
-              <div className="flex flex-col gap-6 px-6 py-6 md:flex-row md:items-center md:justify-between md:px-8">
+              <div className="flex flex-col gap-5 px-5 py-6 sm:px-6 md:flex-row md:items-center md:justify-between md:px-8">
 
-                <div>
+                <div className="min-w-0">
 
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/25">
                     Current Plan
                   </p>
 
@@ -935,7 +1031,7 @@ export default function BillingPage() {
 
                   <span
                     className={[
-                      "rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.15em]",
+                      "rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.12em]",
                       subscription.status ===
                         "ACTIVE"
                         ? "bg-[#3E86A4]/15 text-[#3E86A4]"
@@ -948,17 +1044,20 @@ export default function BillingPage() {
                   </span>
 
                   <span className="rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-white/70">
+
                     {formatAmount(
                       subscription.amount,
                       subscription.currency,
                     )}
 
                     <span className="ml-1 text-xs font-normal text-white/30">
-                      /{" "}
+                      /
+                      {" "}
                       {String(
                         subscription.interval,
                       ).toLowerCase()}
                     </span>
+
                   </span>
 
                 </div>
@@ -973,9 +1072,9 @@ export default function BillingPage() {
         {/* ============================================================ */}
 
         {error && (
-          <div className="mx-auto mt-8 max-w-5xl rounded-2xl border border-red-500/20 bg-red-500/[0.06] px-5 py-4">
+          <div className="mx-auto mt-8 w-full max-w-5xl rounded-2xl border border-red-500/20 bg-red-500/[0.06] px-5 py-4">
 
-            <p className="text-sm font-medium text-red-300">
+            <p className="text-sm font-medium leading-6 text-red-300">
               {error}
             </p>
 
@@ -983,24 +1082,31 @@ export default function BillingPage() {
         )}
 
         {/* ============================================================ */}
-        {/* PRICING CONTROLS */}
+        {/* PRICING */}
         {/* ============================================================ */}
 
-        <section className="mt-14">
+        <section className="mt-12 md:mt-14">
 
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
 
-            <div>
+            {/* Heading */}
 
-              <p className="text-[10px] font-bold uppercase leading-5 tracking-[0.16em] text-[#3E86A4] sm:text-xs sm:tracking-[0.24em]">
+            <div className="min-w-0 max-w-2xl">
+
+              <p className="max-w-full text-[10px] font-bold uppercase leading-5 tracking-[0.12em] text-[#3E86A4] sm:text-xs sm:tracking-[0.2em]">
                 Choose Your Infrastructure
               </p>
 
-              <h2 className="mt-3 max-w-2xl text-3xl font-black leading-[1.08] tracking-[-0.025em] md:text-4xl">
-                Plans built around
-                <br className="hidden sm:block" />
-                how you run events.
+              <h2 className="mt-3 max-w-2xl text-[2rem] font-black leading-[1.12] tracking-tight sm:text-3xl md:text-4xl">
+                Plans built around how you
+                run events.
               </h2>
+
+              <p className="mt-4 max-w-xl text-sm leading-6 text-white/35">
+                Choose the plan, country and
+                billing cycle that works for
+                your organization.
+              </p>
 
             </div>
 
@@ -1008,13 +1114,13 @@ export default function BillingPage() {
             {/* CONTROLS */}
             {/* ====================================================== */}
 
-            <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="grid w-full gap-4 sm:grid-cols-2 lg:w-auto">
 
               {/* Country */}
 
-              <div className="relative">
+              <div className="min-w-0">
 
-                <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-white/25">
+                <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-white/25">
                   Billing Country
                 </label>
 
@@ -1028,7 +1134,7 @@ export default function BillingPage() {
                         .value as BillingCountry,
                     )
                   }
-                  className="min-w-[220px] appearance-none rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3.5 pr-10 text-sm font-semibold text-white outline-none transition hover:border-white/20 focus:border-[#3E86A4]/50"
+                  className="w-full appearance-none rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3.5 text-sm font-semibold text-white outline-none transition hover:border-white/20 focus:border-[#3E86A4]/50 sm:min-w-[220px]"
                 >
                   {BILLING_COUNTRIES.map(
                     (
@@ -1059,9 +1165,9 @@ export default function BillingPage() {
 
               {/* Interval */}
 
-              <div>
+              <div className="min-w-0">
 
-                <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-white/25">
+                <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-white/25">
                   Billing Cycle
                 </label>
 
@@ -1075,7 +1181,7 @@ export default function BillingPage() {
                       )
                     }
                     className={[
-                      "rounded-xl px-4 py-2.5 text-xs font-bold transition",
+                      "flex-1 rounded-xl px-4 py-2.5 text-xs font-bold transition",
                       billingInterval ===
                         "MONTH"
                         ? "bg-white text-black"
@@ -1093,7 +1199,7 @@ export default function BillingPage() {
                       )
                     }
                     className={[
-                      "rounded-xl px-4 py-2.5 text-xs font-bold transition",
+                      "flex-1 rounded-xl px-4 py-2.5 text-xs font-bold transition",
                       billingInterval ===
                         "YEAR"
                         ? "bg-[#3E86A4] text-white"
@@ -1111,22 +1217,31 @@ export default function BillingPage() {
 
           </div>
 
+          {/* ======================================================== */}
           {/* Pricing Context */}
+          {/* ======================================================== */}
 
           <div className="mt-6 flex flex-col gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.02] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
 
-            <p className="text-xs text-white/35">
+            <p className="text-xs leading-5 text-white/35">
+
               Pricing for{" "}
+
               <span className="font-semibold text-white/65">
                 {selectedCountry.label}
-              </span>{" "}
-              ·{" "}
+              </span>
+
+              <span className="mx-1 text-white/20">
+                ·
+              </span>
+
               <span className="font-semibold text-white/65">
                 {selectedCountry.currency}
               </span>
+
             </p>
 
-            <p className="text-xs text-white/25">
+            <p className="text-xs leading-5 text-white/25">
               {billingInterval ===
               "YEAR"
                 ? "Annual billing"
@@ -1141,7 +1256,7 @@ export default function BillingPage() {
         {/* PLANS */}
         {/* ============================================================ */}
 
-        <div className="mt-8 grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
 
           {plans.map(
             (plan) => {
@@ -1169,7 +1284,7 @@ export default function BillingPage() {
                     plan.plan
                   }
                   className={[
-                    "group relative flex flex-col overflow-hidden rounded-[28px] border bg-white/[0.035] transition duration-300",
+                    "group relative flex min-w-0 flex-col overflow-hidden rounded-[28px] border bg-white/[0.035] transition duration-300",
                     featured
                       ? "border-[#3E86A4]/50 shadow-[0_0_60px_rgba(62,134,164,0.08)]"
                       : "border-white/10 hover:border-white/20",
@@ -1177,34 +1292,38 @@ export default function BillingPage() {
                 >
 
                   {featured && (
-                    <div className="h-1 w-full bg-[#3E86A4]" />
+                    <div className="h-1 w-full shrink-0 bg-[#3E86A4]" />
                   )}
 
-                  <div className="flex flex-1 flex-col p-6 md:p-7">
+                  <div className="flex flex-1 flex-col p-5 sm:p-6 md:p-7">
 
+                    {/* ================================================= */}
                     {/* Popular */}
+                    {/* ================================================= */}
 
                     {featured && (
                       <div className="mb-5">
 
-                        <span className="inline-flex rounded-full bg-[#3E86A4]/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#3E86A4]">
+                        <span className="inline-flex rounded-full bg-[#3E86A4]/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#3E86A4]">
                           Most Popular
                         </span>
 
                       </div>
                     )}
 
+                    {/* ================================================= */}
                     {/* Plan */}
+                    {/* ================================================= */}
 
-                    <div>
+                    <div className="min-w-0">
 
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/25">
                         {formatPlanName(
                           plan.plan,
                         )}
                       </p>
 
-                      <h3 className="mt-2 text-2xl font-bold text-white">
+                      <h3 className="mt-2 text-2xl font-bold leading-tight text-white">
                         {plan.name}
                       </h3>
 
@@ -1214,23 +1333,25 @@ export default function BillingPage() {
 
                     </div>
 
+                    {/* ================================================= */}
                     {/* Price */}
+                    {/* ================================================= */}
 
-                    <div className="mt-7">
+                    <div className="mt-7 min-w-0">
 
                       {price ? (
                         <>
-                          <div className="flex items-baseline">
+                          <div className="flex flex-wrap items-baseline gap-x-1">
 
-                            <span className="text-4xl font-black tracking-tight text-white">
+                            <span className="text-[2.15rem] font-black leading-none tracking-tight text-white sm:text-4xl">
                               {formatAmount(
                                 price.amount,
                                 price.currency,
                               )}
                             </span>
 
-                            <span className="ml-2 text-sm text-white/30">
-                              /{" "}
+                            <span className="text-sm text-white/30">
+                              /
                               {billingInterval ===
                               "YEAR"
                                 ? "year"
@@ -1241,7 +1362,7 @@ export default function BillingPage() {
 
                           {billingInterval ===
                             "YEAR" && (
-                            <p className="mt-2 text-xs text-[#3E86A4]">
+                            <p className="mt-2 text-xs leading-5 text-[#3E86A4]">
                               Save with annual
                               billing
                             </p>
@@ -1249,7 +1370,7 @@ export default function BillingPage() {
 
                           {billingInterval ===
                             "MONTH" && (
-                            <p className="mt-2 text-xs text-white/25">
+                            <p className="mt-2 text-xs leading-5 text-white/25">
                               Flexible monthly
                               billing
                             </p>
@@ -1265,9 +1386,8 @@ export default function BillingPage() {
 
                           <p className="mt-2 text-xs leading-5 text-white/25">
                             Pricing for{" "}
-                            {
-                              selectedCountry.label
-                            }{" "}
+                            {selectedCountry.label}
+                            {" "}
                             is not currently
                             available.
                           </p>
@@ -1277,15 +1397,19 @@ export default function BillingPage() {
 
                     </div>
 
+                    {/* ================================================= */}
                     {/* Divider */}
+                    {/* ================================================= */}
 
                     <div className="my-7 h-px bg-white/[0.07]" />
 
+                    {/* ================================================= */}
                     {/* Features */}
+                    {/* ================================================= */}
 
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
 
-                      <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">
+                      <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/25">
                         Includes
                       </p>
 
@@ -1299,14 +1423,14 @@ export default function BillingPage() {
                               key={
                                 feature
                               }
-                              className="flex items-start gap-3 text-sm text-white/60"
+                              className="flex min-w-0 items-start gap-3 text-sm text-white/60"
                             >
 
                               <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#3E86A4]/10 text-[10px] font-bold text-[#3E86A4]">
                                 ✓
                               </span>
 
-                              <span className="leading-5">
+                              <span className="min-w-0 break-words leading-5">
                                 {formatFeature(
                                   feature,
                                 )}
@@ -1320,7 +1444,9 @@ export default function BillingPage() {
 
                     </div>
 
+                    {/* ================================================= */}
                     {/* Checkout */}
+                    {/* ================================================= */}
 
                     <button
                       type="button"
@@ -1388,7 +1514,7 @@ export default function BillingPage() {
                 ✓
               </div>
 
-              <div>
+              <div className="min-w-0">
 
                 <p className="text-sm font-semibold text-white/70">
                   Secure billing
