@@ -27,7 +27,7 @@ export type BillingInterval =
 | Billing Country
 |--------------------------------------------------------------------------
 |
-| Keep this aligned with backend:
+| Keep this aligned with the backend billing configuration.
 |
 | GB → United Kingdom
 | EU → Eurozone
@@ -50,8 +50,19 @@ export type BillingCountry =
 
 /*
 |--------------------------------------------------------------------------
-| Price
+| Billing Price
 |--------------------------------------------------------------------------
+|
+| This is the public pricing information returned to the frontend.
+|
+| IMPORTANT:
+|
+| Revolut plan variation IDs are NEVER exposed here.
+|
+| The backend keeps those IDs server-side and resolves them from:
+|
+| country + plan + interval
+|
 */
 
 export interface BillingPrice {
@@ -64,12 +75,15 @@ export interface BillingPrice {
 |--------------------------------------------------------------------------
 | Plan Pricing
 |--------------------------------------------------------------------------
+|
+| Every supported country contains monthly and yearly pricing.
+|
 */
 
 export interface PlanPricing {
-  MONTH: BillingPrice;
+  MONTH: BillingPrice | null;
 
-  YEAR: BillingPrice;
+  YEAR: BillingPrice | null;
 }
 
 /*
@@ -87,7 +101,7 @@ export interface organizerPlanConfig {
 
   features: string[];
 
-  pricing?: Partial<
+  pricing: Partial<
     Record<
       BillingCountry,
       PlanPricing
@@ -128,7 +142,7 @@ export interface OrganizationSubscription {
 
   amount: string | number;
 
-  interval: string;
+  interval: BillingInterval;
 
   provider?: string | null;
 
@@ -174,9 +188,17 @@ export interface SubscriptionResponse {
 | Checkout Payload
 |--------------------------------------------------------------------------
 |
-| Pricing is now resolved by the backend using:
+| The frontend sends the user's selected:
 |
-| plan + country + interval
+| plan
+| country
+| interval
+|
+| The backend then resolves:
+|
+| amount
+| currency
+| Revolut plan variation ID
 |
 */
 
@@ -196,6 +218,28 @@ export interface CreateBillingCheckoutPayload {
 
 /*
 |--------------------------------------------------------------------------
+| Checkout Pricing
+|--------------------------------------------------------------------------
+|
+| Returned after the backend successfully creates the
+| Revolut subscription checkout.
+|
+*/
+
+export interface CheckoutPricing {
+  amount: number;
+
+  currency: string;
+
+  interval: BillingInterval;
+
+  country: BillingCountry;
+
+  plan: organizerPlan;
+}
+
+/*
+|--------------------------------------------------------------------------
 | Checkout Response
 |--------------------------------------------------------------------------
 */
@@ -211,15 +255,26 @@ export interface CreateBillingCheckoutResponse {
 
   setupOrderId: string;
 
-  pricing?: BillingPrice;
+  pricing: CheckoutPricing;
 
   message?: string;
 }
 
 /*
 |--------------------------------------------------------------------------
-| Get Plans
+| Get Billing Plans
 |--------------------------------------------------------------------------
+|
+| Returns:
+|
+| - plan metadata
+| - features
+| - country pricing
+| - monthly pricing
+| - yearly pricing
+|
+| Revolut variation IDs are NOT returned.
+|
 */
 
 export function getBillingPlans() {
@@ -242,8 +297,13 @@ export function getBillingSubscription() {
 
 /*
 |--------------------------------------------------------------------------
-| Create Checkout
+| Create Billing Checkout
 |--------------------------------------------------------------------------
+|
+| Backend resolves the correct Revolut variation using:
+|
+| country + plan + interval
+|
 */
 
 export function createBillingCheckout(
