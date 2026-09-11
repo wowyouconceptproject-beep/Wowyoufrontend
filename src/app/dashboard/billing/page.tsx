@@ -23,10 +23,6 @@ import {
 |--------------------------------------------------------------------------
 | WOWYOU Brand
 |--------------------------------------------------------------------------
-|
-| This page intentionally does not import a font.
-| It inherits the application layout font.
-|
 */
 
 const BRAND = "#3E86A4";
@@ -36,16 +32,6 @@ const BRAND_HOVER = "#1F7197";
 |--------------------------------------------------------------------------
 | Billing Countries
 |--------------------------------------------------------------------------
-|
-| These are the markets currently provisioned in Revolut.
-|
-| GB → GBP
-| EU → EUR
-| US → USD
-|
-| Additional markets can be added later without changing
-| the pricing architecture.
-|
 */
 
 const BILLING_COUNTRIES: {
@@ -75,22 +61,18 @@ const BILLING_COUNTRIES: {
 | Fallback Plans
 |--------------------------------------------------------------------------
 |
-| Used only if the backend cannot return plans.
+| These prices are also used as a client-side safety fallback.
 |
-| These fallback prices mirror the currently supported
-| GBP pricing.
+| The backend remains the source of truth.
 |
 */
 
 const FALLBACK_PLANS: organizerPlanConfig[] = [
   {
     plan: "STARTER",
-
     name: "Starter",
-
     description:
       "Everything you need to start running professional events.",
-
     features: [
       "Event creation",
       "Event publishing",
@@ -98,38 +80,32 @@ const FALLBACK_PLANS: organizerPlanConfig[] = [
       "Attendee management",
       "Basic analytics",
     ],
-
     pricing: {
       GB: {
         MONTH: {
           amount: 5.99,
           currency: "GBP",
         },
-
         YEAR: {
           amount: 49.99,
           currency: "GBP",
         },
       },
-
       EU: {
         MONTH: {
           amount: 5.99,
           currency: "EUR",
         },
-
         YEAR: {
           amount: 49.99,
           currency: "EUR",
         },
       },
-
       US: {
         MONTH: {
           amount: 6.99,
           currency: "USD",
         },
-
         YEAR: {
           amount: 59.99,
           currency: "USD",
@@ -140,12 +116,9 @@ const FALLBACK_PLANS: organizerPlanConfig[] = [
 
   {
     plan: "PROFESSIONAL",
-
     name: "Professional",
-
     description:
       "Advanced tools for growing event operations.",
-
     features: [
       "Everything in Starter",
       "Staff management",
@@ -154,38 +127,32 @@ const FALLBACK_PLANS: organizerPlanConfig[] = [
       "Advanced analytics",
       "Reports",
     ],
-
     pricing: {
       GB: {
         MONTH: {
           amount: 16.99,
           currency: "GBP",
         },
-
         YEAR: {
           amount: 149.99,
           currency: "GBP",
         },
       },
-
       EU: {
         MONTH: {
           amount: 16.99,
           currency: "EUR",
         },
-
         YEAR: {
           amount: 149.99,
           currency: "EUR",
         },
       },
-
       US: {
         MONTH: {
           amount: 19.99,
           currency: "USD",
         },
-
         YEAR: {
           amount: 179.99,
           currency: "USD",
@@ -196,12 +163,9 @@ const FALLBACK_PLANS: organizerPlanConfig[] = [
 
   {
     plan: "BUSINESS",
-
     name: "Business",
-
     description:
       "Complete infrastructure for serious event businesses.",
-
     features: [
       "Everything in Professional",
       "Vendor management",
@@ -209,38 +173,32 @@ const FALLBACK_PLANS: organizerPlanConfig[] = [
       "Multiple events",
       "Advanced operations",
     ],
-
     pricing: {
       GB: {
         MONTH: {
           amount: 44.99,
           currency: "GBP",
         },
-
         YEAR: {
           amount: 399.99,
           currency: "GBP",
         },
       },
-
       EU: {
         MONTH: {
           amount: 44.99,
           currency: "EUR",
         },
-
         YEAR: {
           amount: 399.99,
           currency: "EUR",
         },
       },
-
       US: {
         MONTH: {
           amount: 49.99,
           currency: "USD",
         },
-
         YEAR: {
           amount: 449.99,
           currency: "USD",
@@ -251,50 +209,41 @@ const FALLBACK_PLANS: organizerPlanConfig[] = [
 
   {
     plan: "ENTERPRISE",
-
     name: "Enterprise",
-
     description:
       "Enterprise-grade event infrastructure and support.",
-
     features: [
       "Everything in Business",
       "Enterprise support",
       "Custom requirements",
       "Dedicated infrastructure",
     ],
-
     pricing: {
       GB: {
         MONTH: {
           amount: 169.99,
           currency: "GBP",
         },
-
         YEAR: {
           amount: 1499.99,
           currency: "GBP",
         },
       },
-
       EU: {
         MONTH: {
           amount: 169.99,
           currency: "EUR",
         },
-
         YEAR: {
           amount: 1499.99,
           currency: "EUR",
         },
       },
-
       US: {
         MONTH: {
           amount: 199.99,
           currency: "USD",
         },
-
         YEAR: {
           amount: 1699.99,
           currency: "USD",
@@ -401,18 +350,88 @@ export default function BillingPage() {
       const response =
         await getBillingPlans();
 
+      /*
+      |--------------------------------------------------------------------------
+      | FIX:
+      |
+      | Do not blindly replace FALLBACK_PLANS with the backend response.
+      |
+      | If the backend currently returns plan metadata but pricing is missing,
+      | preserve the frontend pricing instead of making every card say
+      | "Unavailable".
+      |--------------------------------------------------------------------------
+      */
+
       if (
         response.success &&
         response.plans?.length
       ) {
+        const mergedPlans =
+          response.plans.map(
+            (backendPlan) => {
+              const fallbackPlan =
+                FALLBACK_PLANS.find(
+                  (fallback) =>
+                    fallback.plan ===
+                    backendPlan.plan,
+                );
+
+              return {
+                ...fallbackPlan,
+                ...backendPlan,
+
+                /*
+                |--------------------------------------------------------------------------
+                | Backend pricing wins when it exists.
+                |
+                | Otherwise retain fallback pricing.
+                |--------------------------------------------------------------------------
+                */
+
+                pricing:
+                  backendPlan.pricing &&
+                  Object.keys(
+                    backendPlan.pricing,
+                  ).length > 0
+                    ? backendPlan.pricing
+                    : fallbackPlan?.pricing ??
+                      {},
+              };
+            },
+          );
+
         setPlans(
-          response.plans,
+          mergedPlans,
+        );
+      } else {
+        /*
+        |--------------------------------------------------------------------------
+        | Backend failed to provide usable plans.
+        |
+        | Keep the existing fallback plans.
+        |--------------------------------------------------------------------------
+        */
+
+        setPlans(
+          FALLBACK_PLANS,
         );
       }
     } catch (err) {
       console.error(
         "FAILED TO LOAD BILLING PLANS:",
         err,
+      );
+
+      /*
+      |--------------------------------------------------------------------------
+      | FIX:
+      |
+      | Keep fallback plans when the API fails.
+      |--------------------------------------------------------------------------
+      */
+
+      setPlans(
+        FALLBACK_PLANS,
       );
 
       setError(
@@ -526,15 +545,41 @@ export default function BillingPage() {
   |--------------------------------------------------------------------------
   | Selected Plan Price
   |--------------------------------------------------------------------------
+  |
+  | FIX:
+  |
+  | Backend pricing is preferred.
+  | Fallback pricing is used if the API response does not yet contain
+  | pricing for the selected country/interval.
+  |--------------------------------------------------------------------------
   */
 
   function getPlanPrice(
     plan: organizerPlanConfig,
   ) {
-    return (
+    const backendPrice =
       plan.pricing?.[
         billingCountry
-      ]?.[billingInterval] ??
+      ]?.[billingInterval];
+
+    if (backendPrice) {
+      return backendPrice;
+    }
+
+    const fallbackPlan =
+      FALLBACK_PLANS.find(
+        (fallback) =>
+          fallback.plan ===
+          plan.plan,
+      );
+
+    const fallbackPrice =
+      fallbackPlan?.pricing?.[
+        billingCountry
+      ]?.[billingInterval];
+
+    return (
+      fallbackPrice ??
       null
     );
   }
@@ -608,12 +653,6 @@ export default function BillingPage() {
       setCheckoutPlan(plan);
       setError(null);
 
-      /*
-      |--------------------------------------------------------------------------
-      | Authentication
-      |--------------------------------------------------------------------------
-      */
-
       if (!user) {
         throw new Error(
           "Your account information could not be loaded.",
@@ -625,12 +664,6 @@ export default function BillingPage() {
           "Your organization could not be loaded.",
         );
       }
-
-      /*
-      |--------------------------------------------------------------------------
-      | Selected Pricing
-      |--------------------------------------------------------------------------
-      */
 
       const selectedPlan =
         plans.find(
@@ -652,12 +685,6 @@ export default function BillingPage() {
         );
       }
 
-      /*
-      |--------------------------------------------------------------------------
-      | User Information
-      |--------------------------------------------------------------------------
-      */
-
       const fullName =
         `${user.firstName ?? ""} ${
           user.lastName ?? ""
@@ -677,12 +704,6 @@ export default function BillingPage() {
           "Your account does not have a valid email address.",
         );
       }
-
-      /*
-      |--------------------------------------------------------------------------
-      | Create Checkout
-      |--------------------------------------------------------------------------
-      */
 
       const response =
         await createBillingCheckout({
@@ -711,12 +732,6 @@ export default function BillingPage() {
             "Unable to create checkout.",
         );
       }
-
-      /*
-      |--------------------------------------------------------------------------
-      | Redirect
-      |--------------------------------------------------------------------------
-      */
 
       window.location.href =
         response.checkoutUrl;
@@ -784,27 +799,18 @@ export default function BillingPage() {
       return null;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Expired Trial
-    |--------------------------------------------------------------------------
-    */
-
     if (
       trialDaysRemaining <= 0
     ) {
       return (
         <section className="mx-auto mt-8 w-full max-w-5xl overflow-hidden rounded-[28px] border border-red-500/20 bg-red-500/[0.06]">
           <div className="px-5 py-6 sm:px-6 md:px-8">
-
             <div className="flex items-start gap-3">
-
               <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-500/10 text-sm text-red-400">
                 !
               </span>
 
               <div className="min-w-0">
-
                 <p className="text-sm font-semibold leading-6 text-red-300">
                   Your free trial has ended
                 </p>
@@ -812,33 +818,21 @@ export default function BillingPage() {
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-red-200/50">
                   Choose an organizer plan
                   below to continue using
-                  WOWYOU's event management
+                  WOWYOU&apos;s event management
                   infrastructure.
                 </p>
-
               </div>
-
             </div>
-
           </div>
         </section>
       );
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Active Trial
-    |--------------------------------------------------------------------------
-    */
-
     return (
       <section className="mx-auto mt-8 w-full max-w-5xl overflow-hidden rounded-[28px] border border-[#3E86A4]/20 bg-[#3E86A4]/[0.06]">
         <div className="flex flex-col gap-6 px-5 py-6 sm:px-6 md:flex-row md:items-center md:justify-between md:px-8">
-
           <div className="min-w-0">
-
             <div className="flex flex-wrap items-center gap-3">
-
               <span className="rounded-full bg-[#3E86A4] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
                 Free Trial
               </span>
@@ -848,7 +842,6 @@ export default function BillingPage() {
                   subscription?.plan,
                 )}
               </span>
-
             </div>
 
             <p className="mt-3 max-w-2xl text-sm leading-6 text-white/50">
@@ -863,11 +856,9 @@ export default function BillingPage() {
               </strong>{" "}
               remaining.
             </p>
-
           </div>
 
           <div className="w-full rounded-2xl border border-white/10 bg-black/20 px-5 py-4 sm:w-auto md:min-w-[170px] md:text-right">
-
             <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/30">
               Trial Ends
             </p>
@@ -886,9 +877,7 @@ export default function BillingPage() {
                   )
                 : "—"}
             </p>
-
           </div>
-
         </div>
       </section>
     );
@@ -904,13 +893,11 @@ export default function BillingPage() {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#050505] text-white">
         <div className="text-center">
-
           <div className="mx-auto h-10 w-10 animate-pulse rounded-full bg-[#3E86A4]/30" />
 
           <p className="mt-5 text-sm text-white/40">
             Loading your account...
           </p>
-
         </div>
       </main>
     );
@@ -925,12 +912,9 @@ export default function BillingPage() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#050505] text-white">
 
-      {/* ================================================================ */}
       {/* HERO */}
-      {/* ================================================================ */}
 
       <section className="relative overflow-hidden border-b border-white/[0.07]">
-
         <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-[#3E86A4]/10 blur-[120px]" />
 
         <div className="pointer-events-none absolute -right-40 top-20 h-[450px] w-[450px] rounded-full bg-[#3E86A4]/[0.06] blur-[120px]" />
@@ -938,17 +922,14 @@ export default function BillingPage() {
         <div className="relative mx-auto max-w-7xl px-5 pb-12 pt-10 sm:px-6 md:px-10 md:pb-20 md:pt-16 lg:px-12">
 
           <div className="flex items-center gap-3">
-
             <div className="h-px w-8 shrink-0 bg-[#3E86A4] sm:w-10" />
 
             <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#3E86A4] sm:text-xs sm:tracking-[0.3em]">
               WOWYOU
             </p>
-
           </div>
 
           <div className="mt-7 max-w-4xl sm:mt-8">
-
             <p className="text-[10px] font-semibold uppercase leading-5 tracking-[0.16em] text-white/30 sm:text-xs sm:tracking-[0.2em]">
               Organizer Infrastructure
             </p>
@@ -967,7 +948,6 @@ export default function BillingPage() {
               professional events from one
               intelligent platform.
             </p>
-
           </div>
 
           {organization && (
@@ -992,20 +972,15 @@ export default function BillingPage() {
           )}
 
         </div>
-
       </section>
 
-      {/* ================================================================ */}
       {/* CONTENT */}
-      {/* ================================================================ */}
 
       <div className="mx-auto max-w-7xl px-5 py-8 sm:px-6 md:px-10 md:py-14 lg:px-12">
 
         {renderTrialBanner()}
 
-        {/* ============================================================ */}
         {/* CURRENT SUBSCRIPTION */}
-        {/* ============================================================ */}
 
         {subscription &&
           !isTrialing && (
@@ -1014,7 +989,6 @@ export default function BillingPage() {
               <div className="flex flex-col gap-5 px-5 py-6 sm:px-6 md:flex-row md:items-center md:justify-between md:px-8">
 
                 <div className="min-w-0">
-
                   <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/25">
                     Current Plan
                   </p>
@@ -1024,7 +998,6 @@ export default function BillingPage() {
                       subscription.plan,
                     )}
                   </p>
-
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3">
@@ -1061,35 +1034,25 @@ export default function BillingPage() {
                   </span>
 
                 </div>
-
               </div>
-
             </section>
           )}
 
-        {/* ============================================================ */}
         {/* ERROR */}
-        {/* ============================================================ */}
 
         {error && (
           <div className="mx-auto mt-8 w-full max-w-5xl rounded-2xl border border-red-500/20 bg-red-500/[0.06] px-5 py-4">
-
             <p className="text-sm font-medium leading-6 text-red-300">
               {error}
             </p>
-
           </div>
         )}
 
-        {/* ============================================================ */}
         {/* PRICING */}
-        {/* ============================================================ */}
 
         <section className="mt-12 md:mt-14">
 
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-
-            {/* Heading */}
 
             <div className="min-w-0 max-w-2xl">
 
@@ -1110,13 +1073,9 @@ export default function BillingPage() {
 
             </div>
 
-            {/* ====================================================== */}
-            {/* CONTROLS */}
-            {/* ====================================================== */}
-
             <div className="grid w-full gap-4 sm:grid-cols-2 lg:w-auto">
 
-              {/* Country */}
+              {/* COUNTRY */}
 
               <div className="min-w-0">
 
@@ -1163,7 +1122,7 @@ export default function BillingPage() {
 
               </div>
 
-              {/* Interval */}
+              {/* INTERVAL */}
 
               <div className="min-w-0">
 
@@ -1217,10 +1176,6 @@ export default function BillingPage() {
 
           </div>
 
-          {/* ======================================================== */}
-          {/* Pricing Context */}
-          {/* ======================================================== */}
-
           <div className="mt-6 flex flex-col gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.02] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
 
             <p className="text-xs leading-5 text-white/35">
@@ -1252,14 +1207,13 @@ export default function BillingPage() {
 
         </section>
 
-        {/* ============================================================ */}
         {/* PLANS */}
-        {/* ============================================================ */}
 
         <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
 
           {plans.map(
             (plan) => {
+
               const current =
                 isCurrentPlan(
                   plan.plan,
@@ -1272,6 +1226,15 @@ export default function BillingPage() {
               const featured =
                 plan.plan ===
                 "PROFESSIONAL";
+
+              /*
+              |--------------------------------------------------------------------------
+              | FIX:
+              |
+              | Always use getPlanPrice() rather than directly reading
+              | plan.pricing.
+              |--------------------------------------------------------------------------
+              */
 
               const price =
                 getPlanPrice(
@@ -1297,23 +1260,13 @@ export default function BillingPage() {
 
                   <div className="flex flex-1 flex-col p-5 sm:p-6 md:p-7">
 
-                    {/* ================================================= */}
-                    {/* Popular */}
-                    {/* ================================================= */}
-
                     {featured && (
                       <div className="mb-5">
-
                         <span className="inline-flex rounded-full bg-[#3E86A4]/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#3E86A4]">
                           Most Popular
                         </span>
-
                       </div>
                     )}
-
-                    {/* ================================================= */}
-                    {/* Plan */}
-                    {/* ================================================= */}
 
                     <div className="min-w-0">
 
@@ -1333,9 +1286,7 @@ export default function BillingPage() {
 
                     </div>
 
-                    {/* ================================================= */}
-                    {/* Price */}
-                    {/* ================================================= */}
+                    {/* PRICE */}
 
                     <div className="mt-7 min-w-0">
 
@@ -1375,7 +1326,6 @@ export default function BillingPage() {
                               billing
                             </p>
                           )}
-
                         </>
                       ) : (
                         <div>
@@ -1397,17 +1347,11 @@ export default function BillingPage() {
 
                     </div>
 
-                    {/* ================================================= */}
-                    {/* Divider */}
-                    {/* ================================================= */}
-
                     <div className="my-7 h-px bg-white/[0.07]" />
 
-                    {/* ================================================= */}
-                    {/* Features */}
-                    {/* ================================================= */}
+                    {/* FEATURES */}
 
-                    <div className="flex-1 min-w-0">
+                    <div className="min-w-0 flex-1">
 
                       <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/25">
                         Includes
@@ -1444,9 +1388,7 @@ export default function BillingPage() {
 
                     </div>
 
-                    {/* ================================================= */}
-                    {/* Checkout */}
-                    {/* ================================================= */}
+                    {/* CHECKOUT */}
 
                     <button
                       type="button"
@@ -1492,7 +1434,6 @@ export default function BillingPage() {
                     </button>
 
                   </div>
-
                 </article>
               );
             },
@@ -1500,9 +1441,7 @@ export default function BillingPage() {
 
         </div>
 
-        {/* ============================================================ */}
         {/* BILLING NOTE */}
-        {/* ============================================================ */}
 
         <section className="mt-12 border-t border-white/[0.07] pt-8">
 
