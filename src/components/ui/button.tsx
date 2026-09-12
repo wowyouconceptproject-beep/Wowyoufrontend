@@ -26,20 +26,53 @@ export function Button({
   ...props
 }: ButtonProps) {
   const styles = {
+    /*
+    |--------------------------------------------------------------------------
+    | Primary
+    |--------------------------------------------------------------------------
+    | Main EventTech action.
+    */
+
     primary:
-      "bg-black text-white hover:bg-neutral-800",
+      "bg-primary text-[#072933] hover:bg-primary-light",
+
+    /*
+    |--------------------------------------------------------------------------
+    | Secondary
+    |--------------------------------------------------------------------------
+    | Elevated teal surface for secondary actions.
+    */
 
     secondary:
-      "bg-gray-100 text-gray-900 hover:bg-gray-200",
+      "bg-surface-elevated text-foreground hover:bg-surface-hover",
+
+    /*
+    |--------------------------------------------------------------------------
+    | Outline
+    |--------------------------------------------------------------------------
+    | Transparent teal surface with a subtle cyan border.
+    */
 
     outline:
-      "border border-gray-300 bg-white text-gray-900 hover:bg-gray-50",
+      "border border-divider-strong bg-transparent text-foreground hover:bg-white/[0.06] hover:border-primary/40",
+
+    /*
+    |--------------------------------------------------------------------------
+    | Danger
+    |--------------------------------------------------------------------------
+    */
 
     danger:
-      "bg-red-600 text-white hover:bg-red-700",
+      "bg-danger text-white hover:bg-danger/90",
+
+    /*
+    |--------------------------------------------------------------------------
+    | Destructive
+    |--------------------------------------------------------------------------
+    */
 
     destructive:
-      "bg-red-600 text-white hover:bg-red-700",
+      "bg-danger text-white hover:bg-danger/90",
   };
 
   return (
@@ -57,11 +90,13 @@ export function Button({
         px-5
         py-3
         font-medium
-        transition-colors
+        transition-all
         duration-200
         focus:outline-none
         focus:ring-2
-        focus:ring-black
+        focus:ring-primary/50
+        focus:ring-offset-2
+        focus:ring-offset-background
         disabled:cursor-not-allowed
         disabled:opacity-50
         ${styles[variant]}
@@ -69,7 +104,19 @@ export function Button({
       `}
     >
       {loading ? (
-        <span>
+        <span className="flex items-center gap-2">
+          <span
+            className="
+              h-4
+              w-4
+              animate-spin
+              rounded-full
+              border-2
+              border-current/30
+              border-t-current
+            "
+          />
+
           Loading...
         </span>
       ) : (

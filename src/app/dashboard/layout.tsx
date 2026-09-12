@@ -131,8 +131,8 @@ function DashboardAccessGuard({
 
   if (loading) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="text-sm text-neutral-500">
+      <div className="flex min-h-[60vh] items-center justify-center bg-background">
+        <div className="text-sm text-muted">
           Loading your organization...
         </div>
       </div>
@@ -167,11 +167,23 @@ function DashboardAccessGuard({
     !hasActiveSubscription
   ) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
+      <div className="flex min-h-[60vh] items-center justify-center bg-background">
         <div className="text-center">
-          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-neutral-300 border-t-neutral-950" />
+          <div
+            className="
+              mx-auto
+              mb-4
+              h-8
+              w-8
+              animate-spin
+              rounded-full
+              border-2
+              border-divider-strong
+              border-t-primary
+            "
+          />
 
-          <p className="text-sm text-neutral-500">
+          <p className="text-sm text-muted">
             Redirecting to billing...
           </p>
         </div>

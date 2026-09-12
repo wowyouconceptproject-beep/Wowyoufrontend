@@ -29,18 +29,23 @@ export function Dialog({
 
   return (
     <div className="fixed inset-0 z-50">
-
+      {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/50"
+        className="
+          absolute
+          inset-0
+          bg-background/75
+          backdrop-blur-sm
+        "
         onClick={() =>
           onOpenChange(false)
         }
       />
 
+      {/* Dialog container */}
       <div className="relative flex min-h-screen items-center justify-center p-6">
         {children}
       </div>
-
     </div>
   );
 }
@@ -54,7 +59,19 @@ export function DialogContent({
       onClick={(e) =>
         e.stopPropagation()
       }
-      className={`w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl ${className}`}
+      className={`
+        w-full
+        max-w-lg
+        rounded-2xl
+        border
+        border-divider
+        bg-surface
+        p-6
+        text-foreground
+        shadow-2xl
+        shadow-black/20
+        ${className}
+      `}
     >
       {children}
     </div>
@@ -79,7 +96,7 @@ export function DialogTitle({
   children: ReactNode;
 }) {
   return (
-    <h2 className="text-2xl font-bold">
+    <h2 className="text-2xl font-bold text-foreground">
       {children}
     </h2>
   );

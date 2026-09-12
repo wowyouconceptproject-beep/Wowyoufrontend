@@ -14,18 +14,19 @@ const inter = Inter({
   variable: "--font-body",
 });
 
-const spaceGrotesk =
-  Space_Grotesk({
-    subsets: ["latin"],
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
 
-    variable: "--font-number",
-  });
+  variable: "--font-number",
+});
 
 export const metadata: Metadata = {
-  title: "WowYou",
+  title: "WowYou EventTech",
 
   description:
-    "Discover extraordinary experiences.",
+    "Create, sell, manage and operate professional events from one intelligent platform.",
+
+  themeColor: "#072933",
 };
 
 export default function RootLayout({
@@ -34,9 +35,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className="bg-[#072933]"
+    >
       <body
-        className={`${inter.variable} ${spaceGrotesk.variable}`}
+        className={`${inter.variable} ${spaceGrotesk.variable} bg-[#072933] text-white`}
       >
         {children}
       </body>

@@ -2,58 +2,70 @@
 
 /*
 |--------------------------------------------------------------------------
-| WowYou Design System
+| WowYou EventTech Design System
 |--------------------------------------------------------------------------
 */
 
 :root {
-  /* Backgrounds */
+  /* ----------------------------------------------------------------------
+     Backgrounds
+     ---------------------------------------------------------------------- */
 
-  --background: #050505;
+  --background: #072933;
 
-  --background-secondary: #0b0b0b;
+  --background-secondary: #0b303b;
 
-  --surface: #111111;
+  --surface: #103640;
 
-  --surface-elevated: #171717;
+  --surface-elevated: #153e48;
 
-  --surface-hover: #222222;
+  --surface-hover: #1a4650;
 
-  /* WowYou Brand */
+  /* ----------------------------------------------------------------------
+     WowYou EventTech Brand
+     ---------------------------------------------------------------------- */
 
-  --primary: #3e86a4;
+  --primary: #20b8d0;
 
-  --primary-dark: #1f7197;
+  --primary-dark: #1595ad;
 
-  --primary-light: #53a6c7;
+  --primary-light: #31c6dc;
 
-  --primary-glow: #8fc8dd;
+  --primary-glow: #8de4f0;
 
-  /* Typography */
+  /* ----------------------------------------------------------------------
+     Typography
+     ---------------------------------------------------------------------- */
 
-  --foreground: #ffffff;
+  --foreground: #f5fafb;
 
-  --text-secondary: rgba(255, 255, 255, 0.72);
+  --text-secondary: #a8c2c8;
 
-  --muted: rgba(255, 255, 255, 0.42);
+  --muted: #78969d;
 
-  --disabled: rgba(255, 255, 255, 0.25);
+  --disabled: #55737a;
 
-  /* Borders */
+  /* ----------------------------------------------------------------------
+     Borders
+     ---------------------------------------------------------------------- */
 
-  --divider: rgba(255, 255, 255, 0.08);
+  --divider: rgba(120, 220, 235, 0.12);
 
-  --divider-strong: rgba(255, 255, 255, 0.14);
+  --divider-strong: rgba(120, 220, 235, 0.2);
 
-  /* Status */
+  /* ----------------------------------------------------------------------
+     Status
+     ---------------------------------------------------------------------- */
 
-  --success: #22c55e;
+  --success: #39d98a;
 
-  --warning: #f59e0b;
+  --warning: #f3c969;
 
-  --danger: #ef4444;
+  --danger: #ff6b7a;
 
-  /* Radius */
+  /* ----------------------------------------------------------------------
+     Radius
+     ---------------------------------------------------------------------- */
 
   --radius-card: 28px;
 
@@ -118,6 +130,8 @@
 
 html {
   scroll-behavior: smooth;
+
+  background: var(--background);
 }
 
 body {
@@ -125,20 +139,26 @@ body {
 
   overflow-x: hidden;
 
+  /*
+   * Single EventTech environment.
+   *
+   * The teal base remains dominant while the subtle gradients
+   * provide depth without changing the page's primary color.
+   */
   background:
     radial-gradient(
       circle at top,
-      rgba(62, 134, 164, 0.12),
+      rgba(32, 184, 208, 0.09),
       transparent 42%
     ),
     radial-gradient(
       circle at bottom right,
-      rgba(83, 166, 199, 0.08),
+      rgba(49, 198, 220, 0.055),
       transparent 48%
     ),
     radial-gradient(
       circle at center,
-      rgba(143, 200, 221, 0.04),
+      rgba(141, 228, 240, 0.025),
       transparent 60%
     ),
     var(--background);
@@ -165,17 +185,19 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2d2d2d;
+  background: rgba(120, 220, 235, 0.18);
+
+  border: 2px solid var(--background);
 
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #444;
+  background: rgba(120, 220, 235, 0.3);
 }
 
 /*
@@ -185,9 +207,9 @@ body {
 */
 
 ::selection {
-  background: rgba(62, 134, 164, 0.35);
+  background: rgba(32, 184, 208, 0.3);
 
-  color: white;
+  color: #ffffff;
 }
 
 /*
@@ -250,10 +272,135 @@ img {
 }
 
 .glow-brand {
-  box-shadow: 0 0 40px rgba(62, 134, 164, 0.35);
+  box-shadow: 0 0 40px rgba(32, 184, 208, 0.25);
 }
 
-/* Discovery Rails */
+/*
+|--------------------------------------------------------------------------
+| EventTech Surfaces
+|--------------------------------------------------------------------------
+|
+| Shared classes for pages/components that need a consistent
+| EventTech surface instead of hard-coded black backgrounds.
+|
+*/
+
+.eventtech-surface {
+  background: rgba(16, 54, 64, 0.82);
+
+  border: 1px solid var(--divider);
+}
+
+.eventtech-surface-elevated {
+  background: rgba(21, 62, 72, 0.9);
+
+  border: 1px solid var(--divider-strong);
+}
+
+.eventtech-card {
+  background: rgba(21, 62, 72, 0.72);
+
+  border: 1px solid var(--divider);
+
+  border-radius: var(--radius-card);
+
+  transition:
+    border-color 200ms ease,
+    background 200ms ease,
+    transform 200ms ease;
+}
+
+.eventtech-card:hover {
+  background: rgba(26, 70, 80, 0.78);
+
+  border-color: rgba(32, 184, 208, 0.22);
+}
+
+/*
+|--------------------------------------------------------------------------
+| EventTech Primary Actions
+|--------------------------------------------------------------------------
+*/
+
+.eventtech-primary {
+  background: var(--primary);
+
+  color: #06232b;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  transition:
+    background 200ms ease,
+    transform 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.eventtech-primary:hover {
+  background: var(--primary-light);
+
+  box-shadow: 0 8px 30px rgba(32, 184, 208, 0.18);
+}
+
+.eventtech-primary:active {
+  transform: translateY(1px);
+}
+
+/*
+|--------------------------------------------------------------------------
+| EventTech Inputs
+|--------------------------------------------------------------------------
+*/
+
+.eventtech-input {
+  background: rgba(7, 41, 51, 0.7);
+
+  border: 1px solid var(--divider-strong);
+
+  color: var(--foreground);
+
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    background 200ms ease;
+}
+
+.eventtech-input::placeholder {
+  color: var(--muted);
+}
+
+.eventtech-input:focus {
+  outline: none;
+
+  background: rgba(7, 41, 51, 0.85);
+
+  border-color: rgba(32, 184, 208, 0.55);
+
+  box-shadow: 0 0 0 3px rgba(32, 184, 208, 0.08);
+}
+
+/*
+|--------------------------------------------------------------------------
+| EventTech Status Helpers
+|--------------------------------------------------------------------------
+*/
+
+.eventtech-success {
+  color: var(--success);
+}
+
+.eventtech-warning {
+  color: var(--warning);
+}
+
+.eventtech-danger {
+  color: var(--danger);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Discovery Rails
+|--------------------------------------------------------------------------
+*/
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;

@@ -71,8 +71,8 @@ export default function DashboardStats({
         overflow-hidden
         rounded-[24px]
         border
-        border-white/[0.07]
-        bg-[#0D0D0D]
+        border-divider
+        bg-surface
         sm:grid-cols-2
         xl:grid-cols-4
       "
@@ -167,14 +167,14 @@ function StatCard({
         p-6
         transition
         duration-300
-        hover:bg-white/[0.02]
+        hover:bg-white/[0.03]
         md:p-7
 
         ${
           divider
             ? `
               border-t
-              border-white/[0.07]
+              border-divider
 
               sm:border-l
               sm:border-t-0
@@ -206,7 +206,7 @@ function StatCard({
               font-bold
               uppercase
               tracking-[0.16em]
-              text-white/30
+              text-muted
             "
           >
             {label}
@@ -227,14 +227,14 @@ function StatCard({
             ${
               accent
                 ? `
-                  border-[#3E86A4]/15
-                  bg-[#3E86A4]/[0.06]
-                  text-[#3E86A4]
+                  border-primary/20
+                  bg-primary/[0.08]
+                  text-primary
                 `
                 : `
-                  border-white/[0.07]
-                  bg-white/[0.03]
-                  text-white/35
+                  border-divider
+                  bg-white/[0.04]
+                  text-muted
                 `
             }
           `}
@@ -263,8 +263,8 @@ function StatCard({
 
             ${
               accent
-                ? "text-[#3E86A4]"
-                : "text-white"
+                ? "text-primary"
+                : "text-foreground"
             }
           `}
         >
@@ -279,8 +279,8 @@ function StatCard({
               gap-1.5
               rounded-full
               border
-              border-emerald-500/15
-              bg-emerald-500/[0.06]
+              border-success/20
+              bg-success/[0.08]
               px-2
               py-1
             "
@@ -290,7 +290,7 @@ function StatCard({
                 h-1.5
                 w-1.5
                 rounded-full
-                bg-emerald-400
+                bg-success
               "
             />
 
@@ -300,7 +300,7 @@ function StatCard({
                 font-bold
                 uppercase
                 tracking-[0.12em]
-                text-emerald-400
+                text-success
               "
             >
               Live
@@ -316,7 +316,7 @@ function StatCard({
           mt-3
           text-xs
           leading-5
-          text-white/25
+          text-muted
         "
       >
         {description}
@@ -334,7 +334,7 @@ function StatCard({
             h-px
             bg-gradient-to-r
             from-transparent
-            via-[#D4AF37]/30
+            via-primary/40
             to-transparent
             opacity-0
             transition

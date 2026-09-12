@@ -18,24 +18,49 @@ export default function DateTimePicker({
 }: DateTimePickerProps) {
   return (
     <div>
-      <label className="mb-2 block text-sm font-medium text-white/70">
+      <label className="mb-2 block text-sm font-medium text-text-secondary">
         {label}
       </label>
 
       <DatePicker
-        selected={value ? parseISO(value) : null}
+        selected={
+          value
+            ? parseISO(value)
+            : null
+        }
         onChange={(date: Date | null) => {
           if (!date) return;
 
           // Store local datetime instead of UTC
-          onChange(format(date, "yyyy-MM-dd'T'HH:mm"));
+          onChange(
+            format(
+              date,
+              "yyyy-MM-dd'T'HH:mm",
+            ),
+          );
         }}
         showTimeSelect
         timeIntervals={15}
         timeFormat="h:mm aa"
         dateFormat="MMMM d, yyyy h:mm aa"
         placeholderText="Select date & time"
-        className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-[#3E86A4]/60 focus:ring-1 focus:ring-[#3E86A4]/20"
+        className="
+          w-full
+          rounded-xl
+          border
+          border-divider
+          bg-surface
+          px-4
+          py-3.5
+          text-sm
+          text-foreground
+          outline-none
+          transition
+          placeholder:text-muted
+          focus:border-primary/60
+          focus:ring-1
+          focus:ring-primary/20
+        "
         calendarClassName="wowyou-calendar"
         popperClassName="wowyou-popper"
       />
