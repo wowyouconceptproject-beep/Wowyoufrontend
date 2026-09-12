@@ -98,7 +98,7 @@ export default function EventPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[#050505] text-white">
+      <main className="min-h-screen bg-background text-white">
         <section className="relative h-[88vh] overflow-hidden">
           <div className="absolute inset-0 animate-pulse bg-white/[0.04]" />
 
@@ -128,9 +128,9 @@ export default function EventPage() {
 
   if (!event) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#050505] px-6 text-white">
+      <main className="flex min-h-screen items-center justify-center bg-background px-6 text-white">
         <div className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#3E86A4]">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[primary]">
             WOWYOU
           </p>
 
@@ -169,7 +169,7 @@ export default function EventPage() {
   */
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white">
+    <main className="min-h-screen bg-background text-white">
       {/* ================================================================ */}
       {/* HERO */}
       {/* ================================================================ */}
@@ -185,7 +185,7 @@ export default function EventPage() {
           className="absolute inset-0 h-full w-full object-cover"
         />
 
-        <div className="absolute inset-0 bg-black/25" />
+        <div className="absolute inset-0 bg-background/25" />
 
         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/75 to-black/10" />
 
@@ -197,9 +197,9 @@ export default function EventPage() {
 
             {event.category && (
               <div className="mb-6 flex items-center gap-3">
-                <div className="h-px w-10 bg-[#3E86A4]" />
+                <div className="h-px w-10 bg-primary" />
 
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#3E86A4]">
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[primary]">
                   {event.category}
                 </p>
               </div>
@@ -215,7 +215,7 @@ export default function EventPage() {
 
             <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-3 text-sm text-white/70">
               <div className="flex items-center gap-2">
-                <span className="text-[#3E86A4]">
+                <span className="text-[primary]">
                   ◷
                 </span>
 
@@ -235,7 +235,7 @@ export default function EventPage() {
               <div className="hidden h-1 w-1 rounded-full bg-white/30 sm:block" />
 
               <div className="flex items-center gap-2">
-                <span className="text-[#3E86A4]">
+                <span className="text-[primary]">
                   ◉
                 </span>
 
@@ -272,7 +272,7 @@ export default function EventPage() {
               <button
                 type="button"
                 onClick={openCheckout}
-                className="rounded-full bg-[#3E86A4] px-8 py-4 text-sm font-bold text-white transition hover:bg-[#1F7197] focus:outline-none focus:ring-2 focus:ring-[#3E86A4]/50"
+                className="rounded-full bg-primary px-8 py-4 text-sm font-bold text-white transition hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary/50"
               >
                 Get Tickets
               </button>
@@ -333,9 +333,9 @@ export default function EventPage() {
 
           <article>
             <div className="flex items-center gap-3">
-              <div className="h-px w-8 bg-[#3E86A4]" />
+              <div className="h-px w-8 bg-primary" />
 
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#3E86A4]">
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[primary]">
                 The Experience
               </p>
             </div>
@@ -366,7 +366,7 @@ export default function EventPage() {
               )}
 
               <div className="p-7">
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#3E86A4]">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[primary]">
                   Event Details
                 </p>
 
@@ -430,7 +430,7 @@ export default function EventPage() {
                   <button
                     type="button"
                     onClick={openCheckout}
-                    className="w-full rounded-full bg-[#3E86A4] px-6 py-4 text-sm font-bold text-white transition hover:bg-[#1F7197] focus:outline-none focus:ring-2 focus:ring-[#3E86A4]/50"
+                    className="w-full rounded-full bg-primary px-6 py-4 text-sm font-bold text-white transition hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary/50"
                   >
                     Get Tickets
                   </button>
@@ -457,12 +457,12 @@ export default function EventPage() {
       {event.vendorApplicationsOpen && (
         <section className="border-t border-white/[0.07]">
           <div className="mx-auto max-w-7xl px-6 py-20 md:px-10 lg:px-12">
-            <div className="relative overflow-hidden rounded-[32px] border border-[#3E86A4]/15 bg-[#3E86A4]/[0.04] px-7 py-12 md:px-12 md:py-14">
-              <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#3E86A4]/[0.06] blur-3xl" />
+            <div className="relative overflow-hidden rounded-[32px] border border-primary/15 bg-primary/[0.04] px-7 py-12 md:px-12 md:py-14">
+              <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/[0.06] blur-3xl" />
 
               <div className="relative flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
                 <div className="max-w-2xl">
-                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#3E86A4]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[primary]">
                     Vendor Marketplace
                   </p>
 
@@ -498,7 +498,7 @@ export default function EventPage() {
 
                 <button
                   type="button"
-                  className="shrink-0 rounded-full border border-[#3E86A4]/30 bg-[#3E86A4] px-8 py-4 text-sm font-bold text-white transition hover:bg-[#1F7197]"
+                  className="shrink-0 rounded-full border border-primary/30 bg-primary px-8 py-4 text-sm font-bold text-white transition hover:bg-primary-dark"
                 >
                   Apply as Vendor
                 </button>
@@ -514,7 +514,7 @@ export default function EventPage() {
 
       <section className="border-t border-white/[0.07]">
         <div className="mx-auto max-w-7xl px-6 py-24 text-center md:px-10 lg:px-12">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#3E86A4]">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[primary]">
             Be There
           </p>
 
@@ -531,7 +531,7 @@ export default function EventPage() {
           <button
             type="button"
             onClick={openCheckout}
-            className="mt-9 rounded-full bg-[#3E86A4] px-9 py-4 text-sm font-bold text-white transition hover:bg-[#1F7197] focus:outline-none focus:ring-2 focus:ring-[#3E86A4]/50"
+            className="mt-9 rounded-full bg-primary px-9 py-4 text-sm font-bold text-white transition hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             Get Tickets
           </button>

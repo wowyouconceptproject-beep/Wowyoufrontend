@@ -148,7 +148,7 @@ export default function LegalAcceptancePage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white">
+    <main className="min-h-screen bg-background text-white">
       <div className="mx-auto max-w-4xl px-6 py-12 md:px-10 md:py-20">
         {/* Header */}
 
@@ -227,7 +227,7 @@ export default function LegalAcceptancePage() {
                 h-5
                 w-5
                 shrink-0
-                accent-[#3E86A4]
+                accent-[primary]
               "
             />
 
@@ -267,13 +267,13 @@ export default function LegalAcceptancePage() {
             items-center
             justify-center
             rounded-2xl
-            bg-[#3E86A4]
+            bg-primary
             px-6
             text-sm
             font-bold
             text-white
             transition
-            hover:bg-[#1F7197]
+            hover:bg-primary-dark
             disabled:cursor-not-allowed
             disabled:opacity-40
           "

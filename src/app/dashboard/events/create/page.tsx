@@ -454,7 +454,7 @@ export default function CreateEventPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#070707] text-white">
+    <main className="min-h-screen bg-background text-white">
 
       <div className="mx-auto w-full max-w-6xl px-6 py-10 md:px-10 md:py-14">
 
@@ -466,9 +466,9 @@ export default function CreateEventPage() {
 
           <div className="mb-5 flex items-center gap-3">
 
-            <div className="h-px w-10 bg-[#3E86A4]" />
+            <div className="h-px w-10 bg-primary" />
 
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#3E86A4]">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[primary]">
               Event Creation
             </p>
 
@@ -498,7 +498,7 @@ export default function CreateEventPage() {
 
             <div className="border-b border-white/10 px-6 py-6 md:px-8">
 
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#3E86A4]">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[primary]">
                 01 · Event Identity
               </p>
 
@@ -530,7 +530,7 @@ export default function CreateEventPage() {
                   onClick={() =>
                     fileInputRef.current?.click()
                   }
-                  className="group relative flex aspect-[16/7] w-full overflow-hidden rounded-2xl border border-dashed border-white/15 bg-black/30 transition hover:border-[#3E86A4]/60"
+                  className="group relative flex aspect-[16/7] w-full overflow-hidden rounded-2xl border border-dashed border-white/15 bg-surface/30 transition hover:border-primary/60"
                 >
 
                   {coverPreview ? (
@@ -541,9 +541,9 @@ export default function CreateEventPage() {
                         className="h-full w-full object-cover"
                       />
 
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition group-hover:bg-black/50">
+                      <div className="absolute inset-0 flex items-center justify-center bg-background/0 transition group-hover:bg-background/75">
 
-                        <span className="translate-y-2 rounded-full border border-white/20 bg-black/60 px-5 py-2 text-sm font-medium opacity-0 backdrop-blur transition group-hover:translate-y-0 group-hover:opacity-100">
+                        <span className="translate-y-2 rounded-full border border-white/20 bg-background/80 px-5 py-2 text-sm font-medium opacity-0 backdrop-blur transition group-hover:translate-y-0 group-hover:opacity-100">
                           Change cover
                         </span>
 
@@ -552,7 +552,7 @@ export default function CreateEventPage() {
                   ) : (
                     <div className="m-auto flex flex-col items-center px-6 text-center">
 
-                      <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#53A6C7]/12 text-2xl text-[#3E86A4]">
+                      <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-light/12 text-2xl text-[primary]">
                         +
                       </div>
 
@@ -619,7 +619,7 @@ export default function CreateEventPage() {
 
                     <option
                       value=""
-                      className="bg-[#111]"
+                      className="bg-surface"
                     >
                       Select category
                     </option>
@@ -629,7 +629,7 @@ export default function CreateEventPage() {
                         <option
                           key={category}
                           value={category}
-                          className="bg-[#111]"
+                          className="bg-surface"
                         >
                           {formatCategory(
                             category,
@@ -676,7 +676,7 @@ export default function CreateEventPage() {
 
           <section className="rounded-[28px] border border-white/10 bg-white/[0.035] p-6 md:p-8">
 
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#3E86A4]">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[primary]">
               02 · Place & Time
             </p>
 
@@ -806,7 +806,7 @@ export default function CreateEventPage() {
 
           <section className="rounded-[28px] border border-white/10 bg-white/[0.035] p-6 md:p-8">
 
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#3E86A4]">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[primary]">
               03 · Configuration
             </p>
 
@@ -853,7 +853,7 @@ export default function CreateEventPage() {
                       <option
                         key={currency.value}
                         value={currency.value}
-                        className="bg-[#111]"
+                        className="bg-surface"
                       >
                         {currency.label}
                       </option>
@@ -945,7 +945,7 @@ export default function CreateEventPage() {
               type="button"
               disabled={loading}
               onClick={submit}
-              className="min-w-[190px] rounded-2xl bg-[#3E86A4] px-7 py-4 font-bold text-white transition hover:bg-[#1F7197] disabled:cursor-not-allowed disabled:opacity-50"
+              className="min-w-[190px] rounded-2xl bg-primary px-7 py-4 font-bold text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading
                 ? "Creating Event..."
@@ -969,7 +969,7 @@ export default function CreateEventPage() {
 */
 
 const inputClass =
-  "w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-[#3E86A4]/60 focus:ring-1 focus:ring-[#3E86A4]/20";
+  "w-full rounded-xl border border-white/10 bg-surface/30 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-primary/60 focus:ring-1 focus:ring-primary/20";
 
 function Field({
   label,
@@ -1010,21 +1010,21 @@ function VisibilityOption({
       onClick={onClick}
       className={`flex items-start gap-4 rounded-2xl border p-5 text-left transition ${
         active
-          ? "border-[#3E86A4]/60 bg-[#3E86A4]/[0.08]"
-          : "border-white/10 bg-black/20 hover:border-white/20"
+          ? "border-primary/60 bg-primary/[0.08]"
+          : "border-white/10 bg-background/20 hover:border-white/20"
       }`}
     >
 
       <span
         className={`mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
           active
-            ? "border-[#3E86A4]"
+            ? "border-[primary]"
             : "border-white/30"
         }`}
       >
 
         {active && (
-          <span className="h-2.5 w-2.5 rounded-full bg-[#3E86A4]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-primary" />
         )}
 
       </span>

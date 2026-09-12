@@ -77,7 +77,7 @@ if (data.token) {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#050505] text-white">
+    <main className="relative min-h-screen overflow-hidden bg-background text-white">
       {/* Cinematic background */}
       <div
         className="
@@ -89,7 +89,7 @@ if (data.token) {
           w-[620px]
           -translate-x-1/2
           rounded-full
-          bg-[#53A6C7]/12
+          bg-primary-light/12
           blur-[150px]
         "
       />
@@ -103,7 +103,7 @@ if (data.token) {
           h-[600px]
           w-[600px]
           rounded-full
-          bg-[#53A6C7]/8
+          bg-primary-light/8
           blur-[160px]
         "
       />
@@ -133,15 +133,15 @@ if (data.token) {
                 justify-center
                 rounded-2xl
                 border
-                border-[#3E86A4]/20
-                bg-[#53A6C7]/12
+                border-primary/20
+                bg-primary-light/12
               "
             >
               <span
                 className="
                   text-xl
                   font-black
-                  text-[#3E86A4]
+                  text-[primary]
                 "
               >
                 W
@@ -153,7 +153,7 @@ if (data.token) {
                 text-2xl
                 font-black
                 tracking-[0.28em]
-                text-[#3E86A4]
+                text-[primary]
               "
             >
               WOWYOU
@@ -249,16 +249,16 @@ if (data.token) {
                     rounded-2xl
                     border
                     border-white/[0.08]
-                    bg-[#151515]
+                    bg-surface-elevated
                     px-5
                     text-[15px]
                     text-white
                     outline-none
                     transition
                     placeholder:text-white/25
-                    focus:border-[#3E86A4]/70
+                    focus:border-primary/70
                     focus:ring-4
-                    focus:ring-[#3E86A4]/10
+                    focus:ring-primary/10
                   "
                   placeholder="First name"
                   value={form.firstName}
@@ -292,16 +292,16 @@ if (data.token) {
                     rounded-2xl
                     border
                     border-white/[0.08]
-                    bg-[#151515]
+                    bg-surface-elevated
                     px-5
                     text-[15px]
                     text-white
                     outline-none
                     transition
                     placeholder:text-white/25
-                    focus:border-[#3E86A4]/70
+                    focus:border-primary/70
                     focus:ring-4
-                    focus:ring-[#3E86A4]/10
+                    focus:ring-primary/10
                   "
                   placeholder="Last name"
                   value={form.lastName}
@@ -339,16 +339,16 @@ if (data.token) {
                   rounded-2xl
                   border
                   border-white/[0.08]
-                  bg-[#151515]
+                  bg-surface-elevated
                   px-5
                   text-[15px]
                   text-white
                   outline-none
                   transition
                   placeholder:text-white/25
-                  focus:border-[#3E86A4]/70
+                  focus:border-primary/70
                   focus:ring-4
-                  focus:ring-[#3E86A4]/10
+                  focus:ring-primary/10
                 "
                 placeholder="Enter your email"
                 value={form.email}
@@ -385,16 +385,16 @@ if (data.token) {
                   rounded-2xl
                   border
                   border-white/[0.08]
-                  bg-[#151515]
+                  bg-surface-elevated
                   px-5
                   text-[15px]
                   text-white
                   outline-none
                   transition
                   placeholder:text-white/25
-                  focus:border-[#3E86A4]/70
+                  focus:border-primary/70
                   focus:ring-4
-                  focus:ring-[#3E86A4]/10
+                  focus:ring-primary/10
                 "
                 placeholder="Create a password"
                 value={form.password}
@@ -420,13 +420,13 @@ if (data.token) {
                 items-center
                 justify-center
                 rounded-2xl
-                bg-[#3E86A4]
+                bg-primary
                 px-6
                 text-[15px]
                 font-bold
                 text-white
                 transition
-                hover:bg-[#1F7197]
+                hover:bg-primary-dark
                 disabled:cursor-not-allowed
                 disabled:opacity-50
               "
@@ -456,7 +456,7 @@ if (data.token) {
               }
               className="
                 font-semibold
-                text-[#3E86A4]
+                text-[primary]
                 transition
                 hover:text-[#53A6C7]
               "

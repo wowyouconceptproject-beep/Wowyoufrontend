@@ -170,7 +170,7 @@ export default function CookieConsentPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white">
+    <main className="min-h-screen bg-background text-white">
       <div className="mx-auto max-w-4xl px-6 py-12 md:px-10 md:py-20">
         {/* Header */}
 
@@ -209,7 +209,7 @@ export default function CookieConsentPage() {
               </p>
             </div>
 
-            <span className="shrink-0 rounded-full border border-[#14B8A6]/20 bg-[#14B8A6]/10 px-3 py-1 text-xs font-semibold text-[#14B8A6]">
+            <span className="shrink-0 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
               Always Active
             </span>
           </div>
@@ -256,7 +256,7 @@ export default function CookieConsentPage() {
                         preferences[
                           category.key as keyof typeof preferences
                         ]
-                          ? "bg-[#3E86A4]"
+                          ? "bg-primary"
                           : "bg-white/15"
                       }
                     `}
@@ -366,13 +366,13 @@ export default function CookieConsentPage() {
             className="
               h-14
               rounded-2xl
-              bg-[#3E86A4]
+              bg-primary
               px-5
               text-sm
               font-bold
               text-white
               transition
-              hover:bg-[#1F7197]
+              hover:bg-primary-dark
               disabled:cursor-not-allowed
               disabled:opacity-40
             "

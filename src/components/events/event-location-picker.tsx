@@ -174,7 +174,7 @@ export default function EventLocationPicker({
 
   if (!isLoaded) {
     return (
-      <div className="flex h-[360px] items-center justify-center rounded-2xl border border-white/10 bg-black/30">
+      <div className="flex h-[360px] items-center justify-center rounded-2xl border border-white/10 bg-surface/30">
         <div className="text-sm text-white/40">
           Loading map...
         </div>
@@ -210,7 +210,7 @@ export default function EventLocationPicker({
               rounded-xl
               border
               border-white/10
-              bg-black/30
+              bg-surface/30
               px-4
               py-3.5
               text-sm
@@ -218,9 +218,9 @@ export default function EventLocationPicker({
               outline-none
               transition
               placeholder:text-white/25
-              focus:border-[#3E86A4]/60
+              focus:border-primary/60
               focus:ring-1
-              focus:ring-[#3E86A4]/20
+              focus:ring-primary/20
             "
           />
         </Autocomplete>
@@ -252,7 +252,7 @@ export default function EventLocationPicker({
         </GoogleMap>
       </div>
 
-      <div className="flex items-center justify-between rounded-xl border border-white/10 bg-black/20 px-4 py-3">
+      <div className="flex items-center justify-between rounded-xl border border-white/10 bg-background/20 px-4 py-3">
         <div>
           <p className="text-xs uppercase tracking-[0.16em] text-white/35">
             Selected Coordinates
@@ -264,7 +264,7 @@ export default function EventLocationPicker({
           </p>
         </div>
 
-        <div className="rounded-full border border-[#3E86A4]/30 bg-[#3E86A4]/10 px-3 py-1 text-xs text-[#53A6C7]">
+        <div className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs text-[#53A6C7]">
           Location selected
         </div>
       </div>

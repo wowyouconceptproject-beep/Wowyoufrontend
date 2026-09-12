@@ -50,17 +50,17 @@ export default function ShareButton({
           gap-2
           rounded-xl
           border
-          border-[#3E86A4]/20
-          bg-[#3E86A4]
+          border-primary/20
+          bg-primary
           px-6
           text-sm
           font-semibold
           text-white
           transition-all
           duration-200
-          hover:bg-[#1F7197]
+          hover:bg-primary-dark
           hover:shadow-lg
-          hover:shadow-[#3E86A4]/25
+          hover:shadow-[primary]/25
         "
       >
         <Share2 className="h-4 w-4" />

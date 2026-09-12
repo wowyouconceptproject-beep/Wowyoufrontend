@@ -193,7 +193,7 @@ export default function HeroCarousel({
         rounded-[28px]
         border
         border-white/5
-        bg-black
+        bg-background
         sm:min-h-[720px]
         lg:h-[88vh]
         lg:min-h-[760px]
@@ -326,7 +326,7 @@ export default function HeroCarousel({
               className="
                 h-px
                 w-10
-                bg-[#3E86A4]
+                bg-primary
               "
             />
 
@@ -336,7 +336,7 @@ export default function HeroCarousel({
                 font-bold
                 uppercase
                 tracking-[0.4em]
-                text-[#3E86A4]
+                text-[primary]
                 sm:text-xs
               "
             >
@@ -431,7 +431,7 @@ export default function HeroCarousel({
                 className="
                   h-4
                   w-4
-                  text-[#3E86A4]
+                  text-[primary]
                 "
               />
 
@@ -461,7 +461,7 @@ export default function HeroCarousel({
                   h-4
                   w-4
                   shrink-0
-                  text-[#3E86A4]
+                  text-[primary]
                 "
               />
 
@@ -497,7 +497,7 @@ export default function HeroCarousel({
                 justify-center
                 gap-2
                 rounded-full
-                bg-[#3E86A4]
+                bg-primary
                 px-7
                 py-4
                 text-sm
@@ -582,7 +582,7 @@ export default function HeroCarousel({
               rounded-full
               border
               border-white/15
-              bg-black/20
+              bg-background/20
               text-white
               backdrop-blur-xl
               transition
@@ -611,7 +611,7 @@ export default function HeroCarousel({
               rounded-full
               border
               border-white/15
-              bg-black/20
+              bg-background/20
               text-white
               backdrop-blur-xl
               transition
@@ -671,7 +671,7 @@ export default function HeroCarousel({
                   ${
                     index ===
                     activeIndex
-                      ? "w-10 bg-[#3E86A4]"
+                      ? "w-10 bg-primary"
                       : "w-4 bg-white/25 hover:bg-white/50"
                   }
                 `}

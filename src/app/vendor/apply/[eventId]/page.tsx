@@ -70,7 +70,7 @@ export default function VendorApplyPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[#050505] p-6 md:p-8">
+      <main className="min-h-screen bg-background p-6 md:p-8">
 
         <div
           className="
@@ -122,14 +122,14 @@ export default function VendorApplyPage() {
           min-h-screen
           items-center
           justify-center
-          bg-[#050505]
+          bg-background
           p-6
           text-white
         "
       >
         <div className="text-center">
 
-          <Store className="mx-auto h-8 w-8 text-[#3E86A4]" />
+          <Store className="mx-auto h-8 w-8 text-[primary]" />
 
           <h1 className="mt-5 text-3xl font-black">
             Event Unavailable
@@ -145,7 +145,7 @@ export default function VendorApplyPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white">
+    <main className="min-h-screen bg-background text-white">
 
       <section
         className="
@@ -183,7 +183,7 @@ export default function VendorApplyPage() {
                 rounded-[30px]
                 border
                 border-white/[0.08]
-                bg-[#0D0D0D]
+                bg-surface
               "
             >
 
@@ -229,7 +229,7 @@ export default function VendorApplyPage() {
                   rounded-full
                   border
                   border-white/10
-                  bg-black/60
+                  bg-background/80
                   px-4
                   py-2
                   backdrop-blur-xl
@@ -241,7 +241,7 @@ export default function VendorApplyPage() {
                     h-1.5
                     w-1.5
                     rounded-full
-                    bg-[#3E86A4]
+                    bg-primary
                   "
                 />
 
@@ -251,7 +251,7 @@ export default function VendorApplyPage() {
                     font-bold
                     uppercase
                     tracking-[0.18em]
-                    text-[#3E86A4]
+                    text-[primary]
                   "
                 >
                   Vendor Applications
@@ -270,7 +270,7 @@ export default function VendorApplyPage() {
                       font-bold
                       uppercase
                       tracking-[0.22em]
-                      text-[#3E86A4]
+                      text-[primary]
                     "
                   >
                     {event.category}
@@ -300,7 +300,7 @@ export default function VendorApplyPage() {
 
               <div className="flex items-center gap-2">
 
-                <span className="h-px w-7 bg-[#3E86A4]" />
+                <span className="h-px w-7 bg-primary" />
 
                 <p
                   className="
@@ -308,7 +308,7 @@ export default function VendorApplyPage() {
                     font-bold
                     uppercase
                     tracking-[0.2em]
-                    text-[#3E86A4]
+                    text-[primary]
                   "
                 >
                   About the Event
@@ -377,7 +377,7 @@ export default function VendorApplyPage() {
               rounded-[30px]
               border
               border-white/[0.08]
-              bg-[#0D0D0D]
+              bg-surface
             "
           >
 
@@ -403,11 +403,11 @@ export default function VendorApplyPage() {
                   justify-center
                   rounded-xl
                   border
-                  border-[#3E86A4]/15
-                  bg-[#3E86A4]/[0.06]
+                  border-primary/15
+                  bg-primary/[0.06]
                 "
               >
-                <Store className="h-5 w-5 text-[#3E86A4]" />
+                <Store className="h-5 w-5 text-[primary]" />
               </div>
 
               <p
@@ -417,7 +417,7 @@ export default function VendorApplyPage() {
                   font-bold
                   uppercase
                   tracking-[0.22em]
-                  text-[#3E86A4]
+                  text-[primary]
                 "
               >
                 Vendor Marketplace
@@ -581,8 +581,8 @@ export default function VendorApplyPage() {
                   className="
                     rounded-2xl
                     border
-                    border-[#3E86A4]/10
-                    bg-[#3E86A4]/[0.025]
+                    border-primary/10
+                    bg-primary/[0.025]
                     p-5
                   "
                 >
@@ -598,10 +598,10 @@ export default function VendorApplyPage() {
                         items-center
                         justify-center
                         rounded-lg
-                        bg-[#53A6C7]/12
+                        bg-primary-light/12
                       "
                     >
-                      <LockKeyhole className="h-4 w-4 text-[#3E86A4]" />
+                      <LockKeyhole className="h-4 w-4 text-[primary]" />
                     </div>
 
                     <div>
@@ -663,14 +663,14 @@ export default function VendorApplyPage() {
                     justify-center
                     gap-3
                     rounded-xl
-                    bg-[#3E86A4]
+                    bg-primary
                     px-6
                     text-sm
                     font-black
                     text-white
                     transition
                     duration-300
-                    hover:bg-[#1F7197]
+                    hover:bg-primary-dark
                   "
                 >
                   Submit Application
@@ -738,7 +738,7 @@ function EventDetail({
         rounded-2xl
         border
         border-white/[0.07]
-        bg-[#0D0D0D]
+        bg-surface
         p-5
       "
     >
@@ -754,7 +754,7 @@ function EventDetail({
           bg-white/[0.04]
         "
       >
-        <Icon className="h-4 w-4 text-[#3E86A4]" />
+        <Icon className="h-4 w-4 text-[primary]" />
       </div>
 
       <p
@@ -820,11 +820,11 @@ function FormSection({
             justify-center
             rounded-lg
             border
-            border-[#3E86A4]/15
-            bg-[#3E86A4]/[0.05]
+            border-primary/15
+            bg-primary/[0.05]
             text-[10px]
             font-black
-            text-[#3E86A4]
+            text-[primary]
           "
         >
           {number}
@@ -915,7 +915,7 @@ const inputClass = `
   rounded-xl
   border
   border-white/[0.08]
-  bg-black/30
+  bg-surface/30
   px-4
   py-4
   text-sm
@@ -924,7 +924,7 @@ const inputClass = `
   transition
   placeholder:text-white/20
   hover:border-white/[0.13]
-  focus:border-[#3E86A4]/50
+  focus:border-primary/50
   focus:ring-2
-  focus:ring-[#3E86A4]/5
+  focus:ring-primary/5
 `;

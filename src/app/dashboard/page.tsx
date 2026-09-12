@@ -184,12 +184,12 @@ export default function Dashboard() {
             <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl border border-divider bg-surface">
 
               <Building2
-                className="h-6 w-6 text-[#3E86A4]"
+                className="h-6 w-6 text-[primary]"
               />
 
             </div>
 
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#3E86A4]">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[primary]">
               organizer Setup
             </p>
 
@@ -295,7 +295,7 @@ export default function Dashboard() {
                 justify-center
                 gap-2
                 rounded-full
-                bg-[#3E86A4]
+                bg-primary
                 px-6
                 py-4
                 font-semibold
@@ -374,7 +374,7 @@ export default function Dashboard() {
 
           <div>
 
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#3E86A4]">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[primary]">
               organizer Dashboard
             </p>
 
@@ -402,7 +402,7 @@ export default function Dashboard() {
               justify-center
               gap-2
               rounded-full
-              bg-[#3E86A4]
+              bg-primary
               px-6
               py-4
               font-semibold
@@ -424,7 +424,7 @@ export default function Dashboard() {
 
         {isTrialing &&
           subscription && (
-            <section className="mt-8 rounded-[28px] border border-[#3E86A4]/20 bg-[#3E86A4]/5 p-6">
+            <section className="mt-8 rounded-[28px] border border-primary/20 bg-primary/5 p-6">
 
               <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
 
@@ -432,7 +432,7 @@ export default function Dashboard() {
 
                   <div className="flex flex-wrap items-center gap-3">
 
-                    <span className="rounded-full bg-[#3E86A4] px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
+                    <span className="rounded-full bg-primary px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
                       Free Trial
                     </span>
 
@@ -480,8 +480,8 @@ export default function Dashboard() {
                     text-sm
                     font-semibold
                     transition
-                    hover:border-[#3E86A4]
-                    hover:text-[#3E86A4]
+                    hover:border-[primary]
+                    hover:text-[primary]
                   "
                 >
                   View Plans
@@ -532,7 +532,7 @@ export default function Dashboard() {
                     justify-center
                     gap-2
                     rounded-full
-                    bg-[#3E86A4]
+                    bg-primary
                     px-5
                     py-3
                     text-sm
@@ -574,7 +574,7 @@ export default function Dashboard() {
 
               <Link
                 href="/dashboard/billing"
-                className="inline-flex items-center gap-2 text-sm font-semibold hover:text-[#3E86A4]"
+                className="inline-flex items-center gap-2 text-sm font-semibold hover:text-[primary]"
               >
                 Manage plan
 
@@ -598,7 +598,7 @@ export default function Dashboard() {
                 Total Events
               </p>
 
-              <CalendarDays className="h-5 w-5 text-[#3E86A4]" />
+              <CalendarDays className="h-5 w-5 text-[primary]" />
 
             </div>
 
@@ -668,7 +668,7 @@ export default function Dashboard() {
 
             <div>
 
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#3E86A4]">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[primary]">
                 Event Portfolio
               </p>
 
@@ -696,7 +696,7 @@ export default function Dashboard() {
 
               <div className="flex h-16 w-16 items-center justify-center rounded-full border border-divider bg-background">
 
-                <CalendarDays className="h-7 w-7 text-[#3E86A4]" />
+                <CalendarDays className="h-7 w-7 text-[primary]" />
 
               </div>
 
@@ -716,7 +716,7 @@ export default function Dashboard() {
 
               <Link
                 href="/dashboard/events/create"
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#3E86A4] px-6 py-3 font-semibold text-white"
+                className="mt-8 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-white"
               >
                 <Plus className="h-4 w-4" />
 
@@ -750,7 +750,7 @@ export default function Dashboard() {
                       transition
                       duration-300
                       hover:-translate-y-1
-                      hover:border-[#3E86A4]/40
+                      hover:border-primary/40
                     "
                   >
 
@@ -805,7 +805,7 @@ export default function Dashboard() {
                             event.status ===
                             "PUBLISHED"
                               ? "border-green-400/30 bg-green-500/20 text-green-300"
-                              : "border-white/10 bg-black/40 text-white"
+                              : "border-white/10 bg-background/40 text-white"
                           }
                         `}
                       >
@@ -816,7 +816,7 @@ export default function Dashboard() {
 
                     <div className="p-6">
 
-                      <h3 className="text-2xl font-bold transition group-hover:text-[#3E86A4]">
+                      <h3 className="text-2xl font-bold transition group-hover:text-[primary]">
                         {event.title}
                       </h3>
 
@@ -877,7 +877,7 @@ export default function Dashboard() {
                           Manage Event
                         </span>
 
-                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:text-[#3E86A4]" />
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:text-[primary]" />
 
                       </div>
 

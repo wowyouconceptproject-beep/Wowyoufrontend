@@ -16,7 +16,7 @@ export function LegalLayout({
   children,
 }: LegalLayoutProps) {
   return (
-    <main className="min-h-screen bg-[#050505] text-white">
+    <main className="min-h-screen bg-background text-white">
       <div className="mx-auto max-w-5xl px-6 py-20 sm:px-8 lg:px-10">
         <div className="mb-12">
           <Link

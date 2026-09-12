@@ -96,7 +96,7 @@ export default function EventPage() {
       <main
         className="
           min-h-screen
-          bg-[#050505]
+          bg-background
           px-6
           py-8
           text-white
@@ -121,7 +121,7 @@ export default function EventPage() {
                 rounded-full
                 border-2
                 border-white/10
-                border-t-[#3E86A4]
+                border-t-[primary]
               "
             />
 
@@ -145,7 +145,7 @@ export default function EventPage() {
       <main
         className="
           min-h-screen
-          bg-[#050505]
+          bg-background
           p-8
           text-white
         "
@@ -223,7 +223,7 @@ export default function EventPage() {
       description:
         "Track sales, revenue and event performance.",
       href: `/dashboard/events/${event.id}/revenue`,
-      icon: "₦",
+      icon: "$",
     },
     {
       title: "Activity",
@@ -254,7 +254,7 @@ export default function EventPage() {
         relative
         min-h-screen
         overflow-hidden
-        bg-[#050505]
+        bg-background
         text-white
       "
     >
@@ -269,7 +269,7 @@ export default function EventPage() {
           h-[600px]
           w-[600px]
           rounded-full
-          bg-[#3E86A4]/[0.06]
+          bg-primary/[0.06]
           blur-[160px]
         "
       />
@@ -336,7 +336,7 @@ export default function EventPage() {
     rounded-[28px]
     border
     border-white/[0.07]
-    bg-[#0B0B0B]
+    bg-background-secondary
     p-7
     lg:p-9
   "
@@ -350,7 +350,7 @@ export default function EventPage() {
       h-[320px]
       w-[320px]
       rounded-full
-      bg-[#53A6C7]/12
+      bg-primary-light/12
       blur-[100px]
     "
   />
@@ -391,14 +391,14 @@ export default function EventPage() {
                     gap-2
                     rounded-full
                     border
-                    border-[#3E86A4]/20
-                    bg-[#53A6C7]/12
+                    border-primary/20
+                    bg-primary-light/12
                     px-3
                     py-1.5
                     text-xs
                     font-bold
                     tracking-wider
-                    text-[#3E86A4]
+                    text-[primary]
                   "
                 >
                   <span
@@ -406,7 +406,7 @@ export default function EventPage() {
                       h-1.5
                       w-1.5
                       rounded-full
-                      bg-[#3E86A4]
+                      bg-primary
                     "
                   />
 
@@ -507,13 +507,13 @@ export default function EventPage() {
       className="
         h-12
         rounded-xl
-        bg-[#3E86A4]
+        bg-primary
         px-6
         text-sm
         font-bold
         text-white
         transition
-        hover:bg-[#1F7197]
+        hover:bg-primary-dark
       "
     >
       Publish Event
@@ -532,7 +532,7 @@ export default function EventPage() {
       font-semibold
       text-white
       transition
-      hover:border-[#3E86A4]/30
+      hover:border-primary/30
       hover:bg-white/[0.08]
     "
   >
@@ -575,7 +575,7 @@ export default function EventPage() {
                   font-bold
                   uppercase
                   tracking-[0.22em]
-                  text-[#3E86A4]
+                  text-[primary]
                 "
               >
                 Live Performance
@@ -637,7 +637,7 @@ export default function EventPage() {
                 font-bold
                 uppercase
                 tracking-[0.22em]
-                text-[#3E86A4]
+                text-[primary]
               "
             >
               Management
@@ -693,13 +693,13 @@ export default function EventPage() {
                     rounded-[22px]
                     border
                     border-white/[0.07]
-                    bg-[#0B0B0B]
+                    bg-background-secondary
                     p-6
                     transition
                     duration-300
                     hover:-translate-y-1
-                    hover:border-[#3E86A4]/25
-                    hover:bg-[#101010]
+                    hover:border-primary/25
+                    hover:bg-surface
                   "
                 >
                   <div
@@ -720,11 +720,11 @@ export default function EventPage() {
                         justify-center
                         rounded-xl
                         border
-                        border-[#3E86A4]/15
-                        bg-[#53A6C7]/12
+                        border-primary/15
+                        bg-primary-light/12
                         text-lg
                         font-bold
-                        text-[#3E86A4]
+                        text-[primary]
                       "
                     >
                       {item.icon}
@@ -736,7 +736,7 @@ export default function EventPage() {
                         text-white/20
                         transition
                         group-hover:translate-x-1
-                        group-hover:text-[#3E86A4]
+                        group-hover:text-[primary]
                       "
                     >
                       →
@@ -792,7 +792,7 @@ export default function EventPage() {
               rounded-[24px]
               border
               border-white/[0.07]
-              bg-[#0B0B0B]
+              bg-background-secondary
               p-7
             "
           >
@@ -802,7 +802,7 @@ export default function EventPage() {
                 font-bold
                 uppercase
                 tracking-[0.2em]
-                text-[#3E86A4]
+                text-[primary]
               "
             >
               About
@@ -840,7 +840,7 @@ export default function EventPage() {
               rounded-[24px]
               border
               border-white/[0.07]
-              bg-[#0B0B0B]
+              bg-background-secondary
               p-7
             "
           >
@@ -850,7 +850,7 @@ export default function EventPage() {
                 font-bold
                 uppercase
                 tracking-[0.2em]
-                text-[#3E86A4]
+                text-[primary]
               "
             >
               Event Details
@@ -989,7 +989,7 @@ function DateCard({
         rounded-[22px]
         border
         border-white/[0.07]
-        bg-[#0B0B0B]
+        bg-background-secondary
         p-6
       "
     >
@@ -1028,7 +1028,7 @@ function DateCard({
           mt-2
           text-sm
           font-medium
-          text-[#3E86A4]
+          text-[primary]
         "
       >
         {date.toLocaleTimeString(

@@ -125,14 +125,14 @@ export default function AnnouncementCard({
         overflow-hidden
         rounded-[24px]
         border
-        bg-[#0D0D0D]
+        bg-surface
         transition
         duration-300
-        hover:bg-[#101010]
+        hover:bg-surface
 
         ${
           announcement.isPinned
-            ? "border-[#3E86A4]/20"
+            ? "border-primary/20"
             : "border-white/[0.07] hover:border-white/[0.12]"
         }
       `}
@@ -147,7 +147,7 @@ export default function AnnouncementCard({
             top-0
             h-full
             w-[3px]
-            bg-[#3E86A4]
+            bg-primary
           "
         />
       )}
@@ -226,15 +226,15 @@ export default function AnnouncementCard({
                       gap-1.5
                       rounded-full
                       border
-                      border-[#3E86A4]/20
-                      bg-[#3E86A4]/[0.07]
+                      border-primary/20
+                      bg-primary/[0.07]
                       px-2.5
                       py-1
                       text-[10px]
                       font-bold
                       uppercase
                       tracking-[0.12em]
-                      text-[#3E86A4]
+                      text-[primary]
                     "
                   >
                     <Pin

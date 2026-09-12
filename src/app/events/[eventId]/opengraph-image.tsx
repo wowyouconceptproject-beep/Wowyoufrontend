@@ -24,7 +24,7 @@ export default function Image() {
       >
         <div
           style={{
-            color: "#3E86A4",
+            color: "#20B8D0",
             fontSize: 32,
             fontWeight: 700,
           }}
@@ -53,7 +53,7 @@ export default function Image() {
 
         <div
           style={{
-            color: "#3E86A4",
+            color: "#20B8D0",
             fontSize: 24,
             fontWeight: 600,
           }}

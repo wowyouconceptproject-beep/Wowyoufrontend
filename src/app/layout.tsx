@@ -37,10 +37,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="bg-[#072933]"
+      className="bg-background"
     >
       <body
-        className={`${inter.variable} ${spaceGrotesk.variable} bg-[#072933] text-white`}
+        className={`${inter.variable} ${spaceGrotesk.variable} bg-background text-white`}
       >
         {children}
       </body>

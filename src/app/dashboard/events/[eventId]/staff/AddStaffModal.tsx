@@ -331,14 +331,14 @@ export function AddStaffModal({
           justify-center
           gap-2
           rounded-full
-          bg-[#3E86A4]
+          bg-primary
           px-6
           text-sm
           font-bold
           text-white
           transition
           duration-200
-          hover:bg-[#1F7197]
+          hover:bg-primary-dark
           active:scale-[0.98]
         "
       >
@@ -378,7 +378,7 @@ export function AddStaffModal({
               h-full
               w-full
               cursor-default
-              bg-black/80
+              bg-background/80
               backdrop-blur-sm
             "
           />
@@ -401,7 +401,7 @@ export function AddStaffModal({
               rounded-[30px]
               border
               border-white/10
-              bg-[#0b0b0b]
+              bg-background-secondary
               text-white
               shadow-2xl
             "
@@ -465,15 +465,15 @@ export function AddStaffModal({
                       justify-center
                       rounded-2xl
                       border
-                      border-[#3E86A4]/30
-                      bg-[#3E86A4]/10
+                      border-primary/30
+                      bg-primary/10
                     "
                   >
                     <UserPlus
                       className="
                         h-5
                         w-5
-                        text-[#3E86A4]
+                        text-[primary]
                       "
                     />
                   </div>
@@ -485,7 +485,7 @@ export function AddStaffModal({
                       font-bold
                       uppercase
                       tracking-[0.3em]
-                      text-[#3E86A4]
+                      text-[primary]
                     "
                   >
                     Event Operations
@@ -701,7 +701,7 @@ export function AddStaffModal({
                                     role.value
                                   }
                                   className="
-                                    bg-[#111111]
+                                    bg-surface
                                     text-white
                                   "
                                 >
@@ -784,8 +784,8 @@ export function AddStaffModal({
                       mt-8
                       rounded-2xl
                       border
-                      border-[#3E86A4]/15
-                      bg-[#3E86A4]/[0.04]
+                      border-primary/15
+                      bg-primary/[0.04]
                       p-4
                     "
                   >
@@ -802,7 +802,7 @@ export function AddStaffModal({
                           h-4
                           w-4
                           shrink-0
-                          text-[#3E86A4]
+                          text-[primary]
                         "
                       />
 
@@ -866,7 +866,7 @@ export function AddStaffModal({
                     gap-3
                     border-t
                     border-white/10
-                    bg-[#0d0d0d]
+                    bg-surface
                     px-7
                     py-6
                     sm:flex-row
@@ -916,13 +916,13 @@ export function AddStaffModal({
                       justify-center
                       gap-2
                       rounded-full
-                      bg-[#3E86A4]
+                      bg-primary
                       px-7
                       text-sm
                       font-bold
                       text-white
                       transition
-                      hover:bg-[#1F7197]
+                      hover:bg-primary-dark
                       disabled:cursor-not-allowed
                       disabled:opacity-40
                     "
@@ -962,15 +962,15 @@ export function AddStaffModal({
                       justify-center
                       rounded-full
                       border
-                      border-[#3E86A4]/30
-                      bg-[#3E86A4]/10
+                      border-primary/30
+                      bg-primary/10
                     "
                   >
                     <Check
                       className="
                         h-7
                         w-7
-                        text-[#3E86A4]
+                        text-[primary]
                       "
                     />
                   </div>
@@ -982,7 +982,7 @@ export function AddStaffModal({
                       font-bold
                       uppercase
                       tracking-[0.3em]
-                      text-[#3E86A4]
+                      text-[primary]
                     "
                   >
                     Staff Created
@@ -1025,8 +1025,8 @@ export function AddStaffModal({
                     overflow-hidden
                     rounded-[24px]
                     border
-                    border-[#3E86A4]/25
-                    bg-[#3E86A4]/[0.05]
+                    border-primary/25
+                    bg-primary/[0.05]
                   "
                 >
                   <div
@@ -1035,7 +1035,7 @@ export function AddStaffModal({
                       items-center
                       gap-3
                       border-b
-                      border-[#3E86A4]/15
+                      border-primary/15
                       px-5
                       py-4
                     "
@@ -1044,7 +1044,7 @@ export function AddStaffModal({
                       className="
                         h-4
                         w-4
-                        text-[#3E86A4]
+                        text-[primary]
                       "
                     />
 
@@ -1112,12 +1112,12 @@ export function AddStaffModal({
                       justify-center
                       gap-2
                       border-t
-                      border-[#3E86A4]/15
+                      border-primary/15
                       text-sm
                       font-semibold
                       text-white/60
                       transition
-                      hover:bg-[#3E86A4]/10
+                      hover:bg-primary/10
                       hover:text-white
                     "
                   >
@@ -1127,7 +1127,7 @@ export function AddStaffModal({
                           className="
                             h-4
                             w-4
-                            text-[#3E86A4]
+                            text-[primary]
                           "
                         />
 
@@ -1178,13 +1178,13 @@ export function AddStaffModal({
                     h-12
                     w-full
                     rounded-full
-                    bg-[#3E86A4]
+                    bg-primary
                     px-6
                     text-sm
                     font-bold
                     text-white
                     transition
-                    hover:bg-[#1F7197]
+                    hover:bg-primary-dark
                   "
                 >
                   Done
@@ -1218,10 +1218,10 @@ const inputClass = `
   transition
   placeholder:text-white/25
   hover:border-white/20
-  focus:border-[#3E86A4]/60
+  focus:border-primary/60
   focus:bg-white/[0.05]
   focus:ring-4
-  focus:ring-[#3E86A4]/5
+  focus:ring-primary/5
 `;
 
 function FieldLabel({
@@ -1246,7 +1246,7 @@ function FieldLabel({
     >
       <span
         className="
-          text-[#3E86A4]
+          text-[primary]
         "
       >
         {icon}
@@ -1259,7 +1259,7 @@ function FieldLabel({
       {required && (
         <span
           className="
-            text-[#3E86A4]
+            text-[primary]
           "
         >
           *
@@ -1289,7 +1289,7 @@ function SectionHeading({
           text-[10px]
           font-black
           tracking-[0.2em]
-          text-[#3E86A4]
+          text-[primary]
         "
       >
         {number}

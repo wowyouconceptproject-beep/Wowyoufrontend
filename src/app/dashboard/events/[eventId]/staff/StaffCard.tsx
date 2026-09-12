@@ -118,11 +118,11 @@ export function StaffCard({
           rounded-[26px]
           border
           border-white/[0.08]
-          bg-[#0D0D0D]
+          bg-surface
           transition-all
           duration-300
           hover:-translate-y-1
-          hover:border-[#3E86A4]/25
+          hover:border-primary/25
           hover:shadow-2xl
           hover:shadow-black/30
         "
@@ -166,12 +166,12 @@ export function StaffCard({
                     justify-center
                     rounded-2xl
                     border
-                    border-[#3E86A4]/20
-                    bg-[#53A6C7]/12
+                    border-primary/20
+                    bg-primary-light/12
                     text-sm
                     font-black
                     tracking-wider
-                    text-[#3E86A4]
+                    text-[primary]
                   "
                 >
                   {initials ||
@@ -254,8 +254,8 @@ export function StaffCard({
                 bg-white/[0.03]
                 text-white/30
                 transition
-                group-hover:border-[#3E86A4]/20
-                group-hover:text-[#3E86A4]
+                group-hover:border-primary/20
+                group-hover:text-[primary]
               "
             >
               <ChevronRight className="h-4 w-4" />
@@ -358,7 +358,7 @@ export function StaffCard({
 
               <div className="flex items-center gap-2">
 
-                <ShieldCheck className="h-4 w-4 text-[#3E86A4]" />
+                <ShieldCheck className="h-4 w-4 text-[primary]" />
 
                 <p className="text-sm font-bold text-white">
                   Permissions
@@ -421,8 +421,8 @@ export function StaffCard({
                           gap-1.5
                           rounded-full
                           border
-                          border-[#3E86A4]/15
-                          bg-[#3E86A4]/[0.06]
+                          border-primary/15
+                          bg-primary/[0.06]
                           px-3
                           py-1.5
                           text-xs
@@ -431,7 +431,7 @@ export function StaffCard({
                         "
                       >
 
-                        <ShieldCheck className="h-3 w-3 text-[#3E86A4]" />
+                        <ShieldCheck className="h-3 w-3 text-[primary]" />
 
                         {formatRole(
                           permission
@@ -489,7 +489,7 @@ export function StaffCard({
             gap-4
             border-t
             border-white/[0.07]
-            bg-black/20
+            bg-background/20
             px-6
             py-4
           "
@@ -523,9 +523,9 @@ export function StaffCard({
               gap-1.5
               text-xs
               font-semibold
-              text-[#3E86A4]/70
+              text-[primary]/70
               transition
-              group-hover:text-[#3E86A4]
+              group-hover:text-[primary]
             "
           >
 

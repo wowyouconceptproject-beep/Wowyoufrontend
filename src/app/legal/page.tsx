@@ -55,7 +55,7 @@ const legalPages = [
 
 export default function LegalPage() {
   return (
-    <main className="min-h-screen bg-[#050708] text-white">
+    <main className="min-h-screen bg-background text-white">
       <div className="mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-24">
         <div className="max-w-3xl">
           <Link

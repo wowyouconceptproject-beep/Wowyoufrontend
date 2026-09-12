@@ -72,7 +72,7 @@ export default function VendorApplicationsPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[#050505] text-white">
+      <main className="min-h-screen bg-background text-white">
 
         <section className="mx-auto max-w-7xl px-5 py-14 md:px-8">
 
@@ -150,7 +150,7 @@ export default function VendorApplicationsPage() {
   */
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white">
+    <main className="min-h-screen bg-background text-white">
 
       {/* Header */}
 
@@ -192,7 +192,7 @@ export default function VendorApplicationsPage() {
 
               <div className="flex items-center gap-3">
 
-                <span className="h-px w-8 bg-[#3E86A4]" />
+                <span className="h-px w-8 bg-primary" />
 
                 <p
                   className="
@@ -200,7 +200,7 @@ export default function VendorApplicationsPage() {
                     font-bold
                     uppercase
                     tracking-[0.24em]
-                    text-[#3E86A4]
+                    text-[primary]
                   "
                 >
                   Vendor Portal
@@ -276,7 +276,7 @@ export default function VendorApplicationsPage() {
               rounded-[24px]
               border
               border-white/[0.07]
-              bg-[#0B0B0B]
+              bg-background-secondary
               md:grid-cols-3
             "
           >
@@ -435,7 +435,7 @@ function SummaryCard({
             bg-white/[0.03]
           "
         >
-          <Icon className="h-4 w-4 text-[#3E86A4]" />
+          <Icon className="h-4 w-4 text-[primary]" />
         </div>
 
       </div>
@@ -486,7 +486,7 @@ function ApplicationSection({
 
           <div className="flex items-center gap-3">
 
-            <Icon className="h-4 w-4 text-[#3E86A4]" />
+            <Icon className="h-4 w-4 text-[primary]" />
 
             <h2
               className="
@@ -603,7 +603,7 @@ function ApplicationCard({
         rounded-[24px]
         border
         border-white/[0.07]
-        bg-[#0D0D0D]
+        bg-surface
         p-6
         transition
         duration-300
@@ -636,7 +636,7 @@ function ApplicationCard({
               font-bold
               uppercase
               tracking-[0.16em]
-              text-[#3E86A4]
+              text-[primary]
             "
           >
             <Building2 className="h-3.5 w-3.5" />
@@ -816,13 +816,13 @@ function StatusBadge({
         gap-2
         rounded-full
         border
-        border-[#3E86A4]/15
-        bg-[#3E86A4]/[0.06]
+        border-primary/15
+        bg-primary/[0.06]
         px-4
         py-2
         text-xs
         font-bold
-        text-[#3E86A4]
+        text-[primary]
       "
     >
       <Clock3 className="h-3.5 w-3.5" />
@@ -870,7 +870,7 @@ function EmptyApplications() {
           bg-white/[0.03]
         "
       >
-        <FileText className="h-6 w-6 text-[#3E86A4]" />
+        <FileText className="h-6 w-6 text-[primary]" />
       </div>
 
       <h2 className="mt-7 text-2xl font-black">
@@ -900,13 +900,13 @@ function EmptyApplications() {
           items-center
           gap-3
           rounded-xl
-          bg-[#3E86A4]
+          bg-primary
           px-6
           text-sm
           font-black
           text-white
           transition
-          hover:bg-[#1F7197]
+          hover:bg-primary-dark
         "
       >
         Find Opportunities

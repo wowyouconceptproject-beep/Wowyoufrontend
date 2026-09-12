@@ -151,7 +151,7 @@ export default function VendorPortalPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[#050505] text-white">
+      <main className="min-h-screen bg-background text-white">
 
         <section className="mx-auto max-w-7xl px-5 py-14 md:px-8">
 
@@ -231,7 +231,7 @@ export default function VendorPortalPage() {
   */
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white">
+    <main className="min-h-screen bg-background text-white">
 
       {/* Header */}
 
@@ -273,7 +273,7 @@ export default function VendorPortalPage() {
 
               <div className="flex items-center gap-3">
 
-                <span className="h-px w-8 bg-[#14B8A6]" />
+                <span className="h-px w-8 bg-primary" />
 
                 <p
                   className="
@@ -281,7 +281,7 @@ export default function VendorPortalPage() {
                     font-bold
                     uppercase
                     tracking-[0.24em]
-                    text-[#14B8A6]
+                    text-primary
                   "
                 >
                   Vendor Portal
@@ -371,7 +371,7 @@ export default function VendorPortalPage() {
               rounded-[24px]
               border
               border-white/[0.07]
-              bg-[#0B0B0B]
+              bg-background-secondary
               md:grid-cols-3
             "
           >
@@ -442,7 +442,7 @@ export default function VendorPortalPage() {
                 font-bold
                 uppercase
                 tracking-[0.22em]
-                text-[#14B8A6]
+                text-primary
               "
             >
               Vendor Marketplace
@@ -520,7 +520,7 @@ export default function VendorPortalPage() {
                 bg-white/[0.03]
               "
             >
-              <Store className="h-5 w-5 text-[#14B8A6]" />
+              <Store className="h-5 w-5 text-primary" />
             </div>
 
             <h3 className="mt-6 text-xl font-bold">
@@ -565,7 +565,7 @@ export default function VendorPortalPage() {
                     rounded-[26px]
                     border
                     border-white/[0.07]
-                    bg-[#0D0D0D]
+                    bg-surface
                     transition
                     duration-300
                     hover:-translate-y-1
@@ -615,7 +615,7 @@ export default function VendorPortalPage() {
                         rounded-full
                         border
                         border-white/10
-                        bg-black/60
+                        bg-background/80
                         px-3
                         py-1.5
                         backdrop-blur-xl
@@ -627,7 +627,7 @@ export default function VendorPortalPage() {
                           font-bold
                           uppercase
                           tracking-[0.16em]
-                          text-[#14B8A6]
+                          text-primary
                         "
                       >
                         Accepting Vendors
@@ -703,13 +703,13 @@ export default function VendorPortalPage() {
                           items-center
                           justify-between
                           rounded-xl
-                          bg-[#14B8A6]
+                          bg-primary
                           px-5
                           text-sm
                           font-black
                           text-white
                           transition
-                          hover:bg-[#1F7197]
+                          hover:bg-primary-dark
                         "
                       >
                         Apply as Vendor
@@ -818,7 +818,7 @@ function StatCard({
             bg-white/[0.03]
           "
         >
-          <Icon className="h-4 w-4 text-[#14B8A6]" />
+          <Icon className="h-4 w-4 text-primary" />
         </div>
 
       </div>

@@ -224,7 +224,7 @@ export default function VendorApplicationsPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[#070707] px-6 py-10 text-white md:px-10">
+      <main className="min-h-screen bg-background px-6 py-10 text-white md:px-10">
         <div className="mx-auto max-w-7xl">
 
           <div className="animate-pulse">
@@ -252,7 +252,7 @@ export default function VendorApplicationsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#070707] text-white">
+    <main className="min-h-screen bg-background text-white">
 
       <div className="mx-auto max-w-7xl px-6 py-10 md:px-10 md:py-14">
 
@@ -261,9 +261,9 @@ export default function VendorApplicationsPage() {
         <header className="mb-12">
 
           <div className="mb-5 flex items-center gap-3">
-            <div className="h-px w-10 bg-[#3E86A4]" />
+            <div className="h-px w-10 bg-primary" />
 
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#3E86A4]">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[primary]">
               Vendor Operations
             </p>
           </div>
@@ -288,9 +288,9 @@ export default function VendorApplicationsPage() {
             <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5">
 
               <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#3E86A4] opacity-40" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-40" />
 
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#3E86A4]" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary" />
               </span>
 
               <span className="text-xs font-medium text-white/55">
@@ -395,7 +395,7 @@ function SummaryCard({
 }) {
   const accent =
     tone === "gold"
-      ? "bg-[#3E86A4]"
+      ? "bg-primary"
       : tone === "green"
       ? "bg-emerald-500"
       : "bg-white/25";
@@ -473,7 +473,7 @@ function ApplicationSection({
 
         <div>
 
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#3E86A4]">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[primary]">
             {eyebrow}
           </p>
 
@@ -581,7 +581,7 @@ function VendorCard({
     <article
       className={`overflow-hidden rounded-[26px] border bg-white/[0.035] transition ${
         priority
-          ? "border-[#3E86A4]/20 hover:border-[#3E86A4]/40"
+          ? "border-primary/20 hover:border-primary/40"
           : "border-white/10 hover:border-white/15"
       }`}
     >
@@ -596,7 +596,7 @@ function VendorCard({
 
             <div className="flex items-start gap-4">
 
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-sm font-bold text-[#3E86A4]">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-sm font-bold text-[primary]">
                 {initials}
               </div>
 
@@ -681,7 +681,7 @@ function VendorCard({
             </div>
 
             {application.message && (
-              <div className="mt-6 rounded-2xl border border-white/[0.07] bg-black/20 p-5">
+              <div className="mt-6 rounded-2xl border border-white/[0.07] bg-background/20 p-5">
 
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/30">
                   Message to organizer
@@ -724,7 +724,7 @@ function VendorCard({
                     application.id
                   )
                 }
-                className="rounded-xl bg-[#3E86A4] px-5 py-3.5 text-sm font-bold text-white transition hover:bg-[#1F7197] disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-xl bg-primary px-5 py-3.5 text-sm font-bold text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {processing
                   ? "Processing..."
@@ -798,7 +798,7 @@ function StatusBadge({
       : status ===
         "REJECTED"
       ? "border-red-500/20 bg-red-500/10 text-red-300"
-      : "border-[#3E86A4]/20 bg-[#53A6C7]/12 text-[#3E86A4]";
+      : "border-primary/20 bg-primary-light/12 text-[primary]";
 
   return (
     <span
@@ -819,7 +819,7 @@ function EmptyState({
   return (
     <div className="rounded-[24px] border border-dashed border-white/10 bg-white/[0.02] px-6 py-14 text-center">
 
-      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-lg text-[#3E86A4]">
+      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-lg text-[primary]">
         ✓
       </div>
 

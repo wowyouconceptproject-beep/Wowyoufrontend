@@ -577,7 +577,7 @@ export default function PublicTicketCheckout({
         onClose={onClose}
       >
         <div className="px-7 py-12 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#3E86A4]">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[primary]">
             Tickets
           </p>
 
@@ -620,7 +620,7 @@ export default function PublicTicketCheckout({
       <div className="border-b border-white/10 px-7 py-6">
         <div className="flex items-start justify-between gap-5">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#3E86A4]">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[primary]">
               Secure your place
             </p>
 
@@ -690,7 +690,7 @@ export default function PublicTicketCheckout({
                     }
                     className={`w-full rounded-2xl border p-5 text-left transition ${
                       selected
-                        ? "border-[#3E86A4] bg-[#3E86A4]/10"
+                        ? "border-[primary] bg-primary/10"
                         : "border-white/10 bg-white/[0.03] hover:border-white/20"
                     } ${
                       available <=
@@ -799,7 +799,7 @@ export default function PublicTicketCheckout({
 
         <div className="border-t border-white/10 pt-7">
           <div className="mb-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#3E86A4]">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[primary]">
               Your account
             </p>
 
@@ -825,7 +825,7 @@ export default function PublicTicketCheckout({
               className={`rounded-full px-4 py-2.5 text-xs font-semibold transition ${
                 authMode ===
                 "register"
-                  ? "bg-[#3E86A4] text-white"
+                  ? "bg-primary text-white"
                   : "text-white/40 hover:text-white"
               }`}
             >
@@ -844,7 +844,7 @@ export default function PublicTicketCheckout({
               className={`rounded-full px-4 py-2.5 text-xs font-semibold transition ${
                 authMode ===
                 "login"
-                  ? "bg-[#3E86A4] text-white"
+                  ? "bg-primary text-white"
                   : "text-white/40 hover:text-white"
               }`}
             >
@@ -973,7 +973,7 @@ export default function PublicTicketCheckout({
                 availableQuantity <=
                   0
               }
-              className="mt-5 w-full rounded-full bg-[#3E86A4] px-6 py-4 text-sm font-bold text-white transition hover:bg-[#1F7197] disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-5 w-full rounded-full bg-primary px-6 py-4 text-sm font-bold text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading
                 ? "Preparing your ticket..."
@@ -1007,9 +1007,9 @@ function CheckoutShell({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 z-[60] overflow-y-auto bg-black/85 px-4 py-8 backdrop-blur-md">
+    <div className="fixed inset-0 z-[60] overflow-y-auto bg-background/85 px-4 py-8 backdrop-blur-md">
       <div className="mx-auto flex min-h-full max-w-lg items-center">
-        <div className="w-full overflow-hidden rounded-[28px] border border-white/10 bg-[#0d0d0d] shadow-2xl">
+        <div className="w-full overflow-hidden rounded-[28px] border border-white/10 bg-surface shadow-2xl">
           {children}
         </div>
       </div>
@@ -1060,7 +1060,7 @@ function Input({
         placeholder={
           placeholder
         }
-        className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3.5 text-sm text-white outline-none placeholder:text-white/20 focus:border-[#3E86A4]"
+        className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3.5 text-sm text-white outline-none placeholder:text-white/20 focus:border-[primary]"
       />
     </div>
   );

@@ -148,7 +148,7 @@ export function AttendeesTable({
             rounded-xl
             border
             border-white/[0.07]
-            bg-black/30
+            bg-surface/30
             p-1
           "
         >
@@ -229,7 +229,7 @@ export function AttendeesTable({
           rounded-[20px]
           border
           border-white/[0.07]
-          bg-black/20
+          bg-background/20
           md:block
         "
       >
@@ -308,12 +308,12 @@ export function AttendeesTable({
                           justify-center
                           rounded-xl
                           border
-                          border-[#3E86A4]/15
-                          bg-[#3E86A4]/[0.06]
+                          border-primary/15
+                          bg-primary/[0.06]
                           text-xs
                           font-black
                           tracking-wide
-                          text-[#3E86A4]
+                          text-[primary]
                         "
                       >
                         {initials(
@@ -406,7 +406,7 @@ export function AttendeesTable({
                         text-white/65
                       "
                     >
-                      <Ticket className="h-3.5 w-3.5 text-[#3E86A4]" />
+                      <Ticket className="h-3.5 w-3.5 text-[primary]" />
 
                       {
                         attendee.ticketType
@@ -465,8 +465,8 @@ export function AttendeesTable({
                           gap-2
                           rounded-full
                           border
-                          border-[#3E86A4]/15
-                          bg-[#3E86A4]/[0.06]
+                          border-primary/15
+                          bg-primary/[0.06]
                           px-3
                           py-1.5
                         "
@@ -477,7 +477,7 @@ export function AttendeesTable({
                             h-1.5
                             w-1.5
                             rounded-full
-                            bg-[#3E86A4]
+                            bg-primary
                           "
                         />
 
@@ -485,7 +485,7 @@ export function AttendeesTable({
                           className="
                             text-xs
                             font-bold
-                            text-[#3E86A4]
+                            text-[primary]
                           "
                         >
                           Pending
@@ -578,7 +578,7 @@ export function AttendeesTable({
                 rounded-[20px]
                 border
                 border-white/[0.07]
-                bg-black/20
+                bg-background/20
                 p-5
               "
             >
@@ -595,11 +595,11 @@ export function AttendeesTable({
                     justify-center
                     rounded-xl
                     border
-                    border-[#3E86A4]/15
-                    bg-[#3E86A4]/[0.06]
+                    border-primary/15
+                    bg-primary/[0.06]
                     text-xs
                     font-black
-                    text-[#3E86A4]
+                    text-[primary]
                   "
                 >
                   {initials(
@@ -637,7 +637,7 @@ export function AttendeesTable({
                 {attendee.checkedIn ? (
                   <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-400" />
                 ) : (
-                  <Clock3 className="h-5 w-5 shrink-0 text-[#3E86A4]" />
+                  <Clock3 className="h-5 w-5 shrink-0 text-[primary]" />
                 )}
 
               </div>
@@ -752,7 +752,7 @@ function FilterButton({
         transition-all
         ${
           active
-            ? "bg-[#3E86A4] text-white"
+            ? "bg-primary text-white"
             : "text-white/40 hover:bg-white/[0.05] hover:text-white"
         }
       `}
@@ -767,7 +767,7 @@ function FilterButton({
           text-[10px]
           ${
             active
-              ? "bg-black/10 text-white/70"
+              ? "bg-background/10 text-white/70"
               : "bg-white/[0.06] text-white/30"
           }
         `}

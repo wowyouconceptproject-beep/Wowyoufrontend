@@ -544,7 +544,7 @@ function AttendeeDashboardContent() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[#050505] px-6 py-10 text-white">
+      <main className="min-h-screen bg-background px-6 py-10 text-white">
         <div className="mx-auto max-w-7xl animate-pulse">
 
           <div className="h-4 w-24 rounded bg-white/10" />
@@ -572,10 +572,10 @@ function AttendeeDashboardContent() {
 
   if (error) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#050505] px-6 text-white">
+      <main className="flex min-h-screen items-center justify-center bg-background px-6 text-white">
         <div className="max-w-md text-center">
 
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#3E86A4]">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[primary]">
             WOWYOU
           </p>
 
@@ -592,7 +592,7 @@ function AttendeeDashboardContent() {
             onClick={() => {
               void loadDashboard();
             }}
-            className="mt-7 rounded-full bg-[#3E86A4] px-7 py-3 text-sm font-bold transition hover:bg-[#1F7197]"
+            className="mt-7 rounded-full bg-primary px-7 py-3 text-sm font-bold transition hover:bg-primary-dark"
           >
             Try Again
           </button>
@@ -609,7 +609,7 @@ function AttendeeDashboardContent() {
   */
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white">
+    <main className="min-h-screen bg-background text-white">
 
       {/* HEADER */}
 
@@ -617,7 +617,7 @@ function AttendeeDashboardContent() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 md:px-10 lg:px-12">
 
           <div>
-            <p className="text-xs font-black tracking-[0.3em] text-[#3E86A4]">
+            <p className="text-xs font-black tracking-[0.3em] text-[primary]">
               WOWYOU
             </p>
 
@@ -640,13 +640,13 @@ function AttendeeDashboardContent() {
       {/* PAYMENT RETURN */}
 
       {purchaseId && (
-        <section className="border-b border-[#3E86A4]/15 bg-[#3E86A4]/[0.04]">
+        <section className="border-b border-primary/15 bg-primary/[0.04]">
 
           <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-5 md:flex-row md:items-center md:justify-between md:px-10 lg:px-12">
 
             <div>
 
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#3E86A4]">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[primary]">
                 Payment Return
               </p>
 
@@ -663,7 +663,7 @@ function AttendeeDashboardContent() {
                 void checkPurchaseStatus();
               }}
               disabled={paymentChecking}
-              className="rounded-full border border-[#3E86A4]/30 px-5 py-2.5 text-xs font-semibold text-white transition hover:bg-[#3E86A4]/10 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-full border border-primary/30 px-5 py-2.5 text-xs font-semibold text-white transition hover:bg-primary/10 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {paymentChecking
                 ? "Checking..."
@@ -683,7 +683,7 @@ function AttendeeDashboardContent() {
 
         <section>
 
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#3E86A4]">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[primary]">
             Your Event Hub
           </p>
 
@@ -735,7 +735,7 @@ function AttendeeDashboardContent() {
 
             <div>
 
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#3E86A4]">
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[primary]">
                 Your Access
               </p>
 
@@ -779,7 +779,7 @@ function AttendeeDashboardContent() {
                 onClick={() =>
                   router.push("/events")
                 }
-                className="mt-6 rounded-full bg-[#3E86A4] px-7 py-3 text-sm font-bold transition hover:bg-[#1F7197]"
+                className="mt-6 rounded-full bg-primary px-7 py-3 text-sm font-bold transition hover:bg-primary-dark"
               >
                 Discover Events
               </button>
@@ -814,13 +814,13 @@ function AttendeeDashboardContent() {
 
             <div className="relative overflow-hidden border-b border-white/10 px-7 py-8 md:px-10">
 
-              <div className="absolute -right-20 -top-32 h-72 w-72 rounded-full bg-[#3E86A4]/10 blur-3xl" />
+              <div className="absolute -right-20 -top-32 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
 
               <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
 
                 <div>
 
-                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#3E86A4]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[primary]">
                     AI Networking
                   </p>
 
@@ -864,7 +864,7 @@ function AttendeeDashboardContent() {
                           stroke="currentColor"
                           strokeWidth="3"
                           strokeDasharray={`${profileCompletion}, 100`}
-                          className="text-[#3E86A4]"
+                          className="text-[primary]"
                         />
 
                       </svg>
@@ -964,7 +964,7 @@ function AttendeeDashboardContent() {
                     }
                     rows={5}
                     placeholder="Tell other attendees a little about yourself..."
-                    className="w-full resize-none rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 text-sm leading-6 text-white outline-none placeholder:text-white/20 focus:border-[#3E86A4]"
+                    className="w-full resize-none rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 text-sm leading-6 text-white outline-none placeholder:text-white/20 focus:border-[primary]"
                   />
 
                 </div>
@@ -983,7 +983,7 @@ function AttendeeDashboardContent() {
                       void saveProfile();
                     }}
                     disabled={savingProfile}
-                    className="rounded-full bg-[#3E86A4] px-7 py-3.5 text-sm font-bold transition hover:bg-[#1F7197] disabled:cursor-not-allowed disabled:opacity-50"
+                    className="rounded-full bg-primary px-7 py-3.5 text-sm font-bold transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {savingProfile
                       ? "Saving..."
@@ -1001,17 +1001,17 @@ function AttendeeDashboardContent() {
 
         {/* APP CTA */}
 
-        <section className="mt-8 overflow-hidden rounded-[30px] border border-[#3E86A4]/15 bg-[#3E86A4]/[0.045]">
+        <section className="mt-8 overflow-hidden rounded-[30px] border border-primary/15 bg-primary/[0.045]">
 
           <div className="relative px-7 py-10 md:px-10 md:py-12">
 
-            <div className="absolute -right-24 -top-32 h-80 w-80 rounded-full bg-[#3E86A4]/10 blur-3xl" />
+            <div className="absolute -right-24 -top-32 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
 
             <div className="relative flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
 
               <div className="max-w-2xl">
 
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#3E86A4]">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[primary]">
                   Take WOWYOU With You
                 </p>
 
@@ -1041,7 +1041,7 @@ function AttendeeDashboardContent() {
 
                 <a
                   href="#"
-                  className="rounded-2xl bg-[#3E86A4] px-6 py-4 text-sm font-bold transition hover:bg-[#1F7197]"
+                  className="rounded-2xl bg-primary px-6 py-4 text-sm font-bold transition hover:bg-primary-dark"
                 >
                   Google Play
                 </a>
@@ -1126,7 +1126,7 @@ function TicketCard({
     <article
       className={`overflow-hidden rounded-[28px] border bg-white/[0.025] transition ${
         highlighted
-          ? "border-[#3E86A4]/60 ring-1 ring-[#3E86A4]/30"
+          ? "border-primary/60 ring-1 ring-[primary]/30"
           : "border-white/10"
       }`}
     >
@@ -1139,7 +1139,7 @@ function TicketCard({
 
           <div>
 
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#3E86A4]">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[primary]">
               {ticketType?.name ??
                 "Admission Ticket"}
             </p>
@@ -1157,7 +1157,7 @@ function TicketCard({
             </span>
 
             {checkedIn && (
-              <span className="rounded-full bg-[#3E86A4]/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-[#3E86A4]">
+              <span className="rounded-full bg-primary/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-[primary]">
                 Checked In
               </span>
             )}
@@ -1364,7 +1364,7 @@ function ProfileInput({
           onChange(e.target.value)
         }
         placeholder={placeholder}
-        className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3.5 text-sm text-white outline-none placeholder:text-white/20 focus:border-[#3E86A4]"
+        className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3.5 text-sm text-white outline-none placeholder:text-white/20 focus:border-[primary]"
       />
 
     </div>
@@ -1385,7 +1385,7 @@ export default function AttendeeDashboard() {
   return (
     <Suspense
       fallback={
-        <main className="min-h-screen bg-[#050505] px-6 py-10 text-white">
+        <main className="min-h-screen bg-background px-6 py-10 text-white">
           <div className="mx-auto max-w-7xl animate-pulse">
 
             <div className="h-4 w-24 rounded bg-white/10" />

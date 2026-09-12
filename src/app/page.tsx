@@ -9,7 +9,7 @@ import { LegalFooter } from "@/components/legal";
 
 export default function HomePage() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#050708] text-white">
+    <main className="relative min-h-screen overflow-hidden bg-background text-white">
 
       {/* Ambient background */}
 
@@ -25,7 +25,7 @@ export default function HomePage() {
             -translate-x-1/2
             -translate-y-1/2
             rounded-full
-            bg-[#3E86A4]/[0.08]
+            bg-primary/[0.08]
             blur-[160px]
           "
         />
@@ -132,7 +132,7 @@ export default function HomePage() {
               font-semibold
               uppercase
               tracking-[0.42em]
-              text-[#14B8A6]
+              text-primary
             "
           >
             Discover. Experience. Connect.
@@ -153,7 +153,7 @@ export default function HomePage() {
             at your
             <br />
 
-            <span className="text-[#14B8A6]">
+            <span className="text-primary">
               fingertips.
             </span>
 
@@ -205,7 +205,7 @@ export default function HomePage() {
                 justify-between
                 gap-8
                 rounded-full
-                bg-[#3E86A4]
+                bg-primary
                 px-7
                 py-4
                 font-semibold
@@ -213,7 +213,7 @@ export default function HomePage() {
                 transition
                 duration-300
                 hover:scale-[1.02]
-                hover:bg-[#1F7197]
+                hover:bg-primary-dark
               "
             >
               Discover
@@ -258,7 +258,7 @@ export default function HomePage() {
                 className="
                   h-4
                   w-4
-                  text-[#14B8A6]
+                  text-primary
                 "
               />
 

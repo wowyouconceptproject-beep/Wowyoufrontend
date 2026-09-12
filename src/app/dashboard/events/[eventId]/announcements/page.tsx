@@ -176,7 +176,7 @@ export default function AnnouncementPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[#050505] p-6 text-white md:p-8">
+      <main className="min-h-screen bg-background p-6 text-white md:p-8">
 
         <div className="mx-auto max-w-7xl">
 
@@ -238,13 +238,13 @@ export default function AnnouncementPage() {
 
   if (error) {
     return (
-      <main className="min-h-screen bg-[#050505] p-6 text-white md:p-8">
+      <main className="min-h-screen bg-background p-6 text-white md:p-8">
 
         <div className="mx-auto max-w-7xl">
 
           <div className="flex items-center gap-2">
 
-            <span className="h-px w-8 bg-[#3E86A4]" />
+            <span className="h-px w-8 bg-primary" />
 
             <p
               className="
@@ -252,7 +252,7 @@ export default function AnnouncementPage() {
                 font-bold
                 uppercase
                 tracking-[0.24em]
-                text-[#3E86A4]
+                text-[primary]
               "
             >
               Event Communications
@@ -338,7 +338,7 @@ export default function AnnouncementPage() {
   */
 
   return (
-    <main className="min-h-screen bg-[#050505] p-6 text-white md:p-8">
+    <main className="min-h-screen bg-background p-6 text-white md:p-8">
 
       <div className="mx-auto max-w-7xl space-y-8">
 
@@ -359,7 +359,7 @@ export default function AnnouncementPage() {
 
             <div className="flex items-center gap-2">
 
-              <span className="h-px w-8 bg-[#3E86A4]" />
+              <span className="h-px w-8 bg-primary" />
 
               <p
                 className="
@@ -367,7 +367,7 @@ export default function AnnouncementPage() {
                   font-bold
                   uppercase
                   tracking-[0.24em]
-                  text-[#3E86A4]
+                  text-[primary]
                 "
               >
                 Event Communications
@@ -506,7 +506,7 @@ export default function AnnouncementPage() {
             rounded-[28px]
             border
             border-white/[0.08]
-            bg-[#0D0D0D]
+            bg-surface
           "
         >
 
@@ -539,11 +539,11 @@ export default function AnnouncementPage() {
                   justify-center
                   rounded-xl
                   border
-                  border-[#3E86A4]/15
-                  bg-[#3E86A4]/[0.06]
+                  border-primary/15
+                  bg-primary/[0.06]
                 "
               >
-                <Bell className="h-5 w-5 text-[#3E86A4]" />
+                <Bell className="h-5 w-5 text-[primary]" />
               </div>
 
               <div>
@@ -569,13 +569,13 @@ export default function AnnouncementPage() {
                 rounded-lg
                 border
                 border-white/[0.06]
-                bg-black/20
+                bg-background/20
                 px-3
                 py-2
               "
             >
 
-              <span className="h-1.5 w-1.5 rounded-full bg-[#3E86A4]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
 
               <span
                 className="
@@ -613,8 +613,8 @@ export default function AnnouncementPage() {
                   justify-center
                   rounded-full
                   border
-                  border-[#3E86A4]/15
-                  bg-[#3E86A4]/[0.05]
+                  border-primary/15
+                  bg-primary/[0.05]
                 "
               >
 
@@ -624,11 +624,11 @@ export default function AnnouncementPage() {
                     inset-2
                     rounded-full
                     border
-                    border-[#3E86A4]/10
+                    border-primary/10
                   "
                 />
 
-                <Megaphone className="relative h-8 w-8 text-[#3E86A4]" />
+                <Megaphone className="relative h-8 w-8 text-[primary]" />
 
               </div>
 
@@ -703,10 +703,10 @@ function OverviewCard({
         rounded-[22px]
         border
         border-white/[0.08]
-        bg-[#0D0D0D]
+        bg-surface
         p-6
         transition
-        hover:border-[#3E86A4]/20
+        hover:border-primary/20
       "
     >
 
@@ -719,7 +719,7 @@ function OverviewCard({
           h-32
           w-32
           rounded-full
-          bg-[#3E86A4]/[0.035]
+          bg-primary/[0.035]
           blur-3xl
         "
       />
@@ -735,11 +735,11 @@ function OverviewCard({
             justify-center
             rounded-xl
             border
-            border-[#3E86A4]/15
-            bg-[#3E86A4]/[0.06]
+            border-primary/15
+            bg-primary/[0.06]
           "
         >
-          <Icon className="h-4 w-4 text-[#3E86A4]" />
+          <Icon className="h-4 w-4 text-[primary]" />
         </div>
 
         <p

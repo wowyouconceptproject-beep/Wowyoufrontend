@@ -152,7 +152,7 @@ export default function FeaturedEvent({
                 rounded-full
                 border
                 border-white/15
-                bg-black/40
+                bg-background/40
                 px-4
                 py-2
                 text-[10px]
@@ -179,7 +179,7 @@ export default function FeaturedEvent({
                 items-center
                 gap-2
                 rounded-full
-                bg-[#3E86A4]
+                bg-primary
                 px-4
                 py-2.5
                 text-xs
@@ -230,7 +230,7 @@ export default function FeaturedEvent({
               className="
                 h-px
                 w-8
-                bg-[#3E86A4]
+                bg-primary
               "
             />
 
@@ -240,7 +240,7 @@ export default function FeaturedEvent({
                 font-bold
                 uppercase
                 tracking-[0.35em]
-                text-[#3E86A4]
+                text-[primary]
               "
             >
               Featured Experience
@@ -260,7 +260,7 @@ export default function FeaturedEvent({
                 leading-[1.05]
                 tracking-tight
                 transition-colors
-                hover:text-[#3E86A4]
+                hover:text-[primary]
                 sm:text-5xl
                 xl:text-6xl
               "
@@ -318,14 +318,14 @@ export default function FeaturedEvent({
                   items-center
                   justify-center
                   rounded-full
-                  bg-[#53A6C7]/12
+                  bg-primary-light/12
                 "
               >
                 <CalendarDays
                   className="
                     h-4
                     w-4
-                    text-[#3E86A4]
+                    text-[primary]
                   "
                 />
               </div>
@@ -389,14 +389,14 @@ export default function FeaturedEvent({
                   items-center
                   justify-center
                   rounded-full
-                  bg-[#53A6C7]/12
+                  bg-primary-light/12
                 "
               >
                 <MapPin
                   className="
                     h-4
                     w-4
-                    text-[#3E86A4]
+                    text-[primary]
                   "
                 />
               </div>
@@ -451,7 +451,7 @@ export default function FeaturedEvent({
                 justify-center
                 gap-2
                 rounded-full
-                bg-[#3E86A4]
+                bg-primary
                 px-7
                 py-4
                 text-sm
@@ -499,14 +499,14 @@ export default function FeaturedEvent({
                     saved
                       ? `
                         border-gold/40
-                        bg-[#53A6C7]/12
-                        text-[#3E86A4]
+                        bg-primary-light/12
+                        text-[primary]
                       `
                       : `
                         border-divider
                         bg-transparent
                         text-foreground
-                        hover:border-[#3E86A4]/40
+                        hover:border-primary/40
                         hover:bg-surface-hover
                       `
                   }
@@ -545,7 +545,7 @@ export default function FeaturedEvent({
                 rounded-2xl
                 border
                 border-gold/15
-                bg-[#3E86A4]/[0.04]
+                bg-primary/[0.04]
                 p-5
                 sm:flex-row
                 sm:items-center
@@ -581,7 +581,7 @@ export default function FeaturedEvent({
                   shrink-0
                   text-sm
                   font-bold
-                  text-[#3E86A4]
+                  text-[primary]
                   transition-opacity
                   hover:opacity-70
                 "

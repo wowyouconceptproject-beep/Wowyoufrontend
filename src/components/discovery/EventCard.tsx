@@ -169,7 +169,7 @@ export default function EventCard({
         duration-500
 
         hover:-translate-y-1
-        hover:border-[#3E86A4]/30
+        hover:border-primary/30
         hover:bg-surface-elevated
 
         sm:w-[360px]
@@ -230,7 +230,7 @@ export default function EventCard({
               rounded-full
               border
               border-white/10
-              bg-black/50
+              bg-background/75
               px-4
               py-2
               text-[10px]
@@ -257,7 +257,7 @@ export default function EventCard({
               items-center
               gap-2
               rounded-full
-              bg-[#3E86A4]
+              bg-primary
               px-4
               py-2
               text-[10px]
@@ -355,7 +355,7 @@ export default function EventCard({
               leading-tight
               tracking-tight
               transition-colors
-              group-hover:text-[#3E86A4]
+              group-hover:text-[primary]
             "
           >
             {event.title}
@@ -385,7 +385,7 @@ export default function EventCard({
                 h-4
                 w-4
                 shrink-0
-                text-[#3E86A4]
+                text-[primary]
               "
             />
 
@@ -414,7 +414,7 @@ export default function EventCard({
                 h-4
                 w-4
                 shrink-0
-                text-[#3E86A4]
+                text-[primary]
               "
             />
 
@@ -459,7 +459,7 @@ export default function EventCard({
               items-center
               gap-2
               rounded-full
-              bg-[#3E86A4]
+              bg-primary
               px-5
               py-3
               text-sm

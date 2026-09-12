@@ -25,8 +25,8 @@ import {
 |--------------------------------------------------------------------------
 */
 
-const BRAND = "#3E86A4";
-const BRAND_HOVER = "#1F7197";
+const BRAND = "#20B8D0";
+const BRAND_HOVER = "#1595AD";
 
 /*
 |--------------------------------------------------------------------------
@@ -829,11 +829,11 @@ export default function BillingPage() {
     }
 
     return (
-      <section className="mx-auto mt-8 w-full max-w-5xl overflow-hidden rounded-[28px] border border-[#3E86A4]/20 bg-[#3E86A4]/[0.06]">
+      <section className="mx-auto mt-8 w-full max-w-5xl overflow-hidden rounded-[28px] border border-primary/20 bg-primary/[0.06]">
         <div className="flex flex-col gap-6 px-5 py-6 sm:px-6 md:flex-row md:items-center md:justify-between md:px-8">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-full bg-[#3E86A4] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
+              <span className="rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
                 Free Trial
               </span>
 
@@ -858,7 +858,7 @@ export default function BillingPage() {
             </p>
           </div>
 
-          <div className="w-full rounded-2xl border border-white/10 bg-black/20 px-5 py-4 sm:w-auto md:min-w-[170px] md:text-right">
+          <div className="w-full rounded-2xl border border-white/10 bg-background/20 px-5 py-4 sm:w-auto md:min-w-[170px] md:text-right">
             <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/30">
               Trial Ends
             </p>
@@ -891,9 +891,9 @@ export default function BillingPage() {
 
   if (authLoading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#050505] text-white">
+      <main className="flex min-h-screen items-center justify-center bg-background text-white">
         <div className="text-center">
-          <div className="mx-auto h-10 w-10 animate-pulse rounded-full bg-[#3E86A4]/30" />
+          <div className="mx-auto h-10 w-10 animate-pulse rounded-full bg-primary/30" />
 
           <p className="mt-5 text-sm text-white/40">
             Loading your account...
@@ -910,21 +910,21 @@ export default function BillingPage() {
   */
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#050505] text-white">
+    <main className="min-h-screen overflow-x-hidden bg-background text-white">
 
       {/* HERO */}
 
       <section className="relative overflow-hidden border-b border-white/[0.07]">
-        <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-[#3E86A4]/10 blur-[120px]" />
+        <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-primary/10 blur-[120px]" />
 
-        <div className="pointer-events-none absolute -right-40 top-20 h-[450px] w-[450px] rounded-full bg-[#3E86A4]/[0.06] blur-[120px]" />
+        <div className="pointer-events-none absolute -right-40 top-20 h-[450px] w-[450px] rounded-full bg-primary/[0.06] blur-[120px]" />
 
         <div className="relative mx-auto max-w-7xl px-5 pb-12 pt-10 sm:px-6 md:px-10 md:pb-20 md:pt-16 lg:px-12">
 
           <div className="flex items-center gap-3">
-            <div className="h-px w-8 shrink-0 bg-[#3E86A4] sm:w-10" />
+            <div className="h-px w-8 shrink-0 bg-primary sm:w-10" />
 
-            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#3E86A4] sm:text-xs sm:tracking-[0.3em]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[primary] sm:text-xs sm:tracking-[0.3em]">
               WOWYOU
             </p>
           </div>
@@ -953,7 +953,7 @@ export default function BillingPage() {
           {organization && (
             <div className="mt-8 inline-flex max-w-full flex-wrap items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-2.5 sm:rounded-full">
 
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#3E86A4]/15 text-xs font-bold text-[#3E86A4]">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-[primary]">
                 {organization.name
                   ?.charAt(0)
                   ?.toUpperCase() ??
@@ -1007,7 +1007,7 @@ export default function BillingPage() {
                       "rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.12em]",
                       subscription.status ===
                         "ACTIVE"
-                        ? "bg-[#3E86A4]/15 text-[#3E86A4]"
+                        ? "bg-primary/15 text-[primary]"
                         : "bg-white/5 text-white/40",
                     ].join(" ")}
                   >
@@ -1056,7 +1056,7 @@ export default function BillingPage() {
 
             <div className="min-w-0 max-w-2xl">
 
-              <p className="max-w-full text-[10px] font-bold uppercase leading-5 tracking-[0.12em] text-[#3E86A4] sm:text-xs sm:tracking-[0.2em]">
+              <p className="max-w-full text-[10px] font-bold uppercase leading-5 tracking-[0.12em] text-[primary] sm:text-xs sm:tracking-[0.2em]">
                 Choose Your Infrastructure
               </p>
 
@@ -1093,7 +1093,7 @@ export default function BillingPage() {
                         .value as BillingCountry,
                     )
                   }
-                  className="w-full appearance-none rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3.5 text-sm font-semibold text-white outline-none transition hover:border-white/20 focus:border-[#3E86A4]/50 sm:min-w-[220px]"
+                  className="w-full appearance-none rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3.5 text-sm font-semibold text-white outline-none transition hover:border-white/20 focus:border-primary/50 sm:min-w-[220px]"
                 >
                   {BILLING_COUNTRIES.map(
                     (
@@ -1106,7 +1106,7 @@ export default function BillingPage() {
                         value={
                           country.value
                         }
-                        className="bg-[#111]"
+                        className="bg-surface"
                       >
                         {
                           country.label
@@ -1161,7 +1161,7 @@ export default function BillingPage() {
                       "flex-1 rounded-xl px-4 py-2.5 text-xs font-bold transition",
                       billingInterval ===
                         "YEAR"
-                        ? "bg-[#3E86A4] text-white"
+                        ? "bg-primary text-white"
                         : "text-white/40 hover:text-white",
                     ].join(" ")}
                   >
@@ -1249,20 +1249,20 @@ export default function BillingPage() {
                   className={[
                     "group relative flex min-w-0 flex-col overflow-hidden rounded-[28px] border bg-white/[0.035] transition duration-300",
                     featured
-                      ? "border-[#3E86A4]/50 shadow-[0_0_60px_rgba(62,134,164,0.08)]"
+                      ? "border-primary/50 shadow-[0_0_60px_rgba(62,134,164,0.08)]"
                       : "border-white/10 hover:border-white/20",
                   ].join(" ")}
                 >
 
                   {featured && (
-                    <div className="h-1 w-full shrink-0 bg-[#3E86A4]" />
+                    <div className="h-1 w-full shrink-0 bg-primary" />
                   )}
 
                   <div className="flex flex-1 flex-col p-5 sm:p-6 md:p-7">
 
                     {featured && (
                       <div className="mb-5">
-                        <span className="inline-flex rounded-full bg-[#3E86A4]/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#3E86A4]">
+                        <span className="inline-flex rounded-full bg-primary/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[primary]">
                           Most Popular
                         </span>
                       </div>
@@ -1313,7 +1313,7 @@ export default function BillingPage() {
 
                           {billingInterval ===
                             "YEAR" && (
-                            <p className="mt-2 text-xs leading-5 text-[#3E86A4]">
+                            <p className="mt-2 text-xs leading-5 text-[primary]">
                               Save with annual
                               billing
                             </p>
@@ -1370,7 +1370,7 @@ export default function BillingPage() {
                               className="flex min-w-0 items-start gap-3 text-sm text-white/60"
                             >
 
-                              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#3E86A4]/10 text-[10px] font-bold text-[#3E86A4]">
+                              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-[primary]">
                                 ✓
                               </span>
 
@@ -1409,8 +1409,8 @@ export default function BillingPage() {
                         current
                           ? "cursor-default border border-white/10 bg-white/5 text-white/30"
                           : featured
-                            ? "bg-[#3E86A4] text-white hover:bg-[#1F7197]"
-                            : "border border-white/10 bg-white/[0.04] text-white/80 hover:border-[#3E86A4]/40 hover:bg-[#3E86A4]/10 hover:text-white",
+                            ? "bg-primary text-white hover:bg-primary-dark"
+                            : "border border-white/10 bg-white/[0.04] text-white/80 hover:border-primary/40 hover:bg-primary/10 hover:text-white",
                         loadingPlan
                           ? "cursor-wait opacity-60"
                           : "",
@@ -1449,7 +1449,7 @@ export default function BillingPage() {
 
             <div className="flex items-start gap-4">
 
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#3E86A4]/10 text-sm text-[#3E86A4]">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-sm text-[primary]">
                 ✓
               </div>
 

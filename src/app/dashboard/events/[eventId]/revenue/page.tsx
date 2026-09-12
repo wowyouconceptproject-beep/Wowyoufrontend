@@ -129,7 +129,7 @@ export default function RevenuePage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[#050505] p-8">
+      <main className="min-h-screen bg-background p-8">
 
         <div className="mx-auto max-w-7xl">
 
@@ -165,7 +165,7 @@ export default function RevenuePage() {
 
   if (!data) {
     return (
-      <main className="min-h-screen bg-[#050505] p-8">
+      <main className="min-h-screen bg-background p-8">
 
         <div
           className="
@@ -190,11 +190,11 @@ export default function RevenuePage() {
                 justify-center
                 rounded-2xl
                 border
-                border-[#3E86A4]/20
-                bg-[#53A6C7]/12
+                border-primary/20
+                bg-primary-light/12
               "
             >
-              <BarChart3 className="h-7 w-7 text-[#3E86A4]" />
+              <BarChart3 className="h-7 w-7 text-[primary]" />
             </div>
 
             <h2 className="mt-6 text-2xl font-bold text-white">
@@ -261,7 +261,7 @@ export default function RevenuePage() {
       : null;
 
   return (
-    <main className="min-h-screen bg-[#050505] p-6 text-white md:p-8">
+    <main className="min-h-screen bg-background p-6 text-white md:p-8">
 
       <div className="mx-auto max-w-7xl space-y-8">
 
@@ -282,7 +282,7 @@ export default function RevenuePage() {
 
             <div className="flex items-center gap-2">
 
-              <span className="h-px w-8 bg-[#3E86A4]" />
+              <span className="h-px w-8 bg-primary" />
 
               <p
                 className="
@@ -290,7 +290,7 @@ export default function RevenuePage() {
                   font-bold
                   uppercase
                   tracking-[0.24em]
-                  text-[#3E86A4]
+                  text-[primary]
                 "
               >
                 Financial Performance
@@ -332,7 +332,7 @@ export default function RevenuePage() {
             "
           >
 
-            <CircleDollarSign className="h-4 w-4 text-[#3E86A4]" />
+            <CircleDollarSign className="h-4 w-4 text-[primary]" />
 
             <div>
 
@@ -362,8 +362,8 @@ export default function RevenuePage() {
               overflow-hidden
               rounded-[28px]
               border
-              border-[#3E86A4]/20
-              bg-[#0D0D0D]
+              border-primary/20
+              bg-surface
               p-7
               lg:col-span-2
               md:p-8
@@ -379,7 +379,7 @@ export default function RevenuePage() {
                 h-72
                 w-72
                 rounded-full
-                bg-[#3E86A4]/[0.08]
+                bg-primary/[0.08]
                 blur-3xl
               "
             />
@@ -392,7 +392,7 @@ export default function RevenuePage() {
                 h-px
                 bg-gradient-to-r
                 from-transparent
-                via-[#3E86A4]/70
+                via-[primary]/70
                 to-transparent
               "
             />
@@ -410,11 +410,11 @@ export default function RevenuePage() {
                     justify-center
                     rounded-xl
                     border
-                    border-[#3E86A4]/20
-                    bg-[#53A6C7]/12
+                    border-primary/20
+                    bg-primary-light/12
                   "
                 >
-                  <Banknote className="h-5 w-5 text-[#3E86A4]" />
+                  <Banknote className="h-5 w-5 text-[primary]" />
                 </div>
 
                 <div
@@ -424,13 +424,13 @@ export default function RevenuePage() {
                     gap-2
                     rounded-full
                     border
-                    border-[#3E86A4]/15
-                    bg-[#3E86A4]/[0.05]
+                    border-primary/15
+                    bg-primary/[0.05]
                     px-3
                     py-1.5
                     text-xs
                     font-semibold
-                    text-[#3E86A4]
+                    text-[primary]
                   "
                 >
                   <TrendingUp className="h-3.5 w-3.5" />
@@ -466,7 +466,7 @@ export default function RevenuePage() {
                     lg:text-6xl
                   "
                 >
-                  <span className="text-[#3E86A4]">
+                  <span className="text-[primary]">
                     {symbol}
                   </span>
 
@@ -495,7 +495,7 @@ export default function RevenuePage() {
               rounded-[28px]
               border
               border-white/[0.08]
-              bg-[#0D0D0D]
+              bg-surface
               p-7
             "
           >
@@ -515,7 +515,7 @@ export default function RevenuePage() {
                   bg-white/[0.04]
                 "
               >
-                <Ticket className="h-5 w-5 text-[#3E86A4]" />
+                <Ticket className="h-5 w-5 text-[primary]" />
               </div>
 
               <span className="text-xs font-semibold text-white/25">
@@ -601,7 +601,7 @@ export default function RevenuePage() {
             rounded-[28px]
             border
             border-white/[0.08]
-            bg-[#0D0D0D]
+            bg-surface
           "
         >
 
@@ -625,7 +625,7 @@ export default function RevenuePage() {
 
               <div className="flex items-center gap-2">
 
-                <BarChart3 className="h-4 w-4 text-[#3E86A4]" />
+                <BarChart3 className="h-4 w-4 text-[primary]" />
 
                 <h2 className="text-lg font-bold">
                   Ticket Performance
@@ -677,11 +677,11 @@ export default function RevenuePage() {
                   justify-center
                   rounded-2xl
                   border
-                  border-[#3E86A4]/15
-                  bg-[#3E86A4]/[0.05]
+                  border-primary/15
+                  bg-primary/[0.05]
                 "
               >
-                <Ticket className="h-6 w-6 text-[#3E86A4]" />
+                <Ticket className="h-6 w-6 text-[primary]" />
               </div>
 
               <h3 className="mt-5 font-bold">
@@ -764,7 +764,7 @@ export default function RevenuePage() {
                               bg-white/[0.03]
                               text-sm
                               font-black
-                              text-[#3E86A4]
+                              text-[primary]
                             "
                           >
                             {String(
@@ -812,7 +812,7 @@ export default function RevenuePage() {
                           </p>
 
                           <p className="mt-1 text-xl font-black text-white">
-                            <span className="text-[#3E86A4]">
+                            <span className="text-[primary]">
                               {symbol}
                             </span>
 
@@ -850,7 +850,7 @@ export default function RevenuePage() {
                             className="
                               h-full
                               rounded-full
-                              bg-[#3E86A4]
+                              bg-primary
                               transition-all
                               duration-500
                             "
@@ -900,7 +900,7 @@ function MetricCard({
         rounded-[22px]
         border
         border-white/[0.08]
-        bg-[#0D0D0D]
+        bg-surface
         p-6
       "
     >
@@ -917,11 +917,11 @@ function MetricCard({
             justify-center
             rounded-xl
             border
-            border-[#3E86A4]/15
-            bg-[#3E86A4]/[0.06]
+            border-primary/15
+            bg-primary/[0.06]
           "
         >
-          <Icon className="h-4 w-4 text-[#3E86A4]" />
+          <Icon className="h-4 w-4 text-[primary]" />
         </div>
 
         <div className="min-w-0">

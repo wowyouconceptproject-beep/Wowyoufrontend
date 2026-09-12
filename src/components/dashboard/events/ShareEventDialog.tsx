@@ -105,7 +105,7 @@ export default function ShareEventDialog({
         flex
         items-center
         justify-center
-        bg-black/80
+        bg-background/80
         p-4
         backdrop-blur-sm
       "
@@ -129,7 +129,7 @@ export default function ShareEventDialog({
           rounded-[28px]
           border
           border-white/10
-          bg-[#090909]
+          bg-background-secondary
           text-white
           shadow-2xl
         "
@@ -154,7 +154,7 @@ export default function ShareEventDialog({
                 font-bold
                 uppercase
                 tracking-[0.25em]
-                text-[#3E86A4]
+                text-[primary]
               "
             >
               Share
@@ -213,7 +213,7 @@ export default function ShareEventDialog({
                 overflow-hidden
                 rounded-2xl
                 border
-                border-[#3E86A4]/20
+                border-primary/20
               "
             >
               <input
@@ -236,11 +236,11 @@ export default function ShareEventDialog({
                   items-center
                   gap-2
                   border-l
-                  border-[#3E86A4]/20
-                  bg-[#3E86A4]/10
+                  border-primary/20
+                  bg-primary/10
                   px-5
                   transition
-                  hover:bg-[#3E86A4]/20
+                  hover:bg-primary/20
                 "
               >
                 {copied ? (
@@ -317,7 +317,7 @@ export default function ShareEventDialog({
                 justify-center
                 rounded-3xl
                 border
-                border-[#3E86A4]/20
+                border-primary/20
                 bg-white
                 p-6
               "
@@ -358,11 +358,11 @@ function ShareCard({
         bg-white/[0.03]
         p-4
         transition
-        hover:border-[#3E86A4]/40
-        hover:bg-[#3E86A4]/10
+        hover:border-primary/40
+        hover:bg-primary/10
       "
     >
-      <div className="text-[#3E86A4]">
+      <div className="text-[primary]">
         {icon}
       </div>
 

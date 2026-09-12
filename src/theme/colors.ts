@@ -16,8 +16,8 @@ export const Colors = {
   |--------------------------------------------------------------------------
   */
 
-  primary: "#3E86A4",
-  primaryDark: "#1F7197",
+  primary: "#20B8D0",
+  primaryDark: "#1595AD",
   primaryLight: "#53A6C7",
   primaryGlow: "#8FC8DD",
 
@@ -57,5 +57,5 @@ export const Colors = {
 
   danger: "#EF4444",
 
-  info: "#3E86A4",
+  info: "#20B8D0",
 };

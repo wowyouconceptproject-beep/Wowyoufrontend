@@ -302,7 +302,7 @@ export function AccessCodeDialog({
         flex
         items-center
         justify-center
-        bg-black/80
+        bg-background/80
         p-4
         backdrop-blur-sm
       "
@@ -335,7 +335,7 @@ export function AccessCodeDialog({
           rounded-[28px]
           border
           border-white/10
-          bg-[#090909]
+          bg-background-secondary
           text-white
           shadow-2xl
         "
@@ -377,15 +377,15 @@ export function AccessCodeDialog({
                 justify-center
                 rounded-2xl
                 border
-                border-[#3E86A4]/20
-                bg-[#53A6C7]/12
+                border-primary/20
+                bg-primary-light/12
               "
             >
               <UserRound
                 className="
                   h-5
                   w-5
-                  text-[#3E86A4]
+                  text-[primary]
                 "
               />
             </div>
@@ -556,8 +556,8 @@ export function AccessCodeDialog({
                 overflow-hidden
                 rounded-[22px]
                 border
-                border-[#3E86A4]/20
-                bg-[#3E86A4]/[0.04]
+                border-primary/20
+                bg-primary/[0.04]
               "
             >
 
@@ -567,7 +567,7 @@ export function AccessCodeDialog({
                   items-center
                   gap-3
                   border-b
-                  border-[#3E86A4]/10
+                  border-primary/10
                   px-5
                   py-4
                 "
@@ -582,14 +582,14 @@ export function AccessCodeDialog({
                     items-center
                     justify-center
                     rounded-xl
-                    bg-[#53A6C7]/12
+                    bg-primary-light/12
                   "
                 >
                   <KeyRound
                     className="
                       h-4
                       w-4
-                      text-[#3E86A4]
+                      text-[primary]
                     "
                   />
                 </div>
@@ -650,7 +650,7 @@ export function AccessCodeDialog({
                   grid
                   grid-cols-2
                   border-t
-                  border-[#3E86A4]/10
+                  border-primary/10
                 "
               >
 
@@ -666,13 +666,13 @@ export function AccessCodeDialog({
                     justify-center
                     gap-2
                     border-r
-                    border-[#3E86A4]/10
+                    border-primary/10
                     px-3
                     text-sm
                     font-semibold
                     text-white/65
                     transition
-                    hover:bg-[#53A6C7]/12
+                    hover:bg-primary-light/12
                     hover:text-white
                   "
                 >
@@ -695,7 +695,7 @@ export function AccessCodeDialog({
                         className="
                           h-4
                           w-4
-                          text-[#3E86A4]
+                          text-[primary]
                         "
                       />
 
@@ -724,7 +724,7 @@ export function AccessCodeDialog({
                     font-semibold
                     text-white/65
                     transition
-                    hover:bg-[#53A6C7]/12
+                    hover:bg-primary-light/12
                     hover:text-white
                     disabled:cursor-not-allowed
                     disabled:opacity-40
@@ -735,7 +735,7 @@ export function AccessCodeDialog({
                     className={`
                       h-4
                       w-4
-                      text-[#3E86A4]
+                      text-[primary]
 
                       ${
                         pending
@@ -770,7 +770,7 @@ export function AccessCodeDialog({
                   className="
                     h-4
                     w-4
-                    text-[#3E86A4]
+                    text-[primary]
                   "
                 />
 
@@ -897,13 +897,13 @@ export function AccessCodeDialog({
                         className="
                           rounded-full
                           border
-                          border-[#3E86A4]/15
-                          bg-[#3E86A4]/[0.06]
+                          border-primary/15
+                          bg-primary/[0.06]
                           px-3
                           py-1.5
                           text-xs
                           font-medium
-                          text-[#3E86A4]
+                          text-[primary]
                         "
                       >
                         {formatText(
@@ -1162,7 +1162,7 @@ function DetailRow({
           className="
             h-4
             w-4
-            text-[#3E86A4]
+            text-[primary]
           "
         />
 

@@ -184,7 +184,7 @@ useEffect(() => {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[#050505] p-6 text-white md:p-10">
+      <main className="min-h-screen bg-background p-6 text-white md:p-10">
         <div className="mx-auto max-w-7xl animate-pulse">
           <div className="h-4 w-24 rounded bg-white/10" />
 
@@ -198,7 +198,7 @@ useEffect(() => {
 
   if (error || !capacity) {
     return (
-      <main className="min-h-screen bg-[#050505] p-6 text-white md:p-10">
+      <main className="min-h-screen bg-background p-6 text-white md:p-10">
         <div className="mx-auto max-w-7xl">
           <Link
             href={
@@ -244,7 +244,7 @@ useEffect(() => {
     );
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white">
+    <main className="min-h-screen bg-background text-white">
       <div className="mx-auto max-w-7xl px-6 py-8 md:px-10 md:py-10">
         {/* Header */}
 
@@ -260,7 +260,7 @@ useEffect(() => {
           <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div>
               <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#3E86A4]/15">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/15">
                   <Activity className="h-5 w-5 text-[#53A6C7]" />
                 </div>
 
@@ -283,7 +283,7 @@ useEffect(() => {
             </div>
 
             <div className="flex items-center gap-3">
-              <span className="h-2 w-2 animate-pulse rounded-full bg-[#14B8A6]" />
+              <span className="h-2 w-2 animate-pulse rounded-full bg-primary" />
 
               <span className="text-xs font-medium text-white/45">
                 Live monitoring
@@ -388,7 +388,7 @@ useEffect(() => {
             </div>
           </div>
 
-          <div className="mt-8 rounded-3xl border border-white/10 bg-black/30 p-5 md:p-8">
+          <div className="mt-8 rounded-3xl border border-white/10 bg-surface/30 p-5 md:p-8">
             <div className="mx-auto max-w-4xl">
               <div className="grid grid-cols-4 gap-2 sm:grid-cols-8 md:gap-3">
                 {Array.from({
@@ -396,7 +396,7 @@ useEffect(() => {
                 }).map((_, index) => (
                   <div
                     key={index}
-                    className="aspect-square rounded-xl bg-[#3E86A4] transition-all duration-700"
+                    className="aspect-square rounded-xl bg-primary transition-all duration-700"
                     style={{
                       opacity:
                         getCellOpacity(
@@ -414,11 +414,11 @@ useEffect(() => {
                 </span>
 
                 <div className="flex items-center gap-1.5">
-                  <span className="h-3 w-3 rounded-sm bg-[#3E86A4]/20" />
-                  <span className="h-3 w-3 rounded-sm bg-[#3E86A4]/40" />
-                  <span className="h-3 w-3 rounded-sm bg-[#3E86A4]/60" />
-                  <span className="h-3 w-3 rounded-sm bg-[#3E86A4]/80" />
-                  <span className="h-3 w-3 rounded-sm bg-[#3E86A4]" />
+                  <span className="h-3 w-3 rounded-sm bg-primary/20" />
+                  <span className="h-3 w-3 rounded-sm bg-primary/40" />
+                  <span className="h-3 w-3 rounded-sm bg-primary/60" />
+                  <span className="h-3 w-3 rounded-sm bg-primary/80" />
+                  <span className="h-3 w-3 rounded-sm bg-primary" />
                 </div>
 
                 <span>
@@ -458,7 +458,7 @@ useEffect(() => {
 
               <div className="mt-3 h-3 overflow-hidden rounded-full bg-white/10">
                 <div
-                  className="h-full rounded-full bg-[#3E86A4] transition-all duration-700"
+                  className="h-full rounded-full bg-primary transition-all duration-700"
                   style={{
                     width: `${percentage}%`,
                   }}
@@ -481,7 +481,7 @@ useEffect(() => {
             </h2>
 
             <div className="mt-6 grid grid-cols-2 gap-4">
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+              <div className="rounded-2xl border border-white/10 bg-background/20 p-5">
                 <ArrowUp className="h-5 w-5 text-[#53A6C7]" />
 
                 <p className="mt-4 text-2xl font-bold">
@@ -493,7 +493,7 @@ useEffect(() => {
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+              <div className="rounded-2xl border border-white/10 bg-background/20 p-5">
                 <ArrowDown className="h-5 w-5 text-white/40" />
 
                 <p className="mt-4 text-2xl font-bold">
