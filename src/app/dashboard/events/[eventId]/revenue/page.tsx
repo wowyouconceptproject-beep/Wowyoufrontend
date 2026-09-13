@@ -2,7 +2,9 @@
 
 import {
   useEffect,
+  useRef,
   useState,
+  type ElementType,
 } from "react";
 
 import {
@@ -22,6 +24,12 @@ import {
 import {
   getRevenue,
 } from "@/services/revenue";
+
+/*
+|--------------------------------------------------------------------------
+| Currency Symbol
+|--------------------------------------------------------------------------
+*/
 
 function currencySymbol(
   currency?: string
@@ -50,6 +58,12 @@ function currencySymbol(
   }
 }
 
+/*
+|--------------------------------------------------------------------------
+| Format Amount
+|--------------------------------------------------------------------------
+*/
+
 function formatAmount(
   amount: number
 ) {
@@ -60,6 +74,12 @@ function formatAmount(
   );
 }
 
+/*
+|--------------------------------------------------------------------------
+| Revenue Page
+|--------------------------------------------------------------------------
+*/
+
 export default function RevenuePage() {
   const params =
     useParams<{
@@ -69,12 +89,30 @@ export default function RevenuePage() {
   const eventId =
     params.eventId;
 
+  /*
+  |--------------------------------------------------------------------------
+  | Data
+  |--------------------------------------------------------------------------
+  */
+
   const [
     data,
     setData,
   ] = useState<any>(
     null
   );
+
+  /*
+  |--------------------------------------------------------------------------
+  | Loading
+  |--------------------------------------------------------------------------
+  |
+  | This is only used for the INITIAL page load.
+  |
+  | Background refreshes happen silently so the dashboard does not flash
+  | the loading skeleton every 10 seconds.
+  |
+  */
 
   const [
     loading,
@@ -83,56 +121,192 @@ export default function RevenuePage() {
     true
   );
 
-  async function loadRevenue() {
-    try {
-      setLoading(
-        true
+  /*
+  |--------------------------------------------------------------------------
+  | Refresh Guard
+  |--------------------------------------------------------------------------
+  |
+  | Prevent overlapping API requests if an interval, focus event, or
+  | visibility event fires while a previous request is still running.
+  |
+  */
+
+  const refreshingRef =
+    useRef(false);
+
+  /*
+  |--------------------------------------------------------------------------
+  | Load Revenue
+  |--------------------------------------------------------------------------
+  */
+
+  async function loadRevenue(
+  showLoading = false
+) {
+  if (
+    !eventId ||
+    refreshingRef.current
+  ) {
+    return;
+  }
+
+  refreshingRef.current =
+    true;
+
+  try {
+    if (showLoading) {
+      setLoading(true);
+    }
+
+    const result =
+      await getRevenue(
+        eventId
       );
 
-      const result =
-        await getRevenue(
-          eventId
-        );
-
-      if (
-        result.success
-      ) {
-        setData(
-          result.revenue
-        );
-      }
-    } catch (
-      error
+    if (
+      result.success
     ) {
+      setData(
+        result.revenue
+      );
+    } else {
       console.error(
-        "Revenue Error:",
-        error
-      );
-
-      alert(
-        "Unable to load revenue."
-      );
-    } finally {
-      setLoading(
-        false
+        "Revenue request was unsuccessful."
       );
     }
+  } catch (
+    error
+  ) {
+    console.error(
+      "Revenue Error:",
+      error
+    );
+  } finally {
+    if (showLoading) {
+      setLoading(false);
+    }
+
+    refreshingRef.current =
+      false;
   }
+}
+  /*
+  |--------------------------------------------------------------------------
+  | Initial Load + Live Refresh
+  |--------------------------------------------------------------------------
+  |
+  | Revenue automatically refreshes every 10 seconds.
+  |
+  | It also refreshes immediately when:
+  |
+  | • the browser window receives focus
+  | • the tab becomes visible again
+  |
+  */
 
   useEffect(() => {
     if (!eventId) {
       return;
     }
 
-    loadRevenue();
+    /*
+    |--------------------------------------------------------------------------
+    | Initial Load
+    |--------------------------------------------------------------------------
+    */
+
+    loadRevenue(true);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Background Polling
+    |--------------------------------------------------------------------------
+    */
+
+    const interval =
+      window.setInterval(
+        () => {
+          loadRevenue(false);
+        },
+        10_000
+      );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Window Focus
+    |--------------------------------------------------------------------------
+    */
+
+    const handleFocus =
+      () => {
+        loadRevenue(false);
+      };
+
+    /*
+    |--------------------------------------------------------------------------
+    | Visibility Change
+    |--------------------------------------------------------------------------
+    */
+
+    const handleVisibilityChange =
+      () => {
+        if (
+          document.visibilityState ===
+          "visible"
+        ) {
+          loadRevenue(false);
+        }
+      };
+
+    /*
+    |--------------------------------------------------------------------------
+    | Event Listeners
+    |--------------------------------------------------------------------------
+    */
+
+    window.addEventListener(
+      "focus",
+      handleFocus
+    );
+
+    document.addEventListener(
+      "visibilitychange",
+      handleVisibilityChange
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cleanup
+    |--------------------------------------------------------------------------
+    */
+
+    return () => {
+      window.clearInterval(
+        interval
+      );
+
+      window.removeEventListener(
+        "focus",
+        handleFocus
+      );
+
+      document.removeEventListener(
+        "visibilitychange",
+        handleVisibilityChange
+      );
+    };
   }, [eventId]);
+
+  /*
+  |--------------------------------------------------------------------------
+  | Initial Loading Screen
+  |--------------------------------------------------------------------------
+  */
 
   if (loading) {
     return (
       <main className="min-h-screen bg-background p-8">
-
         <div className="mx-auto max-w-7xl">
-
           <div className="animate-pulse space-y-8">
 
             <div className="space-y-3">
@@ -156,12 +330,16 @@ export default function RevenuePage() {
             <div className="h-80 rounded-[28px] bg-white/[0.04]" />
 
           </div>
-
         </div>
-
       </main>
     );
   }
+
+  /*
+  |--------------------------------------------------------------------------
+  | No Data
+  |--------------------------------------------------------------------------
+  */
 
   if (!data) {
     return (
@@ -194,7 +372,7 @@ export default function RevenuePage() {
                 bg-primary-light/12
               "
             >
-              <BarChart3 className="h-7 w-7 text-[primary]" />
+              <BarChart3 className="h-7 w-7 text-primary" />
             </div>
 
             <h2 className="mt-6 text-2xl font-bold text-white">
@@ -213,6 +391,12 @@ export default function RevenuePage() {
       </main>
     );
   }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Financial Values
+  |--------------------------------------------------------------------------
+  */
 
   const symbol =
     currencySymbol(
@@ -235,11 +419,23 @@ export default function RevenuePage() {
     data.breakdown ??
     [];
 
+  /*
+  |--------------------------------------------------------------------------
+  | Average Ticket Value
+  |--------------------------------------------------------------------------
+  */
+
   const averageTicketValue =
     ticketsSold > 0
       ? totalRevenue /
         ticketsSold
       : 0;
+
+  /*
+  |--------------------------------------------------------------------------
+  | Highest Revenue Ticket
+  |--------------------------------------------------------------------------
+  */
 
   const highestRevenueTicket =
     breakdown.length >
@@ -259,6 +455,12 @@ export default function RevenuePage() {
             )
         )[0]
       : null;
+
+  /*
+  |--------------------------------------------------------------------------
+  | Render
+  |--------------------------------------------------------------------------
+  */
 
   return (
     <main className="min-h-screen bg-background p-6 text-white md:p-8">
@@ -290,7 +492,7 @@ export default function RevenuePage() {
                   font-bold
                   uppercase
                   tracking-[0.24em]
-                  text-[primary]
+                  text-primary
                 "
               >
                 Financial Performance
@@ -332,7 +534,7 @@ export default function RevenuePage() {
             "
           >
 
-            <CircleDollarSign className="h-4 w-4 text-[primary]" />
+            <CircleDollarSign className="h-4 w-4 text-primary" />
 
             <div>
 
@@ -392,7 +594,7 @@ export default function RevenuePage() {
                 h-px
                 bg-gradient-to-r
                 from-transparent
-                via-[primary]/70
+                via-primary/70
                 to-transparent
               "
             />
@@ -414,7 +616,7 @@ export default function RevenuePage() {
                     bg-primary-light/12
                   "
                 >
-                  <Banknote className="h-5 w-5 text-[primary]" />
+                  <Banknote className="h-5 w-5 text-primary" />
                 </div>
 
                 <div
@@ -430,7 +632,7 @@ export default function RevenuePage() {
                     py-1.5
                     text-xs
                     font-semibold
-                    text-[primary]
+                    text-primary
                   "
                 >
                   <TrendingUp className="h-3.5 w-3.5" />
@@ -466,7 +668,7 @@ export default function RevenuePage() {
                     lg:text-6xl
                   "
                 >
-                  <span className="text-[primary]">
+                  <span className="text-primary">
                     {symbol}
                   </span>
 
@@ -515,7 +717,7 @@ export default function RevenuePage() {
                   bg-white/[0.04]
                 "
               >
-                <Ticket className="h-5 w-5 text-[primary]" />
+                <Ticket className="h-5 w-5 text-primary" />
               </div>
 
               <span className="text-xs font-semibold text-white/25">
@@ -625,7 +827,7 @@ export default function RevenuePage() {
 
               <div className="flex items-center gap-2">
 
-                <BarChart3 className="h-4 w-4 text-[primary]" />
+                <BarChart3 className="h-4 w-4 text-primary" />
 
                 <h2 className="text-lg font-bold">
                   Ticket Performance
@@ -681,7 +883,7 @@ export default function RevenuePage() {
                   bg-primary/[0.05]
                 "
               >
-                <Ticket className="h-6 w-6 text-[primary]" />
+                <Ticket className="h-6 w-6 text-primary" />
               </div>
 
               <h3 className="mt-5 font-bold">
@@ -764,7 +966,7 @@ export default function RevenuePage() {
                               bg-white/[0.03]
                               text-sm
                               font-black
-                              text-[primary]
+                              text-primary
                             "
                           >
                             {String(
@@ -812,7 +1014,7 @@ export default function RevenuePage() {
                           </p>
 
                           <p className="mt-1 text-xl font-black text-white">
-                            <span className="text-[primary]">
+                            <span className="text-primary">
                               {symbol}
                             </span>
 
@@ -825,7 +1027,7 @@ export default function RevenuePage() {
 
                       </div>
 
-                      {/* Contribution bar */}
+                      {/* Contribution Bar */}
 
                       <div className="mt-5">
 
@@ -883,13 +1085,19 @@ export default function RevenuePage() {
   );
 }
 
+/*
+|--------------------------------------------------------------------------
+| Metric Card
+|--------------------------------------------------------------------------
+*/
+
 function MetricCard({
   icon: Icon,
   label,
   value,
   description,
 }: {
-  icon: React.ElementType;
+  icon: ElementType;
   label: string;
   value: string;
   description: string;
@@ -921,7 +1129,7 @@ function MetricCard({
             bg-primary/[0.06]
           "
         >
-          <Icon className="h-4 w-4 text-[primary]" />
+          <Icon className="h-4 w-4 text-primary" />
         </div>
 
         <div className="min-w-0">

@@ -2,6 +2,7 @@
 
 import {
   useEffect,
+  useRef,
   useState,
 } from "react";
 
@@ -28,20 +29,87 @@ export default function EventPage() {
   const eventId =
     params.eventId;
 
-  const [event, setEvent] =
-    useState<any>(null);
+  const [
+    event,
+    setEvent,
+  ] = useState<any>(null);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [
+    loading,
+    setLoading,
+  ] = useState(true);
 
-  async function loadEvent() {
+  /*
+  |--------------------------------------------------------------------------
+  | Refresh Guard
+  |--------------------------------------------------------------------------
+  |
+  | Prevent multiple dashboard requests from running at the same time.
+  |
+  */
+
+  const refreshingRef =
+    useRef(false);
+
+  /*
+  |--------------------------------------------------------------------------
+  | Load Event
+  |--------------------------------------------------------------------------
+  |
+  | showLoading = true
+  | ------------------
+  | Used only for the initial page load.
+  |
+  | showLoading = false
+  | -------------------
+  | Used for silent background refreshes.
+  |
+  */
+
+  async function loadEvent(
+    showLoading = false
+  ) {
+    if (
+      !eventId ||
+      refreshingRef.current
+    ) {
+      return;
+    }
+
+    refreshingRef.current =
+      true;
+
     try {
+      /*
+      |--------------------------------------------------------------------------
+      | Initial Loading State
+      |--------------------------------------------------------------------------
+      */
+
+      if (showLoading) {
+        setLoading(true);
+      }
+
+      /*
+      |--------------------------------------------------------------------------
+      | Fetch Event
+      |--------------------------------------------------------------------------
+      */
+
       const result =
         await getEvent(
           eventId
         );
 
-      if (result.success) {
+      /*
+      |--------------------------------------------------------------------------
+      | Update Event
+      |--------------------------------------------------------------------------
+      */
+
+      if (
+        result.success
+      ) {
         setEvent(
           result.event
         );
@@ -56,18 +124,35 @@ export default function EventPage() {
         error
       );
     } finally {
-      setLoading(false);
+      if (showLoading) {
+        setLoading(false);
+      }
+
+      refreshingRef.current =
+        false;
     }
   }
 
+  /*
+  |--------------------------------------------------------------------------
+  | Publish Event
+  |--------------------------------------------------------------------------
+  */
+
   async function handlePublish() {
+    if (!event?.id) {
+      return;
+    }
+
     try {
       const result =
         await publishEvent(
           event.id
         );
 
-      if (!result.success) {
+      if (
+        !result.success
+      ) {
         alert(
           result.message ??
             "Unable to publish event."
@@ -76,7 +161,13 @@ export default function EventPage() {
         return;
       }
 
-      await loadEvent();
+      /*
+      |--------------------------------------------------------------------------
+      | Refresh Without Showing Loading Screen
+      |--------------------------------------------------------------------------
+      */
+
+      await loadEvent(false);
     } catch (error: any) {
       alert(
         error.message ??
@@ -85,11 +176,118 @@ export default function EventPage() {
     }
   }
 
+  /*
+  |--------------------------------------------------------------------------
+  | Initial Load + Live Dashboard Refresh
+  |--------------------------------------------------------------------------
+  |
+  | The Command Center refreshes every 10 seconds.
+  |
+  | It also refreshes immediately when:
+  |
+  | • The browser window receives focus
+  | • The browser tab becomes visible again
+  |
+  */
+
   useEffect(() => {
-    if (eventId) {
-      loadEvent();
+    if (!eventId) {
+      return;
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Initial Load
+    |--------------------------------------------------------------------------
+    */
+
+    loadEvent(true);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Background Polling
+    |--------------------------------------------------------------------------
+    */
+
+    const interval =
+      window.setInterval(
+        () => {
+          loadEvent(false);
+        },
+        10_000
+      );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Window Focus
+    |--------------------------------------------------------------------------
+    */
+
+    const handleFocus =
+      () => {
+        loadEvent(false);
+      };
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tab Visibility
+    |--------------------------------------------------------------------------
+    */
+
+    const handleVisibilityChange =
+      () => {
+        if (
+          document.visibilityState ===
+          "visible"
+        ) {
+          loadEvent(false);
+        }
+      };
+
+    /*
+    |--------------------------------------------------------------------------
+    | Event Listeners
+    |--------------------------------------------------------------------------
+    */
+
+    window.addEventListener(
+      "focus",
+      handleFocus
+    );
+
+    document.addEventListener(
+      "visibilitychange",
+      handleVisibilityChange
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cleanup
+    |--------------------------------------------------------------------------
+    */
+
+    return () => {
+      window.clearInterval(
+        interval
+      );
+
+      window.removeEventListener(
+        "focus",
+        handleFocus
+      );
+
+      document.removeEventListener(
+        "visibilitychange",
+        handleVisibilityChange
+      );
+    };
   }, [eventId]);
+
+  /*
+  |--------------------------------------------------------------------------
+  | Initial Loading Screen
+  |--------------------------------------------------------------------------
+  */
 
   if (loading) {
     return (
@@ -112,6 +310,7 @@ export default function EventPage() {
           "
         >
           <div className="text-center">
+
             <div
               className="
                 mx-auto
@@ -121,7 +320,7 @@ export default function EventPage() {
                 rounded-full
                 border-2
                 border-white/10
-                border-t-[primary]
+                border-t-primary
               "
             />
 
@@ -134,11 +333,18 @@ export default function EventPage() {
             >
               Loading event command center...
             </p>
+
           </div>
         </div>
       </main>
     );
   }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Event Not Found
+  |--------------------------------------------------------------------------
+  */
 
   if (!event) {
     return (
@@ -178,6 +384,12 @@ export default function EventPage() {
     );
   }
 
+  /*
+  |--------------------------------------------------------------------------
+  | Event Dates
+  |--------------------------------------------------------------------------
+  */
+
   const startDate =
     new Date(
       event.startDate
@@ -188,65 +400,107 @@ export default function EventPage() {
       event.endDate
     );
 
+  /*
+  |--------------------------------------------------------------------------
+  | Management Items
+  |--------------------------------------------------------------------------
+  */
+
   const managementItems = [
     {
       title: "Tickets",
+
       description:
         "Create, manage and monitor ticket sales.",
+
       href: `/dashboard/events/${event.id}/tickets`,
+
       icon: "◫",
     },
+
     {
       title: "Attendees",
+
       description:
         "View registrations and attendee information.",
+
       href: `/dashboard/events/${event.id}/attendees`,
+
       icon: "◎",
     },
+
     {
-  title: "Live Capacity",
-  description:
-    "Monitor event occupancy and capacity in real time.",
-  href: `/dashboard/events/${event.id}/capacity`,
-  icon: "◉",
-},
+      title: "Live Capacity",
+
+      description:
+        "Monitor event occupancy and capacity in real time.",
+
+      href: `/dashboard/events/${event.id}/capacity`,
+
+      icon: "◉",
+    },
 
     {
       title: "Staff",
+
       description:
         "Manage your event team and staff access.",
+
       href: `/dashboard/events/${event.id}/staff`,
+
       icon: "◇",
     },
+
     {
       title: "Revenue",
+
       description:
         "Track sales, revenue and event performance.",
+
       href: `/dashboard/events/${event.id}/revenue`,
-      icon: "$",
+
+      icon: "€",
     },
+
     {
       title: "Activity",
+
       description:
         "Follow operational activity across your event.",
+
       href: `/dashboard/events/${event.id}/activity`,
+
       icon: "↗",
     },
+
     {
       title: "Announcements",
+
       description:
         "Send updates and information to attendees.",
+
       href: `/dashboard/events/${event.id}/announcements`,
+
       icon: "◉",
     },
+
     {
       title: "Vendor Applications",
+
       description:
         "Review and manage vendors participating in your event.",
+
       href: `/dashboard/events/${event.id}/vendors`,
+
       icon: "▦",
     },
   ];
+
+  /*
+  |--------------------------------------------------------------------------
+  | Render
+  |--------------------------------------------------------------------------
+  */
 
   return (
     <main
@@ -258,7 +512,10 @@ export default function EventPage() {
         text-white
       "
     >
-      {/* Background atmosphere */}
+
+      {/* ==================================================
+          BACKGROUND ATMOSPHERE
+      ================================================== */}
 
       <div
         className="
@@ -286,7 +543,10 @@ export default function EventPage() {
           lg:py-10
         "
       >
-        {/* Breadcrumb */}
+
+        {/* ==================================================
+            BREADCRUMB
+        ================================================== */}
 
         <div
           className="
@@ -298,6 +558,7 @@ export default function EventPage() {
             text-white/35
           "
         >
+
           <Link
             href="/dashboard"
             className="
@@ -310,7 +571,9 @@ export default function EventPage() {
 
           <span>/</span>
 
-          <span>Events</span>
+          <span>
+            Events
+          </span>
 
           <span>/</span>
 
@@ -323,6 +586,7 @@ export default function EventPage() {
           >
             {event.title}
           </span>
+
         </div>
 
         {/* ==================================================
@@ -330,49 +594,51 @@ export default function EventPage() {
         ================================================== */}
 
         <section
-  className="
-    relative
-    overflow-hidden
-    rounded-[28px]
-    border
-    border-white/[0.07]
-    bg-background-secondary
-    p-7
-    lg:p-9
-  "
->
-  <div
-    className="
-      pointer-events-none
-      absolute
-      right-[-80px]
-      top-[-100px]
-      h-[320px]
-      w-[320px]
-      rounded-full
-      bg-primary-light/12
-      blur-[100px]
-    "
-  />
+          className="
+            relative
+            overflow-hidden
+            rounded-[28px]
+            border
+            border-white/[0.07]
+            bg-background-secondary
+            p-7
+            lg:p-9
+          "
+        >
 
-  <div
-    className="
-      relative
-      z-10
-      flex
-      flex-col
-      gap-8
-      xl:flex-row
-      xl:items-end
-      xl:justify-between
-    "
-  >
-    <div
-      className="
-        max-w-3xl
-      "
-    >
-            
+          <div
+            className="
+              pointer-events-none
+              absolute
+              right-[-80px]
+              top-[-100px]
+              h-[320px]
+              w-[320px]
+              rounded-full
+              bg-primary-light/12
+              blur-[100px]
+            "
+          />
+
+          <div
+            className="
+              relative
+              z-10
+              flex
+              flex-col
+              gap-8
+              xl:flex-row
+              xl:items-end
+              xl:justify-between
+            "
+          >
+
+            <div
+              className="
+                max-w-3xl
+              "
+            >
+
               {/* Status */}
 
               <div
@@ -384,6 +650,7 @@ export default function EventPage() {
                   gap-3
                 "
               >
+
                 <span
                   className="
                     inline-flex
@@ -398,9 +665,10 @@ export default function EventPage() {
                     text-xs
                     font-bold
                     tracking-wider
-                    text-[primary]
+                    text-primary
                   "
                 >
+
                   <span
                     className="
                       h-1.5
@@ -411,6 +679,7 @@ export default function EventPage() {
                   />
 
                   {event.status}
+
                 </span>
 
                 <span
@@ -421,6 +690,7 @@ export default function EventPage() {
                 >
                   Event Command Center
                 </span>
+
               </div>
 
               <h1
@@ -448,6 +718,7 @@ export default function EventPage() {
                   text-white/50
                 "
               >
+
                 <span>
                   {event.venue}
                 </span>
@@ -489,68 +760,78 @@ export default function EventPage() {
                   Capacity{" "}
                   {event.capacity}
                 </span>
+
               </div>
+
             </div>
 
             {/* Actions */}
 
             <div
-  className="
-    flex
-    flex-wrap
-    gap-3
-  "
->
-  {event.status === "DRAFT" && (
-    <button
-      onClick={handlePublish}
-      className="
-        h-12
-        rounded-xl
-        bg-primary
-        px-6
-        text-sm
-        font-bold
-        text-white
-        transition
-        hover:bg-primary-dark
-      "
-    >
-      Publish Event
-    </button>
-  )}
+              className="
+                flex
+                flex-wrap
+                gap-3
+              "
+            >
 
-  <button
-    className="
-      h-12
-      rounded-xl
-      border
-      border-white/10
-      bg-white/[0.04]
-      px-6
-      text-sm
-      font-semibold
-      text-white
-      transition
-      hover:border-primary/30
-      hover:bg-white/[0.08]
-    "
-  >
-    Edit Event
-  </button>
+              {event.status ===
+                "DRAFT" && (
+                <button
+                  onClick={
+                    handlePublish
+                  }
+                  className="
+                    h-12
+                    rounded-xl
+                    bg-primary
+                    px-6
+                    text-sm
+                    font-bold
+                    text-white
+                    transition
+                    hover:bg-primary-dark
+                  "
+                >
+                  Publish Event
+                </button>
+              )}
 
-  <ShareButton
-  event={{
-    id: event.id,
-    title: event.title,
-    description: event.description,
-  }}
-/>
-</div>
+              <button
+                className="
+                  h-12
+                  rounded-xl
+                  border
+                  border-white/10
+                  bg-white/[0.04]
+                  px-6
+                  text-sm
+                  font-semibold
+                  text-white
+                  transition
+                  hover:border-primary/30
+                  hover:bg-white/[0.08]
+                "
+              >
+                Edit Event
+              </button>
 
-</div>
+              <ShareButton
+                event={{
+                  id: event.id,
+                  title:
+                    event.title,
+                  description:
+                    event.description,
+                }}
+              />
 
-</section>
+            </div>
+
+          </div>
+
+        </section>
+
         {/* ==================================================
             PERFORMANCE
         ================================================== */}
@@ -560,6 +841,7 @@ export default function EventPage() {
             mt-10
           "
         >
+
           <div
             className="
               mb-5
@@ -568,14 +850,16 @@ export default function EventPage() {
               justify-between
             "
           >
+
             <div>
+
               <p
                 className="
                   text-xs
                   font-bold
                   uppercase
                   tracking-[0.22em]
-                  text-[primary]
+                  text-primary
                 "
               >
                 Live Performance
@@ -591,7 +875,9 @@ export default function EventPage() {
               >
                 Event Overview
               </h2>
+
             </div>
+
           </div>
 
           <DashboardStats
@@ -599,22 +885,27 @@ export default function EventPage() {
               event.stats
                 ?.ticketSold ?? 0
             }
+
             checkedIn={
               event.stats
                 ?.checkedIn ?? 0
             }
+
             revenue={
               event.stats
                 ?.revenue ?? 0
             }
+
             currency={
               event.currency
             }
+
             onlineStaff={
               event.stats
                 ?.onlineStaff ?? 0
             }
           />
+
         </section>
 
         {/* ==================================================
@@ -626,18 +917,20 @@ export default function EventPage() {
             mt-12
           "
         >
+
           <div
             className="
               mb-6
             "
           >
+
             <p
               className="
                 text-xs
                 font-bold
                 uppercase
                 tracking-[0.22em]
-                text-[primary]
+                text-primary
               "
             >
               Management
@@ -667,6 +960,7 @@ export default function EventPage() {
               part of your event from
               one place.
             </p>
+
           </div>
 
           <div
@@ -677,6 +971,7 @@ export default function EventPage() {
               xl:grid-cols-3
             "
           >
+
             {managementItems.map(
               (item) => (
                 <Link
@@ -702,6 +997,7 @@ export default function EventPage() {
                     hover:bg-surface
                   "
                 >
+
                   <div
                     className="
                       flex
@@ -710,6 +1006,7 @@ export default function EventPage() {
                       gap-5
                     "
                   >
+
                     <div
                       className="
                         flex
@@ -724,7 +1021,7 @@ export default function EventPage() {
                         bg-primary-light/12
                         text-lg
                         font-bold
-                        text-[primary]
+                        text-primary
                       "
                     >
                       {item.icon}
@@ -736,11 +1033,12 @@ export default function EventPage() {
                         text-white/20
                         transition
                         group-hover:translate-x-1
-                        group-hover:text-[primary]
+                        group-hover:text-primary
                       "
                     >
                       →
                     </span>
+
                   </div>
 
                   <h3
@@ -767,10 +1065,13 @@ export default function EventPage() {
                       item.description
                     }
                   </p>
+
                 </Link>
               )
             )}
+
           </div>
+
         </section>
 
         {/* ==================================================
@@ -785,6 +1086,7 @@ export default function EventPage() {
             xl:grid-cols-[1.4fr_0.6fr]
           "
         >
+
           {/* Description */}
 
           <div
@@ -796,13 +1098,14 @@ export default function EventPage() {
               p-7
             "
           >
+
             <p
               className="
                 text-xs
                 font-bold
                 uppercase
                 tracking-[0.2em]
-                text-[primary]
+                text-primary
               "
             >
               About
@@ -831,9 +1134,10 @@ export default function EventPage() {
               {event.description ||
                 "No event description has been added."}
             </p>
+
           </div>
 
-          {/* Event details */}
+          {/* Event Details */}
 
           <div
             className="
@@ -844,13 +1148,14 @@ export default function EventPage() {
               p-7
             "
           >
+
             <p
               className="
                 text-xs
                 font-bold
                 uppercase
                 tracking-[0.2em]
-                text-[primary]
+                text-primary
               "
             >
               Event Details
@@ -863,6 +1168,7 @@ export default function EventPage() {
                 divide-white/[0.06]
               "
             >
+
               <DetailRow
                 label="Venue"
                 value={
@@ -893,8 +1199,11 @@ export default function EventPage() {
                   "—"
                 }
               />
+
             </div>
+
           </div>
+
         </section>
 
         {/* ==================================================
@@ -909,6 +1218,7 @@ export default function EventPage() {
             md:grid-cols-2
           "
         >
+
           <DateCard
             eyebrow="EVENT START"
             date={startDate}
@@ -918,10 +1228,13 @@ export default function EventPage() {
             eyebrow="EVENT END"
             date={endDate}
           />
+
         </section>
 
         <div className="h-12" />
+
       </div>
+
     </main>
   );
 }
@@ -949,6 +1262,7 @@ function DetailRow({
         last:pb-0
       "
     >
+
       <span
         className="
           text-sm
@@ -968,6 +1282,7 @@ function DetailRow({
       >
         {value}
       </span>
+
     </div>
   );
 }
@@ -993,6 +1308,7 @@ function DateCard({
         p-6
       "
     >
+
       <p
         className="
           text-[10px]
@@ -1015,10 +1331,13 @@ function DateCard({
         {date.toLocaleDateString(
           undefined,
           {
-            weekday: "long",
+            weekday:
+              "long",
             day: "numeric",
-            month: "long",
-            year: "numeric",
+            month:
+              "long",
+            year:
+              "numeric",
           }
         )}
       </p>
@@ -1028,17 +1347,20 @@ function DateCard({
           mt-2
           text-sm
           font-medium
-          text-[primary]
+          text-primary
         "
       >
         {date.toLocaleTimeString(
           undefined,
           {
-            hour: "2-digit",
-            minute: "2-digit",
+            hour:
+              "2-digit",
+            minute:
+              "2-digit",
           }
         )}
       </p>
+
     </div>
   );
 }
