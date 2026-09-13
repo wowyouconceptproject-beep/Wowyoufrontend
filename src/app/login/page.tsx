@@ -2,77 +2,47 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 
-import {
-  loginUser,
-} from "@/services/auth";
+import { loginUser } from "@/services/auth";
 
 export default function LoginPage() {
-  const router =
-    useRouter();
+  const router = useRouter();
 
-  const [email, setEmail] =
-    useState("");
-
-  const [password, setPassword] =
-    useState("");
-
-  const [loading, setLoading] =
-    useState(false);
-
-  const [error, setError] =
-    useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   async function submit() {
     try {
       setLoading(true);
       setError("");
 
-      const data =
-        await loginUser(
-          email,
-          password
-        );
+      const data = await loginUser(email, password);
 
-      console.log(
-        "LOGIN RESPONSE:",
-        data
-      );
+      console.log("LOGIN RESPONSE:", data);
 
       if (!data.success) {
-        setError(
-          data.message ||
-            "Login failed"
-        );
+        setError(data.message || "Login failed");
         return;
       }
 
       if (data.token) {
-        localStorage.setItem(
-          "token",
-          data.token
-        );
-
-        router.push(
-          "/dashboard"
-        );
+        localStorage.setItem("token", data.token);
+        router.push("/dashboard");
       }
     } catch (error) {
-      console.error(
-        "LOGIN ERROR:",
-        error
-      );
-
-      setError(
-        "Something went wrong"
-      );
+      console.error("LOGIN ERROR:", error);
+      setError("Something went wrong");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-background text-white">
+    <main className="relative min-h-screen overflow-hidden bg-background text-foreground">
       {/* Cinematic background */}
       <div
         className="
@@ -132,13 +102,7 @@ export default function LoginPage() {
                 bg-primary-light/12
               "
             >
-              <span
-                className="
-                  text-xl
-                  font-black
-                  text-[primary]
-                "
-              >
+              <span className="text-xl font-black text-primary">
                 W
               </span>
             </div>
@@ -148,7 +112,7 @@ export default function LoginPage() {
                 text-2xl
                 font-black
                 tracking-[0.28em]
-                text-[primary]
+                text-primary
               "
             >
               WOWYOU
@@ -160,7 +124,7 @@ export default function LoginPage() {
                 text-[10px]
                 font-semibold
                 tracking-[0.32em]
-                text-white/35
+                text-muted
               "
             >
               EVENT TECHNOLOGY
@@ -174,7 +138,7 @@ export default function LoginPage() {
                 text-4xl
                 font-bold
                 tracking-tight
-                text-white
+                text-foreground
               "
             >
               Welcome Back
@@ -185,11 +149,10 @@ export default function LoginPage() {
                 mt-3
                 text-[15px]
                 leading-7
-                text-white/50
+                text-text-secondary
               "
             >
-              Sign in to continue to your
-              organizer dashboard.
+              Sign in to continue to your organizer dashboard.
             </p>
           </div>
 
@@ -200,12 +163,12 @@ export default function LoginPage() {
                 mb-6
                 rounded-2xl
                 border
-                border-red-500/20
-                bg-red-500/10
+                border-danger/20
+                bg-danger/10
                 px-4
                 py-3.5
                 text-sm
-                text-red-300
+                text-danger
               "
             >
               {error}
@@ -214,20 +177,23 @@ export default function LoginPage() {
 
           {/* Form */}
           <div className="space-y-5">
+            {/* Email */}
             <div>
               <label
+                htmlFor="email"
                 className="
                   mb-2.5
                   block
                   text-sm
                   font-medium
-                  text-white/70
+                  text-text-secondary
                 "
               >
                 Email
               </label>
 
               <input
+                id="email"
                 type="email"
                 autoComplete="email"
                 className="
@@ -239,24 +205,21 @@ export default function LoginPage() {
                   bg-surface-elevated
                   px-5
                   text-[15px]
-                  text-white
+                  text-foreground
                   outline-none
                   transition
-                  placeholder:text-white/25
+                  placeholder:text-muted
                   focus:border-primary/70
                   focus:ring-4
                   focus:ring-primary/10
                 "
                 placeholder="Enter your email"
                 value={email}
-                onChange={(e) =>
-                  setEmail(
-                    e.target.value
-                  )
-                }
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
+            {/* Password */}
             <div>
               <div
                 className="
@@ -267,10 +230,11 @@ export default function LoginPage() {
                 "
               >
                 <label
+                  htmlFor="password"
                   className="
                     text-sm
                     font-medium
-                    text-white/70
+                    text-text-secondary
                   "
                 >
                   Password
@@ -281,46 +245,83 @@ export default function LoginPage() {
                   className="
                     text-xs
                     font-semibold
-                    text-[primary]
+                    text-primary
                     transition
-                    hover:text-[#53A6C7]
+                    hover:text-primary-light
                   "
                 >
                   Forgot Password?
                 </button>
               </div>
 
-              <input
-                type="password"
-                autoComplete="current-password"
-                className="
-                  h-14
-                  w-full
-                  rounded-2xl
-                  border
-                  border-white/[0.08]
-                  bg-surface-elevated
-                  px-5
-                  text-[15px]
-                  text-white
-                  outline-none
-                  transition
-                  placeholder:text-white/25
-                  focus:border-primary/70
-                  focus:ring-4
-                  focus:ring-primary/10
-                "
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) =>
-                  setPassword(
-                    e.target.value
-                  )
-                }
-              />
+              {/* Password input with visibility toggle */}
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  className="
+                    h-14
+                    w-full
+                    rounded-2xl
+                    border
+                    border-white/[0.08]
+                    bg-surface-elevated
+                    px-5
+                    pr-14
+                    text-[15px]
+                    text-foreground
+                    outline-none
+                    transition
+                    placeholder:text-muted
+                    focus:border-primary/70
+                    focus:ring-4
+                    focus:ring-primary/10
+                  "
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowPassword((current) => !current)
+                  }
+                  className="
+                    absolute
+                    right-4
+                    top-1/2
+                    flex
+                    h-9
+                    w-9
+                    -translate-y-1/2
+                    items-center
+                    justify-center
+                    rounded-xl
+                    text-muted
+                    transition
+                    hover:bg-white/[0.05]
+                    hover:text-primary
+                  "
+                  aria-label={
+                    showPassword
+                      ? "Hide password"
+                      : "Show password"
+                  }
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
             </div>
 
+            {/* Sign In */}
             <button
+              type="button"
               onClick={submit}
               disabled={loading}
               className="
@@ -335,16 +336,40 @@ export default function LoginPage() {
                 px-6
                 text-[15px]
                 font-bold
-                text-white
+                text-background
                 transition
-                hover:bg-primary-dark
+                hover:bg-primary-light
                 disabled:cursor-not-allowed
                 disabled:opacity-50
               "
             >
-              {loading
-                ? "Signing in..."
-                : "Sign In"}
+              {loading ? "Signing in..." : "Sign In"}
+            </button>
+
+            {/* Create Account */}
+            <button
+              type="button"
+              onClick={() => router.push("/register")}
+              className="
+                flex
+                h-14
+                w-full
+                items-center
+                justify-center
+                rounded-2xl
+                border
+                border-primary/25
+                bg-primary/[0.05]
+                px-6
+                text-[15px]
+                font-bold
+                text-primary
+                transition
+                hover:border-primary/50
+                hover:bg-primary/[0.10]
+              "
+            >
+              Create Account
             </button>
           </div>
 
@@ -362,15 +387,14 @@ export default function LoginPage() {
               className="
                 text-xs
                 leading-6
-                text-white/30
+                text-muted
               "
             >
               WOWYOU organizer
               <span className="mx-2 text-white/15">
                 •
               </span>
-              Manage events. Connect people.
-              Create experiences.
+              Manage events. Connect people. Create experiences.
             </p>
           </div>
         </div>
