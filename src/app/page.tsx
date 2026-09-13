@@ -1,20 +1,14 @@
+import Image from "next/image";
 import Link from "next/link";
-
-import {
-  ArrowRight,
-  CalendarDays,
-} from "lucide-react";
+import { ArrowRight, CalendarDays } from "lucide-react";
 
 import { LegalFooter } from "@/components/legal";
 
 export default function HomePage() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-background text-white">
-
+    <main className="relative min-h-screen overflow-hidden bg-background text-foreground">
       {/* Ambient background */}
-
       <div className="pointer-events-none absolute inset-0">
-
         <div
           className="
             absolute
@@ -42,11 +36,9 @@ export default function HomePage() {
             blur-[140px]
           "
         />
-
       </div>
 
       {/* Fine grid */}
-
       <div
         className="
           pointer-events-none
@@ -59,7 +51,6 @@ export default function HomePage() {
       />
 
       {/* Header */}
-
       <header
         className="
           relative
@@ -70,39 +61,69 @@ export default function HomePage() {
           items-center
           justify-between
           px-6
-          py-7
+          py-6
           md:px-10
+          md:py-7
         "
       >
-
+        {/* WowYou parent brand */}
         <Link
           href="/"
           className="
-            text-xl
-            font-black
-            tracking-[0.2em]
-          "
-        >
-          WOWYOU
-        </Link>
-
-        <Link
-          href="/login"
-          className="
-            text-sm
-            font-medium
-            text-white/60
+            inline-flex
+            items-center
             transition
-            hover:text-white
+            duration-300
+            hover:opacity-80
           "
+          aria-label="WowYou EventTech OS"
         >
-          organizer Login
+          <Image
+            src="/wowyou-logo.png"
+            alt="WowYou Concepts"
+            width={180}
+            height={150}
+            priority
+            className="
+              h-auto
+              w-[110px]
+              object-contain
+              md:w-[125px]
+            "
+          />
         </Link>
 
+        <div className="flex items-center gap-5">
+          <span
+            className="
+              hidden
+              text-[10px]
+              font-semibold
+              uppercase
+              tracking-[0.28em]
+              text-muted
+              sm:block
+            "
+          >
+            EventTech OS
+          </span>
+
+          <Link
+            href="/login"
+            className="
+              text-sm
+              font-medium
+              text-text-secondary
+              transition
+              hover:text-foreground
+            "
+          >
+            Organizer Login
+          </Link>
+        </div>
       </header>
 
       {/* Hero */}
-
       <section
         className="
           relative
@@ -121,11 +142,8 @@ export default function HomePage() {
           lg:pt-24
         "
       >
-
         {/* Hero copy */}
-
         <div className="max-w-6xl">
-
           <p
             className="
               text-xs
@@ -152,11 +170,7 @@ export default function HomePage() {
             <br />
             at your
             <br />
-
-            <span className="text-primary">
-              fingertips.
-            </span>
-
+            <span className="text-primary">fingertips.</span>
           </h1>
 
           <p
@@ -165,19 +179,16 @@ export default function HomePage() {
               max-w-xl
               text-lg
               leading-8
-              text-white/55
+              text-text-secondary
               md:text-xl
             "
           >
-            See what&apos;s happening
-            around you today — or create
-            an experience of your own.
+            See what&apos;s happening around you today — or create an
+            experience of your own.
           </p>
-
         </div>
 
         {/* Actions */}
-
         <div
           className="
             mt-16
@@ -192,9 +203,7 @@ export default function HomePage() {
             sm:justify-between
           "
         >
-
           <div className="flex flex-col gap-3 sm:flex-row">
-
             <Link
               href="/discover"
               className="
@@ -209,7 +218,7 @@ export default function HomePage() {
                 px-7
                 py-4
                 font-semibold
-                text-white
+                text-background
                 transition
                 duration-300
                 hover:scale-[1.02]
@@ -226,7 +235,6 @@ export default function HomePage() {
                   group-hover:translate-x-1
                 "
               />
-
             </Link>
 
             <Link
@@ -245,10 +253,11 @@ export default function HomePage() {
                 px-7
                 py-4
                 font-semibold
+                text-foreground
                 backdrop-blur
                 transition
                 duration-300
-                hover:border-white/30
+                hover:border-primary/40
                 hover:bg-white/[0.07]
               "
             >
@@ -259,11 +268,11 @@ export default function HomePage() {
                   h-4
                   w-4
                   text-primary
+                  transition
+                  group-hover:scale-105
                 "
               />
-
             </Link>
-
           </div>
 
           <p
@@ -273,23 +282,17 @@ export default function HomePage() {
               text-right
               text-xs
               leading-5
-              text-white/35
+              text-muted
               lg:block
             "
           >
-            Events, people and
-            experiences — connected
-            through one platform.
+            Events, people and experiences connected through one platform.
           </p>
-
         </div>
-
       </section>
 
       {/* Legal Footer */}
-
       <LegalFooter />
-
     </main>
   );
 }
