@@ -13,6 +13,7 @@ import {
   MapPin,
   Plus,
   Users,
+  Wallet,
 } from "lucide-react";
 
 import {
@@ -655,6 +656,89 @@ export default function Dashboard() {
             </p>
 
           </div>
+
+        </section>
+
+        {/* --------------------------------------------------------------- */}
+        {/* Stripe Connect */}
+        {/* --------------------------------------------------------------- */}
+
+        <section className="mt-8">
+
+          <Link
+            href="/dashboard/stripe"
+            className="
+              group
+              flex
+              flex-col
+              gap-6
+              rounded-[28px]
+              border
+              border-divider
+              bg-surface
+              p-6
+              transition
+              duration-300
+              hover:-translate-y-0.5
+              hover:border-primary/40
+              md:flex-row
+              md:items-center
+              md:justify-between
+            "
+          >
+
+            <div className="flex items-center gap-5">
+
+              <div
+                className="
+                  flex
+                  h-12
+                  w-12
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-2xl
+                  bg-primary/10
+                  text-[primary]
+                "
+              >
+                <Wallet className="h-5 w-5" />
+              </div>
+
+              <div>
+
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[primary]">
+                  Payments
+                </p>
+
+                <h2 className="mt-2 text-xl font-bold">
+                  Stripe Connect
+                </h2>
+
+                <p className="mt-1 text-sm leading-6 text-muted">
+                  Connect your Stripe account
+                  to receive event settlements.
+                </p>
+
+              </div>
+
+            </div>
+
+            <div className="inline-flex items-center gap-2 text-sm font-semibold">
+              Manage Stripe
+
+              <ArrowRight
+                className="
+                  h-4
+                  w-4
+                  transition-transform
+                  group-hover:translate-x-1
+                  group-hover:text-[primary]
+                "
+              />
+            </div>
+
+          </Link>
 
         </section>
 

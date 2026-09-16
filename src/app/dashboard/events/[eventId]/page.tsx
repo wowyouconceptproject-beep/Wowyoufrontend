@@ -494,6 +494,17 @@ export default function EventPage() {
 
       icon: "▦",
     },
+
+    {
+       title: "HeatMap and Sentient behaviour",
+
+       description:
+        "Monitor event occupancy and capacity in real time.",
+
+       href: `/dashboard/events/${event.id}/capacity`,
+
+        icon: "◉",
+    },
   ];
 
   /*
