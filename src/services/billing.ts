@@ -37,6 +37,7 @@ export type BillingInterval =
 | DK → Denmark
 | US → United States
 |
+|--------------------------------------------------------------------------
 */
 
 export type BillingCountry =
@@ -53,16 +54,17 @@ export type BillingCountry =
 | Billing Price
 |--------------------------------------------------------------------------
 |
-| This is the public pricing information returned to the frontend.
+| Public pricing information returned by the backend.
 |
-| IMPORTANT:
+| Stripe Price IDs are NEVER exposed as part of the public
+| pricing configuration.
 |
-| Revolut plan variation IDs are NEVER exposed here.
-|
-| The backend keeps those IDs server-side and resolves them from:
+| The backend resolves the correct Stripe Price server-side
+| using:
 |
 | country + plan + interval
 |
+|--------------------------------------------------------------------------
 */
 
 export interface BillingPrice {
@@ -76,8 +78,9 @@ export interface BillingPrice {
 | Plan Pricing
 |--------------------------------------------------------------------------
 |
-| Every supported country contains monthly and yearly pricing.
+| Every supported country can contain monthly and yearly pricing.
 |
+|--------------------------------------------------------------------------
 */
 
 export interface PlanPricing {
@@ -125,7 +128,35 @@ export interface BillingPlansResponse {
 
 /*
 |--------------------------------------------------------------------------
-| Subscription
+| Subscription Status
+|--------------------------------------------------------------------------
+|
+| These values mirror the backend SubscriptionStatus enum.
+|
+|--------------------------------------------------------------------------
+*/
+
+export type SubscriptionStatus =
+  | "PENDING"
+  | "ACTIVE"
+  | "TRIALING"
+  | "PAST_DUE"
+  | "CANCELED"
+  | "EXPIRED";
+
+/*
+|--------------------------------------------------------------------------
+| Subscription Provider
+|--------------------------------------------------------------------------
+*/
+
+export type BillingProvider =
+  | "STRIPE"
+  | string;
+
+/*
+|--------------------------------------------------------------------------
+| Organization Subscription
 |--------------------------------------------------------------------------
 */
 
@@ -136,7 +167,7 @@ export interface OrganizationSubscription {
 
   plan: organizerPlan;
 
-  status: string;
+  status: SubscriptionStatus;
 
   currency: string;
 
@@ -144,15 +175,13 @@ export interface OrganizationSubscription {
 
   interval: BillingInterval;
 
-  provider?: string | null;
+  provider?: BillingProvider | null;
 
   providerCustomerId?: string | null;
 
   providerSubscriptionId?: string | null;
 
   providerPriceId?: string | null;
-
-  providerSetupOrderId?: string | null;
 
   currentPeriodStart?: string | null;
 
@@ -185,21 +214,26 @@ export interface SubscriptionResponse {
 
 /*
 |--------------------------------------------------------------------------
-| Checkout Payload
+| Create Billing Checkout Payload
 |--------------------------------------------------------------------------
 |
 | The frontend sends the user's selected:
 |
-| plan
-| country
-| interval
+| - plan
+| - country
+| - interval
+| - customer information
+| - success/redirect URL
 |
-| The backend then resolves:
+| The backend resolves:
 |
-| amount
-| currency
-| Revolut plan variation ID
+| - amount
+| - currency
+| - Stripe Product
+| - Stripe Price
+| - Stripe Checkout Session
 |
+|--------------------------------------------------------------------------
 */
 
 export interface CreateBillingCheckoutPayload {
@@ -222,8 +256,9 @@ export interface CreateBillingCheckoutPayload {
 |--------------------------------------------------------------------------
 |
 | Returned after the backend successfully creates the
-| Revolut subscription checkout.
+| Stripe subscription Checkout Session.
 |
+|--------------------------------------------------------------------------
 */
 
 export interface CheckoutPricing {
@@ -240,7 +275,24 @@ export interface CheckoutPricing {
 
 /*
 |--------------------------------------------------------------------------
-| Checkout Response
+| Create Billing Checkout Response
+|--------------------------------------------------------------------------
+|
+| Stripe is now the payment provider.
+|
+| The frontend receives:
+|
+| checkoutUrl
+| subscriptionId
+| stripeSessionId
+| stripePriceId
+|
+| The frontend does NOT receive or use:
+|
+| - Revolut subscription IDs
+| - Revolut setup order IDs
+| - Revolut payment URLs
+|
 |--------------------------------------------------------------------------
 */
 
@@ -251,9 +303,9 @@ export interface CreateBillingCheckoutResponse {
 
   subscriptionId: string;
 
-  revolutSubscriptionId: string;
+  stripeSessionId: string;
 
-  setupOrderId: string;
+  stripePriceId: string;
 
   pricing: CheckoutPricing;
 
@@ -273,8 +325,10 @@ export interface CreateBillingCheckoutResponse {
 | - monthly pricing
 | - yearly pricing
 |
-| Revolut variation IDs are NOT returned.
+| Stripe Price IDs are resolved server-side and are not required
+| by the frontend pricing UI.
 |
+|--------------------------------------------------------------------------
 */
 
 export function getBillingPlans() {
@@ -300,10 +354,15 @@ export function getBillingSubscription() {
 | Create Billing Checkout
 |--------------------------------------------------------------------------
 |
-| Backend resolves the correct Revolut variation using:
+| Backend creates the Stripe Checkout Session using:
 |
 | country + plan + interval
 |
+| The frontend then redirects the organizer directly to:
+|
+| Stripe Checkout
+|
+|--------------------------------------------------------------------------
 */
 
 export function createBillingCheckout(
