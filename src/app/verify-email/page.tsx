@@ -1,39 +1,61 @@
 "use client";
 
 import {
+  Suspense,
   useEffect,
   useState,
 } from "react";
 
-import { useSearchParams } from "next/navigation";
+import {
+  useSearchParams,
+} from "next/navigation";
 
-type VerificationStatus =
+import Link from "next/link";
+
+import { apiFetch } from "@/lib/api";
+
+type VerificationState =
   | "loading"
   | "success"
   | "error";
 
-export default function VerifyEmailPage() {
+/*
+|--------------------------------------------------------------------------
+| Verification Content
+|--------------------------------------------------------------------------
+*/
+
+function VerifyEmailContent() {
   const searchParams =
     useSearchParams();
 
-  const [
-    status,
-    setStatus,
-  ] =
-    useState<VerificationStatus>(
+  const [state, setState] =
+    useState<VerificationState>(
       "loading",
     );
 
-  const [
-    message,
-    setMessage,
-  ] = useState(
-    "Verifying your email...",
-  );
+  const [message, setMessage] =
+    useState(
+      "Verifying your email address...",
+    );
 
   useEffect(() => {
-    const token =
+    /*
+    |--------------------------------------------------------------------------
+    | Get Verification Token
+    |--------------------------------------------------------------------------
+    |
+    | URLSearchParams.get() returns string | null.
+    | Converting the value to an explicit string here prevents the
+    | TypeScript string | null error when the token is used below.
+    |
+    */
+
+    const tokenParam =
       searchParams.get("token");
+
+    const token =
+      tokenParam ?? "";
 
     /*
     |--------------------------------------------------------------------------
@@ -42,23 +64,16 @@ export default function VerifyEmailPage() {
     */
 
     if (!token) {
-      setStatus("error");
+      setState("error");
 
       setMessage(
-        "Verification token is missing.",
+        "This email verification link is missing its verification token.",
       );
 
       return;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Token Is Now Narrowed To String
-    |--------------------------------------------------------------------------
-    */
-
-    const verificationToken =
-      token;
+    let cancelled = false;
 
     /*
     |--------------------------------------------------------------------------
@@ -66,47 +81,41 @@ export default function VerifyEmailPage() {
     |--------------------------------------------------------------------------
     */
 
-    async function verify() {
+    async function verifyEmail() {
       try {
-        const apiUrl =
-          process.env
-            .NEXT_PUBLIC_API_URL ||
-          "http://127.0.0.1:5000";
-
-        const response =
-          await fetch(
-            `${apiUrl}/api/auth/verify-email?token=${encodeURIComponent(
-              verificationToken,
+        const data =
+          await apiFetch<{
+            success: boolean;
+            message?: string;
+          }>(
+            `/auth/verify-email?token=${encodeURIComponent(
+              token,
             )}`,
             {
-              method:
-                "GET",
-
-              headers: {
-                Accept:
-                  "application/json",
-              },
+              method: "GET",
+              withAuth: false,
             },
           );
 
         /*
         |--------------------------------------------------------------------------
-        | Parse Response
+        | Component Unmounted
         |--------------------------------------------------------------------------
         */
 
-        const data =
-          await response.json();
+        if (cancelled) {
+          return;
+        }
 
         /*
         |--------------------------------------------------------------------------
-        | API Error
+        | API Reported Failure
         |--------------------------------------------------------------------------
         */
 
-        if (!response.ok) {
+        if (!data.success) {
           throw new Error(
-            data?.message ||
+            data.message ||
               "Email verification failed.",
           );
         }
@@ -117,291 +126,254 @@ export default function VerifyEmailPage() {
         |--------------------------------------------------------------------------
         */
 
-        setStatus(
-          "success",
-        );
+        setState("success");
 
         setMessage(
-          "Your email has been verified successfully.",
+          data.message ||
+            "Your email address has been verified successfully.",
         );
       } catch (error: unknown) {
-        setStatus(
-          "error",
-        );
+        /*
+        |--------------------------------------------------------------------------
+        | Component Unmounted
+        |--------------------------------------------------------------------------
+        */
+
+        if (cancelled) {
+          return;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Error
+        |--------------------------------------------------------------------------
+        */
+
+        setState("error");
 
         setMessage(
           error instanceof Error
             ? error.message
-            : "Email verification failed.",
+            : "Email verification failed. Please request a new verification email.",
         );
       }
     }
 
-    verify();
+    verifyEmail();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cleanup
+    |--------------------------------------------------------------------------
+    */
+
+    return () => {
+      cancelled = true;
+    };
   }, [searchParams]);
 
-  /*
-  |--------------------------------------------------------------------------
-  | Page
-  |--------------------------------------------------------------------------
-  */
-
   return (
-    <main
-      style={{
-        minHeight:
-          "100vh",
+    <main className="min-h-screen bg-[#f8f8f6] px-6 py-16">
+      <div className="mx-auto flex min-h-[70vh] max-w-xl items-center justify-center">
+        <div className="w-full rounded-3xl border border-black/10 bg-white p-8 text-center shadow-sm sm:p-12">
 
-        display:
-          "flex",
+          {/* Logo */}
+          <div className="mb-10">
+            <Link
+              href="/"
+              className="text-xl font-semibold tracking-[-0.03em] text-black"
+            >
+              WOWYOU
+            </Link>
+          </div>
 
-        alignItems:
-          "center",
+          {/* ---------------------------------------------------------- */}
+          {/* Loading */}
+          {/* ---------------------------------------------------------- */}
 
-        justifyContent:
-          "center",
+          {state === "loading" && (
+            <>
+              <div className="mx-auto mb-7 flex h-16 w-16 items-center justify-center rounded-full bg-black/[0.04]">
+                <div className="h-7 w-7 animate-spin rounded-full border-2 border-black/10 border-t-black" />
+              </div>
 
-        background:
-          "#080808",
+              <h1 className="text-2xl font-semibold tracking-[-0.03em] text-black sm:text-3xl">
+                Verifying your email
+              </h1>
 
-        color:
-          "#ffffff",
+              <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-black/55 sm:text-base">
+                {message}
+              </p>
+            </>
+          )}
 
-        padding:
-          "24px",
+          {/* ---------------------------------------------------------- */}
+          {/* Success */}
+          {/* ---------------------------------------------------------- */}
 
-        boxSizing:
-          "border-box",
-      }}
-    >
-      <div
-        style={{
-          width:
-            "100%",
+          {state === "success" && (
+            <>
+              <div className="mx-auto mb-7 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="h-8 w-8 text-emerald-600"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M5 12.5 9.2 17 19 7"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
 
-          maxWidth:
-            "480px",
+              <h1 className="text-2xl font-semibold tracking-[-0.03em] text-black sm:text-3xl">
+                Email verified
+              </h1>
 
-          background:
-            "#111111",
+              <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-black/55 sm:text-base">
+                {message}
+              </p>
 
-          border:
-            "1px solid #242424",
+              <div className="mt-8">
+                <Link
+                  href="/login"
+                  className="inline-flex min-h-12 items-center justify-center rounded-xl bg-black px-6 text-sm font-medium text-white transition hover:bg-black/85"
+                >
+                  Continue to login
+                </Link>
+              </div>
+            </>
+          )}
 
-          borderRadius:
-            "18px",
+          {/* ---------------------------------------------------------- */}
+          {/* Error */}
+          {/* ---------------------------------------------------------- */}
 
-          padding:
-            "40px",
+          {state === "error" && (
+            <>
+              <div className="mx-auto mb-7 flex h-16 w-16 items-center justify-center rounded-full bg-red-50">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="h-8 w-8 text-red-600"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M12 8v5"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
 
-          textAlign:
-            "center",
+                  <circle
+                    cx="12"
+                    cy="16.5"
+                    r="1"
+                    fill="currentColor"
+                  />
 
-          boxSizing:
-            "border-box",
-        }}
-      >
-        {/* Logo */}
+                  <path
+                    d="M10.3 4.8 2.9 17.6A2 2 0 0 0 4.6 20.6h14.8a2 2 0 0 0 1.7-3L13.7 4.8a2 2 0 0 0-3.4 0Z"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
 
-        <div
-          style={{
-            fontSize:
-              "18px",
+              <h1 className="text-2xl font-semibold tracking-[-0.03em] text-black sm:text-3xl">
+                Verification failed
+              </h1>
 
-            fontWeight:
-              800,
+              <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-black/55 sm:text-base">
+                {message}
+              </p>
 
-            letterSpacing:
-              "0.16em",
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+                <Link
+                  href="/login"
+                  className="inline-flex min-h-12 items-center justify-center rounded-xl bg-black px-6 text-sm font-medium text-white transition hover:bg-black/85"
+                >
+                  Go to login
+                </Link>
 
-            marginBottom:
-              "32px",
-          }}
-        >
-          WOWYOU
+                <Link
+                  href="/register"
+                  className="inline-flex min-h-12 items-center justify-center rounded-xl border border-black/10 bg-white px-6 text-sm font-medium text-black transition hover:bg-black/[0.03]"
+                >
+                  Create account
+                </Link>
+              </div>
+            </>
+          )}
         </div>
-
-        {/* Status Icon */}
-
-        <div
-          style={{
-            width:
-              "64px",
-
-            height:
-              "64px",
-
-            margin:
-              "0 auto 24px",
-
-            borderRadius:
-              "50%",
-
-            display:
-              "flex",
-
-            alignItems:
-              "center",
-
-            justifyContent:
-              "center",
-
-            background:
-              status ===
-              "success"
-                ? "rgba(62, 134, 164, 0.15)"
-                : status ===
-                    "error"
-                  ? "rgba(220, 80, 80, 0.12)"
-                  : "rgba(255, 255, 255, 0.06)",
-
-            border:
-              status ===
-              "success"
-                ? "1px solid rgba(62, 134, 164, 0.35)"
-                : status ===
-                    "error"
-                  ? "1px solid rgba(220, 80, 80, 0.25)"
-                  : "1px solid #292929",
-
-            fontSize:
-              "28px",
-          }}
-        >
-          {status ===
-          "loading"
-            ? "…"
-            : status ===
-                "success"
-              ? "✓"
-              : "!"
-          }
-        </div>
-
-        {/* Heading */}
-
-        <h1
-          style={{
-            fontSize:
-              "28px",
-
-            lineHeight:
-              "1.2",
-
-            margin:
-              "0 0 16px",
-
-            fontWeight:
-              700,
-          }}
-        >
-          {status ===
-          "loading"
-            ? "Verifying your email"
-            : status ===
-                "success"
-              ? "Email verified"
-              : "Verification failed"}
-        </h1>
-
-        {/* Message */}
-
-        <p
-          style={{
-            color:
-              "#999999",
-
-            lineHeight:
-              1.7,
-
-            fontSize:
-              "15px",
-
-            margin:
-              0,
-          }}
-        >
-          {message}
-        </p>
-
-        {/* Success */}
-
-        {status ===
-          "success" && (
-          <a
-            href="/login"
-            style={{
-              display:
-                "inline-block",
-
-              marginTop:
-                "28px",
-
-              padding:
-                "13px 20px",
-
-              background:
-                "#3E86A4",
-
-              color:
-                "#ffffff",
-
-              textDecoration:
-                "none",
-
-              borderRadius:
-                "10px",
-
-              fontSize:
-                "14px",
-
-              fontWeight:
-                700,
-            }}
-          >
-            Continue to login
-          </a>
-        )}
-
-        {/* Error */}
-
-        {status ===
-          "error" && (
-          <a
-            href="/login"
-            style={{
-              display:
-                "inline-block",
-
-              marginTop:
-                "28px",
-
-              padding:
-                "13px 20px",
-
-              background:
-                "#3E86A4",
-
-              color:
-                "#ffffff",
-
-              textDecoration:
-                "none",
-
-              borderRadius:
-                "10px",
-
-              fontSize:
-                "14px",
-
-              fontWeight:
-                700,
-            }}
-          >
-            Back to login
-          </a>
-        )}
       </div>
     </main>
+  );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Suspense Fallback
+|--------------------------------------------------------------------------
+*/
+
+function VerifyEmailFallback() {
+  return (
+    <main className="min-h-screen bg-[#f8f8f6] px-6 py-16">
+      <div className="mx-auto flex min-h-[70vh] max-w-xl items-center justify-center">
+        <div className="w-full rounded-3xl border border-black/10 bg-white p-8 text-center shadow-sm sm:p-12">
+
+          {/* Logo */}
+          <div className="mb-10">
+            <Link
+              href="/"
+              className="text-xl font-semibold tracking-[-0.03em] text-black"
+            >
+              WOWYOU
+            </Link>
+          </div>
+
+          {/* Spinner */}
+          <div className="mx-auto mb-7 flex h-16 w-16 items-center justify-center rounded-full bg-black/[0.04]">
+            <div className="h-7 w-7 animate-spin rounded-full border-2 border-black/10 border-t-black" />
+          </div>
+
+          <h1 className="text-2xl font-semibold tracking-[-0.03em] text-black sm:text-3xl">
+            Loading verification
+          </h1>
+
+          <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-black/55 sm:text-base">
+            Please wait while we load your verification link.
+          </p>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Verify Email Page
+|--------------------------------------------------------------------------
+|
+| useSearchParams() requires a Suspense boundary during Next.js
+| production prerendering.
+|
+*/
+
+export default function VerifyEmailPage() {
+  return (
+    <Suspense
+      fallback={
+        <VerifyEmailFallback />
+      }
+    >
+      <VerifyEmailContent />
+    </Suspense>
   );
 }

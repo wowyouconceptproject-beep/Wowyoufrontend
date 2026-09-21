@@ -37,7 +37,15 @@ export default function RegisterPage() {
         return;
       }
 
-      if (data.token) {
+      /*
+      |--------------------------------------------------------------------------
+      | Successful Registration
+      |--------------------------------------------------------------------------
+      | The backend should return both token and user.
+      | We explicitly check both so TypeScript knows they exist.
+      */
+
+      if (data.token && data.user) {
         localStorage.setItem("token", data.token);
 
         localStorage.setItem(
@@ -51,11 +59,28 @@ export default function RegisterPage() {
         );
 
         router.push("/legal/accept");
-      }
-    } catch (err) {
-      console.error(err);
 
-      setError("Something went wrong");
+        return;
+      }
+
+      /*
+      |--------------------------------------------------------------------------
+      | Unexpected Successful Response
+      |--------------------------------------------------------------------------
+      */
+
+      setError(
+        data.message ||
+          "Registration completed, but account information was not returned.",
+      );
+    } catch (err) {
+      console.error("REGISTER ERROR:", err);
+
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong",
+      );
     } finally {
       setLoading(false);
     }
@@ -64,6 +89,7 @@ export default function RegisterPage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-background text-foreground">
       {/* Cinematic background */}
+
       <div
         className="
           pointer-events-none
@@ -106,7 +132,9 @@ export default function RegisterPage() {
         "
       >
         <div className="w-full max-w-[440px]">
+
           {/* Brand */}
+
           <div className="mb-10 text-center">
             <div
               className="
@@ -152,6 +180,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Heading */}
+
           <div className="mb-8">
             <h1
               className="
@@ -178,6 +207,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Error */}
+
           {error && (
             <div
               className="
@@ -197,8 +227,11 @@ export default function RegisterPage() {
           )}
 
           {/* Form */}
+
           <div className="space-y-5">
+
             {/* Name row */}
+
             <div
               className="
                 grid
@@ -207,7 +240,9 @@ export default function RegisterPage() {
                 sm:grid-cols-2
               "
             >
+
               {/* First Name */}
+
               <div>
                 <label
                   htmlFor="firstName"
@@ -255,6 +290,7 @@ export default function RegisterPage() {
               </div>
 
               {/* Last Name */}
+
               <div>
                 <label
                   htmlFor="lastName"
@@ -303,6 +339,7 @@ export default function RegisterPage() {
             </div>
 
             {/* Email */}
+
             <div>
               <label
                 htmlFor="email"
@@ -350,6 +387,7 @@ export default function RegisterPage() {
             </div>
 
             {/* Password */}
+
             <div>
               <label
                 htmlFor="password"
@@ -367,7 +405,11 @@ export default function RegisterPage() {
               <div className="relative">
                 <input
                   id="password"
-                  type={showPassword ? "text" : "password"}
+                  type={
+                    showPassword
+                      ? "text"
+                      : "password"
+                  }
                   autoComplete="new-password"
                   className="
                     h-14
@@ -400,7 +442,9 @@ export default function RegisterPage() {
                 <button
                   type="button"
                   onClick={() =>
-                    setShowPassword((current) => !current)
+                    setShowPassword(
+                      (current) => !current,
+                    )
                   }
                   className="
                     absolute
@@ -434,6 +478,7 @@ export default function RegisterPage() {
             </div>
 
             {/* Submit */}
+
             <button
               type="button"
               onClick={submit}
@@ -464,6 +509,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Sign in */}
+
           <div
             className="
               mt-8
@@ -476,7 +522,9 @@ export default function RegisterPage() {
 
             <button
               type="button"
-              onClick={() => router.push("/login")}
+              onClick={() =>
+                router.push("/login")
+              }
               className="
                 font-semibold
                 text-primary
@@ -489,6 +537,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Footer */}
+
           <div
             className="
               mt-8
@@ -512,6 +561,7 @@ export default function RegisterPage() {
               Create events. Build connections. Shape experiences.
             </p>
           </div>
+
         </div>
       </div>
     </main>
