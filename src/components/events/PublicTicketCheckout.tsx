@@ -15,7 +15,6 @@ import {
 
 interface PublicTicketCheckoutProps {
   event: any;
-
   onClose: () => void;
 }
 
@@ -503,6 +502,11 @@ export default function PublicTicketCheckout({
             selectedTicket.id,
 
           quantity,
+
+          // This is the web attendee checkout.
+          // Do not allow the shared purchase service
+          // to fall back to the mobile channel.
+          channel: "web",
         });
 
       if (
@@ -539,7 +543,7 @@ export default function PublicTicketCheckout({
       | Paid Ticket
       |--------------------------------------------------------------------------
       |
-      | Revolut owns the payment screen.
+      | Stripe owns the payment screen.
       |
       */
 
@@ -799,7 +803,7 @@ export default function PublicTicketCheckout({
 
         <div className="border-t border-white/10 pt-7">
           <div className="mb-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[primary]">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[primary]">
               Your account
             </p>
 
