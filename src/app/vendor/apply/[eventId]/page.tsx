@@ -1,12 +1,14 @@
 "use client";
 
 import {
+  FormEvent,
   useEffect,
   useState,
 } from "react";
 
 import {
   useParams,
+  useRouter,
 } from "next/navigation";
 
 import {
@@ -24,8 +26,19 @@ import {
 } from "lucide-react";
 
 import {
-  getEvent,
+  getPublicEvent,
+  type Event,
 } from "@/services/event";
+
+import {
+  applyAsVendor,
+} from "@/services/vendor";
+
+/*
+|--------------------------------------------------------------------------
+| Vendor Apply Page
+|--------------------------------------------------------------------------
+*/
 
 export default function VendorApplyPage() {
   const params =
@@ -33,34 +46,392 @@ export default function VendorApplyPage() {
       eventId: string;
     }>();
 
+  const router = useRouter();
+
+  /*
+  |--------------------------------------------------------------------------
+  | Event
+  |--------------------------------------------------------------------------
+  */
+
   const [
     event,
     setEvent,
-  ] = useState<any>();
+  ] = useState<Event | null>(null);
 
   const [
     loading,
     setLoading,
   ] = useState(true);
 
+  /*
+  |--------------------------------------------------------------------------
+  | Submission
+  |--------------------------------------------------------------------------
+  */
+
+  const [
+    submitting,
+    setSubmitting,
+  ] = useState(false);
+
+  const [
+    success,
+    setSuccess,
+  ] = useState(false);
+
+  const [
+    error,
+    setError,
+  ] = useState("");
+
+  /*
+  |--------------------------------------------------------------------------
+  | Form
+  |--------------------------------------------------------------------------
+  */
+
+  const [
+    businessName,
+    setBusinessName,
+  ] = useState("");
+
+  const [
+    category,
+    setCategory,
+  ] = useState("");
+
+  const [
+    contactName,
+    setContactName,
+  ] = useState("");
+
+  const [
+    email,
+    setEmail,
+  ] = useState("");
+
+  const [
+    phone,
+    setPhone,
+  ] = useState("");
+
+  const [
+    description,
+    setDescription,
+  ] = useState("");
+
+  const [
+    boothSize,
+    setBoothSize,
+  ] = useState("");
+
+  const [
+    message,
+    setMessage,
+  ] = useState("");
+
+  const [
+    password,
+    setPassword,
+  ] = useState("");
+
+  const [
+    confirmPassword,
+    setConfirmPassword,
+  ] = useState("");
+
+  /*
+  |--------------------------------------------------------------------------
+  | Load Event
+  |--------------------------------------------------------------------------
+  */
+
   useEffect(() => {
     async function load() {
       try {
+        setLoading(true);
+        setError("");
+
         const result =
-          await getEvent(
+          await getPublicEvent(
             params.eventId,
           );
 
+        if (
+          !result.success ||
+          !result.event
+        ) {
+          throw new Error(
+            result.message ??
+              "Unable to load this event.",
+          );
+        }
+
         setEvent(
           result.event,
+        );
+      } catch (err) {
+        console.error(
+          "VENDOR EVENT LOAD ERROR:",
+          err,
+        );
+
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Unable to load this event.",
         );
       } finally {
         setLoading(false);
       }
     }
 
-    load();
-  }, [params.eventId]);
+    if (
+      params.eventId
+    ) {
+      load();
+    }
+  }, [
+    params.eventId,
+  ]);
+
+  /*
+  |--------------------------------------------------------------------------
+  | Submit Application
+  |--------------------------------------------------------------------------
+  */
+
+  async function handleSubmit(
+    formEvent: FormEvent<HTMLFormElement>,
+  ) {
+    formEvent.preventDefault();
+
+    if (submitting) {
+      return;
+    }
+
+    setError("");
+
+    /*
+    |--------------------------------------------------------------------------
+    | Required Fields
+    |--------------------------------------------------------------------------
+    */
+
+    if (!businessName.trim()) {
+      setError(
+        "Business name is required.",
+      );
+
+      return;
+    }
+
+    if (!category.trim()) {
+      setError(
+        "Business category is required.",
+      );
+
+      return;
+    }
+
+    if (!contactName.trim()) {
+      setError(
+        "Contact name is required.",
+      );
+
+      return;
+    }
+
+    if (!email.trim()) {
+      setError(
+        "Email address is required.",
+      );
+
+      return;
+    }
+
+    if (!phone.trim()) {
+      setError(
+        "Phone number is required.",
+      );
+
+      return;
+    }
+
+    if (!description.trim()) {
+      setError(
+        "Please tell the organizer about your business.",
+      );
+
+      return;
+    }
+
+    if (!password) {
+      setError(
+        "Please create a password for your vendor account.",
+      );
+
+      return;
+    }
+
+    if (
+      password.length < 6
+    ) {
+      setError(
+        "Password must be at least 6 characters.",
+      );
+
+      return;
+    }
+
+    if (
+      password !==
+      confirmPassword
+    ) {
+      setError(
+        "Passwords do not match.",
+      );
+
+      return;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Email Validation
+    |--------------------------------------------------------------------------
+    */
+
+    const normalizedEmail =
+      email
+        .trim()
+        .toLowerCase();
+
+    if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        normalizedEmail,
+      )
+    ) {
+      setError(
+        "Please enter a valid email address.",
+      );
+
+      return;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Event Validation
+    |--------------------------------------------------------------------------
+    */
+
+    if (!event?.id) {
+      setError(
+        "This event is unavailable.",
+      );
+
+      return;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Submit
+    |--------------------------------------------------------------------------
+    */
+
+    try {
+      setSubmitting(true);
+
+      const result =
+        await applyAsVendor({
+          eventId:
+            event.id,
+
+          businessName:
+            businessName.trim(),
+
+          category:
+            category.trim(),
+
+          contactName:
+            contactName.trim(),
+
+          email:
+            normalizedEmail,
+
+          phone:
+            phone.trim(),
+
+          description:
+            description.trim(),
+
+          boothSize:
+            boothSize.trim() ||
+            undefined,
+
+          message:
+            message.trim() ||
+            undefined,
+
+          password,
+        });
+
+      if (
+        !result.success
+      ) {
+        throw new Error(
+          result.message ??
+            "Unable to submit your vendor application.",
+        );
+      }
+
+      /*
+      |--------------------------------------------------------------------------
+      | Store Vendor Authentication
+      |--------------------------------------------------------------------------
+      */
+
+      if (result.token) {
+        localStorage.setItem(
+          "vendorToken",
+          result.token,
+        );
+      }
+
+      /*
+      |--------------------------------------------------------------------------
+      | Success
+      |--------------------------------------------------------------------------
+      */
+
+      setSuccess(true);
+
+      /*
+      |--------------------------------------------------------------------------
+      | Redirect To Vendor Portal
+      |--------------------------------------------------------------------------
+      */
+
+      window.setTimeout(() => {
+        router.push(
+          "/vendor/portal/applications",
+        );
+      }, 1200);
+    } catch (err) {
+      console.error(
+        "VENDOR APPLICATION ERROR:",
+        err,
+      );
+
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to submit your vendor application.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   /*
   |--------------------------------------------------------------------------
@@ -110,7 +481,7 @@ export default function VendorApplyPage() {
 
   /*
   |--------------------------------------------------------------------------
-  | Event unavailable
+  | Event Unavailable
   |--------------------------------------------------------------------------
   */
 
@@ -127,19 +498,135 @@ export default function VendorApplyPage() {
           text-white
         "
       >
-        <div className="text-center">
+        <div className="max-w-md text-center">
 
-          <Store className="mx-auto h-8 w-8 text-[primary]" />
+          <Store className="mx-auto h-8 w-8 text-[#3E86A4]" />
 
           <h1 className="mt-5 text-3xl font-black">
             Event Unavailable
           </h1>
 
           <p className="mt-3 text-sm text-white/40">
-            This vendor application could not be loaded.
+            {error ||
+              "This vendor application could not be loaded."}
           </p>
 
         </div>
+      </main>
+    );
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Success State
+  |--------------------------------------------------------------------------
+  */
+
+  if (success) {
+    return (
+      <main
+        className="
+          flex
+          min-h-screen
+          items-center
+          justify-center
+          bg-background
+          px-6
+          text-white
+        "
+      >
+
+        <div
+          className="
+            w-full
+            max-w-lg
+            rounded-[32px]
+            border
+            border-white/[0.08]
+            bg-surface
+            px-8
+            py-12
+            text-center
+            md:px-12
+          "
+        >
+
+          <div
+            className="
+              mx-auto
+              flex
+              h-16
+              w-16
+              items-center
+              justify-center
+              rounded-full
+              border
+              border-[#3E86A4]/20
+              bg-[#3E86A4]/10
+            "
+          >
+            <CheckCircle2
+              className="
+                h-8
+                w-8
+                text-[#3E86A4]
+              "
+            />
+          </div>
+
+          <p
+            className="
+              mt-7
+              text-[10px]
+              font-bold
+              uppercase
+              tracking-[0.22em]
+              text-[#3E86A4]
+            "
+          >
+            Application Submitted
+          </p>
+
+          <h1
+            className="
+              mt-3
+              text-3xl
+              font-black
+              tracking-tight
+            "
+          >
+            You&apos;re officially in the review process.
+          </h1>
+
+          <p
+            className="
+              mx-auto
+              mt-4
+              max-w-md
+              text-sm
+              leading-7
+              text-white/40
+            "
+          >
+            Your vendor application for{" "}
+            <span className="font-semibold text-white/70">
+              {event.title}
+            </span>{" "}
+            has been sent to the event organizer.
+          </p>
+
+          <p
+            className="
+              mt-7
+              text-xs
+              text-white/25
+            "
+          >
+            Taking you to your vendor portal...
+          </p>
+
+        </div>
+
       </main>
     );
   }
@@ -241,7 +728,7 @@ export default function VendorApplyPage() {
                     h-1.5
                     w-1.5
                     rounded-full
-                    bg-primary
+                    bg-[#3E86A4]
                   "
                 />
 
@@ -251,7 +738,7 @@ export default function VendorApplyPage() {
                     font-bold
                     uppercase
                     tracking-[0.18em]
-                    text-[primary]
+                    text-[#3E86A4]
                   "
                 >
                   Vendor Applications
@@ -270,7 +757,7 @@ export default function VendorApplyPage() {
                       font-bold
                       uppercase
                       tracking-[0.22em]
-                      text-[primary]
+                      text-[#3E86A4]
                     "
                   >
                     {event.category}
@@ -300,7 +787,7 @@ export default function VendorApplyPage() {
 
               <div className="flex items-center gap-2">
 
-                <span className="h-px w-7 bg-primary" />
+                <span className="h-px w-7 bg-[#3E86A4]" />
 
                 <p
                   className="
@@ -308,7 +795,7 @@ export default function VendorApplyPage() {
                     font-bold
                     uppercase
                     tracking-[0.2em]
-                    text-[primary]
+                    text-[#3E86A4]
                   "
                 >
                   About the Event
@@ -403,11 +890,11 @@ export default function VendorApplyPage() {
                   justify-center
                   rounded-xl
                   border
-                  border-primary/15
-                  bg-primary/[0.06]
+                  border-[#3E86A4]/15
+                  bg-[#3E86A4]/[0.06]
                 "
               >
-                <Store className="h-5 w-5 text-[primary]" />
+                <Store className="h-5 w-5 text-[#3E86A4]" />
               </div>
 
               <p
@@ -417,7 +904,7 @@ export default function VendorApplyPage() {
                   font-bold
                   uppercase
                   tracking-[0.22em]
-                  text-[primary]
+                  text-[#3E86A4]
                 "
               >
                 Vendor Marketplace
@@ -450,7 +937,30 @@ export default function VendorApplyPage() {
 
             </div>
 
-            <form className="px-6 py-8 md:px-10 md:py-10">
+            <form
+              onSubmit={handleSubmit}
+              className="px-6 py-8 md:px-10 md:py-10"
+            >
+
+              {/* Error */}
+
+              {error && (
+                <div
+                  className="
+                    mb-8
+                    rounded-2xl
+                    border
+                    border-red-500/20
+                    bg-red-500/[0.06]
+                    px-5
+                    py-4
+                  "
+                >
+                  <p className="text-sm leading-6 text-red-300">
+                    {error}
+                  </p>
+                </div>
+              )}
 
               {/* Business */}
 
@@ -465,8 +975,16 @@ export default function VendorApplyPage() {
                   icon={Building2}
                 >
                   <input
+                    value={businessName}
+                    onChange={(e) =>
+                      setBusinessName(
+                        e.target.value,
+                      )
+                    }
                     placeholder="Your business name"
                     className={inputClass}
+                    autoComplete="organization"
+                    disabled={submitting}
                   />
                 </FormField>
 
@@ -475,8 +993,15 @@ export default function VendorApplyPage() {
                   icon={BriefcaseBusiness}
                 >
                   <input
+                    value={category}
+                    onChange={(e) =>
+                      setCategory(
+                        e.target.value,
+                      )
+                    }
                     placeholder="Fashion, food, technology..."
                     className={inputClass}
+                    disabled={submitting}
                   />
                 </FormField>
 
@@ -495,8 +1020,16 @@ export default function VendorApplyPage() {
                   icon={User}
                 >
                   <input
+                    value={contactName}
+                    onChange={(e) =>
+                      setContactName(
+                        e.target.value,
+                      )
+                    }
                     placeholder="Full name"
                     className={inputClass}
+                    autoComplete="name"
+                    disabled={submitting}
                   />
                 </FormField>
 
@@ -508,8 +1041,16 @@ export default function VendorApplyPage() {
                   >
                     <input
                       type="email"
+                      value={email}
+                      onChange={(e) =>
+                        setEmail(
+                          e.target.value,
+                        )
+                      }
                       placeholder="name@business.com"
                       className={inputClass}
+                      autoComplete="email"
+                      disabled={submitting}
                     />
                   </FormField>
 
@@ -519,8 +1060,16 @@ export default function VendorApplyPage() {
                   >
                     <input
                       type="tel"
+                      value={phone}
+                      onChange={(e) =>
+                        setPhone(
+                          e.target.value,
+                        )
+                      }
                       placeholder="Phone number"
                       className={inputClass}
+                      autoComplete="tel"
+                      disabled={submitting}
                     />
                   </FormField>
 
@@ -541,8 +1090,15 @@ export default function VendorApplyPage() {
                 >
                   <textarea
                     rows={5}
+                    value={description}
+                    onChange={(e) =>
+                      setDescription(
+                        e.target.value,
+                      )
+                    }
                     placeholder="Tell the organizer about your products, services and what you plan to showcase..."
                     className={`${inputClass} resize-none`}
+                    disabled={submitting}
                   />
                 </FormField>
 
@@ -550,8 +1106,15 @@ export default function VendorApplyPage() {
                   label="Preferred Booth Size"
                 >
                   <input
+                    value={boothSize}
+                    onChange={(e) =>
+                      setBoothSize(
+                        e.target.value,
+                      )
+                    }
                     placeholder="Example: 3m × 3m"
                     className={inputClass}
+                    disabled={submitting}
                   />
                 </FormField>
 
@@ -561,8 +1124,15 @@ export default function VendorApplyPage() {
                 >
                   <textarea
                     rows={4}
+                    value={message}
+                    onChange={(e) =>
+                      setMessage(
+                        e.target.value,
+                      )
+                    }
                     placeholder="Anything else the organizer should know?"
                     className={`${inputClass} resize-none`}
+                    disabled={submitting}
                   />
                 </FormField>
 
@@ -581,8 +1151,8 @@ export default function VendorApplyPage() {
                   className="
                     rounded-2xl
                     border
-                    border-primary/10
-                    bg-primary/[0.025]
+                    border-[#3E86A4]/10
+                    bg-[#3E86A4]/[0.025]
                     p-5
                   "
                 >
@@ -598,10 +1168,10 @@ export default function VendorApplyPage() {
                         items-center
                         justify-center
                         rounded-lg
-                        bg-primary-light/12
+                        bg-[#3E86A4]/[0.12]
                       "
                     >
-                      <LockKeyhole className="h-4 w-4 text-[primary]" />
+                      <LockKeyhole className="h-4 w-4 text-[#3E86A4]" />
                     </div>
 
                     <div>
@@ -629,8 +1199,16 @@ export default function VendorApplyPage() {
                   >
                     <input
                       type="password"
+                      value={password}
+                      onChange={(e) =>
+                        setPassword(
+                          e.target.value,
+                        )
+                      }
                       placeholder="Create password"
                       className={inputClass}
+                      autoComplete="new-password"
+                      disabled={submitting}
                     />
                   </FormField>
 
@@ -639,8 +1217,16 @@ export default function VendorApplyPage() {
                   >
                     <input
                       type="password"
+                      value={confirmPassword}
+                      onChange={(e) =>
+                        setConfirmPassword(
+                          e.target.value,
+                        )
+                      }
                       placeholder="Confirm password"
                       className={inputClass}
+                      autoComplete="new-password"
+                      disabled={submitting}
                     />
                   </FormField>
 
@@ -654,6 +1240,7 @@ export default function VendorApplyPage() {
 
                 <button
                   type="submit"
+                  disabled={submitting}
                   className="
                     group
                     flex
@@ -663,26 +1250,50 @@ export default function VendorApplyPage() {
                     justify-center
                     gap-3
                     rounded-xl
-                    bg-primary
+                    bg-[#3E86A4]
                     px-6
                     text-sm
                     font-black
                     text-white
                     transition
                     duration-300
-                    hover:bg-primary-dark
+                    hover:bg-[#1F7197]
+                    disabled:cursor-not-allowed
+                    disabled:opacity-60
                   "
                 >
-                  Submit Application
 
-                  <ArrowRight
-                    className="
-                      h-4
-                      w-4
-                      transition-transform
-                      group-hover:translate-x-1
-                    "
-                  />
+                  {submitting ? (
+                    <>
+                      <span
+                        className="
+                          h-4
+                          w-4
+                          animate-spin
+                          rounded-full
+                          border-2
+                          border-white/30
+                          border-t-white
+                        "
+                      />
+
+                      Submitting Application...
+                    </>
+                  ) : (
+                    <>
+                      Submit Application
+
+                      <ArrowRight
+                        className="
+                          h-4
+                          w-4
+                          transition-transform
+                          group-hover:translate-x-1
+                        "
+                      />
+                    </>
+                  )}
+
                 </button>
 
                 <div
@@ -754,7 +1365,7 @@ function EventDetail({
           bg-white/[0.04]
         "
       >
-        <Icon className="h-4 w-4 text-[primary]" />
+        <Icon className="h-4 w-4 text-[#3E86A4]" />
       </div>
 
       <p
@@ -820,11 +1431,11 @@ function FormSection({
             justify-center
             rounded-lg
             border
-            border-primary/15
-            bg-primary/[0.05]
+            border-[#3E86A4]/15
+            bg-[#3E86A4]/[0.05]
             text-[10px]
             font-black
-            text-[primary]
+            text-[#3E86A4]
           "
         >
           {number}
@@ -924,7 +1535,9 @@ const inputClass = `
   transition
   placeholder:text-white/20
   hover:border-white/[0.13]
-  focus:border-primary/50
+  focus:border-[#3E86A4]/50
   focus:ring-2
-  focus:ring-primary/5
+  focus:ring-[#3E86A4]/5
+  disabled:cursor-not-allowed
+  disabled:opacity-50
 `;

@@ -81,7 +81,6 @@ export interface EventPayload {
 
   coverImage?: string;
   featuredImage?: string;
-  bannerUrl?: string;
 
   /*
   |--------------------------------------------------------------------------
@@ -157,8 +156,6 @@ export interface Event {
   |--------------------------------------------------------------------------
   */
 
-  bannerUrl?: string;
-
   coverImage?: string;
 
   featuredImage?: string;
@@ -208,7 +205,7 @@ export interface Event {
 
   /*
   |--------------------------------------------------------------------------
-  | organizer
+  | Organizer
   |--------------------------------------------------------------------------
   */
 
@@ -426,4 +423,3 @@ export function archiveEvent(
     },
   );
 }
-

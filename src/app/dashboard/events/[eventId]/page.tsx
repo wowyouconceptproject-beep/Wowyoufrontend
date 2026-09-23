@@ -10,6 +10,7 @@ import Link from "next/link";
 
 import {
   useParams,
+  useRouter,
 } from "next/navigation";
 
 import DashboardStats from "@/components/dashboard/DashboardStats";
@@ -25,6 +26,8 @@ export default function EventPage() {
     useParams<{
       eventId: string;
     }>();
+
+  const router = useRouter();
 
   const eventId =
     params.eventId;
@@ -178,6 +181,22 @@ export default function EventPage() {
 
   /*
   |--------------------------------------------------------------------------
+  | Edit Event
+  |--------------------------------------------------------------------------
+  */
+
+  function handleEditEvent() {
+    if (!event?.id) {
+      return;
+    }
+
+    router.push(
+      `/dashboard/events/${event.id}/edit`
+    );
+  }
+
+  /*
+  |--------------------------------------------------------------------------
   | Initial Load + Live Dashboard Refresh
   |--------------------------------------------------------------------------
   |
@@ -310,7 +329,6 @@ export default function EventPage() {
           "
         >
           <div className="text-center">
-
             <div
               className="
                 mx-auto
@@ -333,7 +351,6 @@ export default function EventPage() {
             >
               Loading event command center...
             </p>
-
           </div>
         </div>
       </main>
@@ -496,14 +513,14 @@ export default function EventPage() {
     },
 
     {
-       title: "HeatMap and Sentient behaviour",
+      title: "HeatMap and Sentient behaviour",
 
-       description:
+      description:
         "Monitor event occupancy and capacity in real time.",
 
-       href: `/dashboard/events/${event.id}/capacity`,
+      href: `/dashboard/events/${event.id}/capacity`,
 
-        icon: "◉",
+      icon: "◉",
     },
   ];
 
@@ -523,7 +540,6 @@ export default function EventPage() {
         text-white
       "
     >
-
       {/* ==================================================
           BACKGROUND ATMOSPHERE
       ================================================== */}
@@ -554,7 +570,6 @@ export default function EventPage() {
           lg:py-10
         "
       >
-
         {/* ==================================================
             BREADCRUMB
         ================================================== */}
@@ -569,7 +584,6 @@ export default function EventPage() {
             text-white/35
           "
         >
-
           <Link
             href="/dashboard"
             className="
@@ -597,7 +611,6 @@ export default function EventPage() {
           >
             {event.title}
           </span>
-
         </div>
 
         {/* ==================================================
@@ -616,7 +629,6 @@ export default function EventPage() {
             lg:p-9
           "
         >
-
           <div
             className="
               pointer-events-none
@@ -643,13 +655,11 @@ export default function EventPage() {
               xl:justify-between
             "
           >
-
             <div
               className="
                 max-w-3xl
               "
             >
-
               {/* Status */}
 
               <div
@@ -661,7 +671,6 @@ export default function EventPage() {
                   gap-3
                 "
               >
-
                 <span
                   className="
                     inline-flex
@@ -679,7 +688,6 @@ export default function EventPage() {
                     text-primary
                   "
                 >
-
                   <span
                     className="
                       h-1.5
@@ -690,7 +698,6 @@ export default function EventPage() {
                   />
 
                   {event.status}
-
                 </span>
 
                 <span
@@ -701,7 +708,6 @@ export default function EventPage() {
                 >
                   Event Command Center
                 </span>
-
               </div>
 
               <h1
@@ -729,7 +735,6 @@ export default function EventPage() {
                   text-white/50
                 "
               >
-
                 <span>
                   {event.venue}
                 </span>
@@ -771,9 +776,7 @@ export default function EventPage() {
                   Capacity{" "}
                   {event.capacity}
                 </span>
-
               </div>
-
             </div>
 
             {/* Actions */}
@@ -785,7 +788,6 @@ export default function EventPage() {
                 gap-3
               "
             >
-
               {event.status ===
                 "DRAFT" && (
                 <button
@@ -809,6 +811,10 @@ export default function EventPage() {
               )}
 
               <button
+                type="button"
+                onClick={
+                  handleEditEvent
+                }
                 className="
                   h-12
                   rounded-xl
@@ -836,11 +842,8 @@ export default function EventPage() {
                     event.description,
                 }}
               />
-
             </div>
-
           </div>
-
         </section>
 
         {/* ==================================================
@@ -852,7 +855,6 @@ export default function EventPage() {
             mt-10
           "
         >
-
           <div
             className="
               mb-5
@@ -861,9 +863,7 @@ export default function EventPage() {
               justify-between
             "
           >
-
             <div>
-
               <p
                 className="
                   text-xs
@@ -886,9 +886,7 @@ export default function EventPage() {
               >
                 Event Overview
               </h2>
-
             </div>
-
           </div>
 
           <DashboardStats
@@ -896,27 +894,22 @@ export default function EventPage() {
               event.stats
                 ?.ticketSold ?? 0
             }
-
             checkedIn={
               event.stats
                 ?.checkedIn ?? 0
             }
-
             revenue={
               event.stats
                 ?.revenue ?? 0
             }
-
             currency={
               event.currency
             }
-
             onlineStaff={
               event.stats
                 ?.onlineStaff ?? 0
             }
           />
-
         </section>
 
         {/* ==================================================
@@ -928,13 +921,11 @@ export default function EventPage() {
             mt-12
           "
         >
-
           <div
             className="
               mb-6
             "
           >
-
             <p
               className="
                 text-xs
@@ -971,7 +962,6 @@ export default function EventPage() {
               part of your event from
               one place.
             </p>
-
           </div>
 
           <div
@@ -982,7 +972,6 @@ export default function EventPage() {
               xl:grid-cols-3
             "
           >
-
             {managementItems.map(
               (item) => (
                 <Link
@@ -1008,7 +997,6 @@ export default function EventPage() {
                     hover:bg-surface
                   "
                 >
-
                   <div
                     className="
                       flex
@@ -1017,7 +1005,6 @@ export default function EventPage() {
                       gap-5
                     "
                   >
-
                     <div
                       className="
                         flex
@@ -1049,7 +1036,6 @@ export default function EventPage() {
                     >
                       →
                     </span>
-
                   </div>
 
                   <h3
@@ -1076,13 +1062,10 @@ export default function EventPage() {
                       item.description
                     }
                   </p>
-
                 </Link>
               )
             )}
-
           </div>
-
         </section>
 
         {/* ==================================================
@@ -1097,7 +1080,6 @@ export default function EventPage() {
             xl:grid-cols-[1.4fr_0.6fr]
           "
         >
-
           {/* Description */}
 
           <div
@@ -1109,7 +1091,6 @@ export default function EventPage() {
               p-7
             "
           >
-
             <p
               className="
                 text-xs
@@ -1145,7 +1126,6 @@ export default function EventPage() {
               {event.description ||
                 "No event description has been added."}
             </p>
-
           </div>
 
           {/* Event Details */}
@@ -1159,7 +1139,6 @@ export default function EventPage() {
               p-7
             "
           >
-
             <p
               className="
                 text-xs
@@ -1179,7 +1158,6 @@ export default function EventPage() {
                 divide-white/[0.06]
               "
             >
-
               <DetailRow
                 label="Venue"
                 value={
@@ -1210,11 +1188,8 @@ export default function EventPage() {
                   "—"
                 }
               />
-
             </div>
-
           </div>
-
         </section>
 
         {/* ==================================================
@@ -1229,7 +1204,6 @@ export default function EventPage() {
             md:grid-cols-2
           "
         >
-
           <DateCard
             eyebrow="EVENT START"
             date={startDate}
@@ -1239,13 +1213,10 @@ export default function EventPage() {
             eyebrow="EVENT END"
             date={endDate}
           />
-
         </section>
 
         <div className="h-12" />
-
       </div>
-
     </main>
   );
 }
@@ -1273,7 +1244,6 @@ function DetailRow({
         last:pb-0
       "
     >
-
       <span
         className="
           text-sm
@@ -1293,7 +1263,6 @@ function DetailRow({
       >
         {value}
       </span>
-
     </div>
   );
 }
@@ -1319,7 +1288,6 @@ function DateCard({
         p-6
       "
     >
-
       <p
         className="
           text-[10px]
@@ -1371,7 +1339,6 @@ function DateCard({
           }
         )}
       </p>
-
     </div>
   );
 }

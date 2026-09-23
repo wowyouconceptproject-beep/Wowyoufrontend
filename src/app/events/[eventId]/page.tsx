@@ -7,6 +7,7 @@ import {
 
 import {
   useParams,
+  useRouter,
 } from "next/navigation";
 
 import {
@@ -21,6 +22,8 @@ export default function EventPage() {
     useParams<{
       eventId: string;
     }>();
+
+  const router = useRouter();
 
   const [event, setEvent] =
     useState<Event | null>(null);
@@ -88,6 +91,22 @@ export default function EventPage() {
 
   function closeCheckout() {
     setCheckoutOpen(false);
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Vendor Application
+  |--------------------------------------------------------------------------
+  */
+
+  function openVendorApplication() {
+    if (!event?.id) {
+      return;
+    }
+
+    router.push(
+      `/vendor/apply/${event.id}`,
+    );
   }
 
   /*
@@ -280,7 +299,8 @@ export default function EventPage() {
               {event.vendorApplicationsOpen && (
                 <button
                   type="button"
-                  className="rounded-full border border-white/20 bg-white/[0.06] px-8 py-4 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/10"
+                  onClick={openVendorApplication}
+                  className="rounded-full border border-white/20 bg-white/[0.06] px-8 py-4 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20"
                 >
                   Apply as Vendor
                 </button>
@@ -438,7 +458,8 @@ export default function EventPage() {
                   {event.vendorApplicationsOpen && (
                     <button
                       type="button"
-                      className="mt-3 w-full rounded-full border border-white/15 px-6 py-4 text-sm font-semibold text-white/80 transition hover:bg-white/[0.05]"
+                      onClick={openVendorApplication}
+                      className="mt-3 w-full rounded-full border border-white/15 px-6 py-4 text-sm font-semibold text-white/80 transition hover:bg-white/[0.05] focus:outline-none focus:ring-2 focus:ring-white/20"
                     >
                       Apply as Vendor
                     </button>
@@ -498,7 +519,8 @@ export default function EventPage() {
 
                 <button
                   type="button"
-                  className="shrink-0 rounded-full border border-primary/30 bg-primary px-8 py-4 text-sm font-bold text-white transition hover:bg-primary-dark"
+                  onClick={openVendorApplication}
+                  className="shrink-0 rounded-full border border-primary/30 bg-primary px-8 py-4 text-sm font-bold text-white transition hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary/50"
                 >
                   Apply as Vendor
                 </button>

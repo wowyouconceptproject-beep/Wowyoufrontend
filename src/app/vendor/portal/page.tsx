@@ -23,15 +23,12 @@ import {
 
 import {
   getMyApplications,
+  type VendorApplication,
 } from "@/services/vendor";
 
 import {
-  Event,
+  type Event,
 } from "@/services/event";
-
-import {
-  VendorApplication,
-} from "@/services/vendor";
 
 import {
   useRealtime,
@@ -76,18 +73,16 @@ export default function VendorPortalPage() {
       ]);
 
       setEvents(
-        discovery.trending ??
-          [],
+        discovery.trending ?? []
       );
 
       setApplications(
-        mine.applications ??
-          [],
+        mine.applications ?? []
       );
     } catch (error) {
       console.error(
         "Unable to load vendor portal:",
-        error,
+        error
       );
     } finally {
       setLoading(false);
@@ -102,8 +97,7 @@ export default function VendorPortalPage() {
 
   useRealtime({
     onVendorApplicationCreated: (
-      application:
-        VendorApplication,
+      application: VendorApplication,
     ) => {
       setApplications(
         (previous) => {
@@ -127,8 +121,7 @@ export default function VendorPortalPage() {
     },
 
     onVendorApplicationUpdated: (
-      application:
-        VendorApplication,
+      application: VendorApplication,
     ) => {
       setApplications(
         (previous) =>
@@ -152,11 +145,8 @@ export default function VendorPortalPage() {
   if (loading) {
     return (
       <main className="min-h-screen bg-background text-white">
-
         <section className="mx-auto max-w-7xl px-5 py-14 md:px-8">
-
           <div className="animate-pulse">
-
             <div className="h-3 w-28 rounded-full bg-white/[0.05]" />
 
             <div className="mt-5 h-12 w-72 rounded-xl bg-white/[0.05]" />
@@ -164,7 +154,6 @@ export default function VendorPortalPage() {
             <div className="mt-5 h-4 w-full max-w-xl rounded-full bg-white/[0.04]" />
 
             <div className="mt-12 grid gap-4 md:grid-cols-3">
-
               {[1, 2, 3].map(
                 (item) => (
                   <div
@@ -173,11 +162,9 @@ export default function VendorPortalPage() {
                   />
                 ),
               )}
-
             </div>
 
             <div className="mt-20 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-
               {[1, 2, 3].map(
                 (item) => (
                   <div
@@ -186,13 +173,9 @@ export default function VendorPortalPage() {
                   />
                 ),
               )}
-
             </div>
-
           </div>
-
         </section>
-
       </main>
     );
   }
@@ -233,7 +216,9 @@ export default function VendorPortalPage() {
   return (
     <main className="min-h-screen bg-background text-white">
 
-      {/* Header */}
+      {/* ================================================================
+          HEADER
+      ================================================================ */}
 
       <section
         className="
@@ -244,7 +229,6 @@ export default function VendorPortalPage() {
           to-[#050505]
         "
       >
-
         <div
           className="
             mx-auto
@@ -257,7 +241,6 @@ export default function VendorPortalPage() {
             md:pt-20
           "
         >
-
           <div
             className="
               flex
@@ -268,11 +251,8 @@ export default function VendorPortalPage() {
               lg:justify-between
             "
           >
-
             <div>
-
               <div className="flex items-center gap-3">
-
                 <span className="h-px w-8 bg-primary" />
 
                 <p
@@ -286,7 +266,6 @@ export default function VendorPortalPage() {
                 >
                   Vendor Portal
                 </p>
-
               </div>
 
               <h1
@@ -321,7 +300,6 @@ export default function VendorPortalPage() {
                 manage approvals and discover events
                 looking for businesses like yours.
               </p>
-
             </div>
 
             <Link
@@ -358,7 +336,6 @@ export default function VendorPortalPage() {
                 "
               />
             </Link>
-
           </div>
 
           {/* Stats */}
@@ -375,7 +352,6 @@ export default function VendorPortalPage() {
               md:grid-cols-3
             "
           >
-
             <StatCard
               label="Pending Review"
               value={pending}
@@ -398,14 +374,13 @@ export default function VendorPortalPage() {
               description="Applications declined"
               divider
             />
-
           </div>
-
         </div>
-
       </section>
 
-      {/* Marketplace */}
+      {/* ================================================================
+          MARKETPLACE
+      ================================================================ */}
 
       <section
         className="
@@ -417,7 +392,6 @@ export default function VendorPortalPage() {
           md:py-20
         "
       >
-
         {/* Section Header */}
 
         <div
@@ -433,9 +407,7 @@ export default function VendorPortalPage() {
             md:justify-between
           "
         >
-
           <div>
-
             <p
               className="
                 text-[10px]
@@ -463,7 +435,6 @@ export default function VendorPortalPage() {
             <p className="mt-3 text-sm text-white/35">
               Find the right event for your business.
             </p>
-
           </div>
 
           <div
@@ -482,13 +453,11 @@ export default function VendorPortalPage() {
               ? "opportunity"
               : "opportunities"}
           </div>
-
         </div>
 
         {/* Empty Marketplace */}
 
         {events.length === 0 ? (
-
           <div
             className="
               mt-8
@@ -506,7 +475,6 @@ export default function VendorPortalPage() {
               text-center
             "
           >
-
             <div
               className="
                 flex
@@ -539,11 +507,8 @@ export default function VendorPortalPage() {
               New events accepting vendor applications
               will appear here.
             </p>
-
           </div>
-
         ) : (
-
           <div
             className="
               mt-8
@@ -553,10 +518,8 @@ export default function VendorPortalPage() {
               xl:grid-cols-3
             "
           >
-
             {events.map(
               (event) => (
-
                 <article
                   key={event.id}
                   className="
@@ -572,20 +535,16 @@ export default function VendorPortalPage() {
                     hover:border-white/[0.12]
                   "
                 >
-
                   {/* Image */}
 
                   <div className="relative h-64 overflow-hidden">
-
                     <img
                       src={
                         event.coverImage ??
-                        event.bannerUrl ??
+                        event.featuredImage ??
                         "/images/placeholder-event.jpg"
                       }
-                      alt={
-                        event.title
-                      }
+                      alt={event.title}
                       className="
                         h-full
                         w-full
@@ -633,13 +592,11 @@ export default function VendorPortalPage() {
                         Accepting Vendors
                       </span>
                     </div>
-
                   </div>
 
                   {/* Information */}
 
                   <div className="p-6">
-
                     <h3
                       className="
                         line-clamp-2
@@ -653,35 +610,26 @@ export default function VendorPortalPage() {
                     </h3>
 
                     <div className="mt-5 space-y-3">
-
                       <EventMeta
-                        icon={
-                          CalendarDays
-                        }
+                        icon={CalendarDays}
                       >
                         {new Date(
                           event.startDate,
                         ).toLocaleDateString(
                           "en-US",
                           {
-                            month:
-                              "long",
-                            day:
-                              "numeric",
-                            year:
-                              "numeric",
+                            month: "long",
+                            day: "numeric",
+                            year: "numeric",
                           },
                         )}
                       </EventMeta>
 
                       <EventMeta
-                        icon={
-                          MapPin
-                        }
+                        icon={MapPin}
                       >
                         {event.venue}
                       </EventMeta>
-
                     </div>
 
                     <div
@@ -692,7 +640,6 @@ export default function VendorPortalPage() {
                         pt-5
                       "
                     >
-
                       <Link
                         href={`/vendor/apply/${event.id}`}
                         className="
@@ -723,22 +670,14 @@ export default function VendorPortalPage() {
                           "
                         />
                       </Link>
-
                     </div>
-
                   </div>
-
                 </article>
-
               ),
             )}
-
           </div>
-
         )}
-
       </section>
-
     </main>
   );
 }
@@ -775,11 +714,8 @@ function StatCard({
         }
       `}
     >
-
       <div className="flex items-start justify-between">
-
         <div>
-
           <p
             className="
               text-[10px]
@@ -802,7 +738,6 @@ function StatCard({
           >
             {value}
           </p>
-
         </div>
 
         <div
@@ -820,13 +755,11 @@ function StatCard({
         >
           <Icon className="h-4 w-4 text-primary" />
         </div>
-
       </div>
 
       <p className="mt-5 text-xs text-white/25">
         {description}
       </p>
-
     </div>
   );
 }
