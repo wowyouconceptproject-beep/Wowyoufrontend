@@ -513,7 +513,7 @@ export default function EventPage() {
     },
 
     {
-      title: "HeatMap and Sentient behaviour",
+      title: "HeatMap and Sentiment behaviour",
 
       description:
         "Monitor event occupancy and capacity in real time.",
