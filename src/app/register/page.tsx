@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+
 import { useRouter } from "next/navigation";
+
 import { Eye, EyeOff } from "lucide-react";
 
 import { registerUser } from "@/services/auth";
@@ -17,7 +19,9 @@ export default function RegisterPage() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+
   const [loading, setLoading] = useState(false);
+
   const [error, setError] = useState("");
 
   async function submit() {
@@ -41,8 +45,10 @@ export default function RegisterPage() {
       |--------------------------------------------------------------------------
       | Successful Registration
       |--------------------------------------------------------------------------
+      |
       | The backend should return both token and user.
       | We explicitly check both so TypeScript knows they exist.
+      |
       */
 
       if (data.token && data.user) {
@@ -144,15 +150,19 @@ export default function RegisterPage() {
                 w-14
                 items-center
                 justify-center
+                overflow-hidden
                 rounded-2xl
                 border
                 border-primary/20
                 bg-primary-light/12
+                p-2
               "
             >
-              <span className="text-xl font-black text-primary">
-                W
-              </span>
+              <img
+                src="/branding/logo.png"
+                alt="WowYou"
+                className="h-full w-full object-contain"
+              />
             </div>
 
             <div
@@ -561,7 +571,6 @@ export default function RegisterPage() {
               Create events. Build connections. Shape experiences.
             </p>
           </div>
-
         </div>
       </div>
     </main>

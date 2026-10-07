@@ -9,14 +9,23 @@ import {
 } from "@/services/purchase";
 
 import {
+  getCurrentUser,
   registerUser,
   loginUser,
+  verifyLoginOtp,
+  resendLoginOtp,
 } from "@/services/auth";
 
 interface PublicTicketCheckoutProps {
   event: any;
   onClose: () => void;
 }
+
+/*
+|--------------------------------------------------------------------------
+| Public Ticket Checkout
+|--------------------------------------------------------------------------
+*/
 
 export default function PublicTicketCheckout({
   event,
@@ -80,6 +89,40 @@ export default function PublicTicketCheckout({
     password,
     setPassword,
   ] = useState("");
+
+  /*
+  |--------------------------------------------------------------------------
+  | Login OTP State
+  |--------------------------------------------------------------------------
+  |
+  | Login is a two-step authentication flow:
+  |
+  | 1. Email + password
+  | 2. Email OTP
+  |
+  | The JWT is only stored after OTP verification.
+  |
+  */
+
+  const [
+    loginOtpStep,
+    setLoginOtpStep,
+  ] = useState(false);
+
+  const [
+    loginOtp,
+    setLoginOtp,
+  ] = useState("");
+
+  const [
+    otpEmail,
+    setOtpEmail,
+  ] = useState("");
+
+  const [
+    otpLoading,
+    setOtpLoading,
+  ] = useState(false);
 
   /*
   |--------------------------------------------------------------------------
@@ -331,10 +374,33 @@ export default function PublicTicketCheckout({
 
     /*
     |--------------------------------------------------------------------------
+    | If Login OTP Screen Is Active
+    |--------------------------------------------------------------------------
+    |
+    | Do not restart password authentication.
+    |
+    | The user is already at step two.
+    |
+    */
+
+    if (
+      authMode === "login" &&
+      loginOtpStep
+    ) {
+      await verifyOtpAndContinue();
+      return;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
     | Check Existing Authentication
     |--------------------------------------------------------------------------
     |
-    | Existing attendees do not need to authenticate again.
+    | An existing WowYou session can belong to an organizer, vendor,
+    | attendee, or another authenticated account.
+    |
+    | We MUST verify the actual authenticated role before using that
+    | session for ticket checkout.
     |
     */
 
@@ -347,9 +413,75 @@ export default function PublicTicketCheckout({
         : null;
 
     if (existingToken) {
-      await completePurchase();
+      setLoading(true);
 
-      return;
+      try {
+        const currentUser =
+          await getCurrentUser();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Existing Attendee
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+          currentUser.success &&
+          currentUser.user?.role
+            ?.toUpperCase() ===
+            "ATTENDEE"
+        ) {
+          await completePurchase();
+
+          return;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Existing Non-Attendee
+        |--------------------------------------------------------------------------
+        |
+        | IMPORTANT:
+        |
+        | Do NOT remove the existing token.
+        |
+        | An organizer may simply be browsing a public event while logged
+        | into the organizer platform. Logging them out here would destroy
+        | their organizer session.
+        |
+        | Instead, require attendee authentication for this purchase.
+        |
+        */
+
+        setError(
+          "You're currently signed in with a non-attendee account. Please sign in with an attendee account to purchase tickets.",
+        );
+
+        setAuthMode("login");
+
+        return;
+      } catch (err) {
+        /*
+        |--------------------------------------------------------------------------
+        | Invalid / Expired Token
+        |--------------------------------------------------------------------------
+        |
+        | If /auth/me fails, remove only the invalid authentication token
+        | and allow normal attendee authentication to continue.
+        |
+        */
+
+        console.warn(
+          "Unable to verify existing WowYou session:",
+          err,
+        );
+
+        localStorage.removeItem(
+          "token",
+        );
+      } finally {
+        setLoading(false);
+      }
     }
 
     /*
@@ -397,6 +529,12 @@ export default function PublicTicketCheckout({
               "ATTENDEE",
           });
 
+        /*
+        |--------------------------------------------------------------------------
+        | Registration Response
+        |--------------------------------------------------------------------------
+        */
+
         if (
           !result.success ||
           !result.token
@@ -409,7 +547,27 @@ export default function PublicTicketCheckout({
 
         /*
         |--------------------------------------------------------------------------
-        | Store Existing WowYou JWT
+        | Verify Returned Role
+        |--------------------------------------------------------------------------
+        |
+        | Registration was explicitly requested as ATTENDEE.
+        | Still verify the returned user before storing the session.
+        |
+        */
+
+        if (
+          result.user?.role
+            ?.toUpperCase() !==
+          "ATTENDEE"
+        ) {
+          throw new Error(
+            "Unable to create an attendee account.",
+          );
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Store Attendee JWT
         |--------------------------------------------------------------------------
         */
 
@@ -417,6 +575,16 @@ export default function PublicTicketCheckout({
           "token",
           result.token,
         );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Continue Purchase
+        |--------------------------------------------------------------------------
+        */
+
+        await completePurchase();
+
+        return;
       }
 
       /*
@@ -434,9 +602,28 @@ export default function PublicTicketCheckout({
             password,
           );
 
+        /*
+        |--------------------------------------------------------------------------
+        | Login Response
+        |--------------------------------------------------------------------------
+        |
+        | The backend deliberately does NOT return a JWT here.
+        |
+        | It returns:
+        |
+        | {
+        |   success: true,
+        |   requiresOtp: true,
+        |   email: "...",
+        |   message: "..."
+        | }
+        |
+        | The JWT is issued only after OTP verification.
+        |
+        */
+
         if (
-          !result.success ||
-          !result.token
+          !result.success
         ) {
           throw new Error(
             result.message ??
@@ -446,26 +633,65 @@ export default function PublicTicketCheckout({
 
         /*
         |--------------------------------------------------------------------------
-        | Store Existing WowYou JWT
+        | OTP Required
         |--------------------------------------------------------------------------
         */
+
+        if (
+          result.requiresOtp
+        ) {
+          setOtpEmail(
+            result.email ??
+              normalizedEmail,
+          );
+
+          setLoginOtp("");
+
+          setLoginOtpStep(true);
+
+          setError(null);
+
+          return;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Defensive Compatibility Check
+        |--------------------------------------------------------------------------
+        |
+        | If an older backend ever returns a token directly, still validate
+        | the attendee role before storing it.
+        |
+        */
+
+        if (
+          !result.token
+        ) {
+          throw new Error(
+            result.message ??
+              "Additional login verification is required before checkout.",
+          );
+        }
+
+        if (
+          result.user?.role
+            ?.toUpperCase() !==
+          "ATTENDEE"
+        ) {
+          throw new Error(
+            "Please use an attendee account to purchase event tickets.",
+          );
+        }
 
         localStorage.setItem(
           "token",
           result.token,
         );
+
+        await completePurchase();
+
+        return;
       }
-
-      /*
-      |--------------------------------------------------------------------------
-      | Continue Automatically
-      |--------------------------------------------------------------------------
-      |
-      | The attendee does not have to repeat the checkout.
-      |
-      */
-
-      await completePurchase();
     } catch (err: any) {
       setError(
         err?.message ??
@@ -474,6 +700,201 @@ export default function PublicTicketCheckout({
     } finally {
       setLoading(false);
     }
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Verify Login OTP And Continue
+  |--------------------------------------------------------------------------
+  */
+
+  async function verifyOtpAndContinue() {
+    setError(null);
+
+    const normalizedEmail =
+      (
+        otpEmail ||
+        email
+      )
+        .trim()
+        .toLowerCase();
+
+    const normalizedOtp =
+      loginOtp
+        .replace(/\D/g, "")
+        .trim();
+
+    if (!normalizedEmail) {
+      setError(
+        "Your login email is missing. Please start the login process again.",
+      );
+
+      setLoginOtpStep(false);
+
+      return;
+    }
+
+    if (
+      normalizedOtp.length !== 6
+    ) {
+      setError(
+        "Enter the 6-digit verification code sent to your email.",
+      );
+
+      return;
+    }
+
+    setOtpLoading(true);
+
+    setLoading(true);
+
+    try {
+      const result =
+        await verifyLoginOtp({
+          email:
+            normalizedEmail,
+          otp:
+            normalizedOtp,
+        });
+
+      if (
+        !result.success ||
+        !result.token ||
+        !result.user
+      ) {
+        throw new Error(
+          result.message ??
+            "Invalid or expired verification code.",
+        );
+      }
+
+      /*
+      |--------------------------------------------------------------------------
+      | Verify Attendee Role
+      |--------------------------------------------------------------------------
+      */
+
+      if (
+        result.user.role
+          ?.toUpperCase() !==
+        "ATTENDEE"
+      ) {
+        throw new Error(
+          "Please use an attendee account to purchase event tickets.",
+        );
+      }
+
+      /*
+      |--------------------------------------------------------------------------
+      | Store JWT Only After OTP Verification
+      |--------------------------------------------------------------------------
+      */
+
+      localStorage.setItem(
+        "token",
+        result.token,
+      );
+
+      /*
+      |--------------------------------------------------------------------------
+      | Clear OTP State
+      |--------------------------------------------------------------------------
+      */
+
+      setLoginOtpStep(false);
+
+      setLoginOtp("");
+
+      setOtpEmail(
+        normalizedEmail,
+      );
+
+      /*
+      |--------------------------------------------------------------------------
+      | Complete Purchase
+      |--------------------------------------------------------------------------
+      */
+
+      await completePurchase();
+    } catch (err: any) {
+      setError(
+        err?.message ??
+          "Unable to verify the login code.",
+      );
+    } finally {
+      setOtpLoading(false);
+
+      setLoading(false);
+    }
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Resend Login OTP
+  |--------------------------------------------------------------------------
+  */
+
+  async function handleResendOtp() {
+    setError(null);
+
+    const normalizedEmail =
+      (
+        otpEmail ||
+        email
+      )
+        .trim()
+        .toLowerCase();
+
+    if (!normalizedEmail) {
+      setError(
+        "Your login email is missing. Please start the login process again.",
+      );
+
+      return;
+    }
+
+    setOtpLoading(true);
+
+    try {
+      const result =
+        await resendLoginOtp(
+          normalizedEmail,
+        );
+
+      if (
+        !result.success
+      ) {
+        throw new Error(
+          result.message ??
+            "Unable to resend the verification code.",
+        );
+      }
+
+      setLoginOtp("");
+
+      setError(null);
+    } catch (err: any) {
+      setError(
+        err?.message ??
+          "Unable to resend the verification code.",
+      );
+    } finally {
+      setOtpLoading(false);
+    }
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Back To Password Login
+  |--------------------------------------------------------------------------
+  */
+
+  function backToLogin() {
+    setLoginOtpStep(false);
+
+    setLoginOtp("");
+
+    setError(null);
   }
 
   /*
@@ -491,11 +912,80 @@ export default function PublicTicketCheckout({
       return;
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Final Authentication Check
+    |--------------------------------------------------------------------------
+    |
+    | We verify the actual authenticated user one more time immediately
+    | before creating the purchase.
+    |
+    | This prevents a non-attendee session from ever being intentionally
+    | submitted to the purchase endpoint by this checkout.
+    |
+    */
+
+    const token =
+      typeof window !==
+      "undefined"
+        ? localStorage.getItem(
+            "token",
+          )
+        : null;
+
+    if (!token) {
+      setError(
+        "Please sign in with an attendee account to continue.",
+      );
+
+      return;
+    }
+
     setLoading(true);
 
     setError(null);
 
     try {
+      /*
+      |--------------------------------------------------------------------------
+      | Verify Current User
+      |--------------------------------------------------------------------------
+      */
+
+      const currentUser =
+        await getCurrentUser();
+
+      if (
+        !currentUser.success ||
+        !currentUser.user
+      ) {
+        throw new Error(
+          "Unable to verify your WowYou account.",
+        );
+      }
+
+      if (
+        currentUser.user.role
+          ?.toUpperCase() !==
+        "ATTENDEE"
+      ) {
+        throw new Error(
+          "Please use an attendee account to purchase event tickets.",
+        );
+      }
+
+      /*
+      |--------------------------------------------------------------------------
+      | Create Purchase
+      |--------------------------------------------------------------------------
+      |
+      | This is the web attendee checkout.
+      |
+      | The backend remains responsible for validating the authenticated
+      | account and determining the purchaser email.
+      |
+      */
+
       const result =
         await createPurchase({
           ticketTypeId:
@@ -503,9 +993,6 @@ export default function PublicTicketCheckout({
 
           quantity,
 
-          // This is the web attendee checkout.
-          // Do not allow the shared purchase service
-          // to fall back to the mobile channel.
           channel: "web",
         });
 
@@ -522,9 +1009,6 @@ export default function PublicTicketCheckout({
       |--------------------------------------------------------------------------
       | Free Ticket
       |--------------------------------------------------------------------------
-      |
-      | Backend has already created the purchase and issued the pass.
-      |
       */
 
       if (
@@ -542,9 +1026,6 @@ export default function PublicTicketCheckout({
       |--------------------------------------------------------------------------
       | Paid Ticket
       |--------------------------------------------------------------------------
-      |
-      | Stripe owns the payment screen.
-      |
       */
 
       if (
@@ -814,120 +1295,228 @@ export default function PublicTicketCheckout({
             </p>
           </div>
 
-          {/* Auth Toggle */}
-
-          <div className="mb-5 grid grid-cols-2 rounded-full border border-white/10 bg-white/[0.03] p-1">
-            <button
-              type="button"
-              onClick={() => {
-                setAuthMode(
-                  "register",
-                );
-
-                setError(null);
-              }}
-              className={`rounded-full px-4 py-2.5 text-xs font-semibold transition ${
-                authMode ===
-                "register"
-                  ? "bg-primary text-white"
-                  : "text-white/40 hover:text-white"
-              }`}
-            >
-              New attendee
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setAuthMode(
-                  "login",
-                );
-
-                setError(null);
-              }}
-              className={`rounded-full px-4 py-2.5 text-xs font-semibold transition ${
-                authMode ===
-                "login"
-                  ? "bg-primary text-white"
-                  : "text-white/40 hover:text-white"
-              }`}
-            >
-              Existing account
-            </button>
-          </div>
-
-          {/* Registration */}
+          {/* ------------------------------------------------ */}
+          {/* OTP SCREEN */}
+          {/* ------------------------------------------------ */}
 
           {authMode ===
-            "register" && (
-            <div className="grid grid-cols-2 gap-3">
-              <Input
-                label="First name"
-                value={
-                  firstName
-                }
-                onChange={
-                  setFirstName
-                }
-                placeholder="First name"
-                autoComplete="given-name"
-              />
+            "login" &&
+            loginOtpStep ? (
+            <div className="space-y-5">
+              <div>
+                <p className="text-sm font-semibold text-white">
+                  Verify your login
+                </p>
+
+                <p className="mt-2 text-sm leading-6 text-white/40">
+                  We sent a 6-digit
+                  verification code to
+                  <span className="ml-1 text-white/70">
+                    {otpEmail ||
+                      email}
+                  </span>
+                  .
+                </p>
+              </div>
 
               <Input
-                label="Last name"
-                value={
-                  lastName
+                label="Verification code"
+                value={loginOtp}
+                onChange={(value) =>
+                  setLoginOtp(
+                    value
+                      .replace(
+                        /\D/g,
+                        "",
+                      )
+                      .slice(
+                        0,
+                        6,
+                      ),
+                  )
                 }
-                onChange={
-                  setLastName
-                }
-                placeholder="Last name"
-                autoComplete="family-name"
+                placeholder="000000"
+                type="text"
+                autoComplete="one-time-code"
               />
+
+              <button
+                type="button"
+                onClick={
+                  verifyOtpAndContinue
+                }
+                disabled={
+                  loading ||
+                  otpLoading ||
+                  loginOtp.length !==
+                    6
+                }
+                className="w-full rounded-full bg-primary px-6 py-3.5 text-sm font-bold text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {otpLoading ||
+                loading
+                  ? "Verifying..."
+                  : "Verify & Continue"}
+              </button>
+
+              <div className="flex items-center justify-between gap-4">
+                <button
+                  type="button"
+                  onClick={
+                    backToLogin
+                  }
+                  disabled={
+                    otpLoading
+                  }
+                  className="text-xs font-semibold text-white/40 transition hover:text-white disabled:opacity-40"
+                >
+                  Back to login
+                </button>
+
+                <button
+                  type="button"
+                  onClick={
+                    handleResendOtp
+                  }
+                  disabled={
+                    otpLoading
+                  }
+                  className="text-xs font-semibold text-primary transition hover:text-white disabled:opacity-40"
+                >
+                  {otpLoading
+                    ? "Sending..."
+                    : "Resend code"}
+                </button>
+              </div>
             </div>
+          ) : (
+            <>
+              {/* Auth Toggle */}
+
+              <div className="mb-5 grid grid-cols-2 rounded-full border border-white/10 bg-white/[0.03] p-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthMode(
+                      "register",
+                    );
+
+                    setLoginOtpStep(
+                      false,
+                    );
+
+                    setError(null);
+                  }}
+                  className={`rounded-full px-4 py-2.5 text-xs font-semibold transition ${
+                    authMode ===
+                    "register"
+                      ? "bg-primary text-white"
+                      : "text-white/40 hover:text-white"
+                  }`}
+                >
+                  New attendee
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthMode(
+                      "login",
+                    );
+
+                    setLoginOtpStep(
+                      false,
+                    );
+
+                    setError(null);
+                  }}
+                  className={`rounded-full px-4 py-2.5 text-xs font-semibold transition ${
+                    authMode ===
+                    "login"
+                      ? "bg-primary text-white"
+                      : "text-white/40 hover:text-white"
+                  }`}
+                >
+                  Existing account
+                </button>
+              </div>
+
+              {/* Registration */}
+
+              {authMode ===
+                "register" && (
+                <div className="grid grid-cols-2 gap-3">
+                  <Input
+                    label="First name"
+                    value={
+                      firstName
+                    }
+                    onChange={
+                      setFirstName
+                    }
+                    placeholder="First name"
+                    autoComplete="given-name"
+                  />
+
+                  <Input
+                    label="Last name"
+                    value={
+                      lastName
+                    }
+                    onChange={
+                      setLastName
+                    }
+                    placeholder="Last name"
+                    autoComplete="family-name"
+                  />
+                </div>
+              )}
+
+              {/* Email */}
+
+              <div
+                className={
+                  authMode ===
+                  "register"
+                    ? "mt-3"
+                    : ""
+                }
+              >
+                <Input
+                  label="Email"
+                  value={email}
+                  onChange={
+                    setEmail
+                  }
+                  placeholder="you@example.com"
+                  type="email"
+                  autoComplete="email"
+                />
+              </div>
+
+              {/* Password */}
+
+              <div className="mt-3">
+                <Input
+                  label="Password"
+                  value={
+                    password
+                  }
+                  onChange={
+                    setPassword
+                  }
+                  placeholder="Password"
+                  type="password"
+                  autoComplete={
+                    authMode ===
+                    "register"
+                      ? "new-password"
+                      : "current-password"
+                  }
+                />
+              </div>
+            </>
           )}
-
-          {/* Email */}
-
-          <div
-            className={
-              authMode ===
-              "register"
-                ? "mt-3"
-                : ""
-            }
-          >
-            <Input
-              label="Email"
-              value={email}
-              onChange={
-                setEmail
-              }
-              placeholder="you@example.com"
-              type="email"
-              autoComplete="email"
-            />
-          </div>
-
-          {/* Password */}
-
-          <div className="mt-3">
-            <Input
-              label="Password"
-              value={password}
-              onChange={
-                setPassword
-              }
-              placeholder="Password"
-              type="password"
-              autoComplete={
-                authMode ===
-                "register"
-                  ? "new-password"
-                  : "current-password"
-              }
-            />
-          </div>
         </div>
 
         {/* ------------------------------------------------ */}
@@ -974,14 +1563,20 @@ export default function PublicTicketCheckout({
               }
               disabled={
                 loading ||
+                otpLoading ||
                 availableQuantity <=
                   0
               }
               className="mt-5 w-full rounded-full bg-primary px-6 py-4 text-sm font-bold text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {loading
-                ? "Preparing your ticket..."
-                : "Continue to Checkout"}
+              {loginOtpStep
+                ? otpLoading ||
+                  loading
+                  ? "Verifying..."
+                  : "Verify & Continue"
+                : loading
+                  ? "Preparing your ticket..."
+                  : "Continue to Checkout"}
             </button>
 
             <p className="mt-4 text-center text-[11px] leading-5 text-white/25">

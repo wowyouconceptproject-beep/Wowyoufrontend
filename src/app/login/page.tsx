@@ -175,9 +175,7 @@ export default function LoginPage() {
         );
 
         setOtp("");
-
         setResendCountdown(0);
-
         setSuccessMessage("");
 
         return;
@@ -197,11 +195,8 @@ export default function LoginPage() {
         setStep("otp");
 
         setOtp("");
-
         setError("");
-
         setSuccessMessage("");
-
         setResendCountdown(60);
 
         return;
@@ -322,7 +317,6 @@ export default function LoginPage() {
       );
 
       setSuccessMessage("");
-
       return;
     }
 
@@ -418,7 +412,6 @@ export default function LoginPage() {
       }
 
       setOtp("");
-
       setResendCountdown(60);
 
       setSuccessMessage(
@@ -448,13 +441,9 @@ export default function LoginPage() {
 
   function backToLogin() {
     setStep("credentials");
-
     setOtp("");
-
     setError("");
-
     setSuccessMessage("");
-
     setResendCountdown(0);
   }
 
@@ -522,15 +511,19 @@ export default function LoginPage() {
                 w-14
                 items-center
                 justify-center
+                overflow-hidden
                 rounded-2xl
                 border
                 border-primary/20
                 bg-primary-light/12
+                p-2
               "
             >
-              <span className="text-xl font-black text-primary">
-                W
-              </span>
+              <img
+                src="/branding/logo.png"
+                alt="WowYou"
+                className="h-full w-full object-contain"
+              />
             </div>
 
             <div
