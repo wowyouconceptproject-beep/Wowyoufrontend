@@ -49,7 +49,18 @@ export default function AttendeeLoginPage() {
       role: string;
     },
   ) {
+    /*
+     * Keep the token key consistent with the rest of the
+     * attendee application. The API client/authenticated
+     * dashboard reads this key.
+     */
     localStorage.setItem("token", token);
+
+    /*
+     * Also keep the legacy key if another attendee component
+     * uses it.
+     */
+    localStorage.setItem("wowyou_token", token);
 
     if (user) {
       localStorage.setItem("wowyou_user", JSON.stringify(user));
@@ -80,26 +91,18 @@ export default function AttendeeLoginPage() {
     setLoading(true);
 
     try {
-      const response = await loginUser(
-        normalizedEmail,
-        password,
-      );
+      const response = await loginUser(normalizedEmail, password);
 
       if (!response.success) {
-        setError(
-          response.message ||
-            "Unable to sign you in.",
-        );
+        setError(response.message || "Unable to sign you in.");
         return;
       }
 
       /*
-      |--------------------------------------------------------------------------
-      | Email Verification
-      |--------------------------------------------------------------------------
-      */
-
+       * Email verification is required before OTP/login.
+       */
       if (response.requiresEmailVerification) {
+        setEmail(normalizedEmail);
         setStep("verification");
 
         setSuccess(
@@ -111,19 +114,11 @@ export default function AttendeeLoginPage() {
       }
 
       /*
-      |--------------------------------------------------------------------------
-      | OTP Required
-      |--------------------------------------------------------------------------
-      */
-
+       * Password accepted. Backend requires OTP.
+       */
       if (response.requiresOtp) {
-        setEmail(
-          response.email ||
-            normalizedEmail,
-        );
-
+        setEmail(response.email || normalizedEmail);
         setOtp("");
-
         setStep("otp");
 
         setSuccess(
@@ -135,11 +130,8 @@ export default function AttendeeLoginPage() {
       }
 
       /*
-      |--------------------------------------------------------------------------
-      | Direct Login
-      |--------------------------------------------------------------------------
-      */
-
+       * Some environments may return a token directly.
+       */
       if (!response.token) {
         setError(
           response.message ||
@@ -150,37 +142,25 @@ export default function AttendeeLoginPage() {
       }
 
       /*
-      |--------------------------------------------------------------------------
-      | Verify Attendee Role
-      |--------------------------------------------------------------------------
-      */
-
+       * Attendee-only protection.
+       */
       if (
         response.user &&
-        !validateAttendeeRole(
-          response.user.role,
-        )
+        !validateAttendeeRole(response.user.role)
       ) {
-        setError(
-          "This account is not an attendee account.",
-        );
-
+        setError("This account is not an attendee account.");
         return;
       }
 
+      saveSession(response.token, response.user);
+
       /*
-      |--------------------------------------------------------------------------
-      | Store JWT
-      |--------------------------------------------------------------------------
-      */
-
-      saveSession(
-  response.token,
-  response.user,
-);
-
-router.push("/attendee/dashboard");
-router.refresh();
+       * IMPORTANT:
+       * The attendee dashboard is /attendee/dashboard.
+       * There is intentionally NO redirect to /attendee.
+       */
+      router.replace("/attendee/dashboard");
+      router.refresh();
     } catch (err) {
       setError(
         err instanceof Error
@@ -199,71 +179,46 @@ router.refresh();
 
     clearMessages();
 
-    const normalizedOtp =
-      otp.replace(/\D/g, "");
+    const normalizedOtp = otp.replace(/\D/g, "");
 
     if (normalizedOtp.length !== 6) {
-      setError(
-        "Enter the 6-digit verification code.",
-      );
-
+      setError("Enter the 6-digit verification code.");
       return;
     }
 
     setLoading(true);
 
     try {
-      const response =
-        await verifyLoginOtp({
-          email:
-            email.trim().toLowerCase(),
-          otp: normalizedOtp,
-        });
+      const response = await verifyLoginOtp({
+        email: email.trim().toLowerCase(),
+        otp: normalizedOtp,
+      });
 
-      if (
-        !response.success ||
-        !response.token
-      ) {
-        setError(
-          response.message ||
-            "Invalid verification code.",
-        );
-
+      if (!response.success || !response.token) {
+        setError(response.message || "Invalid verification code.");
         return;
       }
 
       /*
-      |--------------------------------------------------------------------------
-      | Verify Attendee Role
-      |--------------------------------------------------------------------------
-      */
-
+       * Do not allow organizer/vendor accounts into
+       * the attendee dashboard.
+       */
       if (
         response.user &&
-        !validateAttendeeRole(
-          response.user.role,
-        )
+        !validateAttendeeRole(response.user.role)
       ) {
-        setError(
-          "This account is not an attendee account.",
-        );
-
+        setError("This account is not an attendee account.");
         return;
       }
 
+      saveSession(response.token, response.user);
+
       /*
-      |--------------------------------------------------------------------------
-      | Store JWT
-      |--------------------------------------------------------------------------
-      */
-
-      saveSession(
-        response.token,
-        response.user,
-      );
-
-      router.push("/attendee/dashboard");
-router.refresh();
+       * IMPORTANT:
+       * OTP login also goes directly to the attendee dashboard.
+       */
+      router.replace("/attendee/dashboard");
+      router.refresh();
     } catch (err) {
       setError(
         err instanceof Error
@@ -277,14 +232,12 @@ router.refresh();
 
   async function handleResendOtp() {
     clearMessages();
-
     setResending(true);
 
     try {
-      const response =
-        await resendLoginOtp(
-          email.trim().toLowerCase(),
-        );
+      const response = await resendLoginOtp(
+        email.trim().toLowerCase(),
+      );
 
       if (!response.success) {
         setError(
@@ -314,14 +267,12 @@ router.refresh();
 
   async function handleResendVerification() {
     clearMessages();
-
     setResending(true);
 
     try {
-      const response =
-        await resendVerificationEmail(
-          email.trim().toLowerCase(),
-        );
+      const response = await resendVerificationEmail(
+        email.trim().toLowerCase(),
+      );
 
       if (!response.success) {
         setError(
@@ -355,10 +306,7 @@ router.refresh();
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#050505] text-white">
-      {/* ================================================================
-          BACKGROUND
-      ================================================================= */}
-
+      {/* Background */}
       <div
         className="pointer-events-none absolute left-1/2 top-[-280px] h-[650px] w-[650px] -translate-x-1/2 rounded-full blur-[170px]"
         style={{
@@ -375,17 +323,9 @@ router.refresh();
 
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(5,5,5,0.4)_70%,rgba(5,5,5,0.9)_100%)]" />
 
-      {/* ================================================================
-          PAGE
-      ================================================================= */}
-
       <div className="relative z-10 flex min-h-screen items-center justify-center px-5 py-10 sm:px-8">
         <div className="w-full max-w-[460px]">
-
-          {/* ============================================================
-              BRAND
-          ============================================================= */}
-
+          {/* Brand */}
           <div className="mb-10 flex justify-center">
             <Link
               href="/"
@@ -401,13 +341,9 @@ router.refresh();
             </Link>
           </div>
 
-          {/* ============================================================
-              LOGIN CARD
-          ============================================================= */}
-
+          {/* Login Card */}
           <div className="overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.035] shadow-2xl shadow-black/40 backdrop-blur-xl">
-
-            {/* Top accent */}
+            {/* Brand accent */}
             <div
               className="h-[2px] w-full"
               style={{
@@ -416,11 +352,7 @@ router.refresh();
             />
 
             <div className="p-7 sm:p-9">
-
-              {/* ======================================================
-                  LOGIN
-              ====================================================== */}
-
+              {/* LOGIN */}
               {step === "login" && (
                 <>
                   <div className="mb-8">
@@ -444,14 +376,12 @@ router.refresh();
                     </p>
                   </div>
 
-                  {/* Error */}
                   {error && (
                     <div className="mb-5 rounded-2xl border border-red-400/20 bg-red-400/[0.07] px-4 py-3 text-sm leading-5 text-red-300">
                       {error}
                     </div>
                   )}
 
-                  {/* Success */}
                   {success && (
                     <div
                       className="mb-5 rounded-2xl border px-4 py-3 text-sm leading-5"
@@ -483,9 +413,7 @@ router.refresh();
                         type="email"
                         value={email}
                         onChange={(event) => {
-                          setEmail(
-                            event.target.value,
-                          );
+                          setEmail(event.target.value);
                           clearMessages();
                         }}
                         placeholder="you@example.com"
@@ -525,9 +453,7 @@ router.refresh();
                           }
                           value={password}
                           onChange={(event) => {
-                            setPassword(
-                              event.target.value,
-                            );
+                            setPassword(event.target.value);
                             clearMessages();
                           }}
                           placeholder="Enter your password"
@@ -539,8 +465,7 @@ router.refresh();
                           type="button"
                           onClick={() =>
                             setShowPassword(
-                              (value) =>
-                                !value,
+                              (value) => !value,
                             )
                           }
                           className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 transition hover:text-white"
@@ -612,10 +537,7 @@ router.refresh();
                 </>
               )}
 
-              {/* ======================================================
-                  OTP
-              ====================================================== */}
-
+              {/* OTP */}
               {step === "otp" && (
                 <>
                   <div className="mb-8">
@@ -700,16 +622,9 @@ router.refresh();
                         autoFocus
                         value={otp}
                         onChange={(event) => {
-                          const value =
-                            event.target.value
-                              .replace(
-                                /\D/g,
-                                "",
-                              )
-                              .slice(
-                                0,
-                                6,
-                              );
+                          const value = event.target.value
+                            .replace(/\D/g, "")
+                            .slice(0, 6);
 
                           setOtp(value);
                           clearMessages();
@@ -749,9 +664,7 @@ router.refresh();
 
                     <button
                       type="button"
-                      onClick={
-                        handleResendOtp
-                      }
+                      onClick={handleResendOtp}
                       disabled={resending}
                       className="mt-2 text-xs font-semibold transition hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
                       style={{
@@ -766,10 +679,7 @@ router.refresh();
                 </>
               )}
 
-              {/* ======================================================
-                  EMAIL VERIFICATION
-              ====================================================== */}
-
+              {/* EMAIL VERIFICATION */}
               {step === "verification" && (
                 <>
                   <div className="mb-8">
@@ -831,9 +741,7 @@ router.refresh();
 
                   <button
                     type="button"
-                    onClick={
-                      handleResendVerification
-                    }
+                    onClick={handleResendVerification}
                     disabled={resending}
                     className="flex h-14 w-full items-center justify-center rounded-2xl text-sm font-bold text-white transition disabled:cursor-not-allowed disabled:opacity-50"
                     style={{
@@ -857,10 +765,7 @@ router.refresh();
             </div>
           </div>
 
-          {/* ============================================================
-              FOOTER
-          ============================================================= */}
-
+          {/* Footer */}
           <div className="mt-8 flex flex-col items-center gap-3">
             <div className="flex items-center gap-5 text-[10px] uppercase tracking-[0.18em] text-white/20">
               <Link
