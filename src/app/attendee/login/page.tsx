@@ -262,8 +262,8 @@ router.refresh();
         response.user,
       );
 
-      router.push("/attendee");
-      router.refresh();
+      router.push("/attendee/dashboard");
+router.refresh();
     } catch (err) {
       setError(
         err instanceof Error
