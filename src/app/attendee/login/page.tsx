@@ -175,12 +175,12 @@ export default function AttendeeLoginPage() {
       */
 
       saveSession(
-        response.token,
-        response.user,
-      );
+  response.token,
+  response.user,
+);
 
-      router.push("/attendee");
-      router.refresh();
+router.push("/attendee/dashboard");
+router.refresh();
     } catch (err) {
       setError(
         err instanceof Error
