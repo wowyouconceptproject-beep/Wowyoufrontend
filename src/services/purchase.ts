@@ -1,29 +1,88 @@
+
 import { apiFetch } from "@/lib/api";
 
 /*
 |--------------------------------------------------------------------------
-| Create Purchase
+| Create Purchase Payload
 |--------------------------------------------------------------------------
 */
 
 export interface CreatePurchasePayload {
   ticketTypeId: string;
-
   quantity: number;
 
-  /*
-  |--------------------------------------------------------------------------
-  | Checkout Channel
-  |--------------------------------------------------------------------------
-  |
-  | mobile = existing attendee mobile app
-  | web    = public web attendee checkout
-  |
-  | Optional so existing mobile callers remain compatible.
-  |
-  */
-
+  /**
+   * mobile = existing attendee mobile app
+   * web = public web attendee checkout
+   *
+   * Optional so existing mobile callers remain compatible.
+   */
   channel?: "mobile" | "web";
+}
+
+/*
+|--------------------------------------------------------------------------
+| Purchase Quote Payload
+|--------------------------------------------------------------------------
+*/
+
+export interface PurchaseQuotePayload {
+  ticketTypeId: string;
+  quantity: number;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Purchase Quote
+|--------------------------------------------------------------------------
+*/
+
+export interface PurchaseQuote {
+  ticketTypeId: string;
+  ticketName: string;
+  eventId: string;
+  eventTitle: string;
+  quantity: number;
+  currency: string;
+  unitPrice: number;
+  subtotal: number;
+  transactionFee: number;
+  amount: number;
+  feeFxRate: number | null;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Purchase Quote Response
+|--------------------------------------------------------------------------
+*/
+
+export interface PurchaseQuoteResponse {
+  success: boolean;
+  quote: PurchaseQuote;
+  message?: string;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Get Purchase Quote
+|--------------------------------------------------------------------------
+|
+| Retrieves the authoritative checkout breakdown before payment.
+|
+| This endpoint does not create a purchase, reserve inventory,
+| or create a Stripe Checkout session.
+|
+*/
+
+export function getPurchaseQuote(data: PurchaseQuotePayload) {
+  return apiFetch<PurchaseQuoteResponse>("/purchase/quote", {
+    method: "POST",
+    body: JSON.stringify({
+      ticketTypeId: data.ticketTypeId,
+      quantity: data.quantity,
+    }),
+  });
 }
 
 /*
@@ -34,52 +93,34 @@ export interface CreatePurchasePayload {
 
 export interface Purchase {
   id: string;
-
   userId: string;
-
   eventId: string;
-
   ticketTypeId: string;
-
   quantity: number;
 
-  /*
-  |--------------------------------------------------------------------------
-  | Amount
-  |--------------------------------------------------------------------------
-  */
-
+  /**
+   * subtotal and transactionFee are stored separately
+   * for financial transparency.
+   */
+  subtotal?: string | number;
+  transactionFee?: string | number;
+  feeFxRate?: number | null;
   amount?: string | number;
 
-  /*
-  |--------------------------------------------------------------------------
-  | Legacy Compatibility
-  |--------------------------------------------------------------------------
-  |
-  | Some existing frontend components may still reference these fields.
-  |
-  */
-
+  /**
+   * Legacy compatibility fields.
+   */
   unitPrice?: string | number;
-
   totalAmount?: string | number;
 
   currency: string;
-
   status: string;
-
   paymentProvider?: string | null;
-
   paymentReference?: string | null;
-
   paymentMethod?: string | null;
-
   gatewayStatus?: string | null;
-
   paymentCompletedAt?: string | null;
-
   createdAt: string;
-
   updatedAt: string;
 }
 
@@ -91,13 +132,9 @@ export interface Purchase {
 
 export interface CreatePurchaseResponse {
   success: boolean;
-
   paymentRequired: boolean;
-
   checkoutUrl: string | null;
-
   purchase: Purchase;
-
   message?: string;
 }
 
@@ -107,36 +144,148 @@ export interface CreatePurchaseResponse {
 |--------------------------------------------------------------------------
 |
 | Used by:
+| - Attendee mobile app
+| - Public web attendee checkout
 |
-| • Attendee mobile app
-| • Public web attendee checkout
+| The backend determines the payment return destination from
+| the checkout channel and recalculates the final amount.
 |
-| The backend determines the Revolut return destination from the
-| checkout channel.
+| Never submit a trusted subtotal, fee, or total from the frontend.
 |
 */
 
-export function createPurchase(
-  data: CreatePurchasePayload,
-) {
-  return apiFetch<CreatePurchaseResponse>(
-    "/purchase/create",
-    {
-      method: "POST",
+export function createPurchase(data: CreatePurchasePayload) {
+  return apiFetch<CreatePurchaseResponse>("/purchase/create", {
+    method: "POST",
+    body: JSON.stringify({
+      ticketTypeId: data.ticketTypeId,
+      quantity: data.quantity,
+      channel: data.channel ?? "mobile",
+    }),
+  });
+}
 
-      body: JSON.stringify({
-        ticketTypeId:
-          data.ticketTypeId,
+/*
+|--------------------------------------------------------------------------
+| Manual / Offline Ticket Sale
+|--------------------------------------------------------------------------
+|
+| Used by organizers to record tickets sold outside the platform.
+|
+| Supported payment methods:
+| - CASH
+| - BANK_TRANSFER
+| - POS
+| - OTHER
+|
+| The backend is responsible for validating the organizer,
+| ticket inventory, event, buyer, payment details, and price.
+|
+| Manual sales do not create a Stripe Checkout session.
+|
+*/
 
-        quantity:
-          data.quantity,
+export type ManualSalePaymentMethod =
+  | "CASH"
+  | "BANK_TRANSFER"
+  | "POS"
+  | "OTHER";
 
-        channel:
-          data.channel ??
-          "mobile",
-      }),
-    },
-  );
+export interface RecordManualSalePayload {
+  eventId: string;
+  ticketTypeId: string;
+  quantity: number;
+
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+
+  paymentMethod: ManualSalePaymentMethod;
+  paymentReference?: string;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Manual Sale Buyer
+|--------------------------------------------------------------------------
+*/
+
+export interface ManualSaleBuyer {
+  id: string;
+  email: string;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Manual Sale Response
+|--------------------------------------------------------------------------
+*/
+
+export interface RecordManualSaleResponse {
+  success: boolean;
+  message: string;
+
+  purchase?: Purchase;
+
+  buyer?: ManualSaleBuyer;
+
+  /**
+   * True when the backend created a new attendee account.
+   */
+  accountCreated?: boolean;
+
+  /**
+   * Indicates whether the account verification email
+   * was successfully requested/sent by the backend.
+   */
+  verificationEmailSent?: boolean;
+
+  /**
+   * Indicates whether the backend successfully issued
+   * the required event passes.
+   */
+  passesIssued?: boolean;
+
+  passCount?: number;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Record Manual Sale
+|--------------------------------------------------------------------------
+|
+| POST /purchase/manual-sale
+|
+| The authenticated organizer records an offline ticket sale.
+|
+| Expected backend behavior:
+| - Validate that the organizer owns the event.
+| - Validate ticket availability.
+| - Find the buyer by email or create an attendee account.
+| - Record the purchase as PAID with zero platform checkout fee.
+| - Issue event passes.
+| - Send relevant ticket/account emails.
+|
+| The backend remains authoritative for all validation.
+|
+*/
+
+export function recordManualSale(data: RecordManualSalePayload) {
+  return apiFetch<RecordManualSaleResponse>("/purchase/manual-sale", {
+    method: "POST",
+    body: JSON.stringify({
+      eventId: data.eventId,
+      ticketTypeId: data.ticketTypeId,
+      quantity: data.quantity,
+      firstName: data.firstName.trim(),
+      lastName: data.lastName.trim(),
+      email: data.email.trim().toLowerCase(),
+      phone: data.phone?.trim() || undefined,
+      paymentMethod: data.paymentMethod,
+      paymentReference: data.paymentReference?.trim() || undefined,
+    }),
+  });
 }
 
 /*
@@ -147,32 +296,27 @@ export function createPurchase(
 
 export interface PurchasePaymentStatus {
   id: string;
-
   status: string;
-
   gatewayStatus?: string | null;
-
   paymentProvider?: string | null;
-
   paymentReference?: string | null;
-
   paymentCompletedAt?: string | null;
 
+  subtotal?: string | number;
+  transactionFee?: string | number;
+  feeFxRate?: number | null;
+
   quantity: number;
-
   amount: string | number;
-
   currency: string;
 
   event?: {
     id: string;
-
     title: string;
   } | null;
 
   ticket?: {
     id: string;
-
     name: string;
   } | null;
 
@@ -183,11 +327,15 @@ export interface PurchasePaymentStatus {
   hasPass?: boolean;
 }
 
+/*
+|--------------------------------------------------------------------------
+| Purchase Payment Status Response
+|--------------------------------------------------------------------------
+*/
+
 export interface PurchasePaymentStatusResponse {
   success: boolean;
-
   purchase: PurchasePaymentStatus;
-
   message?: string;
 }
 
@@ -196,17 +344,15 @@ export interface PurchasePaymentStatusResponse {
 | Get Purchase Payment Status
 |--------------------------------------------------------------------------
 |
-| Used after returning from Revolut.
+| Used after returning from the payment provider.
 |
 | Payment confirmation remains controlled by the backend webhook.
 |
 */
 
-export function getPurchasePaymentStatus(
-  purchaseId: string,
-) {
+export function getPurchasePaymentStatus(purchaseId: string) {
   return apiFetch<PurchasePaymentStatusResponse>(
-    `/purchase/${purchaseId}/status`,
+    `/purchase/${encodeURIComponent(purchaseId)}/status`,
   );
 }
 
@@ -218,23 +364,14 @@ export function getPurchasePaymentStatus(
 
 export interface MyTicketEvent {
   id: string;
-
   title: string;
-
   venue: string;
-
   city?: string | null;
-
   country?: string | null;
-
   coverImage?: string | null;
-
   featuredImage?: string | null;
-
   startDate: string;
-
   endDate: string;
-
   currency: string;
 }
 
@@ -246,9 +383,7 @@ export interface MyTicketEvent {
 
 export interface MyTicketType {
   id: string;
-
   name: string;
-
   price: string | number;
 }
 
@@ -258,32 +393,21 @@ export interface MyTicketType {
 |--------------------------------------------------------------------------
 |
 | These are the actual attendee passes created by:
-|
 | ticket-issuance.service.ts
 |
 */
 
 export interface MyTicketPass {
   id: string;
-
   purchaseId: string;
-
   passNumber: string;
-
   qrToken: string;
-
   nfcToken: string;
-
   isActive: boolean;
-
   isRevoked: boolean;
-
   nfcEnabled: boolean;
-
   issuedAt: string;
-
   createdAt: string;
-
   updatedAt?: string;
 }
 
@@ -295,18 +419,13 @@ export interface MyTicketPass {
 
 export interface MyTicketUser {
   id: string;
-
   firstName: string;
-
   lastName: string;
 
   attendeeProfile?: {
     avatar?: string | null;
-
     profession?: string | null;
-
     company?: string | null;
-
     jobTitle?: string | null;
   } | null;
 }
@@ -319,11 +438,8 @@ export interface MyTicketUser {
 
 export interface MyTicketCheckIn {
   id: string;
-
   createdAt?: string;
-
   checkedInAt?: string;
-
   status?: string;
 }
 
@@ -333,11 +449,9 @@ export interface MyTicketCheckIn {
 |--------------------------------------------------------------------------
 |
 | Matches the backend response returned by:
-|
 | GET /purchase/my
 |
 | Backend:
-|
 | ticketPurchase
 | ├── event
 | ├── ticket
@@ -350,39 +464,30 @@ export interface MyTicketCheckIn {
 
 export interface MyTicket {
   id: string;
-
   userId: string;
-
   eventId: string;
-
   ticketTypeId: string;
-
   quantity: number;
 
+  subtotal?: string | number;
+  transactionFee?: string | number;
+  feeFxRate?: number | null;
+
   amount: string | number;
-
   currency: string;
-
   status: string;
 
   paymentProvider?: string | null;
-
   paymentReference?: string | null;
-
   paymentCompletedAt?: string | null;
 
   createdAt: string;
-
   updatedAt: string;
 
   event: MyTicketEvent;
-
   ticket: MyTicketType;
-
   passes: MyTicketPass[];
-
   user: MyTicketUser;
-
   checkIn?: MyTicketCheckIn | null;
 }
 
@@ -394,9 +499,7 @@ export interface MyTicket {
 
 export interface MyTicketsResponse {
   success: boolean;
-
   tickets: MyTicket[];
-
   message?: string;
 }
 
@@ -406,16 +509,13 @@ export interface MyTicketsResponse {
 |--------------------------------------------------------------------------
 |
 | Used by:
-|
-| • Attendee web dashboard
-| • Attendee mobile app
+| - Attendee web dashboard
+| - Attendee mobile app
 |
 | Both consume the same ticket/purchase system.
 |
 */
 
 export function getMyTickets() {
-  return apiFetch<MyTicketsResponse>(
-    "/purchase/my",
-  );
+  return apiFetch<MyTicketsResponse>("/purchase/my");
 }
