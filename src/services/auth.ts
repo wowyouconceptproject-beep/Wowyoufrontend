@@ -1,4 +1,11 @@
+
 import { apiFetch } from "@/lib/api";
+
+/*
+|--------------------------------------------------------------------------
+| Register Payload
+|--------------------------------------------------------------------------
+*/
 
 export interface RegisterPayload {
   firstName: string;
@@ -7,6 +14,12 @@ export interface RegisterPayload {
   password: string;
   role: string;
 }
+
+/*
+|--------------------------------------------------------------------------
+| User
+|--------------------------------------------------------------------------
+*/
 
 export interface User {
   id: string;
@@ -20,9 +33,6 @@ export interface User {
 |--------------------------------------------------------------------------
 | Register Response
 |--------------------------------------------------------------------------
-|
-| Registration always returns a user.
-|
 */
 
 export interface RegisterResponse {
@@ -37,8 +47,6 @@ export interface RegisterResponse {
 |--------------------------------------------------------------------------
 | Login Response
 |--------------------------------------------------------------------------
-|
-| Login can have two possible outcomes:
 |
 | 1. Email is not verified
 |    -> requiresEmailVerification
@@ -114,21 +122,65 @@ export interface CurrentUserResponse {
 
 /*
 |--------------------------------------------------------------------------
+| Forgot Password
+|--------------------------------------------------------------------------
+*/
+
+export interface ForgotPasswordPayload {
+  email: string;
+}
+
+export interface ForgotPasswordResponse {
+  success: boolean;
+  message?: string;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Verify Password Reset Code
+|--------------------------------------------------------------------------
+*/
+
+export interface VerifyResetCodePayload {
+  email: string;
+  code: string;
+}
+
+export interface VerifyResetCodeResponse {
+  success: boolean;
+  resetToken?: string;
+  message?: string;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Reset Password
+|--------------------------------------------------------------------------
+*/
+
+export interface ResetPasswordPayload {
+  email: string;
+  resetToken: string;
+  newPassword: string;
+}
+
+export interface ResetPasswordResponse {
+  success: boolean;
+  message?: string;
+}
+
+/*
+|--------------------------------------------------------------------------
 | Register User
 |--------------------------------------------------------------------------
 */
 
-export function registerUser(
-  data: RegisterPayload,
-) {
-  return apiFetch<RegisterResponse>(
-    "/auth/register",
-    {
-      method: "POST",
-      withAuth: false,
-      body: JSON.stringify(data),
-    },
-  );
+export function registerUser(data: RegisterPayload) {
+  return apiFetch<RegisterResponse>("/auth/register", {
+    method: "POST",
+    withAuth: false,
+    body: JSON.stringify(data),
+  });
 }
 
 /*
@@ -137,21 +189,15 @@ export function registerUser(
 |--------------------------------------------------------------------------
 */
 
-export function loginUser(
-  email: string,
-  password: string,
-) {
-  return apiFetch<LoginResponse>(
-    "/auth/login",
-    {
-      method: "POST",
-      withAuth: false,
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    },
-  );
+export function loginUser(email: string, password: string) {
+  return apiFetch<LoginResponse>("/auth/login", {
+    method: "POST",
+    withAuth: false,
+    body: JSON.stringify({
+      email,
+      password,
+    }),
+  });
 }
 
 /*
@@ -160,9 +206,7 @@ export function loginUser(
 |--------------------------------------------------------------------------
 */
 
-export function verifyLoginOtp(
-  data: VerifyLoginOtpPayload,
-) {
+export function verifyLoginOtp(data: VerifyLoginOtpPayload) {
   return apiFetch<VerifyLoginOtpResponse>(
     "/auth/verify-login-otp",
     {
@@ -179,9 +223,7 @@ export function verifyLoginOtp(
 |--------------------------------------------------------------------------
 */
 
-export function resendLoginOtp(
-  email: string,
-) {
+export function resendLoginOtp(email: string) {
   return apiFetch<ResendLoginOtpResponse>(
     "/auth/resend-login-otp",
     {
@@ -200,9 +242,7 @@ export function resendLoginOtp(
 |--------------------------------------------------------------------------
 */
 
-export function resendVerificationEmail(
-  email: string,
-) {
+export function resendVerificationEmail(email: string) {
   return apiFetch<ResendVerificationEmailResponse>(
     "/auth/resend-verification",
     {
@@ -222,7 +262,56 @@ export function resendVerificationEmail(
 */
 
 export function getCurrentUser() {
-  return apiFetch<CurrentUserResponse>(
-    "/auth/me",
+  return apiFetch<CurrentUserResponse>("/auth/me");
+}
+
+/*
+|--------------------------------------------------------------------------
+| Request Password Reset Code
+|--------------------------------------------------------------------------
+*/
+
+export function forgotPassword(data: ForgotPasswordPayload) {
+  return apiFetch<ForgotPasswordResponse>(
+    "/auth/forgot-password",
+    {
+      method: "POST",
+      withAuth: false,
+      body: JSON.stringify(data),
+    },
+  );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Verify Password Reset Code
+|--------------------------------------------------------------------------
+*/
+
+export function verifyResetCode(data: VerifyResetCodePayload) {
+  return apiFetch<VerifyResetCodeResponse>(
+    "/auth/verify-reset-code",
+    {
+      method: "POST",
+      withAuth: false,
+      body: JSON.stringify(data),
+    },
+  );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Submit New Password
+|--------------------------------------------------------------------------
+*/
+
+export function resetPassword(data: ResetPasswordPayload) {
+  return apiFetch<ResetPasswordResponse>(
+    "/auth/reset-password",
+    {
+      method: "POST",
+      withAuth: false,
+      body: JSON.stringify(data),
+    },
   );
 }
