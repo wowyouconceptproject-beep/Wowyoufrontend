@@ -17,6 +17,7 @@ import { QRCodeSVG } from "qrcode.react";
 import {
   getMyTickets,
   getPurchasePaymentStatus,
+  getSecureTicketPasses,
   type MyTicket,
 } from "@/services/purchase";
 
@@ -190,9 +191,96 @@ function AttendeeDashboardContent() {
       */
 
       if (ticketResponse.success) {
-        setTickets(
-          ticketResponse.tickets ?? [],
+        const ticketList = ticketResponse.tickets ?? [];
+
+        // QR codes must contain the signed JWT returned by the secure-pass
+        // endpoint. Never use the raw qrToken as the QR payload.
+        const ticketsWithSecurePasses = await Promise.all(
+          ticketList.map(async (ticket) => {
+            if (
+              String(ticket.status).toUpperCase() !== "PAID" ||
+              !ticket.passes?.length
+            ) {
+              return {
+                ...ticket,
+                passes: (ticket.passes ?? []).map((pass) => ({
+                  ...pass,
+                  token: null,
+                })),
+              };
+            }
+
+            try {
+              const secureResponse =
+                await getSecureTicketPasses(ticket.id);
+
+              if (
+                !secureResponse.success ||
+                !Array.isArray(secureResponse.passes)
+              ) {
+                throw new Error(
+                  secureResponse.message ??
+                    "Secure ticket credentials are unavailable.",
+                );
+              }
+
+              const securePassesById = new Map<
+                string,
+                (typeof secureResponse.passes)[number]
+              >(
+                secureResponse.passes.map(
+                  (pass) => [pass.id, pass] as const,
+                ),
+              );
+
+              return {
+                ...ticket,
+                passes: ticket.passes.map((pass) => {
+                  const securePass =
+                    securePassesById.get(pass.id);
+
+                  if (!securePass?.token) {
+                    return {
+                      ...pass,
+                      token: null,
+                    };
+                  }
+
+                  return {
+                    ...pass,
+                    token: securePass.token,
+                    passNumber: securePass.passNumber,
+                    qrToken: securePass.qrToken,
+                    nfcToken: securePass.nfcToken,
+                    isActive: securePass.active,
+                    isRevoked: securePass.revoked,
+                    nfcEnabled: securePass.nfcEnabled,
+                    issuedAt: securePass.issuedAt,
+                    expiresAt: securePass.expiresAt ?? null,
+                  };
+                }),
+              };
+            } catch (securePassError) {
+              // Keep the rest of the dashboard usable if a pass cannot be
+              // secured. The card will show QR unavailable instead of
+              // falling back to an unsigned/raw credential.
+              console.error(
+                `SECURE PASS LOAD ERROR (${ticket.id}):`,
+                securePassError,
+              );
+
+              return {
+                ...ticket,
+                passes: ticket.passes.map((pass) => ({
+                  ...pass,
+                  token: null,
+                })),
+              };
+            }
+          }),
         );
+
+        setTickets(ticketsWithSecurePasses);
       }
 
       /*
@@ -760,7 +848,7 @@ function AttendeeDashboardContent() {
             <div className="mt-6 rounded-[28px] border border-white/10 bg-white/[0.025] px-7 py-16 text-center">
 
               <p className="text-4xl">
-                ◇
+                â—‡
               </p>
 
               <h3 className="mt-5 text-xl font-bold">
@@ -1106,12 +1194,12 @@ function TicketCard({
   | QR Payload
   |--------------------------------------------------------------------------
   |
-  | The backend generates qrToken when the EventPass is issued.
+  | The scanner verifies a signed JWT. Never encode the raw qrToken.
   |
   */
 
-  const qrToken =
-    firstPass?.qrToken ?? null;
+  const signedPassToken =
+    firstPass?.token ?? null;
 
   /*
   |--------------------------------------------------------------------------
@@ -1265,12 +1353,12 @@ function TicketCard({
 
         <div className="flex flex-col items-center">
 
-          {qrToken ? (
+          {signedPassToken ? (
             <>
               <div className="rounded-2xl bg-white p-3">
 
                 <QRCodeSVG
-                  value={qrToken}
+                  value={signedPassToken}
                   size={124}
                   level="H"
                   includeMargin={false}
@@ -1287,13 +1375,13 @@ function TicketCard({
               <div className="flex h-[150px] w-[150px] items-center justify-center rounded-2xl border border-dashed border-white/15 bg-white/[0.02]">
 
                 <span className="px-4 text-center text-xs text-white/25">
-                  QR unavailable
+                  Secure QR unavailable
                 </span>
 
               </div>
 
               <p className="mt-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/20">
-                Pass not issued
+                Secure pass unavailable
               </p>
             </>
           )}
