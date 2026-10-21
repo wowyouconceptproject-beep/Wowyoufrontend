@@ -2,22 +2,27 @@
 
 import {
   Suspense,
+  useCallback,
   useEffect,
   useState,
+  type ChangeEvent,
+  type FormEvent,
 } from "react";
 
-import {
-  useSearchParams,
-} from "next/navigation";
-
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 import { apiFetch } from "@/lib/api";
+import { resendVerificationEmail } from "@/services/auth";
 
-type VerificationState =
-  | "loading"
-  | "success"
-  | "error";
+interface VerificationResponse {
+  success: boolean;
+  message?: string;
+}
+
+type VerificationState = "loading" | "success" | "error";
+
+const RESEND_COOLDOWN_SECONDS = 60;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,132 +30,72 @@ type VerificationState =
 |--------------------------------------------------------------------------
 */
 
-function VerifyEmailContent() {
-  const searchParams =
-    useSearchParams();
+function VerifyEmailContent(): React.JSX.Element {
+  const searchParams = useSearchParams();
 
-  const [state, setState] =
-    useState<VerificationState>(
-      "loading",
-    );
+  const token = searchParams.get("token") ?? "";
+  const initialEmail = searchParams.get("email") ?? "";
 
-  const [message, setMessage] =
-    useState(
-      "Verifying your email address...",
-    );
+  const [state, setState] = useState<VerificationState>("loading");
+
+  const [message, setMessage] = useState<string>(
+    "Verifying your email address...",
+  );
+
+  const [resendEmail, setResendEmail] = useState<string>(initialEmail);
+  const [resendLoading, setResendLoading] = useState<boolean>(false);
+  const [resendMessage, setResendMessage] = useState<string>("");
+  const [resendError, setResendError] = useState<string>("");
+  const [resendCountdown, setResendCountdown] = useState<number>(0);
+
+  /*
+  |--------------------------------------------------------------------------
+  | Verify Email
+  |--------------------------------------------------------------------------
+  */
 
   useEffect(() => {
-    /*
-    |--------------------------------------------------------------------------
-    | Get Verification Token
-    |--------------------------------------------------------------------------
-    |
-    | URLSearchParams.get() returns string | null.
-    | Converting the value to an explicit string here prevents the
-    | TypeScript string | null error when the token is used below.
-    |
-    */
-
-    const tokenParam =
-      searchParams.get("token");
-
-    const token =
-      tokenParam ?? "";
-
-    /*
-    |--------------------------------------------------------------------------
-    | Missing Token
-    |--------------------------------------------------------------------------
-    */
-
-    if (!token) {
-      setState("error");
-
-      setMessage(
-        "This email verification link is missing its verification token.",
-      );
-
-      return;
-    }
-
     let cancelled = false;
 
-    /*
-    |--------------------------------------------------------------------------
-    | Verify Email
-    |--------------------------------------------------------------------------
-    */
+    async function verifyEmail(): Promise<void> {
+      if (!token) {
+        setState("error");
+        setMessage(
+          "This email verification link is missing its verification token.",
+        );
+        return;
+      }
 
-    async function verifyEmail() {
       try {
-        const data =
-          await apiFetch<{
-            success: boolean;
-            message?: string;
-          }>(
-            `/auth/verify-email?token=${encodeURIComponent(
-              token,
-            )}`,
-            {
-              method: "GET",
-              withAuth: false,
-            },
-          );
-
-        /*
-        |--------------------------------------------------------------------------
-        | Component Unmounted
-        |--------------------------------------------------------------------------
-        */
+        const response = await apiFetch<VerificationResponse>(
+          `/auth/verify-email?token=${encodeURIComponent(token)}`,
+          {
+            method: "GET",
+            withAuth: false,
+          },
+        );
 
         if (cancelled) {
           return;
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | API Reported Failure
-        |--------------------------------------------------------------------------
-        */
-
-        if (!data.success) {
+        if (!response.success) {
           throw new Error(
-            data.message ||
-              "Email verification failed.",
+            response.message ?? "Email verification failed.",
           );
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Success
-        |--------------------------------------------------------------------------
-        */
-
         setState("success");
-
         setMessage(
-          data.message ||
+          response.message ??
             "Your email address has been verified successfully.",
         );
       } catch (error: unknown) {
-        /*
-        |--------------------------------------------------------------------------
-        | Component Unmounted
-        |--------------------------------------------------------------------------
-        */
-
         if (cancelled) {
           return;
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Error
-        |--------------------------------------------------------------------------
-        */
-
         setState("error");
-
         setMessage(
           error instanceof Error
             ? error.message
@@ -159,25 +104,126 @@ function VerifyEmailContent() {
       }
     }
 
-    verifyEmail();
-
-    /*
-    |--------------------------------------------------------------------------
-    | Cleanup
-    |--------------------------------------------------------------------------
-    */
+    void verifyEmail();
 
     return () => {
       cancelled = true;
     };
-  }, [searchParams]);
+  }, [token]);
+
+  /*
+  |--------------------------------------------------------------------------
+  | Resend Cooldown
+  |--------------------------------------------------------------------------
+  */
+
+  useEffect(() => {
+    if (resendCountdown <= 0) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setResendCountdown((currentCountdown: number) =>
+        Math.max(currentCountdown - 1, 0),
+      );
+    }, 1000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [resendCountdown]);
+
+  /*
+  |--------------------------------------------------------------------------
+  | Resend Verification Email
+  |--------------------------------------------------------------------------
+  */
+
+  const handleResendVerification = useCallback(
+    async (event: FormEvent<HTMLFormElement>): Promise<void> => {
+      event.preventDefault();
+
+      const email = resendEmail.trim().toLowerCase();
+
+      if (resendLoading || resendCountdown > 0) {
+        return;
+      }
+
+      if (!email) {
+        setResendError(
+          "Enter the email address you registered with.",
+        );
+        setResendMessage("");
+        return;
+      }
+
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailPattern.test(email)) {
+        setResendError("Enter a valid email address.");
+        setResendMessage("");
+        return;
+      }
+
+      try {
+        setResendLoading(true);
+        setResendError("");
+        setResendMessage("");
+
+        const response = await resendVerificationEmail(email);
+
+        if (!response.success) {
+          throw new Error(
+            response.message ??
+              "Unable to resend your verification email.",
+          );
+        }
+
+        setResendMessage(
+          response.message ??
+            "Verification email sent. Please check your inbox and spam folder.",
+        );
+
+        setResendCountdown(RESEND_COOLDOWN_SECONDS);
+      } catch (error: unknown) {
+        setResendError(
+          error instanceof Error
+            ? error.message
+            : "Failed to resend your verification email. Please try again.",
+        );
+      } finally {
+        setResendLoading(false);
+      }
+    },
+    [resendEmail, resendLoading, resendCountdown],
+  );
+
+  /*
+  |--------------------------------------------------------------------------
+  | Email Input Change
+  |--------------------------------------------------------------------------
+  */
+
+  const handleEmailChange = (
+    event: ChangeEvent<HTMLInputElement>,
+  ): void => {
+    setResendEmail(event.currentTarget.value);
+    setResendError("");
+    setResendMessage("");
+  };
+
+  /*
+  |--------------------------------------------------------------------------
+  | Render Verification Page
+  |--------------------------------------------------------------------------
+  */
 
   return (
     <main className="min-h-screen bg-[#f8f8f6] px-6 py-16">
       <div className="mx-auto flex min-h-[70vh] max-w-xl items-center justify-center">
         <div className="w-full rounded-3xl border border-black/10 bg-white p-8 text-center shadow-sm sm:p-12">
-
           {/* Logo */}
+
           <div className="mb-10">
             <Link
               href="/"
@@ -187,14 +233,16 @@ function VerifyEmailContent() {
             </Link>
           </div>
 
-          {/* ---------------------------------------------------------- */}
-          {/* Loading */}
-          {/* ---------------------------------------------------------- */}
+          {/* Loading State */}
 
           {state === "loading" && (
             <>
               <div className="mx-auto mb-7 flex h-16 w-16 items-center justify-center rounded-full bg-black/[0.04]">
-                <div className="h-7 w-7 animate-spin rounded-full border-2 border-black/10 border-t-black" />
+                <div
+                  className="h-7 w-7 animate-spin rounded-full border-2 border-black/10 border-t-black"
+                  role="status"
+                  aria-label="Verifying email"
+                />
               </div>
 
               <h1 className="text-2xl font-semibold tracking-[-0.03em] text-black sm:text-3xl">
@@ -207,9 +255,7 @@ function VerifyEmailContent() {
             </>
           )}
 
-          {/* ---------------------------------------------------------- */}
-          {/* Success */}
-          {/* ---------------------------------------------------------- */}
+          {/* Success State */}
 
           {state === "success" && (
             <>
@@ -249,9 +295,7 @@ function VerifyEmailContent() {
             </>
           )}
 
-          {/* ---------------------------------------------------------- */}
-          {/* Error */}
-          {/* ---------------------------------------------------------- */}
+          {/* Error State */}
 
           {state === "error" && (
             <>
@@ -293,7 +337,69 @@ function VerifyEmailContent() {
                 {message}
               </p>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+              {/* Resend Verification Form */}
+
+              <form
+                className="mx-auto mt-7 max-w-sm text-left"
+                onSubmit={handleResendVerification}
+              >
+                <label
+                  htmlFor="resend-verification-email"
+                  className="mb-2 block text-sm font-medium text-black"
+                >
+                  Email address
+                </label>
+
+                <input
+                  id="resend-verification-email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={resendEmail}
+                  onChange={handleEmailChange}
+                  placeholder="you@example.com"
+                  className="min-h-12 w-full rounded-xl border border-black/15 bg-white px-4 text-sm text-black outline-none transition placeholder:text-black/35 focus:border-black focus:ring-1 focus:ring-black"
+                />
+
+                {resendError && (
+                  <p
+                    role="alert"
+                    className="mt-3 text-sm leading-5 text-red-600"
+                  >
+                    {resendError}
+                  </p>
+                )}
+
+                {resendMessage && (
+                  <p
+                    role="status"
+                    className="mt-3 text-sm leading-5 text-emerald-700"
+                  >
+                    {resendMessage}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={resendLoading || resendCountdown > 0}
+                  className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-black px-6 text-sm font-medium text-white transition hover:bg-black/85 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {resendLoading
+                    ? "Sending verification email..."
+                    : resendCountdown > 0
+                      ? `Resend available in ${resendCountdown}s`
+                      : "Resend verification email"}
+                </button>
+
+                <p className="mt-3 text-center text-xs leading-5 text-black/45">
+                  Enter the email address you used to create your account.
+                </p>
+              </form>
+
+              {/* Navigation */}
+
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
                 <Link
                   href="/login"
                   className="inline-flex min-h-12 items-center justify-center rounded-xl bg-black px-6 text-sm font-medium text-white transition hover:bg-black/85"
@@ -322,13 +428,11 @@ function VerifyEmailContent() {
 |--------------------------------------------------------------------------
 */
 
-function VerifyEmailFallback() {
+function VerifyEmailFallback(): React.JSX.Element {
   return (
     <main className="min-h-screen bg-[#f8f8f6] px-6 py-16">
       <div className="mx-auto flex min-h-[70vh] max-w-xl items-center justify-center">
         <div className="w-full rounded-3xl border border-black/10 bg-white p-8 text-center shadow-sm sm:p-12">
-
-          {/* Logo */}
           <div className="mb-10">
             <Link
               href="/"
@@ -338,9 +442,12 @@ function VerifyEmailFallback() {
             </Link>
           </div>
 
-          {/* Spinner */}
           <div className="mx-auto mb-7 flex h-16 w-16 items-center justify-center rounded-full bg-black/[0.04]">
-            <div className="h-7 w-7 animate-spin rounded-full border-2 border-black/10 border-t-black" />
+            <div
+              className="h-7 w-7 animate-spin rounded-full border-2 border-black/10 border-t-black"
+              role="status"
+              aria-label="Loading verification"
+            />
           </div>
 
           <h1 className="text-2xl font-semibold tracking-[-0.03em] text-black sm:text-3xl">
@@ -360,19 +467,11 @@ function VerifyEmailFallback() {
 |--------------------------------------------------------------------------
 | Verify Email Page
 |--------------------------------------------------------------------------
-|
-| useSearchParams() requires a Suspense boundary during Next.js
-| production prerendering.
-|
 */
 
-export default function VerifyEmailPage() {
+export default function VerifyEmailPage(): React.JSX.Element {
   return (
-    <Suspense
-      fallback={
-        <VerifyEmailFallback />
-      }
-    >
+    <Suspense fallback={<VerifyEmailFallback />}>
       <VerifyEmailContent />
     </Suspense>
   );
