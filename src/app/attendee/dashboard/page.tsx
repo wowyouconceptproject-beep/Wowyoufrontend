@@ -4,7 +4,6 @@ import {
   Suspense,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 
@@ -18,6 +17,7 @@ import { QRCodeSVG } from "qrcode.react";
 import {
   getMyTickets,
   getPurchasePaymentStatus,
+  getSecureTicketPasses,
   type MyTicket,
 } from "@/services/purchase";
 
@@ -73,6 +73,27 @@ function AttendeeDashboardContent() {
 
   const [tickets, setTickets] =
     useState<MyTicket[]>([]);
+
+  /*
+  |--------------------------------------------------------------------------
+  | Live Clock For Event Expiry
+  |--------------------------------------------------------------------------
+  |
+  | Re-evaluate ticket visibility once per minute so ended events disappear
+  | without requiring the attendee to reload the dashboard.
+  |
+  */
+  const [currentTime, setCurrentTime] = useState(0);
+
+  useEffect(() => {
+    setCurrentTime(Date.now());
+
+    const interval = window.setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 60_000);
+
+    return () => window.clearInterval(interval);
+  }, []);
 
   const [profile, setProfile] =
     useState<AttendeeProfile | null>(null);
@@ -191,10 +212,96 @@ function AttendeeDashboardContent() {
       */
 
       if (ticketResponse.success) {
-        // The dashboard lists ticket records only. Each TicketCard requests a
-        // fresh, short-lived QR credential from POST /pass/:purchaseId/rotating-qr.
-        // Do not load or display permanent secure-pass JWTs as web QR codes.
-        setTickets(ticketResponse.tickets ?? []);
+        const ticketList = ticketResponse.tickets ?? [];
+
+        // QR codes must contain the signed JWT returned by the secure-pass
+        // endpoint. Never use the raw qrToken as the QR payload.
+        const ticketsWithSecurePasses = await Promise.all(
+          ticketList.map(async (ticket) => {
+            if (
+              String(ticket.status).toUpperCase() !== "PAID" ||
+              !ticket.passes?.length
+            ) {
+              return {
+                ...ticket,
+                passes: (ticket.passes ?? []).map((pass) => ({
+                  ...pass,
+                  token: null,
+                })),
+              };
+            }
+
+            try {
+              const secureResponse =
+                await getSecureTicketPasses(ticket.id);
+
+              if (
+                !secureResponse.success ||
+                !Array.isArray(secureResponse.passes)
+              ) {
+                throw new Error(
+                  secureResponse.message ??
+                    "Secure ticket credentials are unavailable.",
+                );
+              }
+
+              const securePassesById = new Map<
+                string,
+                (typeof secureResponse.passes)[number]
+              >(
+                secureResponse.passes.map(
+                  (pass) => [pass.id, pass] as const,
+                ),
+              );
+
+              return {
+                ...ticket,
+                passes: ticket.passes.map((pass) => {
+                  const securePass =
+                    securePassesById.get(pass.id);
+
+                  if (!securePass?.token) {
+                    return {
+                      ...pass,
+                      token: null,
+                    };
+                  }
+
+                  return {
+                    ...pass,
+                    token: securePass.token,
+                    passNumber: securePass.passNumber,
+                    qrToken: securePass.qrToken,
+                    nfcToken: securePass.nfcToken,
+                    isActive: securePass.active,
+                    isRevoked: securePass.revoked,
+                    nfcEnabled: securePass.nfcEnabled,
+                    issuedAt: securePass.issuedAt,
+                    expiresAt: securePass.expiresAt ?? null,
+                  };
+                }),
+              };
+            } catch (securePassError) {
+              // Keep the rest of the dashboard usable if a pass cannot be
+              // secured. The card will show QR unavailable instead of
+              // falling back to an unsigned/raw credential.
+              console.error(
+                `SECURE PASS LOAD ERROR (${ticket.id}):`,
+                securePassError,
+              );
+
+              return {
+                ...ticket,
+                passes: ticket.passes.map((pass) => ({
+                  ...pass,
+                  token: null,
+                })),
+              };
+            }
+          }),
+        );
+
+        setTickets(ticketsWithSecurePasses);
       }
 
       /*
@@ -520,23 +627,79 @@ function AttendeeDashboardContent() {
   |--------------------------------------------------------------------------
   */
 
-  const upcomingTickets =
-    useMemo(() => {
-      const now = new Date();
+  const visibleTickets = useMemo(() => {
+    // Before the client clock initializes, preserve all tickets to avoid
+    // incorrectly hiding records during the initial render.
+    if (currentTime === 0) {
+      return tickets;
+    }
 
-      return tickets.filter(
-        (ticket) => {
-          const date =
-            ticket.event?.startDate;
+    return tickets.filter((ticket) => {
+      const rawEndDate = ticket.event?.endDate;
 
-          if (!date) {
-            return true;
-          }
+      // Incomplete event data must not make a valid ticket disappear.
+      if (!rawEndDate) {
+        return true;
+      }
 
-          return new Date(date) >= now;
-        },
-      );
-    }, [tickets]);
+      const endDateText = String(rawEndDate).trim();
+      let endTime: number;
+
+      // A date-only value means the event runs through the end of that
+      // calendar day in the attendee's local timezone.
+      if (/^\d{4}-\d{2}-\d{2}$/.test(endDateText)) {
+        const [year, month, day] = endDateText
+          .split("-")
+          .map(Number);
+        endTime = new Date(
+          year,
+          month - 1,
+          day,
+          23,
+          59,
+          59,
+          999,
+        ).getTime();
+      } else {
+        endTime = new Date(endDateText).getTime();
+      }
+
+      // If the end date is invalid, preserve the ticket rather than
+      // accidentally hiding it.
+      if (!Number.isFinite(endTime)) {
+        return true;
+      }
+
+      return endTime > currentTime;
+    });
+  }, [tickets, currentTime]);
+
+  /*
+  |--------------------------------------------------------------------------
+  | Upcoming Events
+  |--------------------------------------------------------------------------
+  */
+  const upcomingTickets = useMemo(() => {
+    if (currentTime === 0) {
+      return visibleTickets;
+    }
+
+    return visibleTickets.filter((ticket) => {
+      const startDate = ticket.event?.startDate;
+
+      if (!startDate) {
+        return false;
+      }
+
+      const startTime = new Date(startDate).getTime();
+
+      if (!Number.isFinite(startTime)) {
+        return false;
+      }
+
+      return startTime > currentTime;
+    });
+  }, [visibleTickets, currentTime]);
 
   /*
   |--------------------------------------------------------------------------
@@ -711,7 +874,7 @@ function AttendeeDashboardContent() {
           <StatCard
             label="Tickets"
             value={String(
-              tickets.length,
+              visibleTickets.length,
             )}
           />
 
@@ -747,10 +910,10 @@ function AttendeeDashboardContent() {
 
             </div>
 
-            {tickets.length > 0 && (
+            {visibleTickets.length > 0 && (
               <span className="text-sm text-white/30">
-                {tickets.length} ticket
-                {tickets.length === 1
+                {visibleTickets.length} ticket
+                {visibleTickets.length === 1
                   ? ""
                   : "s"}
               </span>
@@ -758,11 +921,11 @@ function AttendeeDashboardContent() {
 
           </div>
 
-          {tickets.length === 0 ? (
+          {visibleTickets.length === 0 ? (
             <div className="mt-6 rounded-[28px] border border-white/10 bg-white/[0.025] px-7 py-16 text-center">
 
               <p className="text-4xl">
-                â—‡
+                Ã¢â€”â€¡
               </p>
 
               <h3 className="mt-5 text-xl font-bold">
@@ -790,7 +953,7 @@ function AttendeeDashboardContent() {
           ) : (
             <div className="mt-6 grid gap-5 lg:grid-cols-2">
 
-              {tickets.map(
+              {visibleTickets.map(
                 (ticket) => (
                   <TicketCard
                     key={ticket.id}
@@ -1105,122 +1268,24 @@ function TicketCard({
 
   /*
   |--------------------------------------------------------------------------
-  | Rotating QR State
+  | QR Payload
   |--------------------------------------------------------------------------
   |
-  | QR credentials are requested from POST /pass/:purchaseId/rotating-qr.
-  | The backend issues signed ROTATING_QR JWTs that expire after 60 seconds.
-  | Never encode the permanent qrToken or a permanent secure-pass JWT here.
+  | The scanner verifies a signed JWT. Never encode the raw qrToken.
+  |
   */
 
-  const [rotatingToken, setRotatingToken] = useState<string | null>(null);
-  const [qrExpiresAt, setQrExpiresAt] = useState<string | null>(null);
-  const [qrSecondsRemaining, setQrSecondsRemaining] = useState(0);
-  const [qrLoading, setQrLoading] = useState(false);
-  const [qrError, setQrError] = useState<string | null>(null);
-  const qrRequestInFlight = useRef(false);
+  const signedPassToken =
+    firstPass?.token ?? null;
 
-  const checkedIn = ticket.checkIn != null;
-  const firstPassCanEnter = Boolean(
-    String(ticket.status).toUpperCase() === "PAID" &&
-      firstPass &&
-      firstPass.isActive &&
-      !firstPass.isRevoked &&
-      !checkedIn,
-  );
+  /*
+  |--------------------------------------------------------------------------
+  | Check-In State
+  |--------------------------------------------------------------------------
+  */
 
-  async function refreshRotatingQr() {
-    if (!firstPassCanEnter || qrRequestInFlight.current) return;
-
-    qrRequestInFlight.current = true;
-    setQrLoading(true);
-    setQrError(null);
-
-    try {
-      const response = await apiFetch<{
-        success: boolean;
-        purchaseId?: string;
-        passes?: Array<{
-          passId: string;
-          passNumber: string;
-          token: string;
-          expiresAt: string;
-        }>;
-        message?: string;
-      }>(`/pass/${encodeURIComponent(ticket.id)}/rotating-qr`, {
-        method: "POST",
-        body: JSON.stringify({}),
-      });
-
-      if (!response.success || !Array.isArray(response.passes)) {
-        throw new Error(response.message ?? "Rotating QR code is unavailable.");
-      }
-
-      const matchingPass = response.passes.find(
-        (pass) => pass.passId === firstPass.id,
-      );
-
-      if (!matchingPass?.token || !matchingPass.expiresAt) {
-        throw new Error("The backend did not return a QR token for this pass.");
-      }
-
-      setRotatingToken(matchingPass.token);
-      setQrExpiresAt(matchingPass.expiresAt);
-      setQrSecondsRemaining(
-        Math.max(0, Math.floor((new Date(matchingPass.expiresAt).getTime() - Date.now()) / 1000)),
-      );
-    } catch (err: unknown) {
-      console.error("ROTATING QR ERROR:", err);
-      setRotatingToken(null);
-      setQrExpiresAt(null);
-      setQrSecondsRemaining(0);
-      setQrError(
-        (err as { message?: string })?.message ?? "Unable to refresh your QR code.",
-      );
-    } finally {
-      qrRequestInFlight.current = false;
-      setQrLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    if (!firstPassCanEnter) {
-      setRotatingToken(null);
-      setQrExpiresAt(null);
-      setQrSecondsRemaining(0);
-      return;
-    }
-
-    void refreshRotatingQr();
-    // Refresh before the backend's 60-second token expiry.
-    const refreshInterval = window.setInterval(() => {
-      void refreshRotatingQr();
-    }, 50_000);
-
-    return () => window.clearInterval(refreshInterval);
-    // A ticket/pass change should start a fresh QR lifecycle.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ticket.id, firstPass?.id, firstPassCanEnter]);
-
-  useEffect(() => {
-    if (!qrExpiresAt) {
-      setQrSecondsRemaining(0);
-      return;
-    }
-
-    const updateCountdown = () => {
-      const remaining = Math.max(
-        0,
-        Math.ceil((new Date(qrExpiresAt).getTime() - Date.now()) / 1000),
-      );
-      setQrSecondsRemaining(remaining);
-      if (remaining === 0) setRotatingToken(null);
-    };
-
-    updateCountdown();
-    const countdownInterval = window.setInterval(updateCountdown, 1000);
-    return () => window.clearInterval(countdownInterval);
-  }, [qrExpiresAt]);
+  const checkedIn =
+    ticket.checkIn != null;
 
   return (
     <article
@@ -1352,8 +1417,9 @@ function TicketCard({
             </p>
 
             <p className="mt-2 text-sm leading-6 text-white/45">
-              Present the live rotating QR code
-              at the event entrance for check-in.
+              Present this QR code
+              at the event entrance
+              for check-in.
             </p>
 
           </div>
@@ -1364,54 +1430,35 @@ function TicketCard({
 
         <div className="flex flex-col items-center">
 
-          {rotatingToken && qrSecondsRemaining > 0 && firstPassCanEnter ? (
+          {signedPassToken ? (
             <>
               <div className="rounded-2xl bg-white p-3">
+
                 <QRCodeSVG
-                  value={rotatingToken}
+                  value={signedPassToken}
                   size={124}
                   level="H"
                   includeMargin={false}
                 />
+
               </div>
-              <p className="mt-3 text-center text-[9px] font-semibold uppercase tracking-[0.15em] text-white/50">
-                Refreshes in {qrSecondsRemaining}s
+
+              <p className="mt-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/20">
+                Scan to enter
               </p>
-              <button
-                type="button"
-                onClick={() => void refreshRotatingQr()}
-                disabled={qrLoading}
-                className="mt-2 text-[10px] font-semibold text-primary underline-offset-4 hover:underline disabled:opacity-50"
-              >
-                {qrLoading ? "Refreshing…" : "Refresh now"}
-              </button>
             </>
           ) : (
             <>
-              <div className="flex h-[150px] w-[150px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 bg-white/[0.02] px-3 text-center">
-                <span className="text-xs text-white/45">
-                  {checkedIn
-                    ? "Ticket already checked in"
-                    : !firstPass
-                      ? "No pass issued"
-                      : !firstPass.isActive || firstPass.isRevoked
-                        ? "Pass inactive or revoked"
-                        : qrLoading
-                          ? "Generating secure QR…"
-                          : qrError ?? "Secure QR unavailable"}
+              <div className="flex h-[150px] w-[150px] items-center justify-center rounded-2xl border border-dashed border-white/15 bg-white/[0.02]">
+
+                <span className="px-4 text-center text-xs text-white/25">
+                  Secure QR unavailable
                 </span>
-                {firstPassCanEnter && !qrLoading && (
-                  <button
-                    type="button"
-                    onClick={() => void refreshRotatingQr()}
-                    className="mt-3 text-xs font-semibold text-primary underline-offset-4 hover:underline"
-                  >
-                    Try again
-                  </button>
-                )}
+
               </div>
-              <p className="mt-3 text-center text-[9px] font-semibold uppercase tracking-[0.15em] text-white/25">
-                Short-lived secure pass
+
+              <p className="mt-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/20">
+                Secure pass unavailable
               </p>
             </>
           )}
