@@ -4,6 +4,7 @@ import {
   Suspense,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -17,7 +18,6 @@ import { QRCodeSVG } from "qrcode.react";
 import {
   getMyTickets,
   getPurchasePaymentStatus,
-  getSecureTicketPasses,
   type MyTicket,
 } from "@/services/purchase";
 
@@ -191,96 +191,10 @@ function AttendeeDashboardContent() {
       */
 
       if (ticketResponse.success) {
-        const ticketList = ticketResponse.tickets ?? [];
-
-        // QR codes must contain the signed JWT returned by the secure-pass
-        // endpoint. Never use the raw qrToken as the QR payload.
-        const ticketsWithSecurePasses = await Promise.all(
-          ticketList.map(async (ticket) => {
-            if (
-              String(ticket.status).toUpperCase() !== "PAID" ||
-              !ticket.passes?.length
-            ) {
-              return {
-                ...ticket,
-                passes: (ticket.passes ?? []).map((pass) => ({
-                  ...pass,
-                  token: null,
-                })),
-              };
-            }
-
-            try {
-              const secureResponse =
-                await getSecureTicketPasses(ticket.id);
-
-              if (
-                !secureResponse.success ||
-                !Array.isArray(secureResponse.passes)
-              ) {
-                throw new Error(
-                  secureResponse.message ??
-                    "Secure ticket credentials are unavailable.",
-                );
-              }
-
-              const securePassesById = new Map<
-                string,
-                (typeof secureResponse.passes)[number]
-              >(
-                secureResponse.passes.map(
-                  (pass) => [pass.id, pass] as const,
-                ),
-              );
-
-              return {
-                ...ticket,
-                passes: ticket.passes.map((pass) => {
-                  const securePass =
-                    securePassesById.get(pass.id);
-
-                  if (!securePass?.token) {
-                    return {
-                      ...pass,
-                      token: null,
-                    };
-                  }
-
-                  return {
-                    ...pass,
-                    token: securePass.token,
-                    passNumber: securePass.passNumber,
-                    qrToken: securePass.qrToken,
-                    nfcToken: securePass.nfcToken,
-                    isActive: securePass.active,
-                    isRevoked: securePass.revoked,
-                    nfcEnabled: securePass.nfcEnabled,
-                    issuedAt: securePass.issuedAt,
-                    expiresAt: securePass.expiresAt ?? null,
-                  };
-                }),
-              };
-            } catch (securePassError) {
-              // Keep the rest of the dashboard usable if a pass cannot be
-              // secured. The card will show QR unavailable instead of
-              // falling back to an unsigned/raw credential.
-              console.error(
-                `SECURE PASS LOAD ERROR (${ticket.id}):`,
-                securePassError,
-              );
-
-              return {
-                ...ticket,
-                passes: ticket.passes.map((pass) => ({
-                  ...pass,
-                  token: null,
-                })),
-              };
-            }
-          }),
-        );
-
-        setTickets(ticketsWithSecurePasses);
+        // The dashboard lists ticket records only. Each TicketCard requests a
+        // fresh, short-lived QR credential from POST /pass/:purchaseId/rotating-qr.
+        // Do not load or display permanent secure-pass JWTs as web QR codes.
+        setTickets(ticketResponse.tickets ?? []);
       }
 
       /*
@@ -1191,24 +1105,122 @@ function TicketCard({
 
   /*
   |--------------------------------------------------------------------------
-  | QR Payload
+  | Rotating QR State
   |--------------------------------------------------------------------------
   |
-  | The scanner verifies a signed JWT. Never encode the raw qrToken.
-  |
+  | QR credentials are requested from POST /pass/:purchaseId/rotating-qr.
+  | The backend issues signed ROTATING_QR JWTs that expire after 60 seconds.
+  | Never encode the permanent qrToken or a permanent secure-pass JWT here.
   */
 
-  const signedPassToken =
-    firstPass?.token ?? null;
+  const [rotatingToken, setRotatingToken] = useState<string | null>(null);
+  const [qrExpiresAt, setQrExpiresAt] = useState<string | null>(null);
+  const [qrSecondsRemaining, setQrSecondsRemaining] = useState(0);
+  const [qrLoading, setQrLoading] = useState(false);
+  const [qrError, setQrError] = useState<string | null>(null);
+  const qrRequestInFlight = useRef(false);
 
-  /*
-  |--------------------------------------------------------------------------
-  | Check-In State
-  |--------------------------------------------------------------------------
-  */
+  const checkedIn = ticket.checkIn != null;
+  const firstPassCanEnter = Boolean(
+    String(ticket.status).toUpperCase() === "PAID" &&
+      firstPass &&
+      firstPass.isActive &&
+      !firstPass.isRevoked &&
+      !checkedIn,
+  );
 
-  const checkedIn =
-    ticket.checkIn != null;
+  async function refreshRotatingQr() {
+    if (!firstPassCanEnter || qrRequestInFlight.current) return;
+
+    qrRequestInFlight.current = true;
+    setQrLoading(true);
+    setQrError(null);
+
+    try {
+      const response = await apiFetch<{
+        success: boolean;
+        purchaseId?: string;
+        passes?: Array<{
+          passId: string;
+          passNumber: string;
+          token: string;
+          expiresAt: string;
+        }>;
+        message?: string;
+      }>(`/pass/${encodeURIComponent(ticket.id)}/rotating-qr`, {
+        method: "POST",
+        body: JSON.stringify({}),
+      });
+
+      if (!response.success || !Array.isArray(response.passes)) {
+        throw new Error(response.message ?? "Rotating QR code is unavailable.");
+      }
+
+      const matchingPass = response.passes.find(
+        (pass) => pass.passId === firstPass.id,
+      );
+
+      if (!matchingPass?.token || !matchingPass.expiresAt) {
+        throw new Error("The backend did not return a QR token for this pass.");
+      }
+
+      setRotatingToken(matchingPass.token);
+      setQrExpiresAt(matchingPass.expiresAt);
+      setQrSecondsRemaining(
+        Math.max(0, Math.floor((new Date(matchingPass.expiresAt).getTime() - Date.now()) / 1000)),
+      );
+    } catch (err: unknown) {
+      console.error("ROTATING QR ERROR:", err);
+      setRotatingToken(null);
+      setQrExpiresAt(null);
+      setQrSecondsRemaining(0);
+      setQrError(
+        (err as { message?: string })?.message ?? "Unable to refresh your QR code.",
+      );
+    } finally {
+      qrRequestInFlight.current = false;
+      setQrLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    if (!firstPassCanEnter) {
+      setRotatingToken(null);
+      setQrExpiresAt(null);
+      setQrSecondsRemaining(0);
+      return;
+    }
+
+    void refreshRotatingQr();
+    // Refresh before the backend's 60-second token expiry.
+    const refreshInterval = window.setInterval(() => {
+      void refreshRotatingQr();
+    }, 50_000);
+
+    return () => window.clearInterval(refreshInterval);
+    // A ticket/pass change should start a fresh QR lifecycle.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ticket.id, firstPass?.id, firstPassCanEnter]);
+
+  useEffect(() => {
+    if (!qrExpiresAt) {
+      setQrSecondsRemaining(0);
+      return;
+    }
+
+    const updateCountdown = () => {
+      const remaining = Math.max(
+        0,
+        Math.ceil((new Date(qrExpiresAt).getTime() - Date.now()) / 1000),
+      );
+      setQrSecondsRemaining(remaining);
+      if (remaining === 0) setRotatingToken(null);
+    };
+
+    updateCountdown();
+    const countdownInterval = window.setInterval(updateCountdown, 1000);
+    return () => window.clearInterval(countdownInterval);
+  }, [qrExpiresAt]);
 
   return (
     <article
@@ -1340,9 +1352,8 @@ function TicketCard({
             </p>
 
             <p className="mt-2 text-sm leading-6 text-white/45">
-              Present this QR code
-              at the event entrance
-              for check-in.
+              Present the live rotating QR code
+              at the event entrance for check-in.
             </p>
 
           </div>
@@ -1353,35 +1364,54 @@ function TicketCard({
 
         <div className="flex flex-col items-center">
 
-          {signedPassToken ? (
+          {rotatingToken && qrSecondsRemaining > 0 && firstPassCanEnter ? (
             <>
               <div className="rounded-2xl bg-white p-3">
-
                 <QRCodeSVG
-                  value={signedPassToken}
+                  value={rotatingToken}
                   size={124}
                   level="H"
                   includeMargin={false}
                 />
-
               </div>
-
-              <p className="mt-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/20">
-                Scan to enter
+              <p className="mt-3 text-center text-[9px] font-semibold uppercase tracking-[0.15em] text-white/50">
+                Refreshes in {qrSecondsRemaining}s
               </p>
+              <button
+                type="button"
+                onClick={() => void refreshRotatingQr()}
+                disabled={qrLoading}
+                className="mt-2 text-[10px] font-semibold text-primary underline-offset-4 hover:underline disabled:opacity-50"
+              >
+                {qrLoading ? "Refreshing…" : "Refresh now"}
+              </button>
             </>
           ) : (
             <>
-              <div className="flex h-[150px] w-[150px] items-center justify-center rounded-2xl border border-dashed border-white/15 bg-white/[0.02]">
-
-                <span className="px-4 text-center text-xs text-white/25">
-                  Secure QR unavailable
+              <div className="flex h-[150px] w-[150px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 bg-white/[0.02] px-3 text-center">
+                <span className="text-xs text-white/45">
+                  {checkedIn
+                    ? "Ticket already checked in"
+                    : !firstPass
+                      ? "No pass issued"
+                      : !firstPass.isActive || firstPass.isRevoked
+                        ? "Pass inactive or revoked"
+                        : qrLoading
+                          ? "Generating secure QR…"
+                          : qrError ?? "Secure QR unavailable"}
                 </span>
-
+                {firstPassCanEnter && !qrLoading && (
+                  <button
+                    type="button"
+                    onClick={() => void refreshRotatingQr()}
+                    className="mt-3 text-xs font-semibold text-primary underline-offset-4 hover:underline"
+                  >
+                    Try again
+                  </button>
+                )}
               </div>
-
-              <p className="mt-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/20">
-                Secure pass unavailable
+              <p className="mt-3 text-center text-[9px] font-semibold uppercase tracking-[0.15em] text-white/25">
+                Short-lived secure pass
               </p>
             </>
           )}
