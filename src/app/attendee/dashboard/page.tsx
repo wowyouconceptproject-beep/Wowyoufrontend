@@ -18,7 +18,6 @@ import {
   getMyTickets,
   getPurchasePaymentStatus,
   getSecureTicketPasses,
-  getRotatingTicketQrs,
   type MyTicket,
 } from "@/services/purchase";
 
@@ -74,10 +73,6 @@ function AttendeeDashboardContent() {
 
   const [tickets, setTickets] =
     useState<MyTicket[]>([]);
-
-  const [rotatingQrs, setRotatingQrs] = useState<
-    Record<string, { token: string; expiresAt: string } | null>
-  >({});
 
   /*
   |--------------------------------------------------------------------------
@@ -219,8 +214,8 @@ function AttendeeDashboardContent() {
       if (ticketResponse.success) {
         const ticketList = ticketResponse.tickets ?? [];
 
-        // QR codes must contain the signed JWT returned by the secure-pass
-        // endpoint. Never use the raw qrToken as the QR payload.
+        // Preserve the original EventPass.qrToken for the legacy 64-character
+        // hexadecimal QR format used by the organizer scanner.
         const ticketsWithSecurePasses = await Promise.all(
           ticketList.map(async (ticket) => {
             if (
@@ -485,144 +480,6 @@ function AttendeeDashboardContent() {
   useEffect(() => {
     void loadDashboard();
   }, []);
-
-  /*
-  |--------------------------------------------------------------------------
-  | Rotating QR Credentials
-  |--------------------------------------------------------------------------
-  |
-  | QR scans require short-lived rotating credentials. Keep these separate
-  | from the permanent signed credentials used by NFC.
-  |
-  */
-
-  useEffect(() => {
-    let cancelled = false;
-    let timer: number | undefined;
-
-    async function refreshRotatingQrs() {
-      const paidTickets = tickets.filter(
-        (ticket) =>
-          String(ticket.status).toUpperCase() === "PAID" &&
-          ticket.passes?.some(
-            (pass) => pass.isActive && !pass.isRevoked,
-          ),
-      );
-
-      if (paidTickets.length === 0) {
-        setRotatingQrs({});
-        return;
-      }
-
-      const nextQrs: Record<
-        string,
-        { token: string; expiresAt: string } | null
-      > = {};
-
-      await Promise.all(
-        paidTickets.map(async (ticket) => {
-          try {
-            const response = await getRotatingTicketQrs(ticket.id);
-
-            if (
-              !response.success ||
-              !Array.isArray(response.passes)
-            ) {
-              throw new Error(
-                response.message ?? "Unable to refresh QR credentials.",
-              );
-            }
-
-            const eligiblePassIds = new Set(
-              (ticket.passes ?? [])
-                .filter((pass) => pass.isActive && !pass.isRevoked)
-                .map((pass) => pass.id),
-            );
-
-            for (const pass of response.passes) {
-              if (
-                !pass.passId ||
-                !eligiblePassIds.has(pass.passId) ||
-                !pass.token ||
-                !pass.expiresAt ||
-                !Number.isFinite(new Date(pass.expiresAt).getTime())
-              ) {
-                continue;
-              }
-
-              nextQrs[pass.passId] = {
-                token: pass.token,
-                expiresAt: pass.expiresAt,
-              };
-            }
-
-            for (const pass of ticket.passes ?? []) {
-              if (
-                pass.isActive &&
-                !pass.isRevoked &&
-                !nextQrs[pass.id]
-              ) {
-                nextQrs[pass.id] = null;
-              }
-            }
-          } catch (err) {
-            console.error(
-              `ROTATING QR REFRESH ERROR (${ticket.id}):`,
-              err,
-            );
-
-            for (const pass of ticket.passes ?? []) {
-              if (pass.isActive && !pass.isRevoked) {
-                nextQrs[pass.id] = null;
-              }
-            }
-          }
-        }),
-      );
-
-      if (cancelled) return;
-
-      // Replace the map so removed or revoked passes cannot retain old tokens.
-      setRotatingQrs(nextQrs);
-
-      const expiryTimes = Object.values(nextQrs)
-        .filter(
-          (
-            qr,
-          ): qr is { token: string; expiresAt: string } => qr !== null,
-        )
-        .map((qr) => new Date(qr.expiresAt).getTime())
-        .filter((expiry) => Number.isFinite(expiry));
-
-      const earliestExpiry =
-        expiryTimes.length > 0
-          ? Math.min(...expiryTimes)
-          : Date.now() + 10_000;
-
-      // Refresh five seconds before the earliest credential expires.
-      const delay = Math.max(
-        1_000,
-        earliestExpiry - Date.now() - 5_000,
-      );
-
-      timer = window.setTimeout(() => {
-        void refreshRotatingQrs();
-      }, delay);
-    }
-
-    if (tickets.length > 0) {
-      void refreshRotatingQrs();
-    } else {
-      setRotatingQrs({});
-    }
-
-    return () => {
-      cancelled = true;
-      if (timer !== undefined) {
-        window.clearTimeout(timer);
-      }
-    };
-  }, [tickets]);
 
   /*
   |--------------------------------------------------------------------------
@@ -1102,7 +959,6 @@ function AttendeeDashboardContent() {
                     key={ticket.id}
                     ticket={ticket}
                     highlighted={ticket.id === purchaseId}
-                    rotatingQrs={rotatingQrs}
                   />
                 ),
               )}
@@ -1375,14 +1231,9 @@ function AttendeeDashboardContent() {
 function TicketCard({
   ticket,
   highlighted,
-  rotatingQrs,
 }: {
   ticket: MyTicket;
   highlighted: boolean;
-  rotatingQrs: Record<
-    string,
-    { token: string; expiresAt: string } | null
-  >;
 }) {
   const event = ticket.event;
 
@@ -1417,20 +1268,13 @@ function TicketCard({
   | QR Payload
   |--------------------------------------------------------------------------
   |
-  | The organizer QR scanner expects a short-lived rotating QR token.
-  | The permanent signed pass token remains available separately for NFC.
+  | Use the original 64-character hexadecimal EventPass.qrToken. The backend
+  | scanner validates this value against the stored pass and event.
   |
   */
 
-  const rotatingQr = firstPass
-    ? rotatingQrs[firstPass.id]
-    : null;
-
-  const rotatingQrToken =
-    rotatingQr &&
-    new Date(rotatingQr.expiresAt).getTime() > Date.now()
-      ? rotatingQr.token
-      : null;
+  const qrToken = firstPass?.qrToken?.trim() ?? "";
+  const hasValidQrToken = /^[a-fA-F0-9]{64}$/.test(qrToken);
 
   /*
   |--------------------------------------------------------------------------
@@ -1584,13 +1428,13 @@ function TicketCard({
 
         <div className="flex flex-col items-center">
 
-          {rotatingQrToken ? (
+          {hasValidQrToken ? (
             <>
               <div className="rounded-2xl bg-white p-3">
                 <QRCodeSVG
-                  value={rotatingQrToken}
+                  value={qrToken}
                   size={124}
-                  level="H"
+                  level="M"
                   includeMargin={false}
                 />
               </div>
@@ -1603,7 +1447,7 @@ function TicketCard({
             <>
               <div className="flex h-[150px] w-[150px] items-center justify-center rounded-2xl border border-dashed border-white/15 bg-white/[0.02]">
                 <span className="px-4 text-center text-xs text-white/25">
-                  Refreshing secure QR…
+                  Ticket QR unavailable
                 </span>
               </div>
 
@@ -1614,7 +1458,6 @@ function TicketCard({
           )}
 
         </div>
-
       </div>
 
     </article>
