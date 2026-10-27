@@ -6,6 +6,7 @@ import {
 } from "react";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import {
   Eye,
@@ -212,22 +213,12 @@ export default function LoginPage() {
       |
       */
 
-      if (data.token) {
-        localStorage.setItem(
-          "token",
-          data.token,
-        );
-
-        router.push(
-          "/dashboard",
-        );
-
-        return;
-      }
-
+      // Browser sessions are established by the backend using an
+      // HttpOnly cookie after the email OTP has been verified.
+      // Never store authentication tokens in browser storage.
       setError(
         data.message ||
-          "Login could not be completed.",
+          "Login could not be completed. Please verify your email and try again.",
       );
     } catch (error) {
       console.error(
@@ -346,22 +337,9 @@ export default function LoginPage() {
         return;
       }
 
-      if (!data.token) {
-        setError(
-          "Login could not be completed.",
-        );
-
-        return;
-      }
-
-      localStorage.setItem(
-        "token",
-        data.token,
-      );
-
-      router.push(
-        "/dashboard",
-      );
+      // The backend sets the HttpOnly session cookie on successful OTP
+      // verification. The browser does not need a readable JWT.
+      router.push("/dashboard");
     } catch (error) {
       console.error(
         "OTP VERIFICATION ERROR:",
@@ -888,6 +866,16 @@ export default function LoginPage() {
               >
                 Create Account
               </button>
+
+              <p className="pt-2 text-center text-sm leading-6 text-text-secondary">
+                Attending an event instead?{" "}
+                <Link
+                  href="/attendee/login"
+                  className="font-semibold text-primary underline-offset-4 transition hover:text-primary-light hover:underline"
+                >
+                  Log in as an attendee
+                </Link>
+              </p>
             </div>
           )}
 

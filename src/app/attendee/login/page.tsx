@@ -10,6 +10,7 @@ import {
   resendLoginOtp,
   resendVerificationEmail,
   verifyLoginOtp,
+  logoutUser,
 } from "@/services/auth";
 
 type Step = "login" | "otp" | "verification";
@@ -39,8 +40,14 @@ export default function AttendeeLoginPage() {
     setSuccess("");
   }
 
+  /**
+   * Browser authentication is managed by the backend-issued
+   * HttpOnly session cookie. Never store authentication tokens
+   * in localStorage or sessionStorage.
+   *
+   * The user profile below is non-secret UI cache only.
+   */
   function saveSession(
-    token: string,
     user?: {
       id: string;
       firstName: string;
@@ -49,18 +56,8 @@ export default function AttendeeLoginPage() {
       role: string;
     },
   ) {
-    /*
-     * Keep the token key consistent with the rest of the
-     * attendee application. The API client/authenticated
-     * dashboard reads this key.
-     */
-    localStorage.setItem("token", token);
-
-    /*
-     * Also keep the legacy key if another attendee component
-     * uses it.
-     */
-    localStorage.setItem("wowyou_token", token);
+    localStorage.removeItem("token");
+    localStorage.removeItem("wowyou_token");
 
     if (user) {
       localStorage.setItem("wowyou_user", JSON.stringify(user));
@@ -99,7 +96,7 @@ export default function AttendeeLoginPage() {
       }
 
       /*
-       * Email verification is required before OTP/login.
+       * Email verification must happen before login OTP.
        */
       if (response.requiresEmailVerification) {
         setEmail(normalizedEmail);
@@ -130,37 +127,16 @@ export default function AttendeeLoginPage() {
       }
 
       /*
-       * Some environments may return a token directly.
+       * Browser login must complete through OTP so the backend
+       * can issue the HttpOnly session cookie.
+       *
+       * Do not accept or store a JWT returned directly by the
+       * password-login endpoint.
        */
-      if (!response.token) {
-        setError(
-          response.message ||
-            "Additional verification is required before you can continue.",
-        );
-
-        return;
-      }
-
-      /*
-       * Attendee-only protection.
-       */
-      if (
-        response.user &&
-        !validateAttendeeRole(response.user.role)
-      ) {
-        setError("This account is not an attendee account.");
-        return;
-      }
-
-      saveSession(response.token, response.user);
-
-      /*
-       * IMPORTANT:
-       * The attendee dashboard is /attendee/dashboard.
-       * There is intentionally NO redirect to /attendee.
-       */
-      router.replace("/attendee/dashboard");
-      router.refresh();
+      setError(
+        response.message ||
+          "Additional verification is required before you can continue.",
+      );
     } catch (err) {
       setError(
         err instanceof Error
@@ -194,28 +170,43 @@ export default function AttendeeLoginPage() {
         otp: normalizedOtp,
       });
 
-      if (!response.success || !response.token) {
+      /*
+       * The backend should set the HttpOnly cookie and return
+       * the authenticated user's profile.
+       */
+      if (!response.success || !response.user) {
         setError(response.message || "Invalid verification code.");
         return;
       }
 
       /*
-       * Do not allow organizer/vendor accounts into
-       * the attendee dashboard.
+       * Do not allow organizer/vendor accounts into the
+       * attendee dashboard.
        */
-      if (
-        response.user &&
-        !validateAttendeeRole(response.user.role)
-      ) {
+      if (!validateAttendeeRole(response.user.role)) {
+        /*
+         * OTP verification may already have created a session.
+         * Attempt to revoke that session before rejecting this
+         * account from the attendee interface.
+         */
+        try {
+          await logoutUser();
+        } catch {
+          // Keep the role restriction even if cleanup fails.
+        }
+
+        localStorage.removeItem("token");
+        localStorage.removeItem("wowyou_token");
+        localStorage.removeItem("wowyou_user");
+
         setError("This account is not an attendee account.");
         return;
       }
 
-      saveSession(response.token, response.user);
+      saveSession(response.user);
 
       /*
-       * IMPORTANT:
-       * OTP login also goes directly to the attendee dashboard.
+       * Attendee OTP login goes directly to the attendee dashboard.
        */
       router.replace("/attendee/dashboard");
       router.refresh();
