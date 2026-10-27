@@ -143,10 +143,19 @@ export function getCurrentUser() {
   return apiFetch<CurrentUserResponse>("/auth/me");
 }
 
-export function logoutUser() {
-  return apiFetch<{ success: boolean; message?: string }>("/auth/logout", {
-    method: "POST",
-  });
+export async function logoutUser(): Promise<void> {
+  try {
+    await apiFetch<{ success: boolean; message?: string }>("/auth/logout", {
+      method: "POST",
+      withAuth: true,
+    });
+  } finally {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token");
+      localStorage.removeItem("wowyou_token");
+      localStorage.removeItem("wowyou_user");
+    }
+  }
 }
 
 export function forgotPassword(data: ForgotPasswordPayload) {
@@ -171,17 +180,4 @@ export function resetPassword(data: ResetPasswordPayload) {
     withAuth: false,
     body: JSON.stringify(data),
   });
-}
-
-export async function logoutUser(): Promise<void> {
-  await apiFetch("/auth/logout", {
-    method: "POST",
-    withAuth: true,
-  });
-
-  if (typeof window !== "undefined") {
-    localStorage.removeItem("token");
-    localStorage.removeItem("wowyou_token");
-    localStorage.removeItem("wowyou_user");
-  }
 }
