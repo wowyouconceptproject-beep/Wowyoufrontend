@@ -10,6 +10,7 @@ import {
   Plus,
   Users,
   Wallet,
+  LogOut,
 } from "lucide-react";
 
 import { useAuth } from "@/context/AuthContext";
@@ -25,6 +26,7 @@ export default function Dashboard() {
     trialDaysRemaining,
     hasActiveSubscription,
     refresh,
+    logout,
   } = useAuth();
 
   const [name, setName] = useState("");
@@ -591,52 +593,62 @@ export default function Dashboard() {
         {/* Events */}
         {/* --------------------------------------------------------------- */}
 
-        <section className="mt-16">
-          <div className="flex items-end justify-between gap-6">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[primary]">
-                Event Portfolio
-              </p>
+        
+<section className="mt-16">
+  <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[primary]">
+        Event Portfolio
+      </p>
 
-              <h2 className="mt-3 text-3xl font-bold">
-                Your Events
-              </h2>
+      <h2 className="mt-3 text-3xl font-bold">
+        Your Events
+      </h2>
 
-              <p className="mt-2 text-muted">
-                Open an event to manage tickets, attendees, staff, revenue
-                and live operations.
-              </p>
-            </div>
-          </div>
+      <p className="mt-2 text-muted">
+        Open an event to manage tickets, attendees, staff, revenue
+        and live operations.
+      </p>
+    </div>
 
-          {/* Empty */}
+    <button
+      type="button"
+      onClick={logout}
+      className="inline-flex w-fit items-center justify-center gap-2 rounded-full border border-divider bg-surface/70 px-5 py-3 text-sm font-semibold text-muted transition-all duration-200 hover:border-red-500/40 hover:bg-red-500/5 hover:text-red-400"
+    >
+      <LogOut className="h-4 w-4" />
+      Sign Out
+    </button>
+  </div>
 
-          {eventCount === 0 && (
-            <div className="mt-8 flex min-h-[360px] flex-col items-center justify-center rounded-[32px] border border-dashed border-divider bg-surface/50 px-6 text-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-divider bg-background">
-                <CalendarDays className="h-7 w-7 text-[primary]" />
-              </div>
+  {/* Empty */}
 
-              <h3 className="mt-6 text-2xl font-bold">
-                Your first event starts here.
-              </h3>
+  {eventCount === 0 && (
+    <div className="mt-8 flex min-h-[360px] flex-col items-center justify-center rounded-[32px] border border-dashed border-divider bg-surface/50 px-6 text-center">
+      <div className="flex h-16 w-16 items-center justify-center rounded-full border border-divider bg-background">
+        <CalendarDays className="h-7 w-7 text-[primary]" />
+      </div>
 
-              <p className="mt-3 max-w-md leading-7 text-muted">
-                Create an event, configure tickets, build your staff team
-                and start preparing your live operations.
-              </p>
+      <h3 className="mt-6 text-2xl font-bold">
+        Your first event starts here.
+      </h3>
 
-              <Link
-                href="/dashboard/events/create"
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-white"
-              >
-                <Plus className="h-4 w-4" />
-                Create Event
-              </Link>
-            </div>
-          )}
+      <p className="mt-3 max-w-md leading-7 text-muted">
+        Create an event, configure tickets, build your staff team
+        and start preparing your live operations.
+      </p>
 
-          {/* Event Cards */}
+      <Link
+        href="/dashboard/events/create"
+        className="mt-8 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-white"
+      >
+        <Plus className="h-4 w-4" />
+        Create Event
+      </Link>
+    </div>
+  )}
+
+  {/* Event Cards */}
 
           {eventCount > 0 && (
             <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
