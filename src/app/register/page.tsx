@@ -1,12 +1,12 @@
+
 "use client";
 
 import { useState } from "react";
-
 import { useRouter } from "next/navigation";
-
 import { Eye, EyeOff } from "lucide-react";
 
 import { registerUser } from "@/services/auth";
+import { setToken } from "@/lib/auth";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -19,9 +19,7 @@ export default function RegisterPage() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-
   const [loading, setLoading] = useState(false);
-
   const [error, setError] = useState("");
 
   async function submit() {
@@ -46,13 +44,17 @@ export default function RegisterPage() {
       | Successful Registration
       |--------------------------------------------------------------------------
       |
-      | The backend should return both token and user.
-      | We explicitly check both so TypeScript knows they exist.
+      | Registration service stores the JWT using setToken()
+      | when the backend returns a token.
+      |
+      | Preserve the existing user information used by
+      | the legal acceptance flow.
       |
       */
 
       if (data.token && data.user) {
-        localStorage.setItem("token", data.token);
+        // Ensure the JWT is stored through the shared auth helper.
+        setToken(data.token);
 
         localStorage.setItem(
           "userFullName",
@@ -532,9 +534,7 @@ export default function RegisterPage() {
 
             <button
               type="button"
-              onClick={() =>
-                router.push("/login")
-              }
+              onClick={() => router.push("/login")}
               className="
                 font-semibold
                 text-primary

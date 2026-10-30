@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -30,57 +31,18 @@ type LoginStep =
 export default function LoginPage() {
   const router = useRouter();
 
-  const [
-    step,
-    setStep,
-  ] = useState<LoginStep>(
-    "credentials",
-  );
+  const [step, setStep] = useState<LoginStep>("credentials");
 
-  const [
-    email,
-    setEmail,
-  ] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
 
-  const [
-    password,
-    setPassword,
-  ] = useState("");
-
-  const [
-    otp,
-    setOtp,
-  ] = useState("");
-
-  const [
-    showPassword,
-    setShowPassword,
-  ] = useState(false);
-
-  const [
-    loading,
-    setLoading,
-  ] = useState(false);
-
-  const [
-    error,
-    setError,
-  ] = useState("");
-
-  const [
-    successMessage,
-    setSuccessMessage,
-  ] = useState("");
-
-  const [
-    resendLoading,
-    setResendLoading,
-  ] = useState(false);
-
-  const [
-    resendCountdown,
-    setResendCountdown,
-  ] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendCountdown, setResendCountdown] = useState(0);
 
   /*
   |--------------------------------------------------------------------------
@@ -93,20 +55,13 @@ export default function LoginPage() {
       return;
     }
 
-    const timer =
-      window.setInterval(() => {
-        setResendCountdown(
-          (current) =>
-            current > 0
-              ? current - 1
-              : 0,
-        );
-      }, 1000);
-
-    return () =>
-      window.clearInterval(
-        timer,
+    const timer = window.setInterval(() => {
+      setResendCountdown((current) =>
+        current > 0 ? current - 1 : 0,
       );
+    }, 1000);
+
+    return () => window.clearInterval(timer);
   }, [resendCountdown]);
 
   /*
@@ -117,17 +72,13 @@ export default function LoginPage() {
 
   async function submit() {
     if (!email.trim()) {
-      setError(
-        "Please enter your email address.",
-      );
+      setError("Please enter your email address.");
       setSuccessMessage("");
       return;
     }
 
     if (!password) {
-      setError(
-        "Please enter your password.",
-      );
+      setError("Please enter your password.");
       setSuccessMessage("");
       return;
     }
@@ -137,22 +88,15 @@ export default function LoginPage() {
       setError("");
       setSuccessMessage("");
 
-      const data =
-        await loginUser(
-          email.trim(),
-          password,
-        );
-
-      console.log(
-        "LOGIN RESPONSE:",
-        data,
+      const data = await loginUser(
+        email.trim(),
+        password,
       );
 
+      console.log("LOGIN RESPONSE:", data);
+
       if (!data.success) {
-        setError(
-          data.message ||
-            "Login failed.",
-        );
+        setError(data.message || "Login failed.");
         return;
       }
 
@@ -161,20 +105,13 @@ export default function LoginPage() {
       | Email Verification Required
       |--------------------------------------------------------------------------
       |
-      | This MUST happen before login OTP.
-      |
-      | An account that has not verified its
-      | email must never enter the OTP flow.
+      | An account that has not verified its email
+      | must complete email verification before login OTP.
       |
       */
 
-      if (
-        data.requiresEmailVerification
-      ) {
-        setStep(
-          "emailVerification",
-        );
-
+      if (data.requiresEmailVerification) {
+        setStep("emailVerification");
         setOtp("");
         setResendCountdown(0);
         setSuccessMessage("");
@@ -187,14 +124,13 @@ export default function LoginPage() {
       | Login OTP Required
       |--------------------------------------------------------------------------
       |
-      | This means the account has already
-      | verified its email address.
+      | Password has been accepted.
+      | The backend has sent a login OTP.
       |
       */
 
       if (data.requiresOtp) {
         setStep("otp");
-
         setOtp("");
         setError("");
         setSuccessMessage("");
@@ -205,26 +141,30 @@ export default function LoginPage() {
 
       /*
       |--------------------------------------------------------------------------
-      | Direct Login Fallback
+      | Direct JWT Login Fallback
       |--------------------------------------------------------------------------
       |
-      | Keeps compatibility if the backend
-      | ever returns a token directly.
+      | Supports a backend response containing a JWT directly.
       |
       */
 
-      // Browser sessions are established by the backend using an
-      // HttpOnly cookie after the email OTP has been verified.
-      // Never store authentication tokens in browser storage.
+      if (data.token) {
+        const { setToken } = await import("@/lib/auth");
+
+        setToken(data.token);
+
+        router.replace("/dashboard");
+        router.refresh();
+
+        return;
+      }
+
       setError(
         data.message ||
-          "Login could not be completed. Please verify your email and try again.",
+          "Login could not be completed. Please try again.",
       );
     } catch (error) {
-      console.error(
-        "LOGIN ERROR:",
-        error,
-      );
+      console.error("LOGIN ERROR:", error);
 
       setError(
         error instanceof Error
@@ -243,10 +183,7 @@ export default function LoginPage() {
   */
 
   async function handleResendVerificationEmail() {
-    if (
-      resendLoading ||
-      resendCountdown > 0
-    ) {
+    if (resendLoading || resendCountdown > 0) {
       return;
     }
 
@@ -255,10 +192,9 @@ export default function LoginPage() {
       setError("");
       setSuccessMessage("");
 
-      const data =
-        await resendVerificationEmail(
-          email.trim(),
-        );
+      const data = await resendVerificationEmail(
+        email.trim(),
+      );
 
       if (!data.success) {
         setError(
@@ -297,16 +233,10 @@ export default function LoginPage() {
   */
 
   async function submitOtp() {
-    const normalizedOtp =
-      otp.replace(/\D/g, "");
+    const normalizedOtp = otp.replace(/\D/g, "");
 
-    if (
-      normalizedOtp.length !== 6
-    ) {
-      setError(
-        "Enter the 6-digit verification code.",
-      );
-
+    if (normalizedOtp.length !== 6) {
+      setError("Enter the 6-digit verification code.");
       setSuccessMessage("");
       return;
     }
@@ -316,35 +246,45 @@ export default function LoginPage() {
       setError("");
       setSuccessMessage("");
 
-      const data =
-        await verifyLoginOtp({
-          email:
-            email.trim(),
-          otp: normalizedOtp,
-        });
+      const data = await verifyLoginOtp({
+        email: email.trim(),
+        otp: normalizedOtp,
+      });
 
-      console.log(
-        "OTP VERIFICATION RESPONSE:",
-        data,
-      );
+      console.log("OTP VERIFICATION RESPONSE:", data);
 
       if (!data.success) {
         setError(
-          data.message ||
-            "Verification failed.",
+          data.message || "Verification failed.",
         );
 
         return;
       }
 
-      // The backend sets the HttpOnly session cookie on successful OTP
-      // verification. The browser does not need a readable JWT.
-      router.push("/dashboard");
+      /*
+      |--------------------------------------------------------------------------
+      | JWT Validation
+      |--------------------------------------------------------------------------
+      |
+      | verifyLoginOtp() stores the JWT through setToken()
+      | in the authentication service.
+      |
+      | Confirm the token exists before entering the dashboard.
+      |
+      */
+
+      if (!data.token) {
+        setError(
+          "Verification succeeded, but no authentication token was returned. Please try again.",
+        );
+
+        return;
+      }
+
+      router.replace("/dashboard");
+      router.refresh();
     } catch (error) {
-      console.error(
-        "OTP VERIFICATION ERROR:",
-        error,
-      );
+      console.error("OTP VERIFICATION ERROR:", error);
 
       setError(
         error instanceof Error
@@ -363,10 +303,7 @@ export default function LoginPage() {
   */
 
   async function handleResendOtp() {
-    if (
-      resendLoading ||
-      resendCountdown > 0
-    ) {
+    if (resendLoading || resendCountdown > 0) {
       return;
     }
 
@@ -375,10 +312,9 @@ export default function LoginPage() {
       setError("");
       setSuccessMessage("");
 
-      const data =
-        await resendLoginOtp(
-          email.trim(),
-        );
+      const data = await resendLoginOtp(
+        email.trim(),
+      );
 
       if (!data.success) {
         setError(
@@ -396,10 +332,7 @@ export default function LoginPage() {
         "A new login code has been sent to your email.",
       );
     } catch (error) {
-      console.error(
-        "RESEND OTP ERROR:",
-        error,
-      );
+      console.error("RESEND OTP ERROR:", error);
 
       setError(
         error instanceof Error
@@ -533,8 +466,7 @@ export default function LoginPage() {
           <div className="mb-9">
 
             {(step === "otp" ||
-              step ===
-                "emailVerification") && (
+              step === "emailVerification") && (
               <button
                 type="button"
                 onClick={backToLogin}
@@ -565,8 +497,7 @@ export default function LoginPage() {
             >
               {step === "credentials"
                 ? "Welcome Back"
-                : step ===
-                    "emailVerification"
+                : step === "emailVerification"
                   ? "Verify your email"
                   : "Check your email"}
             </h1>
@@ -581,8 +512,7 @@ export default function LoginPage() {
             >
               {step === "credentials"
                 ? "Sign in to continue to your organizer dashboard."
-                : step ===
-                    "emailVerification"
+                : step === "emailVerification"
                   ? `Your email address hasn't been verified yet. Please verify ${email} before signing in.`
                   : `We sent a 6-digit verification code to ${email}.`}
             </p>
@@ -672,15 +602,9 @@ export default function LoginPage() {
                   "
                   placeholder="Enter your email"
                   value={email}
-                  onChange={(e) =>
-                    setEmail(
-                      e.target.value,
-                    )
-                  }
+                  onChange={(e) => setEmail(e.target.value)}
                   onKeyDown={(e) => {
-                    if (
-                      e.key === "Enter"
-                    ) {
+                    if (e.key === "Enter") {
                       submit();
                     }
                   }}
@@ -710,28 +634,24 @@ export default function LoginPage() {
                   </label>
 
                   <button
-  type="button"
-  onClick={() => router.push("/forgot-password")}
-  className="
-    text-xs
-    font-semibold
-    text-primary
-    transition
-    hover:text-primary-light
-  "
->
-  Forgot Password?
-</button>
+                    type="button"
+                    onClick={() => router.push("/forgot-password")}
+                    className="
+                      text-xs
+                      font-semibold
+                      text-primary
+                      transition
+                      hover:text-primary-light
+                    "
+                  >
+                    Forgot Password?
+                  </button>
                 </div>
 
                 <div className="relative">
                   <input
                     id="password"
-                    type={
-                      showPassword
-                        ? "text"
-                        : "password"
-                    }
+                    type={showPassword ? "text" : "password"}
                     autoComplete="current-password"
                     className="
                       h-14
@@ -753,15 +673,9 @@ export default function LoginPage() {
                     "
                     placeholder="Enter your password"
                     value={password}
-                    onChange={(e) =>
-                      setPassword(
-                        e.target.value,
-                      )
-                    }
+                    onChange={(e) => setPassword(e.target.value)}
                     onKeyDown={(e) => {
-                      if (
-                        e.key === "Enter"
-                      ) {
+                      if (e.key === "Enter") {
                         submit();
                       }
                     }}
@@ -770,10 +684,7 @@ export default function LoginPage() {
                   <button
                     type="button"
                     onClick={() =>
-                      setShowPassword(
-                        (current) =>
-                          !current,
-                      )
+                      setShowPassword((current) => !current)
                     }
                     className="
                       absolute
@@ -831,20 +742,14 @@ export default function LoginPage() {
                   disabled:opacity-50
                 "
               >
-                {loading
-                  ? "Checking..."
-                  : "Sign In"}
+                {loading ? "Checking..." : "Sign In"}
               </button>
 
               {/* Create Account */}
 
               <button
                 type="button"
-                onClick={() =>
-                  router.push(
-                    "/register",
-                  )
-                }
+                onClick={() => router.push("/register")}
                 className="
                   flex
                   h-14
@@ -881,8 +786,7 @@ export default function LoginPage() {
 
           {/* Email Verification */}
 
-          {step ===
-            "emailVerification" && (
+          {step === "emailVerification" && (
             <div className="space-y-5">
 
               <div
@@ -954,13 +858,8 @@ export default function LoginPage() {
 
                 <button
                   type="button"
-                  onClick={
-                    handleResendVerificationEmail
-                  }
-                  disabled={
-                    resendLoading ||
-                    resendCountdown > 0
-                  }
+                  onClick={handleResendVerificationEmail}
+                  disabled={resendLoading || resendCountdown > 0}
                   className="
                     ml-1.5
                     font-semibold
@@ -973,8 +872,7 @@ export default function LoginPage() {
                 >
                   {resendLoading
                     ? "Sending..."
-                    : resendCountdown >
-                        0
+                    : resendCountdown > 0
                       ? `Resend in ${resendCountdown}s`
                       : "Resend verification email"}
                 </button>
@@ -984,9 +882,7 @@ export default function LoginPage() {
 
               <button
                 type="button"
-                onClick={
-                  backToLogin
-                }
+                onClick={backToLogin}
                 className="
                   flex
                   h-14
@@ -1062,20 +958,12 @@ export default function LoginPage() {
                   onChange={(e) =>
                     setOtp(
                       e.target.value
-                        .replace(
-                          /\D/g,
-                          "",
-                        )
-                        .slice(
-                          0,
-                          6,
-                        ),
+                        .replace(/\D/g, "")
+                        .slice(0, 6),
                     )
                   }
                   onKeyDown={(e) => {
-                    if (
-                      e.key === "Enter"
-                    ) {
+                    if (e.key === "Enter") {
                       submitOtp();
                     }
                   }}
@@ -1087,10 +975,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={submitOtp}
-                disabled={
-                  loading ||
-                  otp.length !== 6
-                }
+                disabled={loading || otp.length !== 6}
                 className="
                   flex
                   h-14
@@ -1109,9 +994,7 @@ export default function LoginPage() {
                   disabled:opacity-50
                 "
               >
-                {loading
-                  ? "Verifying..."
-                  : "Verify Code"}
+                {loading ? "Verifying..." : "Verify Code"}
               </button>
 
               {/* Resend OTP */}
@@ -1127,13 +1010,8 @@ export default function LoginPage() {
 
                 <button
                   type="button"
-                  onClick={
-                    handleResendOtp
-                  }
-                  disabled={
-                    resendLoading ||
-                    resendCountdown > 0
-                  }
+                  onClick={handleResendOtp}
+                  disabled={resendLoading || resendCountdown > 0}
                   className="
                     ml-1.5
                     font-semibold
@@ -1146,8 +1024,7 @@ export default function LoginPage() {
                 >
                   {resendLoading
                     ? "Sending..."
-                    : resendCountdown >
-                        0
+                    : resendCountdown > 0
                       ? `Resend in ${resendCountdown}s`
                       : "Resend code"}
                 </button>
@@ -1157,9 +1034,7 @@ export default function LoginPage() {
 
               <button
                 type="button"
-                onClick={
-                  backToLogin
-                }
+                onClick={backToLogin}
                 className="
                   flex
                   h-14

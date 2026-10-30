@@ -1,5 +1,6 @@
 
 import { apiFetch } from "@/lib/api";
+import { setToken, clearToken } from "@/lib/auth";
 
 export interface RegisterPayload {
   firstName: string;
@@ -94,13 +95,20 @@ export interface ResetPasswordResponse {
   message?: string;
 }
 
-export function registerUser(data: RegisterPayload) {
-  return apiFetch<RegisterResponse>("/auth/register", {
+export async function registerUser(
+  data: RegisterPayload,
+): Promise<RegisterResponse> {
+  const response = await apiFetch<RegisterResponse>("/auth/register", {
     method: "POST",
     withAuth: false,
-    headers: { "X-Auth-Mode": "cookie" },
     body: JSON.stringify(data),
   });
+
+  if (response.token) {
+    setToken(response.token);
+  }
+
+  return response;
 }
 
 export function loginUser(email: string, password: string) {
@@ -111,13 +119,23 @@ export function loginUser(email: string, password: string) {
   });
 }
 
-export function verifyLoginOtp(data: VerifyLoginOtpPayload) {
-  return apiFetch<VerifyLoginOtpResponse>("/auth/verify-login-otp", {
-    method: "POST",
-    withAuth: false,
-    headers: { "X-Auth-Mode": "cookie" },
-    body: JSON.stringify(data),
-  });
+export async function verifyLoginOtp(
+  data: VerifyLoginOtpPayload,
+): Promise<VerifyLoginOtpResponse> {
+  const response = await apiFetch<VerifyLoginOtpResponse>(
+    "/auth/verify-login-otp",
+    {
+      method: "POST",
+      withAuth: false,
+      body: JSON.stringify(data),
+    },
+  );
+
+  if (response.token) {
+    setToken(response.token);
+  }
+
+  return response;
 }
 
 export function resendLoginOtp(email: string) {
@@ -145,16 +163,12 @@ export function getCurrentUser() {
 
 export async function logoutUser(): Promise<void> {
   try {
-    await apiFetch<{ success: boolean; message?: string }>("/auth/logout", {
+    await apiFetch("/auth/logout", {
       method: "POST",
       withAuth: true,
     });
   } finally {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("token");
-      localStorage.removeItem("wowyou_token");
-      localStorage.removeItem("wowyou_user");
-    }
+    clearToken();
   }
 }
 

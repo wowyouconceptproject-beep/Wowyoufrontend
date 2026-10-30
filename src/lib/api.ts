@@ -1,34 +1,22 @@
+
+import { getToken } from "./auth";
+
 const API_URL =
-  process.env.NEXT_PUBLIC_API_URL?.replace(
-    /\/$/,
-    ""
-  );
+  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
 
 if (!API_URL) {
-  throw new Error(
-    "NEXT_PUBLIC_API_URL is not configured."
-  );
+  throw new Error("NEXT_PUBLIC_API_URL is not configured.");
 }
 
 export interface ApiFetchOptions
-  extends Omit<
-    RequestInit,
-    "headers"
-  > {
+  extends Omit<RequestInit, "headers"> {
   headers?: HeadersInit;
-
-  /**
-   * Attach Authorization header.
-   * Default: true
-   */
   withAuth?: boolean;
 }
 
-export async function apiFetch<
-  T = any
->(
+export async function apiFetch<T = any>(
   endpoint: string,
-  options: ApiFetchOptions = {}
+  options: ApiFetchOptions = {},
 ): Promise<T> {
   const {
     withAuth = true,
@@ -36,88 +24,51 @@ export async function apiFetch<
     ...fetchOptions
   } = options;
 
-  const token =
-    typeof window !==
-    "undefined"
-      ? localStorage.getItem(
-          "token"
-        )
-      : null;
+  const headers = new Headers(customHeaders);
 
-  const headers =
-    new Headers(
-      customHeaders
-    );
+  const isFormData =
+    typeof FormData !== "undefined" &&
+    fetchOptions.body instanceof FormData;
 
-  if (
-    !(
-      fetchOptions.body instanceof
-      FormData
-    ) &&
-    !headers.has(
-      "Content-Type"
-    )
-  ) {
-    headers.set(
-      "Content-Type",
-      "application/json"
-    );
+  if (!isFormData && !headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
   }
 
-  if (
-    withAuth &&
-    token
-  ) {
-    headers.set(
-      "Authorization",
-      `Bearer ${token}`
-    );
+  // Attach the stored JWT to protected API requests.
+  if (withAuth) {
+    const token = getToken();
+
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
   }
 
-  const response =
-    await fetch(
-      `${API_URL}${endpoint}`,
-      {
-        ...fetchOptions,
-        headers,
-      }
-    );
+  const response = await fetch(`${API_URL}${endpoint}`, {
+    ...fetchOptions,
+    headers,
+    credentials: "omit",
+  });
 
   if (!response.ok) {
-    let message =
-      "Request failed.";
+    let message = "Request failed.";
 
     try {
-      const body =
-        await response.json();
+      const body = await response.json();
+      message = body.message ?? body.error ?? message;
+    } catch {
+      // Keep the default error message if the response is not JSON.
+    }
 
-      message =
-        body.message ??
-        body.error ??
-        message;
-    } catch {}
-
-    throw new Error(
-      message
-    );
+    throw new Error(message);
   }
 
-  if (
-    response.status === 204
-  ) {
+  if (response.status === 204) {
     return {} as T;
   }
 
-  const contentType =
-    response.headers.get(
-      "content-type"
-    );
+  const contentType = response.headers.get("content-type");
 
-  if (
-    !contentType?.includes(
-      "application/json"
-    )
-  ) {
+  if (!contentType?.includes("application/json")) {
     return {} as T;
   }
 

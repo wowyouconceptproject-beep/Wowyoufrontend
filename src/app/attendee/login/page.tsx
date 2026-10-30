@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -12,6 +13,8 @@ import {
   verifyLoginOtp,
   logoutUser,
 } from "@/services/auth";
+
+import { setToken, clearToken } from "@/lib/auth";
 
 type Step = "login" | "otp" | "verification";
 
@@ -40,28 +43,14 @@ export default function AttendeeLoginPage() {
     setSuccess("");
   }
 
-  /**
-   * Browser authentication is managed by the backend-issued
-   * HttpOnly session cookie. Never store authentication tokens
-   * in localStorage or sessionStorage.
-   *
-   * The user profile below is non-secret UI cache only.
-   */
-  function saveSession(
-    user?: {
-      id: string;
-      firstName: string;
-      lastName: string;
-      email: string;
-      role: string;
-    },
-  ) {
-    localStorage.removeItem("token");
-    localStorage.removeItem("wowyou_token");
-
-    if (user) {
-      localStorage.setItem("wowyou_user", JSON.stringify(user));
-    }
+  function saveSession(user: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    role: string;
+  }) {
+    localStorage.setItem("wowyou_user", JSON.stringify(user));
   }
 
   function validateAttendeeRole(role?: string) {
@@ -95,9 +84,6 @@ export default function AttendeeLoginPage() {
         return;
       }
 
-      /*
-       * Email verification must happen before login OTP.
-       */
       if (response.requiresEmailVerification) {
         setEmail(normalizedEmail);
         setStep("verification");
@@ -110,9 +96,6 @@ export default function AttendeeLoginPage() {
         return;
       }
 
-      /*
-       * Password accepted. Backend requires OTP.
-       */
       if (response.requiresOtp) {
         setEmail(response.email || normalizedEmail);
         setOtp("");
@@ -126,13 +109,21 @@ export default function AttendeeLoginPage() {
         return;
       }
 
-      /*
-       * Browser login must complete through OTP so the backend
-       * can issue the HttpOnly session cookie.
-       *
-       * Do not accept or store a JWT returned directly by the
-       * password-login endpoint.
-       */
+      // Support a direct JWT response if the backend returns one.
+      if (response.token && response.user) {
+        if (!validateAttendeeRole(response.user.role)) {
+          setError("This account is not an attendee account.");
+          return;
+        }
+
+        setToken(response.token);
+        saveSession(response.user);
+
+        router.replace("/attendee/dashboard");
+        router.refresh();
+        return;
+      }
+
       setError(
         response.message ||
           "Additional verification is required before you can continue.",
@@ -170,44 +161,37 @@ export default function AttendeeLoginPage() {
         otp: normalizedOtp,
       });
 
-      /*
-       * The backend should set the HttpOnly cookie and return
-       * the authenticated user's profile.
-       */
       if (!response.success || !response.user) {
         setError(response.message || "Invalid verification code.");
         return;
       }
 
-      /*
-       * Do not allow organizer/vendor accounts into the
-       * attendee dashboard.
-       */
+      // Reject non-attendee accounts before saving the session.
       if (!validateAttendeeRole(response.user.role)) {
-        /*
-         * OTP verification may already have created a session.
-         * Attempt to revoke that session before rejecting this
-         * account from the attendee interface.
-         */
         try {
           await logoutUser();
         } catch {
-          // Keep the role restriction even if cleanup fails.
+          clearToken();
         }
 
-        localStorage.removeItem("token");
-        localStorage.removeItem("wowyou_token");
         localStorage.removeItem("wowyou_user");
 
         setError("This account is not an attendee account.");
         return;
       }
 
+      // verifyLoginOtp() stores the returned JWT through auth.ts.
+      // Check that the token was actually persisted before continuing.
+      if (!response.token) {
+        setError(
+          "Authentication token was not returned. Please try signing in again.",
+        );
+        return;
+      }
+
+      setToken(response.token);
       saveSession(response.user);
 
-      /*
-       * Attendee OTP login goes directly to the attendee dashboard.
-       */
       router.replace("/attendee/dashboard");
       router.refresh();
     } catch (err) {
@@ -334,7 +318,6 @@ export default function AttendeeLoginPage() {
 
           {/* Login Card */}
           <div className="overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.035] shadow-2xl shadow-black/40 backdrop-blur-xl">
-            {/* Brand accent */}
             <div
               className="h-[2px] w-full"
               style={{
@@ -390,7 +373,6 @@ export default function AttendeeLoginPage() {
                     onSubmit={handleLogin}
                     className="space-y-5"
                   >
-                    {/* Email */}
                     <div>
                       <label
                         htmlFor="email"
@@ -413,7 +395,6 @@ export default function AttendeeLoginPage() {
                       />
                     </div>
 
-                    {/* Password */}
                     <div>
                       <div className="mb-2 flex items-center justify-between">
                         <label
@@ -438,9 +419,7 @@ export default function AttendeeLoginPage() {
                         <input
                           id="password"
                           type={
-                            showPassword
-                              ? "text"
-                              : "password"
+                            showPassword ? "text" : "password"
                           }
                           value={password}
                           onChange={(event) => {
@@ -455,9 +434,7 @@ export default function AttendeeLoginPage() {
                         <button
                           type="button"
                           onClick={() =>
-                            setShowPassword(
-                              (value) => !value,
-                            )
+                            setShowPassword((value) => !value)
                           }
                           className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 transition hover:text-white"
                           aria-label={
@@ -475,7 +452,6 @@ export default function AttendeeLoginPage() {
                       </div>
                     </div>
 
-                    {/* Submit */}
                     <button
                       type="submit"
                       disabled={loading}
@@ -509,7 +485,6 @@ export default function AttendeeLoginPage() {
                     </button>
                   </form>
 
-                  {/* Register */}
                   <div className="mt-8 border-t border-white/8 pt-7 text-center">
                     <p className="text-sm text-white/35">
                       New to WowYou?
@@ -564,12 +539,10 @@ export default function AttendeeLoginPage() {
                     </h1>
 
                     <p className="mt-3 text-sm leading-6 text-white/45">
-                      Enter the 6-digit verification
-                      code we sent to{" "}
+                      Enter the 6-digit verification code we sent to{" "}
                       <span className="font-semibold text-white/70">
                         {email}
-                      </span>
-                      .
+                      </span>.
                     </p>
                   </div>
 
@@ -706,8 +679,8 @@ export default function AttendeeLoginPage() {
                     </h1>
 
                     <p className="mt-3 text-sm leading-6 text-white/45">
-                      Your attendee account needs to be
-                      verified before you can continue.
+                      Your attendee account needs to be verified before
+                      you can continue.
                     </p>
                   </div>
 
